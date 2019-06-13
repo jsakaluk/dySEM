@@ -38,7 +38,7 @@ The workflow of using dySEM() proceeds in four steps.
 1. Use one of the lavaan() model fitting functions (e.g., cfa(), sem()) to fit the model specified by your chosen dySEM() script-writing function and save the output. 
 1. Use dyOutput() to automatically export reproducible results in the form of tables and/or path diagrams to your current working directory. 
  
-```{r example}
+```{r example, results="hide", warning=FALSE}
 library(dySEM)
 library(lavaan)
 ## dyadic CFA/invariance example 

@@ -62,8 +62,6 @@ The workflow of using dySEM() proceeds in four steps.
 ``` r
 library(dySEM)
 library(lavaan)
-#> This is lavaan 0.6-3
-#> lavaan is BETA software! Please report any bugs.
 ## dyadic CFA/invariance example 
 
 #Specify the stem of variable names for indicators of latent factor x and/or y, 
@@ -103,5 +101,4 @@ apim.fit.config <- cfa(apim.script.config, data = dat, std.lv = F, auto.fix.firs
 #parameters, and a path diagram with unstandardized estimates
 dyOutput(dvn, apim.fit.config, tabletype = "both", figtype = "unstandardized",
          dydMACS.x = con.dmacs, dydMACS.y = sat.dmacs)
-#> Output stored in /Users/johnsakaluk/Dropbox/Research/Sakaluk/Dyadic Invariance/Data and Scripts/dySEM/apim.png
 ```
