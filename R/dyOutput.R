@@ -1,7 +1,8 @@
 #' A Function That Exports Tables and/or SEM Digrams based on dySEM models
 #'
 #' This function takes the fitted model from fitted dySEM() scripts and
-#' exports table(s) and/or a path diagram figure of expected output.
+#' exports table(s) and/or a path diagram figure of expected output. Currently
+#' only working for apimSEM() models.
 #'
 #' @param dvn input object from dyadVarNames()
 #' @param fit input object from fitted lavaan model
