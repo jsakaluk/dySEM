@@ -1,0 +1,14 @@
+citEntry(
+  entry    = "Article",
+  title    = "Dyadic Measurement Invariance and Its Importance for Replicability in Romantic Relationship Science",
+  author   = personList(person("John", "Sakaluk", "K."), person("Robyn", "Kilshaw", "E."), person("Alexandra", "Fisher", "N.")),
+  journal  = "Personal Relationships",
+  year     = "2019",
+  volume   = "",
+  number   = "",
+  header   = "To cite dySEM in publications use:",
+  pages    = "",
+  url      = "https://psyarxiv.com/9vcnz/",
+  textVersion = paste("Sakaluk, J. K., Kilshaw, R. E., & Fisher, A. N. (2019) Dyadic Measurement invariance",
+                 "and its importance for replicability in romantic relationship science. Personal Relationships (in press). https://psyarxiv.com/9vcnz/")
+)

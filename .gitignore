@@ -1,0 +1,17 @@
+.Rproj.user
+.DS_Store
+.Rbuildignore
+.Rhistory
+Conflict_dyadic_configural.txt
+Conflict_dyadic_intercept.txt
+Conflict_dyadic_loading.txt
+Measurement Parameters Table.doc
+Satisfaction_Conflict_apim_configural.txt
+Satisfaction_Conflict_apim_intercept.txt
+Satisfaction_Conflict_apim_loading.txt
+Satisfaction_dyadic_configural.txt
+Satisfaction_dyadic_intercept.txt
+Satisfaction_dyadic_loading.txt
+Structural Parameters Table.doc
+apim.png
+dySEM.Rproj
