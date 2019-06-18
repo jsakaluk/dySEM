@@ -37,19 +37,12 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
     if(tabletype== "both"){
       #Make measurement parameter table
       #Extract intercepts
-      intercept.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "~1")
-      int.list = c()
-      #Only keep indicator intercepts
-      for(i in 1:dvn[[9]]){
-        int.list[[i]]=intercept.param$est[i]
-      }
+      xints <- xintercepts(dvn, fit)
+      yints <- yintercepts(dvn, fit)
+      int.list <- c(xints, yints)
 
       #Extract loadings, SEs, Z, p,
-      measurement.param = laavan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "=~") %>%
-        dplyr::select('Latent Factor'=.data$lhs, Indicator=.data$rhs, Loading=.data$est, SE=.data$se, Z=.data$z,
-                      'p-value'=.data$pvalue, Std.Loading=.data$std.all)
+      measurement.param <- loadings(dvn, fit)
       measurement.param$Intercept = int.list
       measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
       if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
@@ -78,20 +71,12 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
     else if(tabletype== "measurement"){
       #Make measurement parameter table
 
-      #Extract intercepts
-      intercept.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "~1")
-      int.list = c()
-      #Only keep indicator intercepts
-      for(i in 1:dvn[[9]]){
-        int.list[[i]]=intercept.param$est[i]
-      }
+      xints <- xintercepts(dvn, fit)
+      yints <- yintercepts(dvn, fit)
+      int.list <- c(xints, yints)
 
       #Extract loadings, SEs, Z, p,
-      measurement.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "=~") %>%
-        dplyr::select('Latent Factor'=.data$lhs, Indicator=.data$rhs, Loading=.data$est, SE=.data$se, Z=.data$z,
-                      'p-value'=.data$pvalue, Std.Loading=.data$std.all)
+      measurement.param <- loadings(dvn, fit)
       measurement.param$Intercept = int.list
       measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
       if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
@@ -147,19 +132,12 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
       #Make measurement parameter table
 
       #Extract intercepts
-      intercept.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "~1")
-      int.list = c()
-      #Only keep indicator intercepts
-      for(i in 1:dvn[[9]]){
-        int.list[[i]]=intercept.param$est[i]
-      }
+      xints <- xintercepts(dvn, fit)
+      yints <- yintercepts(dvn, fit)
+      int.list <- c(xints, yints)
 
       #Extract loadings, SEs, Z, p,
-      measurement.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "=~") %>%
-        dplyr::select('Latent Factor'=.data$lhs, Indicator=.data$rhs, Loading=.data$est, SE=.data$se, Z=.data$z,
-                      'p-value'=.data$pvalue, Std.Loading=.data$std.all)
+      measurement.param <- loadings(dvn, fit)
       measurement.param$Intercept = int.list
       measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
       if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
@@ -187,19 +165,12 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
     else if(tabletype== "measurement"){
       #Make measurement parameter table
       #Extract intercepts
-      intercept.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "~1")
-      int.list = c()
-      #Only keep indicator intercepts
-      for(i in 1:dvn[[9]]){
-        int.list[[i]]=intercept.param$est[i]
-      }
+      xints <- xintercepts(dvn, fit)
+      yints <- yintercepts(dvn, fit)
+      int.list <- c(xints, yints)
 
       #Extract loadings, SEs, Z, p,
-      measurement.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "=~") %>%
-        dplyr::select('Latent Factor'=.data$lhs, Indicator=.data$rhs, Loading=.data$est, SE=.data$se, Z=.data$z,
-                      'p-value'=.data$pvalue, Std.Loading=.data$std.all)
+      measurement.param <- loadings(dvn, fit)
       measurement.param$Intercept = int.list
       measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
       if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
