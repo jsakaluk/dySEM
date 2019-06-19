@@ -314,6 +314,6 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
     }
   }
   else if(length(dvn)==6){
-    cat(red("You must supply a dvn object containing information for both X and Y"))
+    cat(crayon::red("You must supply a dvn object containing information for both X and Y"))
   }
 }

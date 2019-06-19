@@ -22,8 +22,8 @@ which was adapted from Johannes Karl's (https://johanneskarl.netlify.com) betwee
 dMACS function (https://github.com/Jo-Karl/dMACS) with his assistance.
 }
 \examples{
-dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",distinguish1 = "1", distinguish2 = "2")
-con.config.script = dyadCFA(dvn, lvxname = "Conflict", lv="X", model = "configural")
+dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
+con.config.script = dyadCFA(dvn, lvname = "Conflict",  model = "configural")
 con.fit.config <- lavaan::cfa(con.config.script, data = dat, std.lv = FALSE,
 auto.fix.first= FALSE, meanstructure = TRUE)
 dydMACS(con.fit.config)

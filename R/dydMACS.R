@@ -12,8 +12,8 @@
 #' @seealso \code{\link{dyadCFA}} which this function relies on
 #' @export
 #' @examples
-#' dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",distinguish1 = "1", distinguish2 = "2")
-#' con.config.script = dyadCFA(dvn, lvxname = "Conflict", lv="X", model = "configural")
+#' dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
+#' con.config.script = dyadCFA(dvn, lvname = "Conflict",  model = "configural")
 #' con.fit.config <- lavaan::cfa(con.config.script, data = dat, std.lv = FALSE,
 #' auto.fix.first= FALSE, meanstructure = TRUE)
 #' dydMACS(con.fit.config)

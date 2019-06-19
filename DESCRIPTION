@@ -31,4 +31,6 @@ Imports:
     magrittr,
     tibble,
     sjPlot,
-    semPlot
+    semPlot,
+    rlang,
+    crayon

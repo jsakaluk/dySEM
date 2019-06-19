@@ -12,11 +12,11 @@ dyadCFA(dvn, lvname, lvnum = "one", model = "configural")
 
 \item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
 
+\item{lvnum}{optional input character to indicate which LV is modeled ("one" or "two").
+Only necessary if dvn contains both X and Y information and user wants CFA for Y}
+
 \item{model}{input character used to specify which level of invariance is
 modeled. Defaults to "configural"}
-
-\item{lv}{optional input character to indicate which LV is modeled. Only
-necessary if dvn contains both X and Y information and user wants CFA for Y}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -29,10 +29,10 @@ for specifying dyadic configural, loading, and intercept invariant
 measurement models for either a specified X or Y factor.
 }
 \examples{
-dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",distinguish1 = "1", distinguish2 = "2")
-con.config.script = dyadCFA(dvn, lvname = "Conflict", lv="X", model = "configural")
-con.loading.script = dyadCFA(dvn, lvname = "Conflict", lv="X", model = "loading")
-con.intercept.script = dyadCFA(dvn, lvname = "Conflict", lv="X", model = "intercept")
+dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
+con.config.script = dyadCFA(dvn, lvname = "Conflict", model = "configural")
+con.loading.script = dyadCFA(dvn, lvname = "Conflict",  model = "loading")
+con.intercept.script = dyadCFA(dvn, lvname = "Conflict",  model = "intercept")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on
