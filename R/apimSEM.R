@@ -17,7 +17,8 @@
 #' are constrained to equivalencey between partners. Default is "none".
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
-#' when the recommended level of invariance is not also specified.
+#' when the recommended level of invariance is not also specified. If user supplies dvn
+#' with containing X or Y variables, they are alerted to respecify the dvn object.
 #' @seealso \code{\link{dyadVarNames}} which this function relies on
 #' @export
 #' @examples
@@ -32,6 +33,7 @@
 #' lvyname = "Satisfaction", model = "loading", compare = "actor")
 
 apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
+  if(length(dvn)==9){
     if(model == "configural"){
       #Loadings
       eta_x1 = sprintf("%s%s =~ NA*",lvxname, dvn[[4]])
@@ -310,4 +312,8 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       cat(intercept.script,"\n", file = sprintf("%s_%s_apim_intercept.txt",lvyname,lvxname))
       return(intercept.script)
     }
+  }
+  else if(length(dvn)==6){
+    cat(red("You must supply a dvn object containing information for both X and Y"))
+  }
 }

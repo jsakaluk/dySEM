@@ -16,22 +16,60 @@
 #' @examples
 #' dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",distinguish1 = "1", distinguish2 = "2")
 
-dyadVarNames = function(dat, xvar, yvar, sep, distinguish1, distinguish2){
-  index1 = gsub(" ", "", paste(sep, distinguish1), fixed = T)
-  index2 = gsub(" ", "", paste(sep, distinguish2), fixed = T)
-  p1xvars = tidyselect::vars_select(names(dat), tidyselect::contains(index1)) %>%
-    tidyselect::vars_select(tidyselect::starts_with(xvar))
-  p2xvars = tidyselect::vars_select(names(dat), tidyselect::contains(index2)) %>%
-    tidyselect::vars_select(tidyselect::starts_with(xvar))
-  p1yvars = tidyselect::vars_select(names(dat), tidyselect::contains(index1)) %>%
-    tidyselect::vars_select(tidyselect::starts_with(yvar))
-  p2yvars = tidyselect::vars_select(names(dat), tidyselect::contains(index2)) %>%
-    tidyselect::vars_select(tidyselect::starts_with(yvar))
-  items.x = length(p1xvars)
-  items.y = length(p1yvars)
-  indicator.num = 2*(items.x+items.y)
-  varinfo = list(p1xvars, p2xvars, items.x, distinguish1, distinguish2,
-                 p1yvars, p2yvars, items.y, indicator.num)
+dyadVarNames = function(dat, xvar=NULL, yvar=NULL, sep, distinguish1, distinguish2){
+  if(!is.null(xvar)&!is.null(yvar)){
+    #Create indices with sep and distinguish
+    index1 = gsub(" ", "", paste(sep, distinguish1), fixed = T)
+    index2 = gsub(" ", "", paste(sep, distinguish2), fixed = T)
+
+    #Extract X/Y indicators for P1 and P2
+    p1xvars <- x1vars(dat, index1, xvar)
+    p2xvars <- x2vars(dat, index2, xvar)
+    p1yvars <- y1vars(dat, index1, yvar)
+    p2yvars <- y2vars(dat, index2, yvar)
+
+    #Item #s for X, Y, and total
+    items.x = length(p1xvars)
+    items.y = length(p1yvars)
+    indicator.num = 2*(items.x+items.y)
+
+    #Compile in list
+    varinfo = list(p1xvars, p2xvars, items.x, distinguish1, distinguish2,
+                   p1yvars, p2yvars, items.y, indicator.num)
+  }
+  else if(!is.null(xvar)&is.null(yvar)){
+    #Create indices with sep and distinguish
+    index1 = gsub(" ", "", paste(sep, distinguish1), fixed = T)
+    index2 = gsub(" ", "", paste(sep, distinguish2), fixed = T)
+
+    #Extract X indicators for P1 and P2
+    p1xvars <- x1vars(dat, index1, xvar)
+    p2xvars <- x2vars(dat, index2, xvar)
+
+    #Item #s for X and total
+    items.x = length(p1xvars)
+    indicator.num = 2*(items.x)
+
+    #Compile in list
+    varinfo = list(p1xvars, p2xvars, items.x, distinguish1, distinguish2,indicator.num)
+
+  }
+  else if(is.null(xvar)&!is.null(yvar)){
+    #Create indices with sep and distinguish
+    index1 = gsub(" ", "", paste(sep, distinguish1), fixed = T)
+    index2 = gsub(" ", "", paste(sep, distinguish2), fixed = T)
+
+    #Extract Y indicators for P1 and P2
+    p1yvars <- y1vars(dat, index1, yvar)
+    p2yvars <- y2vars(dat, index2, yvar)
+
+    #Item #s for Y and total
+    items.y = length(p1yvars)
+    indicator.num = 2*(items.y)
+
+    #Compile in list
+    varinfo = list(p1yvars, p2yvars, items.y, distinguish1, distinguish2,indicator.num)
+  }
   return(varinfo)
 }
 

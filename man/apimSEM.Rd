@@ -25,7 +25,8 @@ are constrained to equivalencey between partners. Default is "none".}
 \value{
 character object of lavaan script that can be passed immediately to
 lavaan functions. Users will receive message if structural comparisons are specified
-when the recommended level of invariance is not also specified.
+when the recommended level of invariance is not also specified. If user supplies dvn
+with containing X or Y variables, they are alerted to respecify the dvn object.
 }
 \description{
 This function takes the outputted object from dyadVarNames()

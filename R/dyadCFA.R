@@ -6,9 +6,9 @@
 #' for specifying dyadic configural, loading, and intercept invariant
 #' measurement models for either a specified X or Y factor.
 #' @param dvn input object from dyadVarNames()
-#' @param lvxname input character to (arbitrarily) name LV X in lavaan syntax
-#' @param lvyname input character to (arbitrarily) name LV Y in lavaan syntax
-#' @param lv input character to indicate which LV is modeled (default is "X")
+#' @param lvname input character to (arbitrarily) name LV in lavaan syntax
+#' @param lv optional input character to indicate which LV is modeled. Only
+#' necessary if dvn contains both X and Y information and user wants CFA for Y
 #' @param model input character used to specify which level of invariance is
 #' modeled. Defaults to "configural"
 #' @return character object of lavaan script that can be passed immediately to
@@ -17,22 +17,22 @@
 #' @export
 #' @examples
 #' dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",distinguish1 = "1", distinguish2 = "2")
-#' con.config.script = dyadCFA(dvn, lvxname = "Conflict", lv="X", model = "configural")
-#' con.loading.script = dyadCFA(dvn, lvxname = "Conflict", lv="X", model = "loading")
-#' con.intercept.script = dyadCFA(dvn, lvxname = "Conflict", lv="X", model = "intercept")
-dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
-  if(lv=="X"){
+#' con.config.script = dyadCFA(dvn, lvname = "Conflict", lv="X", model = "configural")
+#' con.loading.script = dyadCFA(dvn, lvname = "Conflict", lv="X", model = "loading")
+#' con.intercept.script = dyadCFA(dvn, lvname = "Conflict", lv="X", model = "intercept")
+dyadCFA = function(dvn, lvname, lvnum="one", model = "configural"){
+  if(lvnum=="one"){
     if(model == "configural"){
       #Loadings
-      eta_x1 = sprintf("%s%s =~ NA*",lvxname, dvn[[4]])
+      eta_x1 = sprintf("%s%s =~ NA*",lvname, dvn[[4]])
       eta.x1 = gsub(" ", "",paste(eta_x1,paste(dvn[[1]], collapse = "+")), fixed = T)
-      eta_x2 = sprintf("%s%s =~ NA*",lvxname, dvn[[5]])
+      eta_x2 = sprintf("%s%s =~ NA*",lvname, dvn[[5]])
       eta.x2 = gsub(" ", "",paste(eta_x2,paste(dvn[[2]], collapse = "+")), fixed = T)
 
       #Latent (co)variances
-      psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvxname, dvn[[4]],lvxname, dvn[[4]])
-      psi_x2 = sprintf("%s%s ~~ 1*%s%s",lvxname, dvn[[5]],lvxname, dvn[[5]])
-      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
+      psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+      psi_x2 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
       #Correlated residuals
       resids = list()
@@ -53,19 +53,19 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
 
       #Script Creation Syntax
       configural.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, xints1, xints2)
-      cat(configural.script,"\n", file = sprintf("%s_dyadic_configural.txt",lvxname))
+      cat(configural.script,"\n", file = sprintf("%s_dyadic_configural.txt",lvname))
       return(configural.script)
     }
     else if (model == "loading"){
       #Loadings
-      eta_x1 = sprintf("%s%s =~ NA*%s+",lvxname, dvn[[4]], dvn[[1]][1])
+      eta_x1 = sprintf("%s%s =~ NA*%s+",lvname, dvn[[4]], dvn[[1]][1])
       eta.x1 = list()
       for (i in 1:dvn[[3]]) {
         eta.x1[[i]]=sprintf("l%s*%s",i, dvn[[1]][i])
       }
       eta.x1 = gsub(" ", "",paste(eta_x1,paste(eta.x1, collapse = "+")), fixed = T)
 
-      eta_x2 = sprintf("%s%s =~ NA*%s+",lvxname, dvn[[5]], dvn[[2]][1])
+      eta_x2 = sprintf("%s%s =~ NA*%s+",lvname, dvn[[5]], dvn[[2]][1])
       eta.x2 = list()
       for (i in 1:dvn[[3]]) {
         eta.x2[[i]]=sprintf("l%s*%s",i, dvn[[2]][i])
@@ -73,9 +73,9 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
       eta.x2 = gsub(" ", "",paste(eta_x2,paste(eta.x2, collapse = "+")), fixed = T)
 
       #Latent (co)variances
-      psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvxname, dvn[[4]],lvxname, dvn[[4]])
-      psi_x2 = sprintf("%s%s ~~ NA*%s%s",lvxname, dvn[[5]],lvxname, dvn[[5]])
-      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
+      psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+      psi_x2 = sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
       #Correlated residuals
       resids = list()
@@ -96,19 +96,19 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
 
       #Script Creation Syntax
       loading.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, xints1, xints2)
-      cat(loading.script,"\n", file = sprintf("%s_dyadic_loading.txt",lvxname))
+      cat(loading.script,"\n", file = sprintf("%s_dyadic_loading.txt",lvname))
       return(loading.script)
     }
     else if (model == "intercept"){
       #Loadings
-      eta_x1 = sprintf("%s%s =~ NA*%s+",lvxname, dvn[[4]], dvn[[1]][1])
+      eta_x1 = sprintf("%s%s =~ NA*%s+",lvname, dvn[[4]], dvn[[1]][1])
       eta.x1 = list()
       for (i in 1:dvn[[3]]) {
         eta.x1[[i]]=sprintf("l%s*%s",i, dvn[[1]][i])
       }
       eta.x1 = gsub(" ", "",paste(eta_x1,paste(eta.x1, collapse = "+")), fixed = T)
 
-      eta_x2 = sprintf("%s%s =~ NA*%s+",lvxname, dvn[[5]], dvn[[2]][1])
+      eta_x2 = sprintf("%s%s =~ NA*%s+",lvname, dvn[[5]], dvn[[2]][1])
       eta.x2 = list()
       for (i in 1:dvn[[3]]) {
         eta.x2[[i]]=sprintf("l%s*%s",i, dvn[[2]][i])
@@ -116,9 +116,9 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
       eta.x2 = gsub(" ", "",paste(eta_x2,paste(eta.x2, collapse = "+")), fixed = T)
 
       #Latent (co)variances
-      psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvxname, dvn[[4]],lvxname, dvn[[4]])
-      psi_x2 = sprintf("%s%s ~~ NA*%s%s",lvxname, dvn[[5]],lvxname, dvn[[5]])
-      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
+      psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+      psi_x2 = sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
       #Correlated residuals
       resids = list()
@@ -139,22 +139,22 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
 
       #Script Creation Syntax
       intercept.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, xints1, xints2)
-      cat(intercept.script,"\n", file = sprintf("%s_dyadic_intercept.txt",lvxname))
+      cat(intercept.script,"\n", file = sprintf("%s_dyadic_intercept.txt",lvname))
       return(intercept.script)
     }
   }
-  else if(lv=="Y"){
+  else if(lvnum=="two"){
     if(model == "configural"){
       #Loadings
-      eta_y1 = sprintf("%s%s =~ NA*",lvyname, dvn[[4]])
+      eta_y1 = sprintf("%s%s =~ NA*",lvname, dvn[[4]])
       eta.y1 = gsub(" ", "",paste(eta_y1,paste(dvn[[6]], collapse = "+")), fixed = T)
-      eta_y2 = sprintf("%s%s =~ NA*",lvyname, dvn[[5]])
+      eta_y2 = sprintf("%s%s =~ NA*",lvname, dvn[[5]])
       eta.y2 = gsub(" ", "",paste(eta_y2,paste(dvn[[7]], collapse = "+")), fixed = T)
 
       #Latent (co)variances
-      psi_y1 = sprintf("%s%s ~~ 1*%s%s",lvyname, dvn[[4]],lvyname, dvn[[4]])
-      psi_y2 = sprintf("%s%s ~~ 1*%s%s",lvyname, dvn[[5]],lvyname, dvn[[5]])
-      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
+      psi_y1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+      psi_y2 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
       #Correlated residuals
       resids = list()
@@ -175,19 +175,19 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
 
       #Script Creation Syntax
       configural.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.y1, eta.y2, psi_y1, psi_y2, psi_y1y2, resids, yints1, yints2)
-      cat(configural.script,"\n", file = sprintf("%s_dyadic_configural.txt",lvyname))
+      cat(configural.script,"\n", file = sprintf("%s_dyadic_configural.txt",lvname))
       return(configural.script)
     }
     else if (model == "loading"){
       #Loadings
-      eta_y1 = sprintf("%s%s =~ NA*%s+",lvyname, dvn[[4]], dvn[[6]][1])
+      eta_y1 = sprintf("%s%s =~ NA*%s+",lvname, dvn[[4]], dvn[[6]][1])
       eta.y1 = list()
       for (i in 1:dvn[[8]]) {
         eta.y1[[i]]=sprintf("l%s*%s",i, dvn[[6]][i])
       }
       eta.y1 = gsub(" ", "",paste(eta_y1,paste(eta.y1, collapse = "+")), fixed = T)
 
-      eta_y2 = sprintf("%s%s =~ NA*%s+",lvyname, dvn[[5]], dvn[[7]][1])
+      eta_y2 = sprintf("%s%s =~ NA*%s+",lvname, dvn[[5]], dvn[[7]][1])
       eta.y2 = list()
       for (i in 1:dvn[[8]]) {
         eta.y2[[i]]=sprintf("l%s*%s",i, dvn[[7]][i])
@@ -195,9 +195,9 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
       eta.y2 = gsub(" ", "",paste(eta_y2,paste(eta.y2, collapse = "+")), fixed = T)
 
       #Latent (co)variances
-      psi_y1 = sprintf("%s%s ~~ 1*%s%s",lvyname, dvn[[4]],lvyname, dvn[[4]])
-      psi_y2 = sprintf("%s%s ~~ NA*%s%s",lvyname, dvn[[5]],lvyname, dvn[[5]])
-      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
+      psi_y1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+      psi_y2 = sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
       #Correlated residuals
       resids = list()
@@ -218,19 +218,19 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
 
       #Script Creation Syntax
       loading.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.y1, eta.y2, psi_y1, psi_y2, psi_y1y2, resids, yints1, yints2)
-      cat(loading.script,"\n", file = sprintf("%s_dyadic_loading.txt",lvyname))
+      cat(loading.script,"\n", file = sprintf("%s_dyadic_loading.txt",lvname))
       return(loading.script)
     }
     else if (model == "intercept"){
       #Loadings
-      eta_y1 = sprintf("%s%s =~ NA*%s+",lvyname, dvn[[4]], dvn[[6]][1])
+      eta_y1 = sprintf("%s%s =~ NA*%s+",lvname, dvn[[4]], dvn[[6]][1])
       eta.y1 = list()
       for (i in 1:dvn[[8]]) {
         eta.y1[[i]]=sprintf("l%s*%s",i, dvn[[6]][i])
       }
       eta.y1 = gsub(" ", "",paste(eta_y1,paste(eta.y1, collapse = "+")), fixed = T)
 
-      eta_y2 = sprintf("%s%s =~ NA*%s+",lvyname, dvn[[5]], dvn[[7]][1])
+      eta_y2 = sprintf("%s%s =~ NA*%s+",lvname, dvn[[5]], dvn[[7]][1])
       eta.y2 = list()
       for (i in 1:dvn[[8]]) {
         eta.y2[[i]]=sprintf("l%s*%s",i, dvn[[7]][i])
@@ -238,9 +238,9 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
       eta.y2 = gsub(" ", "",paste(eta_y2,paste(eta.y2, collapse = "+")), fixed = T)
 
       #Latent (co)variances
-      psi_y1 = sprintf("%s%s ~~ 1*%s%s",lvyname, dvn[[4]],lvyname, dvn[[4]])
-      psi_y2 = sprintf("%s%s ~~ NA*%s%s",lvyname, dvn[[5]],lvyname, dvn[[5]])
-      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
+      psi_y1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+      psi_y2 = sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
       #Correlated residuals
       resids = list()
@@ -261,7 +261,7 @@ dyadCFA = function(dvn, lvxname, lvyname, lv="X", model = "configural"){
 
       #Script Creation Syntax
       intercept.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.y1, eta.y2, psi_y1, psi_y2, psi_y1y2, resids, yints1, yints2)
-      cat(intercept.script,"\n", file = sprintf("%s_dyadic_intercept.txt",lvyname))
+      cat(intercept.script,"\n", file = sprintf("%s_dyadic_intercept.txt",lvname))
       return(intercept.script)
     }
   }

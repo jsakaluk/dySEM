@@ -33,194 +33,292 @@
 dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
                     figure = TRUE, figtype = NULL,
                     dydMACS.x = NULL, dydMACS.y = NULL){
-  if(table==TRUE & figure == FALSE){
-    if(tabletype== "both"){
-      #Make measurement parameter table
-      #Extract intercepts
+  if(length(dvn)==9){
+    if(table==TRUE & figure == FALSE){
+      if(tabletype== "both"){
+        #Make measurement parameter table
+        #Extract intercepts
+        xints <- xintercepts(dvn, fit)
+        yints <- yintercepts(dvn, fit)
+        int.list <- c(xints, yints)
+
+        #Extract loadings, SEs, Z, p,
+        measurement.param <- loadings(dvn, fit)
+        measurement.param$Intercept = int.list
+        measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
+        if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
+          dmacs = c(dydMACS.x, rep(NA, dvn[[3]]), dydMACS.y, rep(NA, dvn[[8]]))
+          measurement.param$dMACS = dmacs
+        }
+        measurement.param = measurement.param %>%
+          dplyr::mutate_if(is.numeric, round, digits = 3)
+        #Extract structural parameters
+        structural.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+          dplyr::filter(.data$op == "~") %>%
+          dplyr::select('Outcome'=.data$lhs, Predictor=.data$rhs, Label = .data$label, Slope=.data$est, SE=.data$se,
+                        'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, Std.Slope=.data$std.all)
+        structural.param = structural.param %>%
+          dplyr::mutate_if(is.numeric, round, digits = 3)
+        structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
+
+
+        measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
+                                 file = "Measurement Parameters Table.doc", alternate.rows = T)
+        struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
+                                file = "Structural Parameters Table.doc", alternate.rows = T)
+        tab.list = list(measure, struct)
+        return(tab.list)
+      }
+      else if(tabletype== "measurement"){
+        #Make measurement parameter table
+
+        xints <- xintercepts(dvn, fit)
+        yints <- yintercepts(dvn, fit)
+        int.list <- c(xints, yints)
+
+        #Extract loadings, SEs, Z, p,
+        measurement.param <- loadings(dvn, fit)
+        measurement.param$Intercept = int.list
+        measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
+        if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
+          dmacs = c(dydMACS.x, rep(NA, dvn[[3]]), dydMACS.y, rep(NA, dvn[[8]]))
+          measurement.param$dMACS = dmacs
+        }
+        measurement.param = measurement.param %>%
+          dplyr::mutate_if(is.numeric, round, digits = 3)
+
+        measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
+                                 file = "Measurement Parameters Table.doc", alternate.rows = T)
+        return(measure)
+      }
+      else if(tabletype== "slopes"){
+        #Extract structural parameters
+        structural.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+          dplyr::filter(.data$op == "~") %>%
+          dplyr::select('Outcome'=.data$lhs, Predictor=.data$rhs, Label = .data$label, Slope=.data$est, SE=.data$se,
+                        'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, Std.Slope=.data$std.all)
+        structural.param = structural.param %>%
+          dplyr::mutate_if(is.numeric, round, digits = 3)
+
+        structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
+
+        struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
+                                file = "Structural Parameters Table.doc", alternate.rows = T)
+        return(struct)
+      }
+    }
+    else if(table==FALSE & figure == TRUE){
+      #Make path diagram
+      if(figtype == "unstandardized"){
+        semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
+                          curvePivot = F, intercepts = F,
+                          edge.color = "black", filetype = "png", filename = "apim", weighted = F,
+                          edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      else if(figtype == "standardized"){
+        semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
+                          curvePivot = F, intercepts = F,
+                          edge.color = "black", filetype = "png", filename = "apim", weighted = F,
+                          edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      else if(figtype == "labels"){
+        semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
+                          curvePivot = F, intercepts = F,
+                          edge.color = "black", filetype = "png", filename = "apim", weighted = F,
+                          edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+    }
+    else if(table==TRUE & figure == TRUE){
+      if(tabletype== "both"){
+        #Make measurement parameter table
+
+        #Extract intercepts
+        xints <- xintercepts(dvn, fit)
+        yints <- yintercepts(dvn, fit)
+        int.list <- c(xints, yints)
+
+        #Extract loadings, SEs, Z, p,
+        measurement.param <- loadings(dvn, fit)
+        measurement.param$Intercept = int.list
+        measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
+        if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
+          dmacs = c(dydMACS.x, rep(NA, dvn[[3]]), dydMACS.y, rep(NA, dvn[[8]]))
+          measurement.param$dMACS = dmacs
+        }
+        measurement.param= measurement.param%>%
+          dplyr::mutate_if(is.numeric, round, digits = 3)
+        #Extract structural parameters
+        structural.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+          dplyr::filter(.data$op == "~") %>%
+          dplyr::select('Outcome'=.data$lhs, Predictor=.data$rhs, Label = .data$label, Slope=.data$est, SE=.data$se,
+                        'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, Std.Slope=.data$std.all)
+        structural.param = structural.param %>%
+          dplyr::mutate_if(is.numeric, round, digits = 3)
+
+        structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
+
+        measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
+                                 file = "Measurement Parameters Table.doc", alternate.rows = T)
+        struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
+                                file = "Structural Parameters Table.doc", alternate.rows = T)
+        tab.list = list(measure,struct)
+      }
+      else if(tabletype== "measurement"){
+        #Make measurement parameter table
+        #Extract intercepts
+        xints <- xintercepts(dvn, fit)
+        yints <- yintercepts(dvn, fit)
+        int.list <- c(xints, yints)
+
+        #Extract loadings, SEs, Z, p,
+        measurement.param <- loadings(dvn, fit)
+        measurement.param$Intercept = int.list
+        measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
+        if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
+          dmacs = c(dydMACS.x, rep(NA, dvn[[3]]), dydMACS.y, rep(NA, dvn[[8]]))
+          measurement.param$dMACS = dmacs
+        }
+        measurement.param = measurement.param %>%
+          dplyr::mutate_if(is.numeric, round, digits = 3)
+
+        measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
+                                 file = "Measurement Parameters Table.doc", alternate.rows = T)
+        tab.list = list(measure)
+      }
+      else if(tabletype== "slopes"){
+        #Make measurement parameter table
+        #Extract structural parameters
+        structural.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+          dplyr::filter(.data$op == "~") %>%
+          dplyr::select('Outcome'=.data$lhs, Predictor=.data$rhs, Label = .data$label, Slope=.data$est, SE=.data$se,
+                        'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, Std.Slope=.data$std.all)
+        structural.param = structural.param %>%
+          dplyr::mutate_if(is.numeric, round, digits = 3)
+
+        structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
+
+        struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
+                                file = "Structural Parameters Table.doc", alternate.rows = T)
+        tab.list = list(struct)
+      }
+      #Make path diagram
+      if(figtype == "unstandardized"){
+        fig  = semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
+                                 curvePivot = F, intercepts = F,
+                                 edge.color = "black", filetype = "png", filename = "apim", weighted = F,
+                                 edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      else if(figtype == "standardized"){
+        fig = semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
+                                curvePivot = F, intercepts = F,
+                                edge.color = "black", filetype = "png", filename = "apim", weighted = F,
+                                edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      else if(figtype == "labels"){
+        fig = semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
+                                curvePivot = F, intercepts = F,
+                                edge.color = "black", filetype = "png", filename = "apim", weighted = F,
+                                edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      out.list = list(tab.list, fig)
+      return(out.list)
+    }
+  }
+  else if(length(dvn)==6){
+    if(table==TRUE & figure == FALSE){
+      #Extract intercepts (xintercepts function works for single X or Y factor)
       xints <- xintercepts(dvn, fit)
-      yints <- yintercepts(dvn, fit)
-      int.list <- c(xints, yints)
 
       #Extract loadings, SEs, Z, p,
       measurement.param <- loadings(dvn, fit)
-      measurement.param$Intercept = int.list
+      measurement.param$Intercept = xints
       measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
-      if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
-        dmacs = c(dydMACS.x, rep(NA, dvn[[3]]), dydMACS.y, rep(NA, dvn[[8]]))
+
+      if(!is.null(dydMACS.x)){
+        dmacs = c(dydMACS.x, rep(NA, dvn[[3]]))
         measurement.param$dMACS = dmacs
       }
+      else if(!is.null(dydMACS.y)){
+        dmacs = c(dydMACS.y, rep(NA, dvn[[3]]))
+        measurement.param$dMACS = dmacs
+      }
+
       measurement.param = measurement.param %>%
         dplyr::mutate_if(is.numeric, round, digits = 3)
-      #Extract structural parameters
-      structural.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "~") %>%
-        dplyr::select('Outcome'=.data$lhs, Predictor=.data$rhs, Label = .data$label, Slope=.data$est, SE=.data$se,
-               'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, Std.Slope=.data$std.all)
-      structural.param = structural.param %>%
-        dplyr::mutate_if(is.numeric, round, digits = 3)
-      structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
-
 
       measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-             file = "Measurement Parameters Table.doc", alternate.rows = T)
-      struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
-             file = "Structural Parameters Table.doc", alternate.rows = T)
-      tab.list = list(measure, struct)
-      return(tab.list)
-    }
-    else if(tabletype== "measurement"){
-      #Make measurement parameter table
-
-      xints <- xintercepts(dvn, fit)
-      yints <- yintercepts(dvn, fit)
-      int.list <- c(xints, yints)
-
-      #Extract loadings, SEs, Z, p,
-      measurement.param <- loadings(dvn, fit)
-      measurement.param$Intercept = int.list
-      measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
-      if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
-        dmacs = c(dydMACS.x, rep(NA, dvn[[3]]), dydMACS.y, rep(NA, dvn[[8]]))
-        measurement.param$dMACS = dmacs
-      }
-      measurement.param = measurement.param %>%
-        dplyr::mutate_if(is.numeric, round, digits = 3)
-
-       measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-             file = "Measurement Parameters Table.doc", alternate.rows = T)
+                               file = "Measurement Parameters Table.doc", alternate.rows = T)
       return(measure)
     }
-    else if(tabletype== "slopes"){
-      #Extract structural parameters
-      structural.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "~") %>%
-        dplyr::select('Outcome'=.data$lhs, Predictor=.data$rhs, Label = .data$label, Slope=.data$est, SE=.data$se,
-               'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, Std.Slope=.data$std.all)
-      structural.param = structural.param %>%
-        dplyr::mutate_if(is.numeric, round, digits = 3)
-
-      structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
-
-      struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
-             file = "Structural Parameters Table.doc", alternate.rows = T)
-      return(struct)
+    else if(table==FALSE & figure == TRUE){
+      #Make path diagram
+      if(figtype == "unstandardized"){
+        semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
+                          curvePivot = F, intercepts = F,
+                          edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                          edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      else if(figtype == "standardized"){
+        semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
+                          curvePivot = F, intercepts = F,
+                          edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                          edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      else if(figtype == "labels"){
+        semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
+                          curvePivot = F, intercepts = F,
+                          edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                          edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
     }
-  }
-  else if(table==FALSE & figure == TRUE){
-    #Make path diagram
-    if(figtype == "unstandardized"){
-      semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
-               curvePivot = F, intercepts = F,
-               edge.color = "black", filetype = "png", filename = "apim", weighted = F,
-               edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
-    }
-    else if(figtype == "standardized"){
-      semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
-               curvePivot = F, intercepts = F,
-               edge.color = "black", filetype = "png", filename = "apim", weighted = F,
-               edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
-    }
-    else if(figtype == "labels"){
-      semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
-               curvePivot = F, intercepts = F,
-               edge.color = "black", filetype = "png", filename = "apim", weighted = F,
-               edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
-    }
-  }
-  else if(table==TRUE & figure == TRUE){
-    if(tabletype== "both"){
-      #Make measurement parameter table
-
-      #Extract intercepts
+    else if(table==TRUE & figure == TRUE){
+      #Extract intercepts (xintercepts function works for single X or Y factor)
       xints <- xintercepts(dvn, fit)
-      yints <- yintercepts(dvn, fit)
-      int.list <- c(xints, yints)
 
       #Extract loadings, SEs, Z, p,
       measurement.param <- loadings(dvn, fit)
-      measurement.param$Intercept = int.list
+      measurement.param$Intercept = xints
       measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
-      if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
-        dmacs = c(dydMACS.x, rep(NA, dvn[[3]]), dydMACS.y, rep(NA, dvn[[8]]))
+
+      if(!is.null(dydMACS.x)){
+        dmacs = c(dydMACS.x, rep(NA, dvn[[3]]))
         measurement.param$dMACS = dmacs
       }
-      measurement.param= measurement.param%>%
-        dplyr::mutate_if(is.numeric, round, digits = 3)
-      #Extract structural parameters
-      structural.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "~") %>%
-        dplyr::select('Outcome'=.data$lhs, Predictor=.data$rhs, Label = .data$label, Slope=.data$est, SE=.data$se,
-               'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, Std.Slope=.data$std.all)
-      structural.param = structural.param %>%
-        dplyr::mutate_if(is.numeric, round, digits = 3)
-
-      structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
-
-      measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-                       file = "Measurement Parameters Table.doc", alternate.rows = T)
-      struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
-                      file = "Structural Parameters Table.doc", alternate.rows = T)
-      tab.list = list(measure,struct)
-    }
-    else if(tabletype== "measurement"){
-      #Make measurement parameter table
-      #Extract intercepts
-      xints <- xintercepts(dvn, fit)
-      yints <- yintercepts(dvn, fit)
-      int.list <- c(xints, yints)
-
-      #Extract loadings, SEs, Z, p,
-      measurement.param <- loadings(dvn, fit)
-      measurement.param$Intercept = int.list
-      measurement.param$'p-value'[measurement.param$'p-value' < .001] = "< .001"
-      if(!is.null(dydMACS.x)&!is.null(dydMACS.y)){
-        dmacs = c(dydMACS.x, rep(NA, dvn[[3]]), dydMACS.y, rep(NA, dvn[[8]]))
+      else if(!is.null(dydMACS.y)){
+        dmacs = c(dydMACS.y, rep(NA, dvn[[3]]))
         measurement.param$dMACS = dmacs
       }
+
       measurement.param = measurement.param %>%
         dplyr::mutate_if(is.numeric, round, digits = 3)
 
       measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-                       file = "Measurement Parameters Table.doc", alternate.rows = T)
+                               file = "Measurement Parameters Table.doc", alternate.rows = T)
+
       tab.list = list(measure)
-    }
-    else if(tabletype== "slopes"){
-      #Make measurement parameter table
-      #Extract structural parameters
-      structural.param = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-        dplyr::filter(.data$op == "~") %>%
-        dplyr::select('Outcome'=.data$lhs, Predictor=.data$rhs, Label = .data$label, Slope=.data$est, SE=.data$se,
-               'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, Std.Slope=.data$std.all)
-      structural.param = structural.param %>%
-        dplyr::mutate_if(is.numeric, round, digits = 3)
 
-      structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
-
-      struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
-                      file = "Structural Parameters Table.doc", alternate.rows = T)
-      tab.list = list(struct)
+      #Make path diagram
+      if(figtype == "unstandardized"){
+        fig  = semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
+                                 curvePivot = F, intercepts = F,
+                                 edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                                 edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      else if(figtype == "standardized"){
+        fig = semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
+                                curvePivot = F, intercepts = F,
+                                edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                                edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      else if(figtype == "labels"){
+        fig = semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
+                                curvePivot = F, intercepts = F,
+                                edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                                edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+      }
+      out.list = list(tab.list, fig)
+      return(out.list)
     }
-    #Make path diagram
-    if(figtype == "unstandardized"){
-      fig  = semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
-               curvePivot = F, intercepts = F,
-               edge.color = "black", filetype = "png", filename = "apim", weighted = F,
-               edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
-    }
-    else if(figtype == "standardized"){
-      fig = semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
-               curvePivot = F, intercepts = F,
-               edge.color = "black", filetype = "png", filename = "apim", weighted = F,
-               edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
-    }
-    else if(figtype == "labels"){
-      fig = semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
-               curvePivot = F, intercepts = F,
-               edge.color = "black", filetype = "png", filename = "apim", weighted = F,
-               edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
-    }
-    out.list = list(tab.list, fig)
-    return(out.list)
   }
 }
 

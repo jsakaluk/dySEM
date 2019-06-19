@@ -4,7 +4,8 @@
 \alias{dyadVarNames}
 \title{A Variable Name-Scraping and Indexing Function}
 \usage{
-dyadVarNames(dat, xvar, yvar, sep, distinguish1, distinguish2)
+dyadVarNames(dat, xvar = NULL, yvar = NULL, sep, distinguish1,
+  distinguish2)
 }
 \arguments{
 \item{dat}{input data frame of indicators of a particular LV}
