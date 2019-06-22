@@ -2,10 +2,12 @@
 
 export("%>%")
 export(apimSEM)
+export(dirs)
 export(dyOutput)
 export(dyadCFA)
 export(dyadVarNames)
 export(dydMACS)
 export(loadings)
+export(x1_loads)
 export(x1vars)
 importFrom(magrittr,"%>%")

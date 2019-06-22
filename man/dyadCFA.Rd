@@ -5,18 +5,18 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting Latent Dyadic Measurement and Invariance Models}
 \usage{
-dyadCFA(dvn, lvname, lvnum = "one", model = "configural")
+dyadCFA(dvn, lvname, model = "configural")
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
 
 \item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
 
-\item{lvnum}{optional input character to indicate which LV is modeled ("one" or "two").
-Only necessary if dvn contains both X and Y information and user wants CFA for Y}
-
 \item{model}{input character used to specify which level of invariance is
 modeled. Defaults to "configural"}
+
+\item{lvnum}{optional input character to indicate which LV is modeled ("one" or "two").
+Only necessary if dvn contains both X and Y information and user wants CFA for Y}
 }
 \value{
 character object of lavaan script that can be passed immediately to
