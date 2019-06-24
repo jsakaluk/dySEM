@@ -110,7 +110,7 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       #Script Creation Syntax
       configural.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
                                   eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, resids.x, resids.y, xints1, xints2, yints1, yints2)
-      cat(configural.script,"\n", file = sprintf("%s_%s_apim_configural.txt",lvyname,lvxname))
+      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_apim_configural.txt",lvyname,lvxname))
       if(compare=="actor"|compare=="partner"|compare=="all_effects"){
         message("Caution: comparisons of actor/partner effects may be invalid when loadings are not invariant ")
       }
@@ -211,7 +211,7 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       #Script Creation Syntax
       loading.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
                                eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, resids.x, resids.y, xints1, xints2, yints1, yints2)
-      cat(loading.script,"\n", file = sprintf("%s_%s_apim_loading.txt",lvyname,lvxname))
+      cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
 
       if(compare=="x_means"|compare=="y_means"|compare=="all_means"){
         message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant ")
@@ -310,7 +310,7 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       #Script Creation Syntax
       intercept.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
                                  eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, resids.x, resids.y, xints1, xints2, yints1, yints2)
-      cat(intercept.script,"\n", file = sprintf("%s_%s_apim_intercept.txt",lvyname,lvxname))
+      cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
       return(intercept.script)
     }
   }
