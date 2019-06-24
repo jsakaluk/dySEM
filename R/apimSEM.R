@@ -33,6 +33,7 @@
 #' lvyname = "Satisfaction", model = "loading", compare = "actor")
 
 apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
+  dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){
       #Loadings

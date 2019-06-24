@@ -33,8 +33,10 @@
 dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
                     figure = TRUE, figtype = NULL,
                     dydMACS.x = NULL, dydMACS.y = NULL){
+  dirs("output")
   if(length(dvn)==9){
     if(table==TRUE & figure == FALSE){
+      dirs("output/tables")
       if(tabletype== "both"){
         #Make measurement parameter table
         #Extract intercepts
@@ -63,9 +65,9 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
 
 
         measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-                                 file = "Measurement Parameters Table.doc", alternate.rows = T)
+                                 file = "./output/tables/Measurement Parameters Table.doc", alternate.rows = T)
         struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
-                                file = "Structural Parameters Table.doc", alternate.rows = T)
+                                file = "./output/tables/Structural Parameters Table.doc", alternate.rows = T)
         tab.list = list(measure, struct)
         return(tab.list)
       }
@@ -88,7 +90,7 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
           dplyr::mutate_if(is.numeric, round, digits = 3)
 
         measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-                                 file = "Measurement Parameters Table.doc", alternate.rows = T)
+                                 file = "./output/tables/Measurement Parameters Table.doc", alternate.rows = T)
         return(measure)
       }
       else if(tabletype== "slopes"){
@@ -103,11 +105,12 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
         structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
 
         struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
-                                file = "Structural Parameters Table.doc", alternate.rows = T)
+                                file = "./output/tables/Structural Parameters Table.doc", alternate.rows = T)
         return(struct)
       }
     }
     else if(table==FALSE & figure == TRUE){
+      dirs("output/figures")
       #Make path diagram
       if(figtype == "unstandardized"){
         semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
@@ -129,6 +132,8 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
       }
     }
     else if(table==TRUE & figure == TRUE){
+      dirs("output/tables")
+      dirs("output/figures")
       if(tabletype== "both"){
         #Make measurement parameter table
 
@@ -158,9 +163,9 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
         structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
 
         measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-                                 file = "Measurement Parameters Table.doc", alternate.rows = T)
+                                 file = "./output/tables/Measurement Parameters Table.doc", alternate.rows = T)
         struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
-                                file = "Structural Parameters Table.doc", alternate.rows = T)
+                                file = "./output/tables/Structural Parameters Table.doc", alternate.rows = T)
         tab.list = list(measure,struct)
       }
       else if(tabletype== "measurement"){
@@ -182,7 +187,7 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
           dplyr::mutate_if(is.numeric, round, digits = 3)
 
         measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-                                 file = "Measurement Parameters Table.doc", alternate.rows = T)
+                                 file = "./output/tables/Measurement Parameters Table.doc", alternate.rows = T)
         tab.list = list(measure)
       }
       else if(tabletype== "slopes"){
@@ -198,26 +203,26 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
         structural.param$'p-value'[structural.param$'p-value' < .001] = "< .001"
 
         struct = sjPlot::tab_df(structural.param, title = "Structural Model Parameters",
-                                file = "Structural Parameters Table.doc", alternate.rows = T)
+                                file = "./output/tables/Structural Parameters Table.doc", alternate.rows = T)
         tab.list = list(struct)
       }
       #Make path diagram
       if(figtype == "unstandardized"){
         fig  = semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
                                  curvePivot = F, intercepts = F,
-                                 edge.color = "black", filetype = "png", filename = "apim", weighted = F,
+                                 edge.color = "black", filetype = "png", filename = "output/figures/apim", weighted = F,
                                  edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
       }
       else if(figtype == "standardized"){
         fig = semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
                                 curvePivot = F, intercepts = F,
-                                edge.color = "black", filetype = "png", filename = "apim", weighted = F,
+                                edge.color = "black", filetype = "png", filename = "output/figures/apim", weighted = F,
                                 edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
       }
       else if(figtype == "labels"){
         fig = semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
                                 curvePivot = F, intercepts = F,
-                                edge.color = "black", filetype = "png", filename = "apim", weighted = F,
+                                edge.color = "black", filetype = "png", filename = "output/figures/apim", weighted = F,
                                 edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
       }
       out.list = list(tab.list, fig)
@@ -226,6 +231,7 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
   }
   else if(length(dvn)==6){
     if(table==TRUE & figure == FALSE){
+      dirs("output/tables")
       #Extract intercepts (xintercepts function works for single X or Y factor)
       xints <- xintercepts(dvn, fit)
 
@@ -247,31 +253,34 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
         dplyr::mutate_if(is.numeric, round, digits = 3)
 
       measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-                               file = "Measurement Parameters Table.doc", alternate.rows = T)
+                               file = "./output/tables/Measurement Parameters Table.doc", alternate.rows = T)
       return(measure)
     }
     else if(table==FALSE & figure == TRUE){
+      dirs("output/figures")
       #Make path diagram
       if(figtype == "unstandardized"){
         semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
                           curvePivot = F, intercepts = F,
-                          edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                          edge.color = "black", filetype = "png", filename = "output/figures/cfa", weighted = F,
                           edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
       }
       else if(figtype == "standardized"){
         semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
                           curvePivot = F, intercepts = F,
-                          edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                          edge.color = "black", filetype = "png", filename = "output/figures/cfa", weighted = F,
                           edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
       }
       else if(figtype == "labels"){
         semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
                           curvePivot = F, intercepts = F,
-                          edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                          edge.color = "black", filetype = "png", filename = "output/figures/cfa", weighted = F,
                           edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
       }
     }
     else if(table==TRUE & figure == TRUE){
+      dirs("output/tables")
+      dirs("output/figures")
       #Extract intercepts (xintercepts function works for single X or Y factor)
       xints <- xintercepts(dvn, fit)
 
@@ -293,7 +302,7 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
         dplyr::mutate_if(is.numeric, round, digits = 3)
 
       measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
-                               file = "Measurement Parameters Table.doc", alternate.rows = T)
+                               file = "./output/tables/Measurement Parameters Table.doc", alternate.rows = T)
 
       tab.list = list(measure)
 
@@ -301,19 +310,19 @@ dyOutput = function(dvn, fit, table = TRUE, tabletype = NULL,
       if(figtype == "unstandardized"){
         fig  = semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
                                  curvePivot = F, intercepts = F,
-                                 edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                                 edge.color = "black", filetype = "png", filename = "output/figures/cfa", weighted = F,
                                  edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
       }
       else if(figtype == "standardized"){
         fig = semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
                                 curvePivot = F, intercepts = F,
-                                edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                                edge.color = "black", filetype = "png", filename = "output/figures/cfa", weighted = F,
                                 edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
       }
       else if(figtype == "labels"){
         fig = semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
                                 curvePivot = F, intercepts = F,
-                                edge.color = "black", filetype = "png", filename = "cfa", weighted = F,
+                                edge.color = "black", filetype = "png", filename = "output/figures/cfa", weighted = F,
                                 edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
       }
       out.list = list(tab.list, fig)
