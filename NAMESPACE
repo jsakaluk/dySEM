@@ -2,6 +2,7 @@
 
 export("%>%")
 export(apimSEM)
+export(cfSEM)
 export(dirs)
 export(dyOutput)
 export(dyadCFA)
