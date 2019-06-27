@@ -1,6 +1,6 @@
 Package: dySEM
-Title: Dyadic Data Analysis of Latent Variables
-Version: 0.0.0.9000
+Title: dySEM: Dyadic Data Analysis of Latent Variables
+Version: 0.0.0.9014
 Authors@R: 
     c(person(given = "John",
              family = "Sakaluk",
@@ -17,20 +17,7 @@ Authors@R:
              email = "anfisher@uvic.ca"))
 Description: Functions for Automated lavaan() Scripting of
     Dyadic Data Analysis with Latent Variables. Includes dyadic CFA and
-    invariance models, APIMs, and CFMs.
-URL: http://github.com/jsakaluk/dySEM
-BugReports: http://github.com/jsakaluk/dySEM/issues
+    invariance models, APIMs, and CFMs
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1.9000
-Imports: 
-    lavaan,
-    dplyr,
-    tidyselect,
-    magrittr,
-    tibble,
-    sjPlot,
-    semPlot,
-    rlang,
-    crayon
