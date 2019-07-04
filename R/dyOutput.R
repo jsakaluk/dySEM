@@ -1,8 +1,8 @@
 #' A Function That Exports Tables and/or SEM Digrams based on dySEM models
 #'
-#' This function takes the fitted model from fitted dySEM() scripts and
+#' This function takes the  model from fitted dySEM() scripts and
 #' exports table(s) and/or a path diagram figure of expected output. Currently
-#' only working for apimSEM() models.
+#' only working for dyadCFA() and apimSEM() models.
 #'
 #' @param dvn input object from dyadVarNames()
 #' @param model character input specying type of model to output (e.g., "cfa", "apim", "cf")

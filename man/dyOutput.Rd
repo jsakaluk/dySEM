@@ -37,9 +37,9 @@ Ignore console (prints unneccessary semPlot::semPaths details). More importantly
 prints word files for the table(s) and/or figure, outputed to the users working directory
 }
 \description{
-This function takes the fitted model from fitted dySEM() scripts and
+This function takes the  model from fitted dySEM() scripts and
 exports table(s) and/or a path diagram figure of expected output. Currently
-only working for apimSEM() models.
+only working for dyadCFA() and apimSEM() models.
 }
 \examples{
 dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",
