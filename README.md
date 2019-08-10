@@ -179,7 +179,7 @@ the first loading)
 
 ``` r
 
-dyOutput(dvn1, con.fit.config, figtype = "unstandardized")
+dyOutput(dvn1, model="cfa", con.fit.config, figtype = "unstandardized")
 ```
 
 ![](img/table.png)
