@@ -4,7 +4,7 @@
 \alias{dyMIOutput}
 \title{A Function That Exports a Table of Dyadic Invariance Model Comparison Indices}
 \usage{
-dyMIOutput(config, load, int)
+dyMIOutput(config, load, int, robust = F)
 }
 \arguments{
 \item{config}{fitted dyadic configural invariance model lavaan object}
@@ -12,6 +12,8 @@ dyMIOutput(config, load, int)
 \item{load}{fitted dyadic loading invariance model lavaan object}
 
 \item{int}{fitted dyadic intercept invariance model lavaan object}
+
+\item{robust}{logical for whether a robust estimator has been used (default is F)}
 }
 \value{
 Prints word files for the table outputed to the users working directory
@@ -32,7 +34,7 @@ con.fit.config <- cfa(con.config.script, data = dat, std.lv = F, auto.fix.first=
 con.fit.loading <- cfa(con.loading.script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
 con.fit.intercept <- cfa(con.intercept.script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
 
-dyMIOutput(con.fit.config, con.fit.loading, con.fit.intercept)
+dyMIOutput(con.fit.config, con.fit.loading, con.fit.intercept, robust = F)
 }
 \seealso{
 \code{\link{dyadCFA}} which this function relies on
