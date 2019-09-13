@@ -24,6 +24,8 @@
 #' dyMIOutput(con.fit.config, con.fit.loading, con.fit.intercept)
 
 dyMIOutput <-function(config, load, int){
+  dirs("output")
+  dirs("output/tables")
   #Extract and transpose fit indices from each model
   config.fit <- data.frame(lavaan::fitMeasures(config))
   config.fit.t <- data.frame(t(config.fit))
