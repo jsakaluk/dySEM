@@ -30,11 +30,11 @@ con.config.script = dyadCFA(dvn, lvname = "Conflict",  model = "configural")
 con.loading.script = dyadCFA(dvn, lvname = "Conflict",  model = "loading")
 con.intercept.script = dyadCFA(dvn, lvname = "Conflict",  model = "intercept")
 
-con.fit.config <- cfa(con.config.script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
-con.fit.loading <- cfa(con.loading.script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
-con.fit.intercept <- cfa(con.intercept.script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
+con.fit.config <- lavaan::cfa(con.config.script, data = dat, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+con.fit.loading <- lavaan::cfa(con.loading.script, data = dat, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+con.fit.intercept <- lavaan::cfa(con.intercept.script, data = dat, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 
-dyMIOutput(con.fit.config, con.fit.loading, con.fit.intercept, robust = F)
+dyMIOutput(con.fit.config, con.fit.loading, con.fit.intercept, robust = FALSE)
 }
 \seealso{
 \code{\link{dyadCFA}} which this function relies on
