@@ -40,5 +40,7 @@ dyRand<-function(dvn, dat){
       dat.perm[i,] = ins.row
     }
   }
+  names(dat.perm) = names(dat)
+
   return(dat.perm)
 }

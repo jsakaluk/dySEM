@@ -1,6 +1,6 @@
 Package: dySEM
 Title: dySEM: Dyadic Data Analysis of Latent Variables
-Version: 0.0.0.9019
+Version: 0.0.0.9020
 Authors@R: 
     c(person(given = "John",
              family = "Sakaluk",
@@ -22,11 +22,3 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Imports: 
-    magrittr,
-    MASS,
-    nlme,
-    boot,
-    Matrix
-Suggests: 
-    foreign
