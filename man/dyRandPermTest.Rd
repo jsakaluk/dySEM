@@ -2,7 +2,7 @@
 % Please edit documentation in R/dyRandPermTest.R
 \name{dyRandPermTest}
 \alias{dyRandPermTest}
-\title{A performs random permuted tests of  invariance for ostensibly indistinguishable  dyads}
+\title{Performs random permutation tests of  invariance for ostensibly indistinguishable  dyads}
 \usage{
 dyRandPermTest(dvn, dat, n, AFIs = NULL, model = "configural")
 }

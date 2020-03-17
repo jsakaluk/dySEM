@@ -47,5 +47,6 @@ dyRandPermTest<-function(dvn, dat, n, AFIs = NULL, model = "configural"){
   perm.plot
 
   print(prob)
-  return(perm.plot)
+  newList <- list("p" = prob, "plot" = perm.plot)
+  return(newList)
 }
