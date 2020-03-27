@@ -4,7 +4,9 @@
 \name{dat}
 \alias{dat}
 \title{Example data}
-\format{An object of class \code{data.frame} with 500 rows and 12 columns.}
+\format{
+An object of class \code{data.frame} with 500 rows and 12 columns.
+}
 \usage{
 data(dat)
 }

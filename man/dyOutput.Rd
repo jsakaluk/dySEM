@@ -4,9 +4,17 @@
 \alias{dyOutput}
 \title{A Function That Exports Tables and/or SEM Digrams based on dySEM models}
 \usage{
-dyOutput(dvn, model = NULL, fit, table = TRUE, tabletype = NULL,
-  figure = TRUE, figtype = NULL, dydMACS.x = NULL,
-  dydMACS.y = NULL)
+dyOutput(
+  dvn,
+  model = NULL,
+  fit,
+  table = TRUE,
+  tabletype = NULL,
+  figure = TRUE,
+  figtype = NULL,
+  dydMACS.x = NULL,
+  dydMACS.y = NULL
+)
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
