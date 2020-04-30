@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A Function That Writes, Saves, and Exports Syntax for
-Fitting the I-NULL model for indistinguishable dyads — INULL • dySEM</title>
+<title>A Function that Computes Corrected Fit Indexes According to the ISAT and INULL Models of Olsen &amp; Kenny (2006) — indistFit • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,11 +46,11 @@ Fitting the I-NULL model for indistinguishable dyads — INULL • dySEM</title>
 
 
 
-<meta property="og:title" content="A Function That Writes, Saves, and Exports Syntax for
-Fitting the I-NULL model for indistinguishable dyads — INULL" />
+<meta property="og:title" content="A Function that Computes Corrected Fit Indexes According to the ISAT and INULL Models of Olsen &amp; Kenny (2006) — indistFit" />
 <meta property="og:description" content="This function takes the outputted object from dyadVarNames()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
-for the I-NULL model described in Olsen &amp;amp; Kenny (2006)" />
+for specifying dyadic configural, loading, and intercept invariant
+measurement models for either a specified X or Y factor." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -118,44 +117,43 @@ for the I-NULL model described in Olsen &amp;amp; Kenny (2006)" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A Function That Writes, Saves, and Exports Syntax for
-Fitting the I-NULL model for indistinguishable dyads</h1>
+    <h1>A Function that Computes Corrected Fit Indexes According to the ISAT and INULL Models of Olsen &amp; Kenny (2006)</h1>
     
-    <div class="hidden name"><code>INULL.Rd</code></div>
+    <div class="hidden name"><code>indistFit.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>This function takes the outputted object from dyadVarNames()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
-for the I-NULL model described in Olsen &amp; Kenny (2006)</p>
+for specifying dyadic configural, loading, and intercept invariant
+measurement models for either a specified X or Y factor.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>INULL</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>)</pre>
+    <pre class="usage"><span class='fu'>indistFit</span>(<span class='no'>indmodel</span>, <span class='no'>isatmod</span>, <span class='no'>inullmod</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dvn</th>
-      <td><p>input object from dyadVarNames()</p></td>
+      <th>indmodel</th>
+      <td><p>input lavaan model fitted using dyadCFA(model = "indistinguishable")</p></td>
     </tr>
     <tr>
-      <th>lvname</th>
-      <td><p>input character to (arbitrarily) name LV in lavaan syntax</p></td>
+      <th>isatmod</th>
+      <td><p>input lavaan model fitted using ISAT()</p></td>
+    </tr>
+    <tr>
+      <th>inullmod</th>
+      <td><p>input lavaan model fitted using INULL()</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>character object of lavaan script that can be passed immediately to
-lavaan functions</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='dyadVarNames.html'>dyadVarNames</a></code> which this function relies on</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span><span class='kw'>=</span><span class='st'>"X"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>,<span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
-<span class='no'>isat.mod</span> <span class='kw'>=</span> <span class='fu'><a href='ISAT.html'>ISAT</a></span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"X"</span>)</div></pre>
+<span class='no'>indist.script</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='dyadCFA.html'>dyadCFA</a></span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"indistinguishable"</span>)
+<span class='no'>indist.fit</span> <span class='kw'>&lt;-</span> <span class='fu'>cfa</span>(<span class='no'>indist.script</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='no'>T</span>)</div><div class='output co'>#&gt; <span class='error'>Error in cfa(indist.script, data = dat, std.lv = F, auto.fix.first = F,     meanstructure = T): could not find function "cfa"</span></div><div class='input'><span class='no'>isat.mod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ISAT.html'>ISAT</a></span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>)
+<span class='no'>isat.fit</span> <span class='kw'>&lt;-</span> <span class='fu'>cfa</span>(<span class='no'>isat.mod</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='no'>T</span>)</div><div class='output co'>#&gt; <span class='error'>Error in cfa(isat.mod, data = dat, std.lv = F, auto.fix.first = F, meanstructure = T): could not find function "cfa"</span></div><div class='input'><span class='no'>inull.mod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='INULL.html'>INULL</a></span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in fixed(" "): could not find function "fixed"</span></div><div class='input'><span class='no'>inull.fit</span> <span class='kw'>&lt;-</span> <span class='fu'>cfa</span>(<span class='no'>inull.mod</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='no'>T</span>)</div><div class='output co'>#&gt; <span class='error'>Error in cfa(inull.mod, data = dat, std.lv = F, auto.fix.first = F, meanstructure = T): could not find function "cfa"</span></div><div class='input'><span class='fu'>indistFit</span>(<span class='kw'>indmodel</span> <span class='kw'>=</span> <span class='no'>indist.fit</span>, <span class='kw'>isatmod</span> <span class='kw'>=</span> <span class='no'>isat.fit</span>, <span class='kw'>inullmod</span> <span class='kw'>=</span> <span class='no'>inull.fit</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::fitMeasures(indmodel): object 'indist.fit' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

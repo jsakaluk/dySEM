@@ -24,8 +24,8 @@ dyadCFA = function(dvn, lvname, model = "configural"){
   dirs("scripts")
   if(model == "configural"){
     #Loadings
-    eta.x1 = loadings(dvn, lvname, partner="1", type = "free")
-    eta.x2 = loadings(dvn, lvname, partner="2", type = "free")
+    eta.x1 = loads(dvn, lvname, partner="1", type = "free")
+    eta.x2 = loads(dvn, lvname, partner="2", type = "free")
 
     #Latent (co)variances
     psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
@@ -50,8 +50,8 @@ dyadCFA = function(dvn, lvname, model = "configural"){
   }
   else if (model == "loading"){
     #Loadings
-    eta.x1 = loadings(dvn, lvname, partner="1", type = "equated")
-    eta.x2 = loadings(dvn, lvname, partner="2", type = "equated")
+    eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
+    eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
 
     #Latent (co)variances
     psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
@@ -76,8 +76,8 @@ dyadCFA = function(dvn, lvname, model = "configural"){
   }
   else if (model == "intercept"){
     #Loadings
-    eta.x1 = loadings(dvn, lvname, partner="1", type = "equated")
-    eta.x2 = loadings(dvn, lvname, partner="2", type = "equated")
+    eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
+    eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
 
     #Latent (co)variances
     psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
@@ -102,8 +102,8 @@ dyadCFA = function(dvn, lvname, model = "configural"){
   }
   else if (model == "residual"){
     #Loadings
-    eta.x1 = loadings(dvn, lvname, partner="1", type = "equated")
-    eta.x2 = loadings(dvn, lvname, partner="2", type = "equated")
+    eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
+    eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
 
     #Latent (co)variances
     psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
@@ -131,8 +131,8 @@ dyadCFA = function(dvn, lvname, model = "configural"){
   }
   else if (model == "indistinguishable"){
     #Loadings
-    eta.x1 = loadings(dvn, lvname, partner="1", type = "equated")
-    eta.x2 = loadings(dvn, lvname, partner="2", type = "equated")
+    eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
+    eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
 
     #Latent (co)variances
     psi_x1 = sprintf("%s%s ~~ psi1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])

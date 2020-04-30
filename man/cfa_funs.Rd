@@ -2,12 +2,12 @@
 % Please edit documentation in R/cfa_funs.R
 \name{cfa_funs}
 \alias{cfa_funs}
-\alias{loadings}
+\alias{loads}
 \alias{intercepts}
 \alias{resids}
 \title{Functions for dyadCFA() for scripting free or fixed families of parameters}
 \usage{
-loadings(dvn, fit)
+loads(dvn, lvname, partner = "1", type = "free")
 
 intercepts(dvn, partner = "1", type = "free")
 
@@ -16,11 +16,11 @@ resids(dvn, partner = "1", type = "free")
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
 
+\item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
+
 \item{partner}{input character to indicate parameters for first or second dyad member}
 
 \item{type}{input character to indicate whether parameters "free" or "equated" in estimation}
-
-\item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
 }
 \description{
 Functions for dyadCFA() for scripting free or fixed families of parameters

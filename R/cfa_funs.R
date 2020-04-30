@@ -12,7 +12,7 @@
 #' @export
 
 #' @rdname cfa_funs
-loadings <- function(dvn, lvname, partner="1", type = "free"){
+loads <- function(dvn, lvname, partner="1", type = "free"){
 
   if(partner == "1" & type == "free"){
     eta_x = sprintf("%s%s =~ NA*",lvname, dvn[[4]])
