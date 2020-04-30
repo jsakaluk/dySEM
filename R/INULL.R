@@ -3,8 +3,7 @@
 #'
 #' This function takes the outputted object from dyadVarNames()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
-#' for specifying dyadic configural, loading, and intercept invariant
-#' measurement models for either a specified X or Y factor.
+#' for the I-NULL model described in Olsen & Kenny (2006)
 #' @param dvn input object from dyadVarNames()
 #' @param lvname input character to (arbitrarily) name LV in lavaan syntax
 #' @return character object of lavaan script that can be passed immediately to
@@ -13,9 +12,7 @@
 #' @export
 #' @examples
 #' dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
-#' con.config.script = dyadCFA(dvn, lvname = "Conflict", model = "configural")
-#' con.loading.script = dyadCFA(dvn, lvname = "Conflict",  model = "loading")
-#' con.intercept.script = dyadCFA(dvn, lvname = "Conflict",  model = "intercept")
+#' isat.mod = ISAT(dvn, lvname = "X")
 INULL = function(dvn, lvname){
   dirs("scripts")
 
@@ -43,19 +40,32 @@ INULL = function(dvn, lvname){
     store[[i]] = paste("0*",covar.list[[i]],collapse = "+")
   }
 
-  store = gsub(" ", "", store, fixed = TRUE)
+  store = stringr::str_replace_all(store, fixed(" "), "")
+
+  #store = gsub("", "", store, fixed = TRUE)
 
   covars = c()
   for (i in 1:length(covar.list)) {
-    covars[[i]]=sprintf("%s ~~ %s", covar.list[[i]], store[[i]])
+    covars[[i]]=sprintf("%s ~~ %s", varname[[i]], store[[i]])
   }
 
+  covars = paste(covars, collapse = "\n")
   #covars = gsub(" ", "", covars, fixed = T)
   #covars = paste(covars, collapse = "\n")
   #covars = stringi::stri_paste_list(covars, sep = "", collapse = NULL)
-  covars = c(covars, recursive = T)
-  covars = paste(covars, collapse = "\n")
+  #covars = c(covars, recursive = T)
+
   #Variances (hacky-way to undo fixing to zero 5 variances)
+  #vars1 = list()
+  #vars2 = list()
+  #for (i in 1:dvn[[3]]) {
+    #vars1[[i]]=sprintf("%s ~~ v%s*%s",dvn[[1]][i],i, dvn[[1]][i])
+    #vars2[[i]]=sprintf("%s ~~ v%s*%s",dvn[[2]][i],i, dvn[[2]][i])
+  #}
+  #vars1 = paste(vars1, collapse = "\n")
+  #vars2 = paste(vars2, collapse = "\n")
+
+  #Variances
   vars1 = list()
   vars2 = list()
   for (i in 1:dvn[[3]]) {
@@ -66,7 +76,7 @@ INULL = function(dvn, lvname){
   vars2 = paste(vars2, collapse = "\n")
 
   #Script Creation Syntax
-  INULL.script = sprintf("#Constrained Means\n%s\n%s\n\n#Constrained Covariances\n%s\n\n#Constrained Variances\n%s\n%s", xints1, xints2, covars, vars1, vars2)
+  INULL.script = sprintf("#Equated Means\n%s\n%s\n\n#No Covariances\n%s\n\n#Equated Variances\n%s\n%s", xints1, xints2, covars, vars1, vars2)
   cat(INULL.script,"\n", file = sprintf("./scripts/%s_INULL.txt",lvname))
   return(INULL.script)
 }
