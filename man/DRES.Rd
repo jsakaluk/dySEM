@@ -7,10 +7,10 @@
 \format{
 A data frame with 121 rows and 28 variables:
 \describe{
- \item{PRQC_1.1}{PRQC items for partner 1}
- \item{PRQC_1.2}{PRQC items for partner 2}
- \item{sexsat1.1}{sexual satisfaction items for partner 1}
- \item{sexsat1.1}{sexual satisfaction items for partner 2}
+\item{PRQC_1.1}{PRQC items for partner 1}
+\item{PRQC_1.2}{PRQC items for partner 2}
+\item{sexsat1.1}{sexual satisfaction items for partner 1}
+\item{sexsat1.1}{sexual satisfaction items for partner 2}
 }
 }
 \usage{

@@ -19,14 +19,11 @@ lavaan functions
 \description{
 This function takes the outputted object from dyadVarNames()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
-for specifying dyadic configural, loading, and intercept invariant
-measurement models for either a specified X or Y factor.
+for the I-NULL model described in Olsen & Kenny (2006)
 }
 \examples{
 dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
-con.config.script = dyadCFA(dvn, lvname = "Conflict", model = "configural")
-con.loading.script = dyadCFA(dvn, lvname = "Conflict",  model = "loading")
-con.intercept.script = dyadCFA(dvn, lvname = "Conflict",  model = "intercept")
+isat.mod = ISAT(dvn, lvname = "X")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on

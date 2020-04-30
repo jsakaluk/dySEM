@@ -26,7 +26,7 @@ dyOutput(
 \item{table}{logical input of whether table output is desired. Default is TRUE}
 
 \item{tabletype}{character input of what type of table(s) is(are) desired.
-.data$options are "measurement" (i.e,, slopes, intercepts, and [.data$optionally] dMACS),
+.data$options are "measurement" (i.e,, slopes, intercepts, and \link{.data$optionally} dMACS),
 "slopes" (i.e., latent slopes, such as actor/partner effects), or "both"
 (i.e., both measurement and slope tables)}
 
