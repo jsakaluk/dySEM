@@ -15,6 +15,8 @@ knitr::opts_chunk$set(
 # dySEM <img src="man/figures/logo.png" align="right" />
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![CRAN status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/package=dySEM)
 <!-- badges: end -->
 
 `dySEM` helps automate the process of scripting, fitting, and reporting on latent models of dyadic data via [`lavaan`](http://lavaan.ugent.be). 

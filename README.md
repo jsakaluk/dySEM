@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/package=dySEM)
 <!-- badges: end -->
 
 `dySEM` helps automate the process of scripting, fitting, and reporting
@@ -93,8 +97,7 @@ A full vignette paper is in the works, but at a glance, the typical
     resulting `dvn` object should contain all that is needed for the
     rest of the packge to work, and its just a simple list of variable
     names, items (per dyad member), and dyad member distinguishing
-    characters for latent X and
-Y.
+    characters for latent X and Y.
 
 <!-- end list -->
 
@@ -127,8 +130,7 @@ dvn
     `lavaan`-friendly script object and output a reproducible version of
     the script as a .txt to your current working directory (post this
     somewhere like the [OSF](http://osf.io) to make your reviewers happy
-    :)
-)
+    :) )
 
 <!-- end list -->
 
@@ -154,8 +156,7 @@ dres.loading.fit <- cfa(dres.loading, data = dat, std.lv = F, auto.fix.first= F,
     information in your fitted `lavaan` object to return reproducible
     tables (of measurement and/or structural parameter estimates, of
     model fit indexes and comparisons), and/or (for some select) path
-    diagrams generated using
-`semPlot::semPaths`.
+    diagrams generated using `semPlot::semPaths`.
 
 <!-- end list -->
 

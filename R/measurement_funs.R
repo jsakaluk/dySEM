@@ -1,7 +1,7 @@
 #' @name measurement_funs
 #' @rdname measurement_funs
 #'
-#' @title Functions for dyOutput() for extracting measurement model output
+#' @title Functions for extracting measurement model output
 #'
 #' @param dvn input object from dyadVarNames()
 #' @param fit input object from fitted lavaan model
@@ -9,6 +9,25 @@
 #' @seealso \code{\link{dyOutput}} which this function supplies
 #' @export
 #'
+
+#' @rdname measurement_funs
+xlamda1 <- function(dvn, fit){
+  #Extract loadings
+  load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+    dplyr::filter(.data$op == "=~" & rhs %in% dvn[[1]]) %>%
+    dplyr::select(Std.Loading=.data$std.all)
+  return(load)
+}
+
+#' @rdname measurement_funs
+xlamda2 <- function(dvn, fit){
+  #Extract loadings
+  load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+    dplyr::filter(.data$op == "=~" & rhs %in% dvn[[2]]) %>%
+    dplyr::select(Std.Loading=.data$std.all)
+  return(load)
+}
+
 #' @rdname measurement_funs
 loadings <- function(dvn, fit){
   #Extract loadings, SEs, Z, p,
