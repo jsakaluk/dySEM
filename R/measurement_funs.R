@@ -29,6 +29,33 @@ xlamda2 <- function(dvn, fit){
 }
 
 #' @rdname measurement_funs
+xtheta1 <- function(dvn, fit){
+  #Extract loadings
+  error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+    dplyr::filter(.data$op == "~~" & lhs %in% dvn[[1]] & rhs %in% dvn[[1]]) %>%
+    dplyr::select(Std.Error=.data$std.all)
+  return(error)
+}
+
+#' @rdname measurement_funs
+xtheta2 <- function(dvn, fit){
+  #Extract loadings
+  error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+    dplyr::filter(.data$op == "~~" & lhs %in% dvn[[2]] & rhs %in% dvn[[2]]) %>%
+    dplyr::select(Std.Error=.data$std.all)
+  return(error)
+}
+
+#' @rdname measurement_funs
+xtheta12 <- function(dvn, fit){
+  #Extract loadings
+  corerror = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+    dplyr::filter(.data$op == "~~" & lhs %in% dvn[[1]] & rhs %in% dvn[[2]]) %>%
+    dplyr::select(Std.Error=.data$std.all)
+  return(corerror)
+}
+
+#' @rdname measurement_funs
 loadings <- function(dvn, fit){
   #Extract loadings, SEs, Z, p,
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
