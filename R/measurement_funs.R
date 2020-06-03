@@ -30,7 +30,7 @@ xlamda2 <- function(dvn, fit){
 
 #' @rdname measurement_funs
 xtheta1 <- function(dvn, fit){
-  #Extract loadings
+  #Extract resicual variances
   error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
     dplyr::filter(.data$op == "~~" & lhs %in% dvn[[1]] & rhs %in% dvn[[1]]) %>%
     dplyr::select(Std.Error=.data$std.all)
@@ -39,7 +39,7 @@ xtheta1 <- function(dvn, fit){
 
 #' @rdname measurement_funs
 xtheta2 <- function(dvn, fit){
-  #Extract loadings
+  #Extract residual variances
   error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
     dplyr::filter(.data$op == "~~" & lhs %in% dvn[[2]] & rhs %in% dvn[[2]]) %>%
     dplyr::select(Std.Error=.data$std.all)

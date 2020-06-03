@@ -2,11 +2,26 @@
 % Please edit documentation in R/measurement_funs.R
 \name{measurement_funs}
 \alias{measurement_funs}
+\alias{xlamda1}
+\alias{xlamda2}
+\alias{xtheta1}
+\alias{xtheta2}
+\alias{xtheta12}
 \alias{loadings}
 \alias{xintercepts}
 \alias{yintercepts}
-\title{Functions for dyOutput() for extracting measurement model output}
+\title{Functions for extracting measurement model output}
 \usage{
+xlamda1(dvn, fit)
+
+xlamda2(dvn, fit)
+
+xtheta1(dvn, fit)
+
+xtheta2(dvn, fit)
+
+xtheta12(dvn, fit)
+
 loadings(dvn, fit)
 
 xintercepts(dvn, fit)
@@ -19,7 +34,7 @@ yintercepts(dvn, fit)
 \item{fit}{input object from fitted lavaan model}
 }
 \description{
-Functions for dyOutput() for extracting measurement model output
+Functions for extracting measurement model output
 }
 \seealso{
 \code{\link{dyOutput}} which this function supplies

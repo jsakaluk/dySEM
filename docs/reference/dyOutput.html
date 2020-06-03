@@ -82,7 +82,7 @@ only working for dyadCFA() and apimSEM() models." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9028</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9030</span>
       </span>
     </div>
 
@@ -200,63 +200,7 @@ prints word files for the table(s) and/or figure, outputed to the users working 
 <span class='kw'>lvyname</span> <span class='kw'>=</span> <span class='st'>"Satisfaction"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"loading"</span>)
 <span class='no'>apim.fit.load</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lavaan</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span>(<span class='no'>apim.script.load</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
 <span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>dyOutput</span>(<span class='no'>dvn</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"apim"</span>, <span class='no'>apim.fit.load</span>, <span class='kw'>tabletype</span> <span class='kw'>=</span> <span class='st'>"both"</span>, <span class='kw'>figtype</span> <span class='kw'>=</span> <span class='st'>"unstandardized"</span>)</div><div class='output co'>#&gt; <span class='message'>Output stored in /Users/johnsakaluk/Dropbox/Research/Sakaluk/Dyadic Invariance/Data and Scripts/dySEM/docs/reference/output/figures/apimscriptload unstd.png</span></div><div class='output co'>#&gt; [[1]]
-#&gt; [[1]][[1]]
-#&gt; 
-#&gt; [[1]][[2]]
-#&gt; 
-#&gt; 
-#&gt; [[2]]
-#&gt; From		To	Weight
-#&gt; 13 	 --&gt; 	 1 	 0.42 
-#&gt; 13 	 --&gt; 	 2 	 0.71 
-#&gt; 13 	 --&gt; 	 3 	 0.57 
-#&gt; 14 	 --&gt; 	 4 	 0.42 
-#&gt; 14 	 --&gt; 	 5 	 0.71 
-#&gt; 14 	 --&gt; 	 6 	 0.57 
-#&gt; 15 	 --&gt; 	 7 	 0.73 
-#&gt; 15 	 --&gt; 	 8 	 0.87 
-#&gt; 15 	 --&gt; 	 9 	 0.87 
-#&gt; 16 	 --&gt; 	 10 	 0.73 
-#&gt; 16 	 --&gt; 	 11 	 0.87 
-#&gt; 16 	 --&gt; 	 12 	 0.87 
-#&gt; 13 	 &lt;-&gt; 	 13 	 1 
-#&gt; 14 	 &lt;-&gt; 	 14 	 1.13 
-#&gt; 13 	 &lt;-&gt; 	 14 	 0.47 
-#&gt; 15 	 &lt;-&gt; 	 15 	 1 
-#&gt; 16 	 &lt;-&gt; 	 16 	 0.85 
-#&gt; 15 	 &lt;-&gt; 	 16 	 0.12 
-#&gt; 13 	 --&gt; 	 15 	 -0.26 
-#&gt; 14 	 --&gt; 	 16 	 -0.39 
-#&gt; 14 	 --&gt; 	 15 	 -0.33 
-#&gt; 13 	 --&gt; 	 16 	 -0.13 
-#&gt; 1 	 &lt;-&gt; 	 4 	 0.09 
-#&gt; 2 	 &lt;-&gt; 	 5 	 0.03 
-#&gt; 3 	 &lt;-&gt; 	 6 	 -0.13 
-#&gt; 7 	 &lt;-&gt; 	 10 	 -0.05 
-#&gt; 8 	 &lt;-&gt; 	 11 	 0 
-#&gt; 9 	 &lt;-&gt; 	 12 	 -0.04 
-#&gt; 1 	 &lt;-&gt; 	 1 	 0.98 
-#&gt; 2 	 &lt;-&gt; 	 2 	 0.98 
-#&gt; 3 	 &lt;-&gt; 	 3 	 1.15 
-#&gt; 4 	 &lt;-&gt; 	 4 	 0.98 
-#&gt; 5 	 &lt;-&gt; 	 5 	 0.89 
-#&gt; 6 	 &lt;-&gt; 	 6 	 1.12 
-#&gt; 7 	 &lt;-&gt; 	 7 	 0.96 
-#&gt; 8 	 &lt;-&gt; 	 8 	 0.97 
-#&gt; 9 	 &lt;-&gt; 	 9 	 1.17 
-#&gt; 10 	 &lt;-&gt; 	 10 	 0.96 
-#&gt; 11 	 &lt;-&gt; 	 11 	 0.91 
-#&gt; 12 	 &lt;-&gt; 	 12 	 0.89 
-#&gt; 14 	 &lt;-&gt; 	 13 	 0.47 
-#&gt; 16 	 &lt;-&gt; 	 15 	 0.12 
-#&gt; 4 	 &lt;-&gt; 	 1 	 0.09 
-#&gt; 5 	 &lt;-&gt; 	 2 	 0.03 
-#&gt; 6 	 &lt;-&gt; 	 3 	 -0.13 
-#&gt; 10 	 &lt;-&gt; 	 7 	 -0.05 
-#&gt; 11 	 &lt;-&gt; 	 8 	 0 
-#&gt; 12 	 &lt;-&gt; 	 9 	 -0.04 
-#&gt; </div></pre>
+<span class='fu'>dyOutput</span>(<span class='no'>dvn</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"apim"</span>, <span class='no'>apim.fit.load</span>, <span class='kw'>tabletype</span> <span class='kw'>=</span> <span class='st'>"both"</span>, <span class='kw'>figtype</span> <span class='kw'>=</span> <span class='st'>"unstandardized"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in `$&lt;-.data.frame`(`*tmp*`, "Intercept", value = list(3.0435729045094,     2.98327283078665, 3.09056640771096, 2.96727080628337, 2.83740262594899,     3.20228926650011, NULL, NULL, NULL, NULL, NULL, NULL, 2.51810833894548,     3.18207727737971, 4.27418950081745, 2.67534357758445, 3.16962321246847,     4.16664502431464)): replacement has 18 rows, data has 12</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

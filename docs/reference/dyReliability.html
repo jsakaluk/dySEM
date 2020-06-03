@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Example data — dat • dySEM</title>
+<title>A Function Calculates Omega Total Coefficients from a Dyadic CFA — dyReliability • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Example data — dat" />
-<meta property="og:description" content="Example data" />
+<meta property="og:title" content="A Function Calculates Omega Total Coefficients from a Dyadic CFA — dyReliability" />
+<meta property="og:description" content="This function takes the  model from fitted dyCFA() scripts and returns omega total coefficients
+for each dyad member following Formula 2 in McNeish (2018)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -114,22 +115,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Example data</h1>
+    <h1>A Function Calculates Omega Total Coefficients from a Dyadic CFA</h1>
     
-    <div class="hidden name"><code>dat.Rd</code></div>
+    <div class="hidden name"><code>dyReliability.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Example data</p>
+    <p>This function takes the  model from fitted dyCFA() scripts and returns omega total coefficients
+for each dyad member following Formula 2 in McNeish (2018).</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>dat</span>)</pre>
+    <pre class="usage"><span class='fu'>dyReliability</span>(<span class='no'>dvn</span>, <span class='no'>fit</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dvn</th>
+      <td><p>input object from dyadVarNames()</p></td>
+    </tr>
+    <tr>
+      <th>fit</th>
+      <td><p>input object from fitted lavaan model based on the default (i.e., "configural") dyadCFA() function</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>data.frame</code> with 500 rows and 12 columns.</p>
+    <p>Calculated omega total coefficients for dyad Member 1 and Member 2</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span><span class='kw'>=</span><span class='st'>"X"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>,<span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
+<span class='no'>con.config.script</span> <span class='kw'>=</span> <span class='fu'><a href='dyadCFA.html'>dyadCFA</a></span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)
+<span class='no'>con.config.mod</span> <span class='kw'>&lt;-</span> <span class='fu'>cfa</span>(<span class='no'>con.config.script</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='no'>T</span>)</div><div class='output co'>#&gt; <span class='error'>Error in cfa(con.config.script, data = dat, std.lv = F, auto.fix.first = F,     meanstructure = T): could not find function "cfa"</span></div><div class='input'><span class='fu'>dyReliability</span>(<span class='no'>con.config.mod</span>)</div><div class='output co'>#&gt; <span class='error'>Error in xlamda1(dvn, fit): argument "fit" is missing, with no default</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

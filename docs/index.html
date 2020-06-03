@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9028</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9030</span>
       </span>
     </div>
 
@@ -71,18 +71,19 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="dysem" class="section level1">
+<div id="dysem-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#dysem" class="anchor"></a>dySEM <img src="reference/figures/logo.png" align="right">
+<a href="#dysem-" class="anchor"></a>dySEM <img src="reference/figures/logo.png" align="right">
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
+
 <p><code>dySEM</code> helps automate the process of scripting, fitting, and reporting on latent models of dyadic data via <a href="http://lavaan.ugent.be"><code>lavaan</code></a>.</p>
 <p>The package currently provides functionality regarding the following types of latent dyadic data models:</p>
 <ol>
 <li><strong>Dyadic Confirmatory Factor Analysis</strong></li>
 </ol>
 <!-- end list --><ul>
+<li>Measure Reliability (Omega) for Each Dyad Member</li>
 <li>Configural Invariance</li>
 <li>Loading Invariance</li>
 <li>Intercept Invariance</li>
@@ -123,12 +124,10 @@
 <p><code>dySEM</code> is able to automate much of the process of conducting latent dyadic data analysis because of predictable (albeit imperfect) patterns in variable naming, and the repetitious nature of <a href="http://lavaan.ugent.be"><code>lavaan</code></a> syntax. For <code>dySEM</code>, all you need is a clean dyad-structured data file, and indicator/manifest variables that follow a re-occuring naming pattern consiting of a shared item stem, unique item numbers, and a distinguishing character that indicates to which dyad partner the variable applies; the names may or may not include delimeters to separate elements of the name (e.g., ecr1_a, ecr2_a, …ecr10_a, ecr1_b, ecr2_b, …ecr10_b).</p>
 <p>A full vignette paper is in the works, but at a glance, the typical <code>dySEM</code> workflow is as follows:</p>
 <ol>
-<li>Use <code>dvn2</code> (short for the second rendition of the Dyad Variable Names function) to extract variable names of the indicators for your latent variable(s). All you need to provide are the item stem(s) for your latent X and/or Y variable, dilimeter(s) (if any), and the distinguishing character that indicate which variables are from which partner. The <code>x_order</code> and/or <code>y_order</code> arguments are used to indicate whether your variable names follow the order of (s)tem, (i)tem, (p)artner (“sip”), or (s)tem, (p)artner, (i)tem (“spi”). The resulting <code>dvn</code> object should contain all that is needed for the rest of the packge to work, and its just a simple list of variable names, items (per dyad member), and dyad member distinguishing characters for latent X and</li>
+<li>Use <code>dvn2</code> (short for the second rendition of the Dyad Variable Names function) to extract variable names of the indicators for your latent variable(s). All you need to provide are the item stem(s) for your latent X and/or Y variable, dilimeter(s) (if any), and the distinguishing character that indicate which variables are from which partner. The <code>x_order</code> and/or <code>y_order</code> arguments are used to indicate whether your variable names follow the order of (s)tem, (i)tem, (p)artner (“sip”), or (s)tem, (p)artner, (i)tem (“spi”). The resulting <code>dvn</code> object should contain all that is needed for the rest of the packge to work, and its just a simple list of variable names, items (per dyad member), and dyad member distinguishing characters for latent X and Y.</li>
 </ol>
-<p>Y.</p>
-<!-- end list -->
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co">#Four items from the PRQC in the DRES data set (Raposo &amp; Muise, under review) from each dyad member</span>
-<span class="no">dat</span> <span class="kw">=</span> <span class="no">DRES</span> <span class="kw">%&gt;%</span>
+<!-- end list --><div class="sourceCode" id="cb2"><pre class="r"><span class="co">#Four items from the PRQC in the DRES data set (Raposo &amp; Muise, under review) from each dyad member</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="no">DRES</span> <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(<span class="no">.</span>, <span class="no">PRQC_1.1</span>:<span class="no">PRQC_4.1</span>, <span class="no">PRQC_1.2</span>:<span class="no">PRQC_4.2</span>)
 
 <span class="co">#Extract item info with dvn2</span>
@@ -152,7 +151,7 @@
 <li>Use one of the script-writing <code>dySEM</code> functions (e.g., <code>dyadCFA</code>, <code>apimSEM</code>, <code>INULL</code>), and supply it your saved <code>dvn</code>. It will save a <code>lavaan</code>-friendly script object and output a reproducible version of the script as a .txt to your current working directory (post this somewhere like the <a href="http://osf.io">OSF</a> to make your reviewers happy :) )</li>
 </ol>
 <!-- end list --><div class="sourceCode" id="cb3"><pre class="r"><span class="co">#Generate script for a dyadic CFA model with loading-invariance contraints</span>
-<span class="no">dres.loading</span> <span class="kw">=</span> <span class="fu"><a href="reference/dyadCFA.html">dyadCFA</a></span>(<span class="no">dvn</span>, <span class="kw">lvname</span> <span class="kw">=</span> <span class="st">"PRQC"</span>,  <span class="kw">model</span> <span class="kw">=</span> <span class="st">"loading"</span>)</pre></div>
+<span class="no">dres.loading</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/dyadCFA.html">dyadCFA</a></span>(<span class="no">dvn</span>, <span class="kw">lvname</span> <span class="kw">=</span> <span class="st">"PRQC"</span>,  <span class="kw">model</span> <span class="kw">=</span> <span class="st">"loading"</span>)</pre></div>
 <ol>
 <li>Fit the scripted model using one of the <code>lavaan</code> model-fitting functions (e.g., <code>cfa</code>); this ensures you retain complete control over how your model is fitted (e.g., estimator selection, missing data treatment, etc.)</li>
 </ol>
@@ -190,7 +189,14 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://CRAN.R-project.org/package=dySEM"><img src="https://www.r-pkg.org/badges/version/dySEM" alt="CRAN status"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 

@@ -1,6 +1,6 @@
 Package: dySEM
 Title: dySEM: Dyadic Data Analysis of Latent Variables
-Version: 0.0.0.9028
+Version: 0.0.0.9030
 Authors@R: 
     c(person(given = "John",
              family = "Sakaluk",

@@ -21,6 +21,7 @@ types of latent dyadic data models:
 
 <!-- end list -->
 
+  - Measure Reliability (Omega) for Each Dyad Member
   - Configural Invariance
   - Loading Invariance
   - Intercept Invariance
@@ -103,7 +104,7 @@ A full vignette paper is in the works, but at a glance, the typical
 
 ``` r
 #Four items from the PRQC in the DRES data set (Raposo & Muise, under review) from each dyad member
-dat = DRES %>% 
+dat <- DRES %>% 
   select(., PRQC_1.1:PRQC_4.1, PRQC_1.2:PRQC_4.2)
 
 #Extract item info with dvn2
@@ -136,7 +137,7 @@ dvn
 
 ``` r
 #Generate script for a dyadic CFA model with loading-invariance contraints
-dres.loading = dyadCFA(dvn, lvname = "PRQC",  model = "loading")
+dres.loading <- dyadCFA(dvn, lvname = "PRQC",  model = "loading")
 ```
 
 3.  Fit the scripted model using one of the `lavaan` model-fitting
