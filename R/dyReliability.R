@@ -25,7 +25,7 @@ dyReliability <- function(dvn, fit){
   omega2 <- numer2/denom2
 
   #Bind omega estimates into tibble
-  rels <- rbindbind(omega1, omega2)
+  rels <- rbind(omega1, omega2)
   rel.tib <- tibble::as_tibble(rels)
 
   #Name omegas based on distinguishing characters in dvn
