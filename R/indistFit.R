@@ -7,6 +7,7 @@
 #' @param indmodel input lavaan model fitted using dyadCFA(model = "indistinguishable")
 #' @param isatmod input lavaan model fitted using ISAT()
 #' @param inullmod input lavaan model fitted using INULL()
+#' @return A data frame of the original and corrected chi sq, df, p, rmsea, and tli
 #' @export
 #' @examples
 #' dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
@@ -19,7 +20,7 @@
 #' indistFit(indmodel = indist.fit, isatmod = isat.fit, inullmod = inull.fit)
 
 indistFit <- function(indmodel, isatmod, inullmod){
-  #Extract and transpose indinstinguishable model fit indexes
+  #Extract and transpose indistinguishable model fit indexes
   mod.fit <- data.frame(lavaan::fitMeasures(indmodel))
   mod.fit <- data.frame(t(mod.fit))
   #Extract and transpose ISAT model fit indexes
@@ -29,7 +30,7 @@ indistFit <- function(indmodel, isatmod, inullmod){
   inull.fit <- data.frame(lavaan::fitMeasures(inullmod))
   inull.fit <- data.frame(t(inull.fit))
 
-  #Round off fit indexes for reporting from indinstinguishable model
+  #Round off fit indexes for reporting from indistinguishable model
   chi2_orig <- round(mod.fit$chisq, 4)
   df_orig <- mod.fit$df
   p_orig <- round(mod.fit$pvalue, 4)
@@ -37,7 +38,7 @@ indistFit <- function(indmodel, isatmod, inullmod){
   tli_orig <- round(mod.fit$tli, 4)
 
   #Calculate adjusted fit indexes a la Olsen & Kenny (2006) and round
-  chi2_adj <- round((mod.fit$chisq - isat.fit$chisq), 4)#Substract off ISAT X^2
+  chi2_adj <- round((mod.fit$chisq - isat.fit$chisq), 4)#Subtract off ISAT X^2
   df_adj <- mod.fit$df - isat.fit$df#Subtract off ISAT df
   p_adj <-round(c(pchisq(chi2_adj,df_adj, lower.tail = FALSE)), 4) #Compute adjusted-p based on ISAT-adjusted X^2 and df
   rmsea_adj <- round((sqrt(((chi2_adj/df_adj)-1)/(lavaan::lavInspect(indmodel, "nobs")))),4)#Compute adjusted RMSEA

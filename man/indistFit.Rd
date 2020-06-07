@@ -13,6 +13,9 @@ indistFit(indmodel, isatmod, inullmod)
 
 \item{inullmod}{input lavaan model fitted using INULL()}
 }
+\value{
+A data frame of the original and corrected chi sq, df, p, rmsea, and tli
+}
 \description{
 This function takes the outputted object from dyadVarNames()
 and automatically writes, returns, and exports (.txt) lavaan() syntax

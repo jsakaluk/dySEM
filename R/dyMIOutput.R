@@ -70,8 +70,8 @@ dyMIOutput <-function(config, load, int, robust = F){
   if(robust == T){
     #Extract vectors of fit indices of interest
     Model <-c("Configural", "Loading", "Intercept")
-    chi2 <-fit$chisq.scaled
-    df <-fit$df.scaled
+    chi2 <-fit$chisq
+    df <-fit$df
     AIC <-fit$aic
     BIC <-fit$bic
     CFI <-fit$cfi.robust
