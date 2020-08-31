@@ -11,10 +11,15 @@
 #' @param lvyname input character to (arbitrarily) name LV Y in lavaan syntax
 #' @param model input character used to specify which level of invariance is
 #' modeled. Defaults to "configural"
-#' @param compare input character to specify which type of structural parameters
+#' @param equate input character to specify which type of structural parameters
 #' ("actor" = actor effects, "partner" = partner effects,
 #' "all_effects" = actor and partner effects, x_means, y_means, or all_means)
-#' are constrained to equivalencey between partners. Default is "none".
+#' are constrained to equivalencey between partners. Default is "none". Actor or partner effect constraints
+#' require at least a loading-invariant model to be specified, otherwise a warning is returned; mean constraints
+#' require an intercept-invariant model to be specified, otherwise a warning is returned.
+#' @param k input logical for whether Kenny & Ledermann's (2010) k parameter should be
+#' calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
+#' a loading-invariant model to be specified, otherwise a warning is returned.
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
@@ -30,9 +35,9 @@
 #' apim.script.int = apimSEM(dvn, lvxname = "Conflict",
 #' lvyname = "Satisfaction", model = "intercept")
 #' apim.script.load.actor = apimSEM(dvn, lvxname = "Conflict",
-#' lvyname = "Satisfaction", model = "loading", compare = "actor")
+#' lvyname = "Satisfaction", model = "loading", equate = "actor")
 
-apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
+apimSEM = function(dvn, lvxname, lvyname, model = "configural", equate="none", k = FALSE){
   dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){
@@ -57,22 +62,36 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
 
       #Actor effects
-      if(compare=="none"|compare=="partner"|compare=="means"){
+      if(equate=="none"|equate=="partner"|equate=="means"){
         beta_y1x1 = sprintf("%s%s ~ a1*%s%s",lvyname, dvn[[4]],lvxname, dvn[[4]])
         beta_y2x2 = sprintf("%s%s ~ a2*%s%s",lvyname, dvn[[5]],lvxname, dvn[[5]])
       }
-      else if(compare=="actor"|compare=="all_effects"){
+      else if(equate=="actor"|equate=="all_effects"){
         beta_y1x1 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[[4]],lvxname, dvn[[4]])
         beta_y2x2 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[[5]],lvxname, dvn[[5]])
       }
       #Partner effects
-      if(compare=="none"|compare=="actor"|compare=="means"){
+      if(equate=="none"|equate=="actor"|equate=="means"){
         beta_y1x2 = sprintf("%s%s ~ p1*%s%s",lvyname, dvn[[4]],lvxname, dvn[[5]])
         beta_y2x1 = sprintf("%s%s ~ p2*%s%s",lvyname, dvn[[5]],lvxname, dvn[[4]])
       }
-      else if(compare=="partner"|compare=="all_effects"){
+      else if(equate=="partner"|equate=="all_effects"){
         beta_y1x2 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[[4]],lvxname, dvn[[5]])
         beta_y2x1 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[[5]],lvxname, dvn[[4]])
+      }
+
+      #parameter k
+      if(k == TRUE & equate=="none"){
+        k1 = paste("k1 := p1/a1")
+        k2 = paste("k2 := p2/a2")
+      }else if(k == TRUE & equate=="actor"){
+        k1 = paste("k1 := p1/a")
+        k2 = paste("k2 := p2/a")
+      }else if(k == TRUE & equate=="partner"){
+        k1 = paste("k1 := p/a1")
+        k2 = paste("k2 := p/a2")
+      }else if(k == TRUE & equate=="all_effects"){
+        k1 = paste("k := p/a")
       }
 
       #Correlated residuals
@@ -107,15 +126,25 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       yints1 = paste(yints1, collapse = "\n")
       yints2 = paste(yints2, collapse = "\n")
 
-      #Script Creation Syntax
-      configural.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
-                                  eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, resids.x, resids.y, xints1, xints2, yints1, yints2)
-      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_apim_configural.txt",lvyname,lvxname))
-      if(compare=="actor"|compare=="partner"|compare=="all_effects"){
-        message("Caution: comparisons of actor/partner effects may be invalid when loadings are not invariant ")
+      #Script Creation Syntax (contingent on whether k ==T and pattern of a/p constraints)
+      if(k == FALSE){
+        configural.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
+                                    eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, resids.x, resids.y, xints1, xints2, yints1, yints2)
+      }else if(k == TRUE & equate=="all_effects"){
+        configural.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#coefficient K\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
+                                    eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, k1, resids.x, resids.y, xints1, xints2, yints1, yints2)
+      }else{
+        configural.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#coefficient K\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
+                                    eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, k1, k2, resids.x, resids.y, xints1, xints2, yints1, yints2)
       }
-      else if(compare=="x_means"|compare=="y_means"|compare=="all_means"){
-        message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant ")
+      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_apim_configural.txt",lvyname,lvxname))
+      if(equate=="actor"|equate=="partner"|equate=="all_effects"|k == TRUE){
+        cat(crayon::yellow("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant"))
+        #message("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant")
+      }
+      else if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
+        cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
+        #message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
       }
       return(configural.script)
     }
@@ -159,22 +188,36 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
 
       #Actor effects
-      if(compare=="none"|compare=="partner"|compare=="means"){
+      if(equate=="none"|equate=="partner"|equate=="means"){
         beta_y1x1 = sprintf("%s%s ~ a1*%s%s",lvyname, dvn[[4]],lvxname, dvn[[4]])
         beta_y2x2 = sprintf("%s%s ~ a2*%s%s",lvyname, dvn[[5]],lvxname, dvn[[5]])
       }
-      else if(compare=="actor"|compare=="all_effects"){
+      else if(equate=="actor"|equate=="all_effects"){
         beta_y1x1 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[[4]],lvxname, dvn[[4]])
         beta_y2x2 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[[5]],lvxname, dvn[[5]])
       }
       #Partner effects
-      if(compare=="none"|compare=="actor"|compare=="means"){
+      if(equate=="none"|equate=="actor"|equate=="means"){
         beta_y1x2 = sprintf("%s%s ~ p1*%s%s",lvyname, dvn[[4]],lvxname, dvn[[5]])
         beta_y2x1 = sprintf("%s%s ~ p2*%s%s",lvyname, dvn[[5]],lvxname, dvn[[4]])
       }
-      else if(compare=="partner"|compare=="all_effects"){
+      else if(equate=="partner"|equate=="all_effects"){
         beta_y1x2 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[[4]],lvxname, dvn[[5]])
         beta_y2x1 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[[5]],lvxname, dvn[[4]])
+      }
+
+      #parameter k
+      if(k == TRUE & equate=="none"){
+        k1 = paste("k1 := p1/a1")
+        k2 = paste("k2 := p2/a2")
+      }else if(k == TRUE & equate=="actor"){
+        k1 = paste("k1 := p1/a")
+        k2 = paste("k2 := p2/a")
+      }else if(k == TRUE & equate=="partner"){
+        k1 = paste("k1 := p/a1")
+        k2 = paste("k2 := p/a2")
+      }else if(k == TRUE & equate=="all_effects"){
+        k1 = paste("k := p/a")
       }
 
       #Correlated residuals
@@ -208,15 +251,23 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       yints1 = paste(yints1, collapse = "\n")
       yints2 = paste(yints2, collapse = "\n")
 
-      #Script Creation Syntax
-      loading.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
-                               eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, resids.x, resids.y, xints1, xints2, yints1, yints2)
+      #Script Creation Syntax (contingent on whether k ==T and pattern of a/p constraints)
+      if(k == FALSE){
+        loading.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
+                                    eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, resids.x, resids.y, xints1, xints2, yints1, yints2)
+      }else if(k == TRUE & equate=="all_effects"){
+        loading.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#coefficient K\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
+                                    eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, k1, resids.x, resids.y, xints1, xints2, yints1, yints2)
+      }else{
+        loading.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#coefficient K\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
+                                    eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, k1, k2, resids.x, resids.y, xints1, xints2, yints1, yints2)
+      }
       cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
 
-      if(compare=="x_means"|compare=="y_means"|compare=="all_means"){
-        message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant ")
+      if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
+        cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
+        #message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
       }
-
       return(loading.script)
     }
     else if (model == "intercept"){
@@ -258,22 +309,36 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       psi_y2 = sprintf("%s%s ~~ NA*%s%s",lvyname, dvn[[5]],lvyname, dvn[[5]])
       psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
       #Actor effects
-      if(compare=="none"|compare=="partner"|compare=="means"){
+      if(equate=="none"|equate=="partner"|equate=="means"){
         beta_y1x1 = sprintf("%s%s ~ a1*%s%s",lvyname, dvn[[4]],lvxname, dvn[[4]])
         beta_y2x2 = sprintf("%s%s ~ a2*%s%s",lvyname, dvn[[5]],lvxname, dvn[[5]])
       }
-      else if(compare=="actor"|compare=="all_effects"){
+      else if(equate=="actor"|equate=="all_effects"){
         beta_y1x1 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[[4]],lvxname, dvn[[4]])
         beta_y2x2 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[[5]],lvxname, dvn[[5]])
       }
       #Partner effects
-      if(compare=="none"|compare=="actor"|compare=="means"){
+      if(equate=="none"|equate=="actor"|equate=="means"){
         beta_y1x2 = sprintf("%s%s ~ p1*%s%s",lvyname, dvn[[4]],lvxname, dvn[[5]])
         beta_y2x1 = sprintf("%s%s ~ p2*%s%s",lvyname, dvn[[5]],lvxname, dvn[[4]])
       }
-      else if(compare=="partner"|compare=="all_effects"){
+      else if(equate=="partner"|equate=="all_effects"){
         beta_y1x2 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[[4]],lvxname, dvn[[5]])
         beta_y2x1 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[[5]],lvxname, dvn[[4]])
+      }
+
+      #parameter k
+      if(k == TRUE & equate=="none"){
+        k1 = paste("k1 := p1/a1")
+        k2 = paste("k2 := p2/a2")
+      }else if(k == TRUE & equate=="actor"){
+        k1 = paste("k1 := p1/a")
+        k2 = paste("k2 := p2/a")
+      }else if(k == TRUE & equate=="partner"){
+        k1 = paste("k1 := p/a1")
+        k2 = paste("k2 := p/a2")
+      }else if(k == TRUE & equate=="all_effects"){
+        k1 = paste("k := p/a")
       }
 
       #Correlated residuals
@@ -307,9 +372,18 @@ apimSEM = function(dvn, lvxname, lvyname, model = "configural", compare="none"){
       }
       yints1 = paste(yints1, collapse = "\n")
       yints2 = paste(yints2, collapse = "\n")
-      #Script Creation Syntax
-      intercept.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
+
+      #Script Creation Syntax (contingent on whether k ==T and pattern of a/p constraints)
+      if(k == FALSE){
+        intercept.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
                                  eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, resids.x, resids.y, xints1, xints2, yints1, yints2)
+      }else if(k == TRUE & equate=="all_effects"){
+        intercept.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#coefficient K\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
+                                 eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, k1, resids.x, resids.y, xints1, xints2, yints1, yints2)
+      }else{
+        intercept.script = sprintf("#Loadings\n%s\n%s\n\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Actor Effects\n%s\n%s\n\n#Partner Effects\n%s\n%s\n\n#coefficient K\n%s\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
+                                 eta.x1, eta.x2,eta.y1,eta.y2, psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2, beta_y1x1, beta_y2x2, beta_y1x2, beta_y2x1, k1, k2, resids.x, resids.y, xints1, xints2, yints1, yints2)
+      }
       cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
       return(intercept.script)
     }

@@ -5,7 +5,14 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting Latent Actor-Partner Interdependence Models}
 \usage{
-apimSEM(dvn, lvxname, lvyname, model = "configural", compare = "none")
+apimSEM(
+  dvn,
+  lvxname,
+  lvyname,
+  model = "configural",
+  equate = "none",
+  k = FALSE
+)
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
@@ -17,10 +24,16 @@ apimSEM(dvn, lvxname, lvyname, model = "configural", compare = "none")
 \item{model}{input character used to specify which level of invariance is
 modeled. Defaults to "configural"}
 
-\item{compare}{input character to specify which type of structural parameters
+\item{equate}{input character to specify which type of structural parameters
 ("actor" = actor effects, "partner" = partner effects,
 "all_effects" = actor and partner effects, x_means, y_means, or all_means)
-are constrained to equivalencey between partners. Default is "none".}
+are constrained to equivalencey between partners. Default is "none". Actor or partner effect constraints
+require at least a loading-invariant model to be specified, otherwise a warning is returned; mean constraints
+require an intercept-invariant model to be specified, otherwise a warning is returned.}
+
+\item{k}{input logical for whether Kenny & Ledermann's (2010) k parameter should be
+calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
+a loading-invariant model to be specified, otherwise a warning is returned.}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -44,7 +57,7 @@ lvyname = "Satisfaction", model = "loading")
 apim.script.int = apimSEM(dvn, lvxname = "Conflict",
 lvyname = "Satisfaction", model = "intercept")
 apim.script.load.actor = apimSEM(dvn, lvxname = "Conflict",
-lvyname = "Satisfaction", model = "loading", compare = "actor")
+lvyname = "Satisfaction", model = "loading", equate = "actor")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on
