@@ -45,9 +45,9 @@ dvn2 <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2=NULL, x_i
     num_x2_var <- length(x2vars)
     dist_1 <- distinguish_1
     dist_2 <- distinguish_2
-
+    tot_var <- num_x1_var + num_x2_var
     if(num_x1_var == num_x2_var){
-      varlist <- list(x1vars, x2vars, num_x1_var, dist_1, dist_2)
+      varlist <- list(x1vars, x2vars, num_x1_var, dist_1, dist_2, tot_var)
       return(varlist)
     }else if(num_x1_var != num_x2_var){
       stop("dvn() cannot detect a similar number of ", x_stem, " items for P1 and P2")

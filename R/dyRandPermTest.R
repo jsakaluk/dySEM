@@ -16,34 +16,36 @@
 #' @examples
 #' dat = dplyr::select(DRES, sexsat1.1:sexsat5.2)
 #' dvn = dyadVarNames(dat, xvar = "sexsat", sep = ".", distinguish1 = "1", distinguish2 = "2")
-#' dyRandPermTest(dvn, dat, n = 10, model = "configural")
+#' config.test <- dyRandPermTest(dvn, dat, n = 10, model = "configural")
 
 dyRandPermTest<-function(dvn, dat, n, AFIs = NULL, model = "configural"){
   if(model == "configural"){
     permout = dyRandPermFit(dvn, dat, n, model = "configural")
-    script = dyadCFA(dvn, lvname = "X", model = "configural")
-    model.fit <- lavaan::cfa(script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
+    script = dyadCFA(dvn, model = "configural")
   }else if(model == "loading"){
     permout = dyRandPermFit(dvn, dat, n, model = "loading")
-    script = dyadCFA(dvn, lvname = "X", model = "loading")
-    model.fit <- lavaan::cfa(script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
+    script = dyadCFA(dvn, model = "loading")
   }else if(model == "intercept"){
     permout = dyRandPermFit(dvn, dat, n, model = "intercept")
-    script = dyadCFA(dvn, lvname = "X", model = "intercept")
-    model.fit <- lavaan::cfa(script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
+    script = dyadCFA(dvn, model = "intercept")
   }
+  model.fit <- lavaan::cfa(script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
 
-  fit.indexes = data.frame(lavaan::fitMeasures(model.fit)) %>%
-    t(.) %>%
-    as.data.frame(.)
+  isat.mod <- ISAT(dvn)
+  isat.fit <- cfa(isat.mod, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
+
+  inull.mod <- INULL(dvn)
+  inull.fit <- cfa(inull.mod, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
+
+  ind.fit <- indistFit(indmodel = model.fit, isatmod = isat.fit, inullmod = inull.fit)
 
   prob.func<- ecdf(permout)
-  prob<-prob.func(fit.indexes$chisq)
+  prob<-prob.func(ind.fit$chi2_adj)
 
   perm.plot <-ggplot2::ggplot()+
-    geom_density(aes(x = permout))+
-    geom_vline(xintercept = fit.indexes$chisq, linetype = "dashed")+
-    labs(x = "Null Chi Square Values")
+    ggplot2::geom_density(ggplot2::aes(x = permout))+
+    ggplot2::geom_vline(xintercept = ind.fit$chi2_adj, linetype = "dashed")+
+    ggplot2::labs(x = "Null Chi Square Values")
   perm.plot
 
   print(prob)

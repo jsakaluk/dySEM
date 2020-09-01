@@ -5,7 +5,7 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting the I-NULL model for indistinguishable dyads}
 \usage{
-INULL(dvn, lvname)
+INULL(dvn, lvname = "X")
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}

@@ -17,7 +17,7 @@
 #' isat.fit <- cfa(isat.mod, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
 #' inull.mod <- INULL(dvn, lvname = "Conflict")
 #' inull.fit <- cfa(inull.mod, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
-#' indistFit(indmodel = indist.fit, isatmod = isat.fit, inullmod = inull.fit)
+#' ind.fit <- indistFit(indmodel = indist.fit, isatmod = isat.fit, inullmod = inull.fit)
 
 indistFit <- function(indmodel, isatmod, inullmod){
   #Extract and transpose indistinguishable model fit indexes

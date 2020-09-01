@@ -30,7 +30,7 @@ the fit of the empirical null sampling distribtuion
 \examples{
 dat = dplyr::select(DRES, sexsat1.1:sexsat5.2)
 dvn = dyadVarNames(dat, xvar = "sexsat", sep = ".", distinguish1 = "1", distinguish2 = "2")
-dyRandPermTest(dvn, dat, n = 10, model = "configural")
+config.test <- dyRandPermTest(dvn, dat, n = 10, model = "configural")
 }
 \seealso{
 \code{\link{dyadVarNames}} \code{\link{dyRand}} \code{\link{dyRandPermFit}} which this function relies on

@@ -5,7 +5,7 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting Latent Dyadic Measurement and Invariance Models}
 \usage{
-dyadCFA(dvn, lvname, model = "configural")
+dyadCFA(dvn, lvname = "X", model = "configural")
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}

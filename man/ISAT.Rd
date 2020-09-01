@@ -5,7 +5,7 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting the I-SAT model for indistinguishable dyads}
 \usage{
-ISAT(dvn, lvname)
+ISAT(dvn, lvname = "X")
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}

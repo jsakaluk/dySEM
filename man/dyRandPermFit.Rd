@@ -30,7 +30,6 @@ for indistinguishable dyads
 \examples{
 dat = dplyr::select(DRES, sexsat1.1:sexsat5.2)
 dvn = dyadVarNames(dat, xvar = "sexsat", sep = ".", distinguish1 = "1", distinguish2 = "2")
-perm = dyRandPermFit(dvn, dat)
 permout = dyRandPermFit(dvn, dat, n = 10)
 }
 \seealso{

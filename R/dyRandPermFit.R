@@ -16,7 +16,6 @@
 #' @examples
 #' dat = dplyr::select(DRES, sexsat1.1:sexsat5.2)
 #' dvn = dyadVarNames(dat, xvar = "sexsat", sep = ".", distinguish1 = "1", distinguish2 = "2")
-#' perm = dyRandPermFit(dvn, dat)
 #' permout = dyRandPermFit(dvn, dat, n = 10)
 
 dyRandPermFit<-function(dvn, dat, n, AFIs = NULL, model = "configural"){
@@ -24,17 +23,23 @@ dyRandPermFit<-function(dvn, dat, n, AFIs = NULL, model = "configural"){
   for(i in 1:n){
     perm = dyRand(dvn, dat)
     if(model == "configural"){
-      script = dyadCFA(dvn, lvname = "X", model = "configural")
+      script = dyadCFA(dvn, model = "configural")
     }else if(model == "loading"){
-      script = dyadCFA(dvn, lvname = "X", model = "loading")
+      script = dyadCFA(dvn, model = "loading")
     }else if(model == "intercept"){
-      script = dyadCFA(dvn, lvname = "X", model = "intercept")
+      script = dyadCFA(dvn, model = "intercept")
     }
-    fit.config <- cfa(script, data = perm, std.lv = F, auto.fix.first= F, meanstructure = T)
-    fit = data.frame(lavaan::fitMeasures(fit.config)) %>%
-      t(.) %>%
-      as.data.frame(.)
-    permout[i] = fit$chisq
+    fit.mod <- cfa(script, data = perm, std.lv = F, auto.fix.first= F, meanstructure = T)
+
+    isat.mod <- ISAT(dvn)
+    isat.fit <- cfa(isat.mod, data = perm, std.lv = F, auto.fix.first= F, meanstructure = T)
+
+    inull.mod <- INULL(dvn)
+    inull.fit <- cfa(inull.mod, data = perm, std.lv = F, auto.fix.first= F, meanstructure = T)
+
+    ind.fit <- indistFit(indmodel = fit.mod, isatmod = isat.fit, inullmod = inull.fit)
+
+    permout[i] = ind.fit$chi2_adj
   }
   return(permout)
 }

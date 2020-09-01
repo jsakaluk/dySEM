@@ -13,7 +13,7 @@
 #' @examples
 #' dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
 #' isat.mod = ISAT(dvn, lvname = "X")
-INULL = function(dvn, lvname){
+INULL = function(dvn, lvname = "X"){
   dirs("scripts")
 
   #Means
@@ -40,7 +40,7 @@ INULL = function(dvn, lvname){
     store[[i]] = paste("0*",covar.list[[i]],collapse = "+")
   }
 
-  store = stringr::str_replace_all(store, fixed(" "), "")
+  store = stringr::str_replace_all(store, stringr::fixed(" "), "")
 
   #store = gsub("", "", store, fixed = TRUE)
 

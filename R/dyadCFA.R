@@ -20,7 +20,7 @@
 #' con.config.script = dyadCFA(dvn, lvname = "Conflict", model = "configural")
 #' con.loading.script = dyadCFA(dvn, lvname = "Conflict",  model = "loading")
 #' con.intercept.script = dyadCFA(dvn, lvname = "Conflict",  model = "intercept")
-dyadCFA = function(dvn, lvname, model = "configural"){
+dyadCFA = function(dvn, lvname = "X", model = "configural"){
   dirs("scripts")
   if(model == "configural"){
     #Loadings

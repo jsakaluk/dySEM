@@ -13,7 +13,7 @@
 #' @examples
 #' dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
 #' isat.mod = ISAT(dvn, lvname = "X")
-ISAT = function(dvn, lvname){
+ISAT = function(dvn, lvname = "X"){
   dirs("scripts")
 
   #Means
