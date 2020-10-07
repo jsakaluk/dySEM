@@ -28,8 +28,8 @@
 #'characters distinguishing partners, and total number of indicators
 #' @export
 #' @examples
-#' dvn <- dvn2(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2=".", x_item_num="\\d", distinguish_1="1", distinguish_2="2",
-#' y_order="sip", y_stem="Y", y_delim2=".", y_item_num="\\d")
+#' dvn <- dvn2(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
+#' y_order="sip", y_stem="Y", y_delim2=".", y_item_num="\\d+")
 
 dvn2 <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2=NULL, x_item_num="\\d", distinguish_1="1", distinguish_2="2",
                 y_order=NULL, y_stem=NULL, y_delim1=NULL, y_delim2=NULL, y_item_num="\\d"){
