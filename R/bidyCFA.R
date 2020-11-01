@@ -50,7 +50,7 @@ bidyCFA = function(dvn, lvname = "X", model = "configural"){
 
     #Script Creation Syntax
     configural.script = sprintf("#Loadings\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.g, eta.x1, eta.x2, psi_x1, psi_x2, psi_g, psi_gx1, psi_gx2, psi_x1x2, resids, xints1, xints2)
-    cat(configural.script,"\n", file = sprintf("./scripts/%s_dyadic_configural.txt",lvname))
+    cat(configural.script,"\n", file = sprintf("./scripts/%s_bidy_configural.txt",lvname))
     return(configural.script)
   }
   else if (model == "loading"){
@@ -81,7 +81,7 @@ bidyCFA = function(dvn, lvname = "X", model = "configural"){
 
     #Script Creation Syntax
     loading.script = sprintf("#Loadings\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.g, eta.x1, eta.x2, psi_x1, psi_x2, psi_g, psi_gx1, psi_gx2, psi_x1x2, resids, xints1, xints2)
-    cat(loading.script,"\n", file = sprintf("./scripts/%s_dyadic_loading.txt",lvname))
+    cat(loading.script,"\n", file = sprintf("./scripts/%s_bidy_loading.txt",lvname))
     return(loading.script)
   }
   else if (model == "intercept"){
@@ -112,7 +112,7 @@ bidyCFA = function(dvn, lvname = "X", model = "configural"){
 
     #Script Creation Syntax
     intercept.script = sprintf("#Loadings\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.g, eta.x1, eta.x2, psi_x1, psi_x2, psi_g, psi_gx1, psi_gx2, psi_x1x2, resids, xints1, xints2)
-    cat(intercept.script,"\n", file = sprintf("./scripts/%s_dyadic_intercept.txt",lvname))
+    cat(intercept.script,"\n", file = sprintf("./scripts/%s_bidi_intercept.txt",lvname))
     return(intercept.script)
   }
   else if (model == "residual"){
@@ -146,7 +146,7 @@ bidyCFA = function(dvn, lvname = "X", model = "configural"){
 
     #Script Creation Syntax
     residual.script = sprintf("#Loadings\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s", eta.g, eta.x1, eta.x2, psi_x1, psi_x2, psi_g, psi_gx1, psi_gx2, psi_x1x2, resids, res1, res2, xints1, xints2)
-    cat(residual.script,"\n", file = sprintf("./scripts/%s_dyadic_residual.txt",lvname))
+    cat(residual.script,"\n", file = sprintf("./scripts/%s_bidi_residual.txt",lvname))
     return(residual.script)
   }
   else if (model == "indistinguishable"){
@@ -180,7 +180,7 @@ bidyCFA = function(dvn, lvname = "X", model = "configural"){
 
     #Script Creation Syntax
     indist.script = sprintf("#Loadings\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s", eta.g, eta.x1, eta.x2, psi_x1, psi_x2, psi_g, psi_gx1, psi_gx2, psi_x1x2, resids, res1, res2, xints1, xints2)
-    cat(indist.script,"\n", file = sprintf("./scripts/%s_dyadic_indistinguishable.txt",lvname))
+    cat(indist.script,"\n", file = sprintf("./scripts/%s_bidi_indistinguishable.txt",lvname))
     return(indist.script)
   }
 }
