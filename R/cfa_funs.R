@@ -38,6 +38,23 @@ loads <- function(dvn, lvname, partner="1", type = "free"){
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
+  }else if(partner == "g" & type == "free"){
+    eta_x = sprintf("%sDy =~ NA*",lvname)
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[[1]], collapse = "+"), "+",paste(dvn[[2]], collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "g" & type == "equated"){
+    eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[[1]][1])
+    eta.x1 = list()
+    for (i in 1:dvn[[3]]) {
+      eta.x1[[i]]=sprintf("l%s*%s",i, dvn[[1]][i])
+    }
+    eta.x2 = list()
+    for (i in 1:dvn[[3]]) {
+      eta.x2[[i]]=sprintf("l%s*%s",i, dvn[[2]][i])
+    }
+
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
+    return(eta.x)
   }
 }
 
