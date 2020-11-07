@@ -4,13 +4,14 @@
 #' @title Helper functions for noninvariance effect size functions
 #'
 #' @param dat data frame of indicators
+#' @param dvn dvn for the dyadic cfa measurement model
 #' @param fit outputted from dyadic cfa lavaan object
 #' @param source character for whether parameter of interest should be extracted for group "1", "2", or from the "nogroup" model
 #'
 #' @export
 
 #' @rdname es_helpers
-grouploads <- function(fit, source){
+grouploads <- function(fit, dvn, source){
   if(source == "1"){
     loads <- dplyr::filter(lavaan::parameterEstimates(fit), op == "=~" & rhs %in% dvn[[1]]) %>%
       dplyr::select(., est)
@@ -22,7 +23,7 @@ grouploads <- function(fit, source){
 }
 
 #' @rdname es_helpers
-groupints <- function(fit, source){
+groupints <- function(fit, dvn,source){
   if(source == "1"){
     ints <- lavaan::parameterEstimates(fit) %>%
       dplyr::filter(., op == "~1" & lhs %in% dvn[[1]]) %>%
@@ -36,7 +37,7 @@ groupints <- function(fit, source){
 }
 
 #' @rdname es_helpers
-groupindsds <- function(dat, source){
+groupindsds <- function(dat, dvn, source){
 
   if(source == 1){
     sds <- dat %>% dplyr::select(., paste(dvn[[1]])) %>%

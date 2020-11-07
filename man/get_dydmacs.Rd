@@ -4,10 +4,12 @@
 \alias{get_dydmacs}
 \title{Calculates dmacs difference in expected indicator scores for between dyad members}
 \usage{
-get_dydmacs(dat, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5)
+get_dydmacs(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5)
 }
 \arguments{
 \item{dat}{data frame of indicators}
+
+\item{dvn}{dvn for the dyadic cfa measurement model}
 
 \item{fit}{outputted dyadic cfa lavaan object}
 

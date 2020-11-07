@@ -9,11 +9,11 @@
 \alias{grouplvsd}
 \title{Helper functions for noninvariance effect size functions}
 \usage{
-grouploads(fit, source)
+grouploads(fit, dvn, source)
 
-groupints(fit, source)
+groupints(fit, dvn, source)
 
-groupindsds(dat, source)
+groupindsds(dat, dvn, source)
 
 grouplvmean(fit, source)
 
@@ -21,6 +21,8 @@ grouplvsd(fit, source)
 }
 \arguments{
 \item{fit}{outputted from dyadic cfa lavaan object}
+
+\item{dvn}{dvn for the dyadic cfa measurement model}
 
 \item{source}{character for whether parameter of interest should be extracted for group "1", "2", or from the "nogroup" model}
 
