@@ -37,18 +37,18 @@ get_dydmacs <- function(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV =
   dyn <- lavaan::lavInspect(fit, what = "nobs")
 
   #Use es_helpers to snatch necessary values from cfa model
-  load1 <- grouploads(fit, source = "1")
-  load2 <- grouploads(fit, source = "2")
+  load1 <- grouploads(fit, dvn, source = "1")
+  load2 <- grouploads(fit, dvn, source = "2")
   loading1 <- load1$est
   loading2 <- load2$est
 
-  int1 <- groupints(fit, source = "1")
-  int2 <- groupints(fit, source = "2")
+  int1 <- groupints(fit, dvn, source = "1")
+  int2 <- groupints(fit, dvn, source = "2")
   intercept1 <- int1$est
   intercept2 <- int2$est
 
-  stdev1 <- groupindsds(dat, source = 1)
-  stdev2 <- groupindsds(dat, source = 2)
+  stdev1 <- groupindsds(dat, dvn, source = 1)
+  stdev2 <- groupindsds(dat, dvn, source = 2)
 
   fmean2 <- grouplvmean(fit, source = "2")
 
