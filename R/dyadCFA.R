@@ -95,8 +95,10 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     xints1 = intercepts(dvn, partner="1", type = "equated")
     xints2 = intercepts(dvn, partner="2", type = "equated")
 
+    alpha_x1 = sprintf("%s%s ~ 0*1",lvname, dvn[[4]])
+    alpha_x2 = sprintf("%s%s ~ NA*1",lvname, dvn[[5]])
     #Script Creation Syntax
-    intercept.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, xints1, xints2)
+    intercept.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, xints1, xints2, alpha_x1, alpha_x2)
     cat(intercept.script,"\n", file = sprintf("./scripts/%s_dyadic_intercept.txt",lvname))
     return(intercept.script)
   }
@@ -124,8 +126,10 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     xints1 = intercepts(dvn, partner="1", type = "equated")
     xints2 = intercepts(dvn, partner="2", type = "equated")
 
+    alpha_x1 = sprintf("%s%s ~ 0*1",lvname, dvn[[4]])
+    alpha_x2 = sprintf("%s%s ~ NA*1",lvname, dvn[[5]])
     #Script Creation Syntax
-    residual.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2)
+    residual.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
     cat(residual.script,"\n", file = sprintf("./scripts/%s_dyadic_residual.txt",lvname))
     return(residual.script)
   }
