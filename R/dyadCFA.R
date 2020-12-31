@@ -28,8 +28,8 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     eta.x2 = loads(dvn, lvname, partner="2", type = "free")
 
     #Latent (co)variances
-    psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
-    psi_x2 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
+    psi_x2 = lvars(dvn, lvname, partner = "2", type = "fixed")
     psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
     #Correlated residuals
@@ -39,12 +39,20 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     }
     resids = paste(resids, collapse = "\n")
 
+    #Residual variances
+    res1 = resids(dvn, partner="1", type = "free")
+    res2 = resids(dvn, partner="2", type = "free")
+
     #Intercepts
     xints1 = intercepts(dvn, partner="1", type = "free")
     xints2 = intercepts(dvn, partner="2", type = "free")
 
+    #Latent Means
+    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
+    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "fixed")
+
     #Script Creation Syntax
-    configural.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, xints1, xints2)
+    configural.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
     cat(configural.script,"\n", file = sprintf("./scripts/%s_dyadic_configural.txt",lvname))
     return(configural.script)
   }
@@ -54,8 +62,8 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
 
     #Latent (co)variances
-    psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
-    psi_x2 = sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
+    psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
     psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
     #Correlated residuals
@@ -65,12 +73,20 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     }
     resids = paste(resids, collapse = "\n")
 
+    #Residual variances
+    res1 = resids(dvn, partner="1", type = "free")
+    res2 = resids(dvn, partner="2", type = "free")
+
     #Intercepts
     xints1 = intercepts(dvn, partner="1", type = "free")
     xints2 = intercepts(dvn, partner="2", type = "free")
 
+    #Latent Means
+    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
+    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "fixed")
+
     #Script Creation Syntax
-    loading.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, xints1, xints2)
+    loading.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
     cat(loading.script,"\n", file = sprintf("./scripts/%s_dyadic_loading.txt",lvname))
     return(loading.script)
   }
@@ -80,8 +96,8 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
 
     #Latent (co)variances
-    psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
-    psi_x2 = sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
+    psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
     psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
     #Correlated residuals
@@ -91,14 +107,19 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     }
     resids = paste(resids, collapse = "\n")
 
+    #Residual variances
+    res1 = resids(dvn, partner="1", type = "free")
+    res2 = resids(dvn, partner="2", type = "free")
+
     #Intercepts
     xints1 = intercepts(dvn, partner="1", type = "equated")
     xints2 = intercepts(dvn, partner="2", type = "equated")
 
-    alpha_x1 = sprintf("%s%s ~ 0*1",lvname, dvn[[4]])
-    alpha_x2 = sprintf("%s%s ~ NA*1",lvname, dvn[[5]])
+    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
+    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+
     #Script Creation Syntax
-    intercept.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, xints1, xints2, alpha_x1, alpha_x2)
+    intercept.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
     cat(intercept.script,"\n", file = sprintf("./scripts/%s_dyadic_intercept.txt",lvname))
     return(intercept.script)
   }
@@ -108,8 +129,8 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
 
     #Latent (co)variances
-    psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
-    psi_x2 = sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
+    psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
     psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
     #Correlated residuals
@@ -119,6 +140,7 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     }
     resids = paste(resids, collapse = "\n")
 
+    #Residual variances
     res1 = resids(dvn, partner="1", type = "equated")
     res2 = resids(dvn, partner="2", type = "equated")
 
@@ -126,12 +148,80 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     xints1 = intercepts(dvn, partner="1", type = "equated")
     xints2 = intercepts(dvn, partner="2", type = "equated")
 
-    alpha_x1 = sprintf("%s%s ~ 0*1",lvname, dvn[[4]])
-    alpha_x2 = sprintf("%s%s ~ NA*1",lvname, dvn[[5]])
+    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
+    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+
     #Script Creation Syntax
-    residual.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
+    residual.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
     cat(residual.script,"\n", file = sprintf("./scripts/%s_dyadic_residual.txt",lvname))
     return(residual.script)
+  }
+  else if (model == "lvariance"){
+    #Loadings
+    eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
+    eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+
+    #Latent (co)variances
+    psi_x1 = lvars(dvn, lvname, partner = "1", type = "equated")
+    psi_x2 = lvars(dvn, lvname, partner = "2", type = "equated")
+    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
+
+    #Correlated residuals
+    resids = list()
+    for (i in 1:dvn[[3]]) {
+      resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+    }
+    resids = paste(resids, collapse = "\n")
+
+    #Residual variances
+    res1 = resids(dvn, partner="1", type = "free")
+    res2 = resids(dvn, partner="2", type = "free")
+
+    #Intercepts
+    xints1 = intercepts(dvn, partner="1", type = "free")
+    xints2 = intercepts(dvn, partner="2", type = "free")
+
+    #Latent Means
+    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
+    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "fixed")
+
+    #Script Creation Syntax
+    lvariance.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
+    cat(lvariance.script,"\n", file = sprintf("./scripts/%s_dyadic_lvariance.txt",lvname))
+    return(lvariance.script)
+  }
+  else if (model == "lmean"){
+    #Loadings
+    eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
+    eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+
+    #Latent (co)variances
+    psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
+    psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
+
+    #Correlated residuals
+    resids = list()
+    for (i in 1:dvn[[3]]) {
+      resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+    }
+    resids = paste(resids, collapse = "\n")
+
+    #Residual variances
+    res1 = resids(dvn, partner="1", type = "free")
+    res2 = resids(dvn, partner="2", type = "free")
+
+    #Intercepts
+    xints1 = intercepts(dvn, partner="1", type = "equated")
+    xints2 = intercepts(dvn, partner="2", type = "equated")
+
+    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "equated")
+    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "equated")
+
+    #Script Creation Syntax
+    lmean.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
+    cat(lmean.script,"\n", file = sprintf("./scripts/%s_dyadic_lmean.txt",lvname))
+    return(lmean.script)
   }
   else if (model == "indistinguishable"){
     #Loadings
@@ -139,8 +229,8 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
 
     #Latent (co)variances
-    psi_x1 = sprintf("%s%s ~~ psi1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
-    psi_x2 = sprintf("%s%s ~~ psi1*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    psi_x1 = lvars(dvn, lvname, partner = "1", type = "equated")
+    psi_x2 = lvars(dvn, lvname, partner = "2", type = "equated")
     psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
     #Correlated residuals
@@ -150,6 +240,7 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     }
     resids = paste(resids, collapse = "\n")
 
+    #Residual variances
     res1 = resids(dvn, partner="1", type = "equated")
     res2 = resids(dvn, partner="2", type = "equated")
 
@@ -157,8 +248,11 @@ dyadCFA = function(dvn, lvname = "X", model = "configural"){
     xints1 = intercepts(dvn, partner="1", type = "equated")
     xints2 = intercepts(dvn, partner="2", type = "equated")
 
+    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "equated")
+    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "equated")
+
     #Script Creation Syntax
-    indist.script = sprintf("#Loadings\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2)
+    indist.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
     cat(indist.script,"\n", file = sprintf("./scripts/%s_dyadic_indistinguishable.txt",lvname))
     return(indist.script)
   }

@@ -6,7 +6,7 @@
 #' @param dvn input object from dyadVarNames()
 #' @param lvname input character to (arbitrarily) name LV in lavaan syntax
 #' @param partner input character to indicate parameters for first or second dyad member
-#' @param type input character to indicate whether parameters "free" or "equated" in estimation
+#' @param type input character to indicate whether parameters "fixed", "free" or "equated" in estimation
 #'
 #' @seealso \code{\link{dyadCFA}} which this function supplies
 #' @export
@@ -124,3 +124,49 @@ resids <- function(dvn, partner="1", type = "free"){
   }
 }
 
+#' @rdname cfa_funs
+lvars <- function(dvn, lvname, partner = "1", type = "free"){
+  if(partner == "1" & type == "fixed"){
+    lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+    return(lvar)
+  }else if(partner == "1" & type == "free"){
+    lvar <- sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+    return(lvar)
+  }else if(partner == "1" & type == "equated"){
+    lvar <- sprintf("%s%s ~~ psi*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+    return(lvar)
+  }else if (partner == "2" & type == "fixed"){
+    lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    return(lvar)
+  }else if(partner == "2" & type == "free"){
+    lvar <- sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    return(lvar)
+  }else if(partner == "2" & type == "equated"){
+    lvar <- sprintf("%s%s ~~ psi*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    return(lvar)
+  }
+
+}
+
+#' @rdname cfa_funs
+lmeans <- function(dvn, lvname, partner = "1", type = "free"){
+  if(partner == "1" & type == "fixed"){
+    alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[[4]])
+    return(alpha)
+  }else if(partner == "1" & type == "free"){
+    alpha <- sprintf("%s%s ~ NA*1",lvname, dvn[[4]])
+    return(alpha)
+  }else if(partner == "1" & type == "equated"){
+    alpha <- sprintf("%s%s ~ alpha*1",lvname, dvn[[4]])
+    return(alpha)
+  }else if (partner == "2" & type == "fixed"){
+    alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[[5]])
+    return(alpha)
+  }else if(partner == "2" & type == "free"){
+    alpha <- sprintf("%s%s ~ NA*1",lvname, dvn[[5]])
+    return(alpha)
+  }else if(partner == "2" & type == "equated"){
+    alpha <- sprintf("%s%s ~ alpha*1",lvname, dvn[[5]])
+    return(alpha)
+  }
+}

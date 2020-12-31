@@ -5,6 +5,8 @@
 \alias{loads}
 \alias{intercepts}
 \alias{resids}
+\alias{lvars}
+\alias{lmeans}
 \title{Functions for dyadCFA() for scripting free or fixed families of parameters}
 \usage{
 loads(dvn, lvname, partner = "1", type = "free")
@@ -12,6 +14,10 @@ loads(dvn, lvname, partner = "1", type = "free")
 intercepts(dvn, partner = "1", type = "free")
 
 resids(dvn, partner = "1", type = "free")
+
+lvars(dvn, lvname, partner = "1", type = "free")
+
+lmeans(dvn, lvname, partner = "1", type = "free")
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
@@ -20,7 +26,7 @@ resids(dvn, partner = "1", type = "free")
 
 \item{partner}{input character to indicate parameters for first or second dyad member}
 
-\item{type}{input character to indicate whether parameters "free" or "equated" in estimation}
+\item{type}{input character to indicate whether parameters "fixed", "free" or "equated" in estimation}
 }
 \description{
 Functions for dyadCFA() for scripting free or fixed families of parameters
