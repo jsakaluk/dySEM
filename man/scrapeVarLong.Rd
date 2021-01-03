@@ -75,3 +75,8 @@ It is used primarily to guide the syntax-writing of the other dySEM functions.
 dvn <- scrapeVarLong(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2",
 y_order="sip", y_stem="Y", y_delim2=".", y_item_num="\\\\d+")
 }
+\seealso{
+Other variable-scraping functions: 
+\code{\link{scrapeVarCross}()}
+}
+\concept{variable-scraping functions}
