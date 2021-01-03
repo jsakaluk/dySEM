@@ -28,6 +28,7 @@
 #' Will be updated to allow particular range of values, to make more sub-scale friendly.
 #' @return list containing variable names for p1, p2, # of items per LV,
 #'characters distinguishing partners, and total number of indicators
+#' @family variable-scraping functions
 #' @export
 #' @examples
 #' dvn <- scrapeVarLong(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
