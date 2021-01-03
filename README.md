@@ -59,7 +59,8 @@ data restructuring. Please get in touch with John if you are interested
 in contributing to the package–all nice humans with a knack for R/dyadic
 data analysis/SEM are welcome\!
 
-The `dySEM` logo was designed by Wolfgang Deranleau.
+The `dySEM` logo was designed by Wolfgang Deranleau (for logo design
+inquiries, email: <agangofwolves@gmail.com>).
 
 ## Installation
 
@@ -108,22 +109,25 @@ dat <- DRES %>%
   select(., PRQC_1.1:PRQC_4.1, PRQC_1.2:PRQC_4.2)
 
 #Extract item info with dvn2
-dvn <- dvn2(dat, x_order = "sip", x_stem = "PRQC", x_delim1="_", x_delim2 = ".", distinguish_1="1", distinguish_2="2")
+dvn <- scrapeVarCross(dat, x_order = "sip", x_stem = "PRQC", x_delim1="_", x_delim2 = ".", distinguish_1="1", distinguish_2="2")
 dvn
-#> [[1]]
+#> $p1xvarnames
 #> [1] "PRQC_1.1" "PRQC_2.1" "PRQC_3.1" "PRQC_4.1"
 #> 
-#> [[2]]
+#> $p2xvarnames
 #> [1] "PRQC_1.2" "PRQC_2.2" "PRQC_3.2" "PRQC_4.2"
 #> 
-#> [[3]]
+#> $indper
 #> [1] 4
 #> 
-#> [[4]]
+#> $dist1
 #> [1] "1"
 #> 
-#> [[5]]
+#> $dist2
 #> [1] "2"
+#> 
+#> $indnum
+#> [1] 8
 ```
 
 2.  Use one of the script-writing `dySEM` functions (e.g., `dyadCFA`,
@@ -137,7 +141,7 @@ dvn
 
 ``` r
 #Generate script for a dyadic CFA model with loading-invariance contraints
-dres.loading <- dyadCFA(dvn, lvname = "PRQC",  model = "loading")
+dres.loading <- scriptCFA(dvn, lvname = "PRQC",  model = "loading")
 ```
 
 3.  Fit the scripted model using one of the `lavaan` model-fitting

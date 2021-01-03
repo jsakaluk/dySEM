@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A Function That Exports Tables and/or SEM Digrams based on dySEM models — dyOutput • dySEM</title>
+<title>A Function That Writes, Saves, and Exports Syntax for
+Fitting Latent Actor-Partner Interdependence Models — scriptAPIM • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,10 +47,13 @@
 
 
 
-<meta property="og:title" content="A Function That Exports Tables and/or SEM Digrams based on dySEM models — dyOutput" />
-<meta property="og:description" content="This function takes the  model from fitted dySEM() scripts and
-exports table(s) and/or a path diagram figure of expected output. Currently
-only working for dyadCFA() and apimSEM() models." />
+<meta property="og:title" content="A Function That Writes, Saves, and Exports Syntax for
+Fitting Latent Actor-Partner Interdependence Models — scriptAPIM" />
+<meta property="og:description" content="This function takes the outputted object from dyadVarNames()
+and automatically writes, returns, and exports (.txt) lavaan() syntax
+for specifying Actor-Partner Interdependence Models (APIMs). Users can
+also invoke configural, loading, and/or intercept invariant
+measurement models, and particular types of structural comparisons." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -116,27 +120,27 @@ only working for dyadCFA() and apimSEM() models." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A Function That Exports Tables and/or SEM Digrams based on dySEM models</h1>
+    <h1>A Function That Writes, Saves, and Exports Syntax for
+Fitting Latent Actor-Partner Interdependence Models</h1>
     
-    <div class="hidden name"><code>dyOutput.Rd</code></div>
+    <div class="hidden name"><code>scriptAPIM.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function takes the  model from fitted dySEM() scripts and
-exports table(s) and/or a path diagram figure of expected output. Currently
-only working for dyadCFA() and apimSEM() models.</p>
+    <p>This function takes the outputted object from dyadVarNames()
+and automatically writes, returns, and exports (.txt) lavaan() syntax
+for specifying Actor-Partner Interdependence Models (APIMs). Users can
+also invoke configural, loading, and/or intercept invariant
+measurement models, and particular types of structural comparisons.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dyOutput</span>(
+    <pre class="usage"><span class='fu'>scriptAPIM</span>(
   <span class='no'>dvn</span>,
-  <span class='kw'>model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>fit</span>,
-  <span class='kw'>table</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>tabletype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>figure</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>figtype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>dydMACS.x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>dydMACS.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='no'>lvxname</span>,
+  <span class='no'>lvyname</span>,
+  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>,
+  <span class='kw'>equate</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -147,58 +151,61 @@ only working for dyadCFA() and apimSEM() models.</p>
       <td><p>input object from dyadVarNames()</p></td>
     </tr>
     <tr>
+      <th>lvxname</th>
+      <td><p>input character to (arbitrarily) name LV X in lavaan syntax</p></td>
+    </tr>
+    <tr>
+      <th>lvyname</th>
+      <td><p>input character to (arbitrarily) name LV Y in lavaan syntax</p></td>
+    </tr>
+    <tr>
       <th>model</th>
-      <td><p>character input specying type of model to output (e.g., "cfa", "apim", "cf")</p></td>
+      <td><p>input character used to specify which level of invariance is
+modeled. Defaults to "configural"</p></td>
     </tr>
     <tr>
-      <th>fit</th>
-      <td><p>input object from fitted lavaan model</p></td>
+      <th>equate</th>
+      <td><p>input character to specify which type of structural parameters
+("actor" = actor effects, "partner" = partner effects,
+"all_effects" = actor and partner effects, x_means, y_means, or all_means)
+are constrained to equivalencey between partners. Default is "none". Actor or partner effect constraints
+require at least a loading-invariant model to be specified, otherwise a warning is returned; mean constraints
+require an intercept-invariant model to be specified, otherwise a warning is returned.</p></td>
     </tr>
     <tr>
-      <th>table</th>
-      <td><p>logical input of whether table output is desired. Default is TRUE</p></td>
-    </tr>
-    <tr>
-      <th>tabletype</th>
-      <td><p>character input of what type of table(s) is(are) desired.
-.data$options are "measurement" (i.e,, slopes, intercepts, and .data$optionally dMACS),
-"slopes" (i.e., latent slopes, such as actor/partner effects), or "both"
-(i.e., both measurement and slope tables)</p></td>
-    </tr>
-    <tr>
-      <th>figure</th>
-      <td><p>logical input of whether figure output is desired. Default is TRUE</p></td>
-    </tr>
-    <tr>
-      <th>figtype</th>
-      <td><p>character input of what type of figure is desired.</p></td>
-    </tr>
-    <tr>
-      <th>dydMACS.x</th>
-      <td><p>.data$optional input of saved output from dydMACS() for x variable, to be included
-in tabletype = "measurement" output</p></td>
-    </tr>
-    <tr>
-      <th>dydMACS.y</th>
-      <td><p>.data$optional input of saved output from dydMACS() for y variable, to be included
-in tabletype = "measurement" output</p></td>
+      <th>k</th>
+      <td><p>input logical for whether Kenny &amp; Ledermann's (2010) k parameter should be
+calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
+a loading-invariant model to be specified, otherwise a warning is returned.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Ignore console (prints unneccessary semPlot::semPaths details). More importantly,
-prints word files for the table(s) and/or figure, outputed to the users working directory</p>
+    <p>character object of lavaan script that can be passed immediately to
+lavaan functions. Users will receive message if structural comparisons are specified
+when the recommended level of invariance is not also specified. If user supplies dvn
+with containing X or Y variables, they are alerted to respecify the dvn object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='dyadVarNames.html'>dyadVarNames</a></code> <code>apimSEM</code> <code><a href='dydMACS.html'>dydMACS</a></code> which this function relies on</p></div>
+    <div class='dont-index'><p><code><a href='dyadVarNames.html'>dyadVarNames</a></code> which this function relies on</p>
+<p>Other script-writing functions: 
+<code><a href='scriptBifactor.html'>scriptBifactor</a>()</code>,
+<code><a href='scriptCFA.html'>scriptCFA</a>()</code>,
+<code><a href='scriptCFM.html'>scriptCFM</a>()</code>,
+<code><a href='scriptINULL.html'>scriptINULL</a>()</code>,
+<code><a href='scriptISAT.html'>scriptISAT</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span><span class='kw'>=</span><span class='st'>"X"</span>, <span class='kw'>yvar</span><span class='kw'>=</span><span class='st'>"Y"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>,
-<span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
-<span class='no'>apim.script.load</span> <span class='kw'>=</span> <span class='fu'>apimSEM</span>(<span class='no'>dvn</span>, <span class='kw'>lvxname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,
-<span class='kw'>lvyname</span> <span class='kw'>=</span> <span class='st'>"Satisfaction"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"loading"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in apimSEM(dvn, lvxname = "Conflict", lvyname = "Satisfaction",     model = "loading"): could not find function "apimSEM"</span></div><div class='input'><span class='no'>apim.fit.load</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lavaan</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span>(<span class='no'>apim.script.load</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-<span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavaan(model = apim.script.load, data = dat, std.lv = FALSE,     auto.fix.first = TRUE, meanstructure = TRUE, model.type = "cfa",     int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.single = TRUE,     auto.var = TRUE, auto.cov.lv.x = TRUE, auto.cov.y = TRUE,     auto.th = TRUE, auto.delta = TRUE, auto.efa = TRUE): object 'apim.script.load' not found</span></div><div class='input'><span class='fu'>dyOutput</span>(<span class='no'>dvn</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"apim"</span>, <span class='no'>apim.fit.load</span>, <span class='kw'>tabletype</span> <span class='kw'>=</span> <span class='st'>"both"</span>, <span class='kw'>figtype</span> <span class='kw'>=</span> <span class='st'>"unstandardized"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::parameterEstimates(fit, standardized = TRUE): object 'apim.fit.load' not found</span></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span><span class='kw'>=</span><span class='st'>"X"</span>, <span class='kw'>yvar</span><span class='kw'>=</span><span class='st'>"Y"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>,<span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
+<span class='no'>apim.script.config</span> <span class='kw'>=</span> <span class='fu'>scriptAPIM</span>(<span class='no'>dvn</span>, <span class='kw'>lvxname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,
+<span class='kw'>lvyname</span> <span class='kw'>=</span> <span class='st'>"Satisfaction"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)
+<span class='no'>apim.script.load</span> <span class='kw'>=</span> <span class='fu'>scriptAPIM</span>(<span class='no'>dvn</span>, <span class='kw'>lvxname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,
+<span class='kw'>lvyname</span> <span class='kw'>=</span> <span class='st'>"Satisfaction"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"loading"</span>)
+<span class='no'>apim.script.int</span> <span class='kw'>=</span> <span class='fu'>scriptAPIM</span>(<span class='no'>dvn</span>, <span class='kw'>lvxname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,
+<span class='kw'>lvyname</span> <span class='kw'>=</span> <span class='st'>"Satisfaction"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"intercept"</span>)
+<span class='no'>apim.script.load.actor</span> <span class='kw'>=</span> <span class='fu'>scriptAPIM</span>(<span class='no'>dvn</span>, <span class='kw'>lvxname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,
+<span class='kw'>lvyname</span> <span class='kw'>=</span> <span class='st'>"Satisfaction"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"loading"</span>, <span class='kw'>equate</span> <span class='kw'>=</span> <span class='st'>"actor"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

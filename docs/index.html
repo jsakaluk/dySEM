@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9030</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9038</span>
       </span>
     </div>
 
@@ -110,7 +110,7 @@
 <li>Intercept Invariance</li>
 </ul>
 <p>The package was developed and used in the course of the research described in <a href="https://psyarxiv.com/9vcnz/">Sakaluk, Fisher, &amp; Kilshaw</a> (in press). Our goals for future functionality in <code>dysem</code> include adding support for longitudinal dyadic SEM models, dyadic SEM simulations, and data restructuring. Please get in touch with John if you are interested in contributing to the package–all nice humans with a knack for R/dyadic data analysis/SEM are welcome!</p>
-<p>The <code>dySEM</code> logo was designed by Wolfgang Deranleau.</p>
+<p>The <code>dySEM</code> logo was designed by Wolfgang Deranleau (for logo design inquiries, email: <a href="mailto:agangofwolves@gmail.com" class="email">agangofwolves@gmail.com</a>).</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -131,27 +131,30 @@
   <span class="fu">select</span>(<span class="no">.</span>, <span class="no">PRQC_1.1</span>:<span class="no">PRQC_4.1</span>, <span class="no">PRQC_1.2</span>:<span class="no">PRQC_4.2</span>)
 
 <span class="co">#Extract item info with dvn2</span>
-<span class="no">dvn</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/dvn2.html">dvn2</a></span>(<span class="no">dat</span>, <span class="kw">x_order</span> <span class="kw">=</span> <span class="st">"sip"</span>, <span class="kw">x_stem</span> <span class="kw">=</span> <span class="st">"PRQC"</span>, <span class="kw">x_delim1</span><span class="kw">=</span><span class="st">"_"</span>, <span class="kw">x_delim2</span> <span class="kw">=</span> <span class="st">"."</span>, <span class="kw">distinguish_1</span><span class="kw">=</span><span class="st">"1"</span>, <span class="kw">distinguish_2</span><span class="kw">=</span><span class="st">"2"</span>)
+<span class="no">dvn</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/scrapeVarCross.html">scrapeVarCross</a></span>(<span class="no">dat</span>, <span class="kw">x_order</span> <span class="kw">=</span> <span class="st">"sip"</span>, <span class="kw">x_stem</span> <span class="kw">=</span> <span class="st">"PRQC"</span>, <span class="kw">x_delim1</span><span class="kw">=</span><span class="st">"_"</span>, <span class="kw">x_delim2</span> <span class="kw">=</span> <span class="st">"."</span>, <span class="kw">distinguish_1</span><span class="kw">=</span><span class="st">"1"</span>, <span class="kw">distinguish_2</span><span class="kw">=</span><span class="st">"2"</span>)
 <span class="no">dvn</span>
-<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; $p1xvarnames</span>
 <span class="co">#&gt; [1] "PRQC_1.1" "PRQC_2.1" "PRQC_3.1" "PRQC_4.1"</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; $p2xvarnames</span>
 <span class="co">#&gt; [1] "PRQC_1.2" "PRQC_2.2" "PRQC_3.2" "PRQC_4.2"</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; $indper</span>
 <span class="co">#&gt; [1] 4</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
+<span class="co">#&gt; $dist1</span>
 <span class="co">#&gt; [1] "1"</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [[5]]</span>
-<span class="co">#&gt; [1] "2"</span></pre></div>
+<span class="co">#&gt; $dist2</span>
+<span class="co">#&gt; [1] "2"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $indnum</span>
+<span class="co">#&gt; [1] 8</span></pre></div>
 <ol>
 <li>Use one of the script-writing <code>dySEM</code> functions (e.g., <code>dyadCFA</code>, <code>apimSEM</code>, <code>INULL</code>), and supply it your saved <code>dvn</code>. It will save a <code>lavaan</code>-friendly script object and output a reproducible version of the script as a .txt to your current working directory (post this somewhere like the <a href="http://osf.io">OSF</a> to make your reviewers happy :) )</li>
 </ol>
 <!-- end list --><div class="sourceCode" id="cb3"><pre class="r"><span class="co">#Generate script for a dyadic CFA model with loading-invariance contraints</span>
-<span class="no">dres.loading</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/dyadCFA.html">dyadCFA</a></span>(<span class="no">dvn</span>, <span class="kw">lvname</span> <span class="kw">=</span> <span class="st">"PRQC"</span>,  <span class="kw">model</span> <span class="kw">=</span> <span class="st">"loading"</span>)</pre></div>
+<span class="no">dres.loading</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/scriptCFA.html">scriptCFA</a></span>(<span class="no">dvn</span>, <span class="kw">lvname</span> <span class="kw">=</span> <span class="st">"PRQC"</span>,  <span class="kw">model</span> <span class="kw">=</span> <span class="st">"loading"</span>)</pre></div>
 <ol>
 <li>Fit the scripted model using one of the <code>lavaan</code> model-fitting functions (e.g., <code>cfa</code>); this ensures you retain complete control over how your model is fitted (e.g., estimator selection, missing data treatment, etc.)</li>
 </ol>

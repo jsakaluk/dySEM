@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs • dySEM</title>
+<title>A Function That Writes, Saves, and Exports Syntax for
+Fitting Latent Dyadic Measurement and Invariance Models — scriptCFA • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +47,12 @@
 
 
 
-<meta property="og:title" content="Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs" />
-<meta property="og:description" content="Functions for dyadCFA() for scripting free or fixed families of parameters" />
+<meta property="og:title" content="A Function That Writes, Saves, and Exports Syntax for
+Fitting Latent Dyadic Measurement and Invariance Models — scriptCFA" />
+<meta property="og:description" content="This function takes the outputted object from dyadVarNames()
+and automatically writes, returns, and exports (.txt) lavaan() syntax
+for specifying dyadic configural, loading, and intercept invariant
+measurement models for either a specified X or Y factor." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -114,24 +119,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Functions for dyadCFA() for scripting free or fixed families of parameters</h1>
+    <h1>A Function That Writes, Saves, and Exports Syntax for
+Fitting Latent Dyadic Measurement and Invariance Models</h1>
     
-    <div class="hidden name"><code>cfa_funs.Rd</code></div>
+    <div class="hidden name"><code>scriptCFA.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Functions for dyadCFA() for scripting free or fixed families of parameters</p>
+    <p>This function takes the outputted object from dyadVarNames()
+and automatically writes, returns, and exports (.txt) lavaan() syntax
+for specifying dyadic configural, loading, and intercept invariant
+measurement models for either a specified X or Y factor.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>loads</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>intercepts</span>(<span class='no'>dvn</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>resids</span>(<span class='no'>dvn</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>lvars</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>lmeans</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)</pre>
+    <pre class="usage"><span class='fu'>scriptCFA</span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"X"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,19 +146,34 @@
       <td><p>input character to (arbitrarily) name LV in lavaan syntax</p></td>
     </tr>
     <tr>
-      <th>partner</th>
-      <td><p>input character to indicate parameters for first or second dyad member</p></td>
+      <th>model</th>
+      <td><p>input character used to specify which level of invariance is
+modeled ("configural", "loading", "intercept", "residual", or "indistinguishable"). Defaults to "configural".</p></td>
     </tr>
     <tr>
-      <th>type</th>
-      <td><p>input character to indicate whether parameters "fixed", "free" or "equated" in estimation</p></td>
+      <th>lvnum</th>
+      <td><p>optional input character to indicate which LV is modeled ("one" or "two").
+Only necessary if dvn contains both X and Y information and user wants CFA for Y</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>character object of lavaan script that can be passed immediately to
+lavaan functions</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>dyadCFA</code> which this function supplies</p></div>
+    <div class='dont-index'><p><code><a href='dyadVarNames.html'>dyadVarNames</a></code> which this function relies on</p>
+<p>Other script-writing functions: 
+<code><a href='scriptAPIM.html'>scriptAPIM</a>()</code>,
+<code><a href='scriptBifactor.html'>scriptBifactor</a>()</code>,
+<code><a href='scriptCFM.html'>scriptCFM</a>()</code>,
+<code><a href='scriptINULL.html'>scriptINULL</a>()</code>,
+<code><a href='scriptISAT.html'>scriptISAT</a>()</code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span><span class='kw'>=</span><span class='st'>"X"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>,<span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
+<span class='no'>con.config.script</span> <span class='kw'>=</span> <span class='fu'>scriptCFA</span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in 1:dvn[["indper"]]: argument of length 0</span></div><div class='input'><span class='no'>con.loading.script</span> <span class='kw'>=</span> <span class='fu'>scriptCFA</span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"loading"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in 1:dvn[["indper"]]: argument of length 0</span></div><div class='input'><span class='no'>con.intercept.script</span> <span class='kw'>=</span> <span class='fu'>scriptCFA</span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"intercept"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in 1:dvn[["indper"]]: argument of length 0</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -44,7 +44,7 @@ The package currently provides functionality regarding the following types of la
   
 The package was developed and used in the course of the research described in [Sakaluk, Fisher, & Kilshaw](https://psyarxiv.com/9vcnz/) (in press). Our goals for future functionality in `dysem` include adding support for longitudinal dyadic SEM models, dyadic SEM simulations, and data restructuring. Please get in touch with John if you are interested in contributing to the package--all nice humans with a knack for R/dyadic data analysis/SEM are welcome!
 
-The `dySEM` logo was designed by Wolfgang Deranleau.
+The `dySEM` logo was designed by Wolfgang Deranleau (for logo design inquiries, email: agangofwolves@gmail.com).
 
 ## Installation
 
@@ -73,7 +73,7 @@ dat <- DRES %>%
   select(., PRQC_1.1:PRQC_4.1, PRQC_1.2:PRQC_4.2)
 
 #Extract item info with dvn2
-dvn <- dvn2(dat, x_order = "sip", x_stem = "PRQC", x_delim1="_", x_delim2 = ".", distinguish_1="1", distinguish_2="2")
+dvn <- scrapeVarCross(dat, x_order = "sip", x_stem = "PRQC", x_delim1="_", x_delim2 = ".", distinguish_1="1", distinguish_2="2")
 dvn
 ```
 
@@ -81,7 +81,7 @@ dvn
 
 ```{r dyadCFA, eval=F}
 #Generate script for a dyadic CFA model with loading-invariance contraints
-dres.loading <- dyadCFA(dvn, lvname = "PRQC",  model = "loading")
+dres.loading <- scriptCFA(dvn, lvname = "PRQC",  model = "loading")
 ```
 
 3. Fit the scripted model using one of the `lavaan` model-fitting functions (e.g., `cfa`); this ensures you retain complete control over how your model is fitted (e.g., estimator selection, missing data treatment, etc.)

@@ -86,7 +86,7 @@ dMACS function (https://github.com/Jo-Karl/dMACS) with his assistance." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9030</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9038</span>
       </span>
     </div>
 
@@ -151,17 +151,12 @@ lavaan()</p></td>
     <p>numeric vector of dMACS values for each indicator of a given LV</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='dyadCFA.html'>dyadCFA</a></code> which this function relies on</p></div>
+    <div class='dont-index'><p><code>dyadCFA</code> which this function relies on</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span><span class='kw'>=</span><span class='st'>"X"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>,<span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
-<span class='no'>con.config.script</span> <span class='kw'>=</span> <span class='fu'><a href='dyadCFA.html'>dyadCFA</a></span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)
-<span class='no'>con.fit.config</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lavaan</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span>(<span class='no'>con.config.script</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-<span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>dydMACS</span>(<span class='no'>con.fit.config</span>)</div><div class='output co'>#&gt;         dMAC
-#&gt; Item 1 0.193
-#&gt; Item 2 0.075
-#&gt; Item 3 0.067</div></pre>
+<span class='no'>con.config.script</span> <span class='kw'>=</span> <span class='fu'>dyadCFA</span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dyadCFA(dvn, lvname = "Conflict", model = "configural"): could not find function "dyadCFA"</span></div><div class='input'><span class='no'>con.fit.config</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lavaan</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span>(<span class='no'>con.config.script</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+<span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavaan(model = con.config.script, data = dat, std.lv = FALSE,     auto.fix.first = TRUE, meanstructure = TRUE, model.type = "cfa",     int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.single = TRUE,     auto.var = TRUE, auto.cov.lv.x = TRUE, auto.cov.y = TRUE,     auto.th = TRUE, auto.delta = TRUE, auto.efa = TRUE): object 'con.config.script' not found</span></div><div class='input'><span class='fu'>dydMACS</span>(<span class='no'>con.fit.config</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavInspect(fit.cfa, what = "rsquare"): object 'con.fit.config' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

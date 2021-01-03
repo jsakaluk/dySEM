@@ -15,42 +15,42 @@
 loads <- function(dvn, lvname, partner="1", type = "free"){
 
   if(partner == "1" & type == "free"){
-    eta_x = sprintf("%s%s =~ NA*",lvname, dvn[[4]])
-    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[[1]], collapse = "+")), fixed = T)
+    eta_x = sprintf("%s%s =~ NA*",lvname, dvn[["dist1"]])
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
   }else if(partner == "1" & type == "equated"){
-    eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[[4]], dvn[[1]][1])
+    eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist1"]], dvn[["p1xvarnames"]][1])
     eta.x = list()
-    for (i in 1:dvn[[3]]) {
-      eta.x[[i]]=sprintf("l%s*%s",i, dvn[[1]][i])
+    for (i in 1:dvn[["indper"]]) {
+      eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p1xvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
   }else if(partner == "2" & type == "free"){
-    eta_x = sprintf("%s%s =~ NA*",lvname, dvn[[5]])
-    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[[2]], collapse = "+")), fixed = T)
+    eta_x = sprintf("%s%s =~ NA*",lvname, dvn[["dist2"]])
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
   }else if(partner == "2" & type == "equated"){
-    eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[[5]], dvn[[2]][1])
+    eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist2"]], dvn[["p2xvarnames"]][1])
     eta.x = list()
-    for (i in 1:dvn[[3]]) {
-      eta.x[[i]]=sprintf("l%s*%s",i, dvn[[2]][i])
+    for (i in 1:dvn[["indper"]]) {
+      eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p2xvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
   }else if(partner == "g" & type == "free"){
     eta_x = sprintf("%sDy =~ NA*",lvname)
-    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[[1]], collapse = "+"), "+",paste(dvn[[2]], collapse = "+")), fixed = T)
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+"), "+",paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
   }else if(partner == "g" & type == "equated"){
-    eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[[1]][1])
+    eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[["p1xvarnames"]][1])
     eta.x1 = list()
-    for (i in 1:dvn[[3]]) {
-      eta.x1[[i]]=sprintf("l%s*%s",(dvn[[3]]*2+i), dvn[[1]][i])
+    for (i in 1:dvn[["indper"]]) {
+      eta.x1[[i]]=sprintf("l%s*%s",(dvn[["indper"]]*2+i), dvn[["p1xvarnames"]][i])
     }
     eta.x2 = list()
-    for (i in 1:dvn[[3]]) {
-      eta.x2[[i]]=sprintf("l%s*%s",(dvn[[3]]*2+i), dvn[[2]][i])
+    for (i in 1:dvn[["indper"]]) {
+      eta.x2[[i]]=sprintf("l%s*%s",(dvn[["indper"]]*2+i), dvn[["p2xvarnames"]][i])
     }
 
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
@@ -62,29 +62,29 @@ loads <- function(dvn, lvname, partner="1", type = "free"){
 intercepts <- function(dvn, partner="1", type = "free"){
   if(partner == "1" & type == "free"){
     xints = list()
-    for (i in 1:dvn[[3]]) {
-      xints[[i]]=sprintf("%s ~ 1", dvn[[1]][i])
+    for (i in 1:dvn[["indper"]]) {
+      xints[[i]]=sprintf("%s ~ 1", dvn[["p1xvarnames"]][i])
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
   }else if(partner == "1" & type == "equated"){
     xints = list()
-    for (i in 1:dvn[[3]]) {
-      xints[[i]]=sprintf("%s ~ t%s*1", dvn[[1]][i], i)
+    for (i in 1:dvn[["indper"]]) {
+      xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p1xvarnames"]][i], i)
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
   }else if(partner == "2" & type == "free"){
     xints = list()
-    for (i in 1:dvn[[3]]) {
-      xints[[i]]=sprintf("%s ~ 1", dvn[[2]][i])
+    for (i in 1:dvn[["indper"]]) {
+      xints[[i]]=sprintf("%s ~ 1", dvn[["p2xvarnames"]][i])
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
   }else if(partner == "2" & type == "equated"){
     xints = list()
-    for (i in 1:dvn[[3]]) {
-      xints[[i]]=sprintf("%s ~ t%s*1", dvn[[2]][i], i)
+    for (i in 1:dvn[["indper"]]) {
+      xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p2xvarnames"]][i], i)
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
@@ -95,29 +95,29 @@ intercepts <- function(dvn, partner="1", type = "free"){
 resids <- function(dvn, partner="1", type = "free"){
   if(partner == "1" & type == "free"){
     res = list()
-    for (i in 1:dvn[[3]]) {
-      res[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[1]][i])
+    for (i in 1:dvn[["indper"]]) {
+      res[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p1xvarnames"]][i])
     }
     res = paste(res, collapse = "\n")
     return(res)
   }else if(partner == "1" & type == "equated"){
     res = list()
-    for (i in 1:dvn[[3]]) {
-      res[[i]]=sprintf("%s ~~ th%s*%s",dvn[[1]][i],i, dvn[[1]][i])
+    for (i in 1:dvn[["indper"]]) {
+      res[[i]]=sprintf("%s ~~ th%s*%s",dvn[["p1xvarnames"]][i],i, dvn[["p1xvarnames"]][i])
     }
     res = paste(res, collapse = "\n")
     return(res)
   }else if(partner == "2" & type == "free"){
     res = list()
-    for (i in 1:dvn[[3]]) {
-      res[[i]]=sprintf("%s ~~ %s",dvn[[2]][i], dvn[[2]][i])
+    for (i in 1:dvn[["indper"]]) {
+      res[[i]]=sprintf("%s ~~ %s",dvn[["p2xvarnames"]][i], dvn[["p2xvarnames"]][i])
     }
     res = paste(res, collapse = "\n")
     return(res)
   }else if(partner == "2" & type == "equated"){
     res = list()
-    for (i in 1:dvn[[3]]) {
-      res[[i]]=sprintf("%s ~~ th%s*%s",dvn[[2]][i],i, dvn[[2]][i])
+    for (i in 1:dvn[["indper"]]) {
+      res[[i]]=sprintf("%s ~~ th%s*%s",dvn[["p2xvarnames"]][i],i, dvn[["p2xvarnames"]][i])
     }
     res = paste(res, collapse = "\n")
     return(res)
@@ -127,22 +127,22 @@ resids <- function(dvn, partner="1", type = "free"){
 #' @rdname cfa_funs
 lvars <- function(dvn, lvname, partner = "1", type = "free"){
   if(partner == "1" & type == "fixed"){
-    lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+    lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
     return(lvar)
   }else if(partner == "1" & type == "free"){
-    lvar <- sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+    lvar <- sprintf("%s%s ~~ NA*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
     return(lvar)
   }else if(partner == "1" & type == "equated"){
-    lvar <- sprintf("%s%s ~~ psi*%s%s",lvname, dvn[[4]],lvname, dvn[[4]])
+    lvar <- sprintf("%s%s ~~ psi*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
     return(lvar)
   }else if (partner == "2" & type == "fixed"){
-    lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
     return(lvar)
   }else if(partner == "2" & type == "free"){
-    lvar <- sprintf("%s%s ~~ NA*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    lvar <- sprintf("%s%s ~~ NA*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
     return(lvar)
   }else if(partner == "2" & type == "equated"){
-    lvar <- sprintf("%s%s ~~ psi*%s%s",lvname, dvn[[5]],lvname, dvn[[5]])
+    lvar <- sprintf("%s%s ~~ psi*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
     return(lvar)
   }
 
@@ -151,22 +151,22 @@ lvars <- function(dvn, lvname, partner = "1", type = "free"){
 #' @rdname cfa_funs
 lmeans <- function(dvn, lvname, partner = "1", type = "free"){
   if(partner == "1" & type == "fixed"){
-    alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[[4]])
+    alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[["dist1"]])
     return(alpha)
   }else if(partner == "1" & type == "free"){
-    alpha <- sprintf("%s%s ~ NA*1",lvname, dvn[[4]])
+    alpha <- sprintf("%s%s ~ NA*1",lvname, dvn[["dist1"]])
     return(alpha)
   }else if(partner == "1" & type == "equated"){
-    alpha <- sprintf("%s%s ~ alpha*1",lvname, dvn[[4]])
+    alpha <- sprintf("%s%s ~ alpha*1",lvname, dvn[["dist1"]])
     return(alpha)
   }else if (partner == "2" & type == "fixed"){
-    alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[[5]])
+    alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[["dist2"]])
     return(alpha)
   }else if(partner == "2" & type == "free"){
-    alpha <- sprintf("%s%s ~ NA*1",lvname, dvn[[5]])
+    alpha <- sprintf("%s%s ~ NA*1",lvname, dvn[["dist2"]])
     return(alpha)
   }else if(partner == "2" & type == "equated"){
-    alpha <- sprintf("%s%s ~ alpha*1",lvname, dvn[[5]])
+    alpha <- sprintf("%s%s ~ alpha*1",lvname, dvn[["dist2"]])
     return(alpha)
   }
 }

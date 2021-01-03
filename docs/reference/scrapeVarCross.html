@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A Variable Name-Scraping and Indexing Function — dyadVarNames • dySEM</title>
+<title>A Variable Name-Scraping and Indexing Function for cross-sectional data — scrapeVarCross • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="A Variable Name-Scraping and Indexing Function — dyadVarNames" />
+<meta property="og:title" content="A Variable Name-Scraping and Indexing Function for cross-sectional data — scrapeVarCross" />
 <meta property="og:description" content="This function scrapes the names of indicator variables in a
 wide-format data set used for dyadic analyses of two latent variables (LV; X and Y),
 and indexes which indicators correspond to which partner, for which LV.
@@ -117,9 +117,9 @@ It is used primarily to guide the syntax-writing of the other dySEM functions." 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A Variable Name-Scraping and Indexing Function</h1>
+    <h1>A Variable Name-Scraping and Indexing Function for cross-sectional data</h1>
     
-    <div class="hidden name"><code>dyadVarNames.Rd</code></div>
+    <div class="hidden name"><code>scrapeVarCross.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -129,7 +129,21 @@ and indexes which indicators correspond to which partner, for which LV.
 It is used primarily to guide the syntax-writing of the other dySEM functions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dyadVarNames</span>(<span class='no'>dat</span>, <span class='kw'>xvar</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>yvar</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>sep</span>, <span class='no'>distinguish1</span>, <span class='no'>distinguish2</span>)</pre>
+    <pre class="usage"><span class='fu'>scrapeVarCross</span>(
+  <span class='no'>dat</span>,
+  <span class='kw'>x_order</span> <span class='kw'>=</span> <span class='st'>"spi"</span>,
+  <span class='no'>x_stem</span>,
+  <span class='kw'>x_delim1</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>x_delim2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>x_item_num</span> <span class='kw'>=</span> <span class='st'>"\\d+"</span>,
+  <span class='kw'>distinguish_1</span> <span class='kw'>=</span> <span class='st'>"1"</span>,
+  <span class='kw'>distinguish_2</span> <span class='kw'>=</span> <span class='st'>"2"</span>,
+  <span class='kw'>y_order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>y_stem</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>y_delim1</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>y_delim2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>y_item_num</span> <span class='kw'>=</span> <span class='st'>"\\d+"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,16 +153,51 @@ It is used primarily to guide the syntax-writing of the other dySEM functions.</
       <td><p>input data frame of indicators of a particular LV</p></td>
     </tr>
     <tr>
-      <th>xvar</th>
+      <th>x_order</th>
+      <td><p>input character for order of (S)tem, (P)artner number, and (Item) number
+when creating variable names. Defaults to "spi" (qualtrics-friendly)</p></td>
+    </tr>
+    <tr>
+      <th>x_stem</th>
       <td><p>input character stem of indicator variables for LV X</p></td>
     </tr>
     <tr>
-      <th>yvar</th>
-      <td><p>input character stem of indicator variables for LV Y</p></td>
+      <th>x_delim1</th>
+      <td><p>optional character to separate stem from partner number (spi) or item number (sip)</p></td>
     </tr>
     <tr>
-      <th>sep</th>
-      <td><p>input character use to separate variable names from the partner identifier</p></td>
+      <th>x_delim2</th>
+      <td><p>optional character to separate stem/partner number (spi) or stem/item number (sip) from
+from final element of variable name</p></td>
+    </tr>
+    <tr>
+      <th>x_item_num</th>
+      <td><p>defaults to scrape all items that match the stem with any digits that follow.
+Will be updated to allow particular range of values, to make more sub-scale friendly.</p></td>
+    </tr>
+    <tr>
+      <th>y_order</th>
+      <td><p>optional character for order of (S)tem, (P)artner number, and (Item) number
+when creating variable names. Defaults to "spi" (qualtrics-friendly). This and other Y-arguments
+only necessary if there is a latent Y variable to model</p></td>
+    </tr>
+    <tr>
+      <th>y_stem</th>
+      <td><p>optional input character stem of indicator variables for LV X</p></td>
+    </tr>
+    <tr>
+      <th>y_delim1</th>
+      <td><p>optional character to separate stem from partner number (spi) or item number (sip)</p></td>
+    </tr>
+    <tr>
+      <th>y_delim2</th>
+      <td><p>optional character to separate stem/partner number (spi) or stem/item number (sip) from
+from final element of variable name</p></td>
+    </tr>
+    <tr>
+      <th>y_item_num</th>
+      <td><p>defaults to scrape all items that match the stem with any digits that follow.
+Will be updated to allow particular range of values, to make more sub-scale friendly.</p></td>
     </tr>
     <tr>
       <th>distinguish1</th>
@@ -164,9 +213,14 @@ It is used primarily to guide the syntax-writing of the other dySEM functions.</
 
     <p>list containing variable names for p1, p2, # of items per LV,
 characters distinguishing partners, and total number of indicators</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other variable-scraping functions: 
+<code><a href='scrapeVarLong.html'>scrapeVarLong</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'>dyadVarNames</span>(<span class='no'>dat</span>, <span class='kw'>xvar</span><span class='kw'>=</span><span class='st'>"X"</span>, <span class='kw'>yvar</span><span class='kw'>=</span><span class='st'>"Y"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>,<span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>&lt;-</span> <span class='fu'>scrapeVarCross</span>(<span class='kw'>dat</span> <span class='kw'>=</span> <span class='no'>dat.pkg</span>, <span class='kw'>x_order</span> <span class='kw'>=</span> <span class='st'>"sip"</span>, <span class='kw'>x_stem</span> <span class='kw'>=</span> <span class='st'>"X"</span>, <span class='kw'>x_delim2</span><span class='kw'>=</span><span class='st'>"."</span>, <span class='kw'>x_item_num</span><span class='kw'>=</span><span class='st'>"\\d+"</span>, <span class='kw'>distinguish_1</span><span class='kw'>=</span><span class='st'>"1"</span>, <span class='kw'>distinguish_2</span><span class='kw'>=</span><span class='st'>"2"</span>,
+<span class='kw'>y_order</span><span class='kw'>=</span><span class='st'>"sip"</span>, <span class='kw'>y_stem</span><span class='kw'>=</span><span class='st'>"Y"</span>, <span class='kw'>y_delim2</span><span class='kw'>=</span><span class='st'>"."</span>, <span class='kw'>y_item_num</span><span class='kw'>=</span><span class='st'>"\\d+"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in stri_extract_first_regex(string, pattern, opts_regex = opts(pattern)): object 'dat.pkg' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

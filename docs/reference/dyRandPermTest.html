@@ -83,7 +83,7 @@ the fit of the empirical null sampling distribtuion" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9030</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9038</span>
       </span>
     </div>
 
@@ -129,7 +129,14 @@ comparison of the fit of the observed invariance model against
 the fit of the empirical null sampling distribtuion</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dyRandPermTest</span>(<span class='no'>dvn</span>, <span class='no'>dat</span>, <span class='no'>n</span>, <span class='kw'>AFIs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</pre>
+    <pre class="usage"><span class='fu'>dyRandPermTest</span>(
+  <span class='no'>dvn</span>,
+  <span class='no'>dat</span>,
+  <span class='no'>n</span>,
+  <span class='kw'>index</span> <span class='kw'>=</span> <span class='st'>"chi2"</span>,
+  <span class='kw'>nulldist</span> <span class='kw'>=</span> <span class='st'>"chi2"</span>,
+  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,19 +154,22 @@ the fit of the empirical null sampling distribtuion</p>
       <td><p>input numeric argument for number of randomly permuted samples to use</p></td>
     </tr>
     <tr>
-      <th>AFIs</th>
-      <td><p>Optional character vector indicating which alternative fit indices (or chi-squared itself)</p></td>
+      <th>index</th>
+      <td><p>character argument indicating which observed fit index to compare to null dists. ("chi2", "ISAT", or "both")</p></td>
+    </tr>
+    <tr>
+      <th>nulldist</th>
+      <td><p>character argument indicating against which null dist. ("chi2", "ISAT", or "both") index should be compared</p></td>
     </tr>
     <tr>
       <th>model</th>
-      <td><p>Character argument indicating type of invariance model to evaluate
-are to be used to be extracted from the model fit in each permuted sample</p></td>
+      <td><p>Character argument indicating type of invariance model to evaluate</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A randomly permuted data frame</p>
+    <p>list of permuted p-value and ggplot</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='dyadVarNames.html'>dyadVarNames</a></code> <code><a href='dyRand.html'>dyRand</a></code> <code><a href='dyRandPermFit.html'>dyRandPermFit</a></code> which this function relies on</p></div>
@@ -167,7 +177,7 @@ are to be used to be extracted from the model fit in each permuted sample</p></t
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dat</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>DRES</span>, <span class='no'>sexsat1.1</span>:<span class='no'>sexsat5.2</span>)
 <span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span> <span class='kw'>=</span> <span class='st'>"sexsat"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
-<span class='fu'>dyRandPermTest</span>(<span class='no'>dvn</span>, <span class='no'>dat</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in cfa(script, data = perm, std.lv = F, auto.fix.first = F, meanstructure = T): could not find function "cfa"</span></div></pre>
+<span class='no'>config.test</span> <span class='kw'>&lt;-</span> <span class='fu'>dyRandPermTest</span>(<span class='no'>dvn</span>, <span class='no'>dat</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dyadCFA(dvn, model = "configural"): could not find function "dyadCFA"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

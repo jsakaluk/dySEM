@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs • dySEM</title>
+<title>Functions for longitudinal measurement model scripting free or fixed families of parameters — longcfa_funs • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs" />
-<meta property="og:description" content="Functions for dyadCFA() for scripting free or fixed families of parameters" />
+<meta property="og:title" content="Functions for longitudinal measurement model scripting free or fixed families of parameters — longcfa_funs" />
+<meta property="og:description" content="Functions for longitudinal measurement model scripting free or fixed families of parameters" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -114,49 +114,63 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Functions for dyadCFA() for scripting free or fixed families of parameters</h1>
+    <h1>Functions for longitudinal measurement model scripting free or fixed families of parameters</h1>
     
-    <div class="hidden name"><code>cfa_funs.Rd</code></div>
+    <div class="hidden name"><code>longcfa_funs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Functions for dyadCFA() for scripting free or fixed families of parameters</p>
+    <p>Functions for longitudinal measurement model scripting free or fixed families of parameters</p>
     </div>
 
-    <pre class="usage"><span class='fu'>loads</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
+    <pre class="usage"><span class='fu'>longloads</span>(
+  <span class='no'>longdvn</span>,
+  <span class='no'>lvname</span>,
+  <span class='kw'>markvar</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>,
+  <span class='kw'>dyequate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>longequate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
-<span class='fu'>intercepts</span>(<span class='no'>dvn</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
+<span class='fu'>longints</span>(
+  <span class='no'>longdvn</span>,
+  <span class='kw'>markvar</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>,
+  <span class='kw'>dyequate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>longequate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
-<span class='fu'>resids</span>(<span class='no'>dvn</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>lvars</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>lmeans</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)</pre>
+<span class='fu'>longrvs</span>(<span class='no'>longdvn</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>dyequate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>longequate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dvn</th>
-      <td><p>input object from dyadVarNames()</p></td>
+      <th>longdvn</th>
+      <td><p>input object from dyadVarNames() with a longitudinal component</p></td>
     </tr>
     <tr>
       <th>lvname</th>
       <td><p>input character to (arbitrarily) name LV in lavaan syntax</p></td>
     </tr>
     <tr>
+      <th>markvar</th>
+      <td><p>input numeric for which indicator should be the marker variable (loading fixed to 1); defaults to 1</p></td>
+    </tr>
+    <tr>
       <th>partner</th>
       <td><p>input character to indicate parameters for first or second dyad member</p></td>
     </tr>
     <tr>
-      <th>type</th>
-      <td><p>input character to indicate whether parameters "fixed", "free" or "equated" in estimation</p></td>
+      <th>dyequate</th>
+      <td><p>logical to indicate whether to constrain loadings across dyad members; defaults to FALSE</p></td>
+    </tr>
+    <tr>
+      <th>longequate</th>
+      <td><p>logical to indicate whether to constrain loadings across time points; defaults to FALSE</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code>dyadCFA</code> which this function supplies</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

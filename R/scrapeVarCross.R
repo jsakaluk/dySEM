@@ -48,7 +48,12 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
     dist_2 <- distinguish_2
     tot_var <- num_x1_var + num_x2_var
     if(num_x1_var == num_x2_var){
-      varlist <- list(x1vars, x2vars, num_x1_var, dist_1, dist_2, tot_var)
+      varlist <- list(p1xvarnames = x1vars,
+                      p2xvarnames = x2vars,
+                      indper = num_x1_var,
+                      dist1 =dist_1,
+                      dist2 = dist_2,
+                      indnum = tot_var)
       return(varlist)
     }else if(num_x1_var != num_x2_var){
       stop("dvn() cannot detect a similar number of ", x_stem, " items for P1 and P2")
@@ -79,7 +84,15 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
     tot_var <- num_x1_var + num_x2_var + num_y1_var + num_y2_var
 
     if(num_x1_var == num_x2_var && num_y1_var == num_y2_var){
-      varlist <- list(x1vars, x2vars, num_x1_var, dist_1, dist_2, y1vars, y2vars, num_y1_var, tot_var)
+      varlist <- list(p1xvarnames = x1vars,
+                      p2xvarnames = x2vars,
+                      xindper = num_x1_var,
+                      dist1 = dist_1,
+                      dist1 = dist_2,
+                      p1yvarnames = y1vars,
+                      p2yvarnames = y2vars,
+                      yindper =num_y1_var,
+                      indnum = tot_var)
       return(varlist)
     }else if(num_x1_var != num_x2_var || num_y1_var != num_y2_var){
       stop("dvn() cannot detect a similar number of ", x_stem, "or", y_stem, " items for P1 and P2")

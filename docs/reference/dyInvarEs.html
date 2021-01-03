@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs • dySEM</title>
+<title>A Function That Computes Effect Sizes of Dyadic Noninvariance — dyInvarEs • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,12 @@
 
 
 
-<meta property="og:title" content="Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs" />
-<meta property="og:description" content="Functions for dyadCFA() for scripting free or fixed families of parameters" />
+<meta property="og:title" content="A Function That Computes Effect Sizes of Dyadic Noninvariance — dyInvarEs" />
+<meta property="og:description" content="This function takes a model written with dyadCFA() and fitted with lavaan()
+and returns d_MACS values for each indicator variable. Function is a renamed
+version of my  dMACS_long function (https://github.com/jsakaluk/dMACS_long),
+which was adapted from Johannes Karl's (https://johanneskarl.netlify.com) between-groups
+dMACS function (https://github.com/Jo-Karl/dMACS) with his assistance." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -114,50 +118,41 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Functions for dyadCFA() for scripting free or fixed families of parameters</h1>
+    <h1>A Function That Computes Effect Sizes of Dyadic Noninvariance</h1>
     
-    <div class="hidden name"><code>cfa_funs.Rd</code></div>
+    <div class="hidden name"><code>dyInvarEs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Functions for dyadCFA() for scripting free or fixed families of parameters</p>
+    <p>This function takes a model written with dyadCFA() and fitted with lavaan()
+and returns d_MACS values for each indicator variable. Function is a renamed
+version of my  dMACS_long function (https://github.com/jsakaluk/dMACS_long),
+which was adapted from Johannes Karl's (https://johanneskarl.netlify.com) between-groups
+dMACS function (https://github.com/Jo-Karl/dMACS) with his assistance.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>loads</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>intercepts</span>(<span class='no'>dvn</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>resids</span>(<span class='no'>dvn</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>lvars</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)
-
-<span class='fu'>lmeans</span>(<span class='no'>dvn</span>, <span class='no'>lvname</span>, <span class='kw'>partner</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"free"</span>)</pre>
+    <pre class="usage"><span class='fu'>dyInvarEs</span>(<span class='no'>fit.cfa</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dvn</th>
-      <td><p>input object from dyadVarNames()</p></td>
-    </tr>
-    <tr>
-      <th>lvname</th>
-      <td><p>input character to (arbitrarily) name LV in lavaan syntax</p></td>
-    </tr>
-    <tr>
-      <th>partner</th>
-      <td><p>input character to indicate parameters for first or second dyad member</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>input character to indicate whether parameters "fixed", "free" or "equated" in estimation</p></td>
+      <th>fit.cfa</th>
+      <td><p>output from a dyadCFA() configural invariance model fitted with
+lavaan()</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>numeric vector of dMACS values for each indicator of a given LV</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>dyadCFA</code> which this function supplies</p></div>
+    <div class='dont-index'><p><code>dyadCFA</code> which this function relies on</p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>&lt;-</span> <span class='fu'>dvn2</span>(<span class='no'>DRES</span>, <span class='kw'>x_order</span> <span class='kw'>=</span> <span class='st'>"sip"</span>, <span class='kw'>x_stem</span> <span class='kw'>=</span> <span class='st'>"sexsat"</span>, <span class='kw'>x_delim2</span><span class='kw'>=</span><span class='st'>"."</span>, <span class='kw'>x_item_num</span><span class='kw'>=</span><span class='st'>"\\d+"</span>, <span class='kw'>distinguish_1</span><span class='kw'>=</span><span class='st'>"1"</span>, <span class='kw'>distinguish_2</span><span class='kw'>=</span><span class='st'>"2"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dvn2(DRES, x_order = "sip", x_stem = "sexsat", x_delim2 = ".",     x_item_num = "\\d+", distinguish_1 = "1", distinguish_2 = "2"): could not find function "dvn2"</span></div><div class='input'><span class='no'>config.script</span> <span class='kw'>=</span> <span class='fu'>dyadCFA</span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"SexSat"</span>,  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dyadCFA(dvn, lvname = "SexSat", model = "configural"): could not find function "dyadCFA"</span></div><div class='input'><span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lavaan</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span>(<span class='no'>config.script</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>DRES</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+<span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavaan(model = config.script, data = DRES, std.lv = FALSE,     auto.fix.first = TRUE, meanstructure = TRUE, model.type = "cfa",     int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.single = TRUE,     auto.var = TRUE, auto.cov.lv.x = TRUE, auto.cov.y = TRUE,     auto.th = TRUE, auto.delta = TRUE, auto.efa = TRUE): object 'config.script' not found</span></div><div class='input'><span class='fu'><a href='dydMACS.html'>dydMACS</a></span>(<span class='no'>con.fit.config</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavInspect(fit.cfa, what = "rsquare"): object 'con.fit.config' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
