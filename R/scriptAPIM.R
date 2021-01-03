@@ -25,19 +25,20 @@
 #' when the recommended level of invariance is not also specified. If user supplies dvn
 #' with containing X or Y variables, they are alerted to respecify the dvn object.
 #' @seealso \code{\link{dyadVarNames}} which this function relies on
+#' @family script-writing functions
 #' @export
 #' @examples
 #' dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",distinguish1 = "1", distinguish2 = "2")
-#' apim.script.config = apimSEM(dvn, lvxname = "Conflict",
+#' apim.script.config = scriptAPIM(dvn, lvxname = "Conflict",
 #' lvyname = "Satisfaction", model = "configural")
-#' apim.script.load = apimSEM(dvn, lvxname = "Conflict",
+#' apim.script.load = scriptAPIM(dvn, lvxname = "Conflict",
 #' lvyname = "Satisfaction", model = "loading")
-#' apim.script.int = apimSEM(dvn, lvxname = "Conflict",
+#' apim.script.int = scriptAPIM(dvn, lvxname = "Conflict",
 #' lvyname = "Satisfaction", model = "intercept")
-#' apim.script.load.actor = apimSEM(dvn, lvxname = "Conflict",
+#' apim.script.load.actor = scriptAPIM(dvn, lvxname = "Conflict",
 #' lvyname = "Satisfaction", model = "loading", equate = "actor")
 
-apimSEM = function(dvn, lvxname, lvyname, model = "configural", equate="none", k = FALSE){
+scriptAPIM = function(dvn, lvxname, lvyname, model = "configural", equate="none", k = FALSE){
   dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){

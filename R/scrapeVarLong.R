@@ -1,4 +1,4 @@
-#' A Variable Name-Scraping and Indexing Function
+#' A Variable Name-Scraping and Indexing Function for longitudinal data
 #'
 #' This function scrapes the names of indicator variables in a
 #' wide-format data set used for dyadic analyses of two latent variables (LV; X and Y),
@@ -30,10 +30,10 @@
 #'characters distinguishing partners, and total number of indicators
 #' @export
 #' @examples
-#' dvn <- dvn2(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
+#' dvn <- scrapeVarLong(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
 #' y_order="sip", y_stem="Y", y_delim2=".", y_item_num="\\d+")
 
-dvn3 <- function(dat, x_order = "spi", time = NULL, x_stem, x_delim1=NULL, x_delim2=NULL, x_delim3=NULL, x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
+scrapeVarLong <- function(dat, x_order = "spi", time = NULL, x_stem, x_delim1=NULL, x_delim2=NULL, x_delim3=NULL, x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
                  y_order=NULL, y_stem=NULL, y_delim1=NULL, y_delim2=NULL, y_delim3=NULL, y_item_num="\\d+"){
   if(is.null(y_order)){
     if(x_order == "sipt"){

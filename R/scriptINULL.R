@@ -9,11 +9,12 @@
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @seealso \code{\link{dyadVarNames}} which this function relies on
+#' @family script-writing functions
 #' @export
 #' @examples
 #' dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
-#' isat.mod = ISAT(dvn, lvname = "X")
-INULL = function(dvn, lvname = "X"){
+#' inull.mod = scriptINULL(dvn, lvname = "X")
+scriptINULL = function(dvn, lvname = "X"){
   dirs("scripts")
 
   #Means

@@ -14,13 +14,14 @@
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @seealso \code{\link{dyadVarNames}} which this function relies on
+#' @family script-writing functions
 #' @export
 #' @examples
 #' dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
-#' con.config.script = dyadCFA(dvn, lvname = "Conflict", model = "configural")
-#' con.loading.script = dyadCFA(dvn, lvname = "Conflict",  model = "loading")
-#' con.intercept.script = dyadCFA(dvn, lvname = "Conflict",  model = "intercept")
-dyadCFA = function(dvn, lvname = "X", model = "configural"){
+#' con.config.script = scriptCFA(dvn, lvname = "Conflict", model = "configural")
+#' con.loading.script = scriptCFA(dvn, lvname = "Conflict",  model = "loading")
+#' con.intercept.script = scriptCFA(dvn, lvname = "Conflict",  model = "intercept")
+scriptCFA = function(dvn, lvname = "X", model = "configural"){
   dirs("scripts")
   if(model == "configural"){
     #Loadings
