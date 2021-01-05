@@ -1,0 +1,216 @@
+---
+title: "dySEM overview"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{dySEM-overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = FALSE, message=FALSE}
+library(dySEM)
+library(tidyverse)
+library(lavaan)
+DRES <- as_tibble(DRES) 
+```
+
+## Why `dySEM`?
+
+* Speeds up writing `lavaan` syntax for latent dyadic models
+* Makes it easy to share your code
+* Helps prevent typos or model-misspecifications mucking up your analyses and/or reporting
+* Creates figures and "90% Ready" tables of results for you
+
+## The `dySEM` Workflow at a Glance
+
+**TODO**: MENTION REPRODUCIBLE WORKFLOWS BEING NECESSARY FOR MANY BENEFITS
+
+1. Import and wrangle your **Data** to a *dyad structure data set*
+1. **Scrape** variables from your data frame
+1. **Script** your preferred model
+1. **Fit** and **Inspect** your scripted model using `lavaan`
+1. **Output** statisitcal table(s) and or visualization(s) 
+
+You might also use **optional** `dySEM` functions after Step 3 to calculate/output some additional information. 
+
+These families of functions--***Scrapers***, ***Scripters***, and ***Outputters***--are listed and described in the Reference (LINK)
+
+We now demonstrate a typical `dySEM` workflow, using the built-in [`DRES`](https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R) **data** (Raposso & Muise, 2020), in order to perform dyadic confirmatory factor analysis (CFA).
+
+## 1. Import and Wrangle Data
+
+We will use a subset of  [`DRES`](https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R), consisting of 121 dyadic couples' ratings of relationship quality on 9 of the [PRQC](https://journals.sagepub.com/doi/abs/10.1177/0146167200265007) indicators (1 = *not at all*, 7 = *extremely*; all indicators positively keyed). Structural equation modeling (SEM) programs like `lavaan` require dyadic data to be in *dyad structure dataset*, whereby each row contains the data for one dyad, with separate columns for each observation (in this case, indicator variables of latent relationship quality) made for each member of the dyad. 
+
+**TODO**: Mention pivot_ family for data transformation needs
+
+However, like many real-world analytic contexts, [`DRES`](https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R) contains a number of other variables that we aren't interested in modeling at this time (specifically, 5 indicators of sexual satisfaction from the [GMSEX](https://www.tandfonline.com/doi/abs/10.1080/00224490509552264) for each dyad member). This wil not be a problem for `dySEM`. 
+
+Our data set therefore results in a tibble that is 121 (# of couples) x 28 ((9 PRQC items + 5 GMSEX items) x 2 (# of dyad members)): 
+
+```{r previewtib}
+DRES
+```
+
+## 2. Scrape
+
+The first step in a typical `dySEM` workflow is to **scrape** the indicator variables that are to feature in your latent dyadic model. The scraping functions in `dySEM` accomplish this by making an important but reasonable (in most cases) assumptions about how the useR has named their indicator variables. Specifically: 
+
+> Indicator variables of a latent variable will be named in a highly repetitious manner, distinguished by partner using two numbers or characters
+
+### Anatomy of a Repetitious Indicator Name
+
+The `dySEM` scrapers consider appropriately repetitously named indicators as consisting of at least three distinct elements: **s**tem, **i**tem, and **p**artner. For longitudinal designs, a fourth element--**t**ime is also considered to be part of the repetitious structure of variable names, but we cover longitudinal variable-scraping in a separate vignette. **delimiter** characters (e.g., ".", "_") are commonly--but not always--used to separate some/all of these elements. 
+
+**TO DO: MAKE THIS SIMPLER AND START WITH VISUALS AT THIS POINT**
+
+1. The indicator **s**tem (i.e., the character(s) that captures to which scale/latent variable the indicators correspond, e.g., "PRQC", "sexsat", "BFI", etc.). The contents of indicator stems will vary considerably both within and between data sets.
+1. The indicator **i**tem number (i.e, the number that captures which indicator--within a set of indicators of some *n* length--is located in a given column, e.g., 1-9 for our PRQC items)
+1. And the number or character **p**artner capturing to which member of the dyad (the first or second) a given indicator corresponds (e.g., "A" or "B", "M" or "F", "1" or "2"). ***Note***: this is only about variable selection; this has no bearing on whether a given dyadic model is specified to be (in)distinguishiable (which is determined by the **script**).
+
+`dySEM` scrapers largely function by asking you to specify in what order the elements of variable names are ordered. For example: 
+* `x_order = "sip"` would scrape variable names according to a **s**tem --> **i**tem --> **p**artner order (e.g., PRQC)
+
+### Using `dySEM` Scrapers
+
+The `scrapeVarCross` function is your `dySEM` scraper for cross-sectional dyadic data. It can acomodate scraping indicators for models featuring one latent variable (e.g., as in our dyadic CFA), as well as bivariate latent variable models, such as the Actor-Partner Interdependence Model (APIM). We cover scraping and scripting of these bivariate models in other vignettes.
+
+We first supply our data frame, `DRES`. We want to extract our PRQC indicators, which have the following properties:
+
+* a reoccuring **S**tem of "PRQC"
+* distinguishing **P**artner charcters of "1" and "2"
+* a "sip" (**S**tem, **I**tem, **P**artner) order of elements
+* the **S** and **I** are separated by a "_" **delimiter**
+* the **I** and **P** are separated by a "." **delimiter**
+
+Feeding this information to `scrapeVarCross` is quite straightforward: 
+
+```{r scrape}
+dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_delim2=".",  distinguish_1="1", distinguish_2="2")
+
+```
+
+Before looking at what `scrapeVarCross` returns, you may be wondering:
+
+1. Where is information about **I**tem number for each indicator specified? And...
+1. What should you do if your indicator names don't use two (or any) delimiting characters?
+
+The answer to 1. is that **I**tem number is automatically captured "behind the scenes" by `scrapeVarCross`. Specifically, `scrapeVarCross` searches for (and then captures) any variable names containing your stem and *any* digit(s) (using a regular expression). 
+
+The answer to 2. is that you would simply omit the `x_delim1` and/or `x_delim2` arguments--by default, `scrapeVarCross` will create variable names from **S** **I** and **P** without any separating delimiters, unless you declare a character in one/both delimiter arguments.
+
+`scrapeVarCross` returns a generic list (which I refer to as a `dvn` for a list of "dyad variable names") consisting of 6 (or 9, if scraping for a bivariate model) elements:
+
+1. a vector of indicator names for the first member of the dyad
+1. a vector of indicator names for the second member of the dyad
+1. a number capturing how many indicators per dyad member were stored
+1. the distinguishing character in names for indicators from the first member of the dyad
+1. the distinguishing character in names for indicators from the second member of the dyad 
+1. the total number of indicators scraped
+
+This might not seem like much, but the list returned by `scrapeVarCross` contains *all* the information needed to automate the scripting of `lavaan` syntax for virtually any dyadic SEM that you can imagine. 
+
+## 3. Script
+
+The `script...()` **TODO**: CREATE/LINK to family in Reference on pkgdown site: family of functions in `dySEM` simplify the process of accurately and reproducibly scripting dyadic SEMs to a singleton line of R code. 
+
+Each *Scripter* function is a wrapper for a series of *Helper* functions (see [`cfa_funs`](https://github.com/jsakaluk/dySEM/blob/master/R/cfa_funs.R) if you are interested) that snatch the information about the indicators they need from a saved `dvn` object and combine it with other text to write the `lavaan` syntax for a particular part of the measurement (e.g., factor loadings, item intercepts) or structural (e.g., regression slopes, factor means) portion of your model. 
+
+*Scripter* functions like [`scriptCFA`](https://github.com/jsakaluk/dySEM/blob/master/R/scriptCFA.R) typically require only three arguments to be specified: 
+
+1. the `dvn` object (e.g., from `scrapeVarCross`) to be used to script the model
+1. a mostly arbitrary name for the latent variable(s) you are modeling (bivariate model scripting functions like `scriptAPIM` have you input two names)
+1. the kind of parameter equality constraints that you wish to be imposed (if any), such as those corresponding to particular levels of measurement invariance (e.g., "loading"), or even a fully "indistiguishable" model (i.e., in which all measurement and structural parameters are constrained to equality between partners)
+
+If you plan on scripting multiple models, I recommend that you name the output of `Scripters` to include information about the  latent variable's name (from 2.) and model (from 3.). For example, if we were to use `scriptCFA` to generate scripts for a configurally invariant CFA of the PRQC items we scraped, we could specify
+
+```{r configscript}
+qual.config.script <- scriptCFA(dvn, lvname = "Quality", model = "configural")
+```
+
+`scriptCFA` returns to your environment an (ugly, to the human-eyes) character object consisting of the `lavaan` syntax corresponding to the model that matches the *Scripter* function (i.e., in this case a CFA) and input for the `model` argument (i.e., configurally invariant). 
+
+Meanwhile, behind the scenes, `scriptCFA` has created a folder in your working directory called "scripts", and has stored a .txt file containing the (less-ugly, to the human eyes) `lavaan` syntax for your model. The file will be named as a combination of your `lvname` and `model` arguments. 
+
+**TODO**: Show image of directory + file and .txt
+
+We think this syntax-exporting-.txt feature serves three important purposes: 
+
+1. It makes it easy to immediately share your analytic code (i.e., just drop the .txt file in your OSF project)
+1. It can be useful as an exemplar from which to learn how certain model features of dyadic SEMs are scripted in `lavaan`. For example, our `Scripters` manually specify (and label) the estimation of certain parameters that would already be estimated by default, but this way you can learn how  differences in model specification (e.g., changing to a different level of invariance) impacts the `lavaan` syntax. And...
+1. Should you require a model that is more customizable (e.g., a particular pattern of partial dyadic invariance), the text in the .txt file can serve as useful starting point for scripting your model that should (hopefully) only require but a few "handmade" changes (e.g., keeping most item intercepts equated via `model = "intercepts`, and manually freeing only those that are appreciably different).
+
+The modeling efficiency and accuracy gained via `dySEM`'s automated scripting may already be apparent, but becomes painfully obvious once you leverage `dySEM` to quickly script a sequence of competing models (e.g., from configural invariance CFA --> fully indistinguisbale CFA)
+
+```{r scriptsequence}
+qual.load.script <- scriptCFA(dvn, lvname = "Quality", model = "loading")
+
+qual.int.script <- scriptCFA(dvn, lvname = "Quality", model = "intercept")
+
+qual.res.script <- scriptCFA(dvn, lvname = "Quality", model = "residual")
+
+qual.ind.script <- scriptCFA(dvn, lvname = "Quality", model = "indistinguishable")
+```
+
+The scripting of longitudinal dyadic SEM models is not yet supported by `dySEM`, but we hope to develop this functionality over the Spring/Summer 2021. 
+
+## 4. Fit and Inspect
+
+By design, we have attempted to avoid functionality pertaining to model-fitting and inspection in `dySEM`: `lavaan` does that perfectly well itself. We therefore strongly recommend that you cultivate a command of `lavaan`'s basic functionality before delving too far with `dySEM`--the package [tutorial website](https://lavaan.ugent.be/tutorial/index.html) is a very good place to get started.  
+
+You can immediately pass any script(s) returned from a `dySEM` scripter (e.g., `scriptCFA`) to your intended `lavaan` wrapper (we recommend `cfa`--be sure to disable any options that might fix parameters, as the scripter has already taken care of manually specifying which parameters to fix or estimate), with your prefered estimator and missing data treatment. For example:
+
+```{r modelfit, warning= FALSE}
+#Fit configural invariance model
+qual.config.fit <- lavaan::cfa(qual.config.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+#Fit loading invariance model
+qual.load.fit <- lavaan::cfa(qual.load.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+#Fit intercept invariance model
+qual.int.fit <- lavaan::cfa(qual.int.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+#Fit residual invariance model
+qual.res.fit <- lavaan::cfa(qual.res.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+#Fit fully indistinguishable model
+qual.ind.fit <- lavaan::cfa(qual.ind.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+```
+
+At this point, the full arsenal of `lavaan` model-inspecting tools are at your disposal. Two that you will almost certainly want to make use of are `summary` and `anova`. 
+
+`summary` will useful for printing model fit information as well as parameter estimates and tests to your console. For example: 
+
+```{r summary, eval = FALSE}
+summary(qual.config.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+```
+
+`anova`, meanwhile, will enable you to perform comparisons of competing nested dyadic models. For example:
+
+```{r anova}
+anova(qual.load.fit, qual.config.fit)
+```
+You can learn about what other kinds of detail you can extract from a fitted `lavaan` model [here](https://lavaan.ugent.be/tutorial/inspect.html).
+
+## 5. Output
+
+`dySEM` also contains functionality to help you quickly, correctly, and reproducibly generate output from your fitted model(s), in the forms of path diagrams and/or tables of statistical values. Path diagram creation is supported via the [`semPlot`](https://cran.r-project.org/web/packages/semPlot/index.html) package's `semPaths` function, whereas table creation is currently supported by the [`sjPlot`](https://strengejacke.github.io/sjPlot/) package's `tab_df` function, though users should be aware that [we are considering](https://github.com/jsakaluk/dySEM/issues/28) a move to the [`gt`](https://gt.rstudio.com) package for improved tabling capacity.
+
+The `dyOutput` function is currenty `dySEM`'s all-purpose outputting function. 
+
+
+The useR must specify the `dvn` of scraped variables used to script the model and the type of model being outputted (e.g., "cfa"). UseRs can specify whether they only want a path diagram or some table(s) to be outputted (e.g., by setting either `figure = FALSE` or `table = FALSE`), but by default both are created and written to an `output` folder in your working directory. UseRs can further specify what kind of path diagram (e.g., using standardized or unstandardized value) or tables (e.g., featuring measurement- or structural-model parameter, or both) are created.
+
+Whatever options the useR specifies, `dyOutput` is typically run without assigning its output to an object, as it's mostly to facilitate statistical reporting for scientific articles: 
+
+**TODO**: CORRECT CODE GOES HERE
+
+```{r dyoutput, eval = FALSE}
+dyOutput(dvn, model = "cfa", qual.config.fit, tabletype = "measurement", figtype = "unstandardized")
+```
