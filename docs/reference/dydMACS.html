@@ -86,7 +86,7 @@ dMACS function (https://github.com/Jo-Karl/dMACS) with his assistance." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9039</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9040</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@ which was adapted from Johannes Karl's (https://johanneskarl.netlify.com) betwee
 dMACS function (https://github.com/Jo-Karl/dMACS) with his assistance.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dydMACS</span>(<span class='no'>fit.cfa</span>)</pre>
+    <pre class="usage"><span class='fu'>dydMACS</span><span class='op'>(</span><span class='va'>fit.cfa</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,9 +157,12 @@ lavaan()</p></td>
     <div class='dont-index'><p><code>dyadCFA</code> which this function relies on</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span><span class='kw'>=</span><span class='st'>"X"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>,<span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
-<span class='no'>con.config.script</span> <span class='kw'>=</span> <span class='fu'>dyadCFA</span>(<span class='no'>dvn</span>, <span class='kw'>lvname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>,  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dyadCFA(dvn, lvname = "Conflict", model = "configural"): could not find function "dyadCFA"</span></div><div class='input'><span class='no'>con.fit.config</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lavaan</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span>(<span class='no'>con.config.script</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>std.lv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-<span class='kw'>auto.fix.first</span><span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>meanstructure</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavaan(model = con.config.script, data = dat, std.lv = FALSE,     auto.fix.first = TRUE, meanstructure = TRUE, model.type = "cfa",     int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.single = TRUE,     auto.var = TRUE, auto.cov.lv.x = TRUE, auto.cov.y = TRUE,     auto.th = TRUE, auto.delta = TRUE, auto.efa = TRUE): object 'con.config.script' not found</span></div><div class='input'><span class='fu'>dydMACS</span>(<span class='no'>con.fit.config</span>)</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavInspect(fit.cfa, what = "rsquare"): object 'con.fit.config' not found</span></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span><span class='op'>(</span><span class='va'>dat</span>, xvar<span class='op'>=</span><span class='st'>"X"</span>, sep <span class='op'>=</span> <span class='st'>"."</span>,distinguish1 <span class='op'>=</span> <span class='st'>"1"</span>, distinguish2 <span class='op'>=</span> <span class='st'>"2"</span><span class='op'>)</span>
+<span class='va'>con.config.script</span> <span class='op'>=</span> <span class='fu'>dyadCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>,  model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in dyadCFA(dvn, lvname = "Conflict", model = "configural"): could not find function "dyadCFA"</span></div><div class='input'><span class='va'>con.fit.config</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>con.config.script</span>, data <span class='op'>=</span> <span class='va'>dat</span>, std.lv <span class='op'>=</span> <span class='cn'>FALSE</span>,
+auto.fix.first<span class='op'>=</span> <span class='cn'>FALSE</span>, meanstructure <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavaan(model = con.config.script, data = dat, std.lv = FALSE,     auto.fix.first = TRUE, meanstructure = TRUE, model.type = "cfa",     int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.single = TRUE,     auto.var = TRUE, auto.cov.lv.x = TRUE, auto.cov.y = TRUE,     auto.th = TRUE, auto.delta = TRUE, auto.efa = TRUE): object 'con.config.script' not found</span></div><div class='input'><span class='fu'>dydMACS</span><span class='op'>(</span><span class='va'>con.fit.config</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavInspect(fit.cfa, what = "rsquare"): object 'con.fit.config' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -175,7 +178,7 @@ lavaan()</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

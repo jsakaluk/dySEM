@@ -82,7 +82,7 @@ a dataframe (e.g., P1 variables followed by P2)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9039</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9040</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@ presumes that variables/columns for a given partner are blocked together in
 a dataframe (e.g., P1 variables followed by P2)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>transDtoP</span>(<span class='no'>dat</span>, <span class='no'>firstvar1</span>, <span class='no'>lastvar1</span>, <span class='no'>firstvar2</span>, <span class='no'>lastvar2</span>)</pre>
+    <pre class="usage"><span class='fu'>transDtoP</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>firstvar1</span>, <span class='va'>lastvar1</span>, <span class='va'>firstvar2</span>, <span class='va'>lastvar2</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,8 +162,9 @@ a dataframe (e.g., P1 variables followed by P2)</p>
     <p>Pairwise-structured data frame</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>&lt;-</span> <span class='fu'>dvn2</span>(<span class='kw'>dat</span> <span class='kw'>=</span> <span class='no'>dat.pkg</span>, <span class='kw'>x_order</span> <span class='kw'>=</span> <span class='st'>"sip"</span>, <span class='kw'>x_stem</span> <span class='kw'>=</span> <span class='st'>"X"</span>, <span class='kw'>x_delim2</span><span class='kw'>=</span><span class='st'>"."</span>, <span class='kw'>x_item_num</span><span class='kw'>=</span><span class='st'>"\\d"</span>, <span class='kw'>distinguish_1</span><span class='kw'>=</span><span class='st'>"1"</span>, <span class='kw'>distinguish_2</span><span class='kw'>=</span><span class='st'>"2"</span>,
-<span class='kw'>y_order</span><span class='kw'>=</span><span class='st'>"sip"</span>, <span class='kw'>y_stem</span><span class='kw'>=</span><span class='st'>"Y"</span>, <span class='kw'>y_delim2</span><span class='kw'>=</span><span class='st'>"."</span>, <span class='kw'>y_item_num</span><span class='kw'>=</span><span class='st'>"\\d"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in dvn2(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2 = ".",     x_item_num = "\\d", distinguish_1 = "1", distinguish_2 = "2",     y_order = "sip", y_stem = "Y", y_delim2 = ".", y_item_num = "\\d"): could not find function "dvn2"</span></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>&lt;-</span> <span class='fu'>dvn2</span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>dat.pkg</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"X"</span>, x_delim2<span class='op'>=</span><span class='st'>"."</span>, x_item_num<span class='op'>=</span><span class='st'>"\\d"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span>,
+y_order<span class='op'>=</span><span class='st'>"sip"</span>, y_stem<span class='op'>=</span><span class='st'>"Y"</span>, y_delim2<span class='op'>=</span><span class='st'>"."</span>, y_item_num<span class='op'>=</span><span class='st'>"\\d"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in dvn2(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2 = ".",     x_item_num = "\\d", distinguish_1 = "1", distinguish_2 = "2",     y_order = "sip", y_stem = "Y", y_delim2 = ".", y_item_num = "\\d"): could not find function "dvn2"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -179,7 +180,7 @@ a dataframe (e.g., P1 variables followed by P2)</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

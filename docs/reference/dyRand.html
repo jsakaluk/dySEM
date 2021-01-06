@@ -84,7 +84,7 @@ dyadic invariance for ostensibly indistinguishable dyads." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9039</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9040</span>
       </span>
     </div>
 
@@ -134,7 +134,7 @@ This is a helper function for the randomization permutation testing function of
 dyadic invariance for ostensibly indistinguishable dyads.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dyRand</span>(<span class='no'>dvn</span>, <span class='no'>dat</span>)</pre>
+    <pre class="usage"><span class='fu'>dyRand</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>dat</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,9 +157,10 @@ dyadic invariance for ostensibly indistinguishable dyads.</p>
     <div class='dont-index'><p><code><a href='dyadVarNames.html'>dyadVarNames</a></code> which this function relies on</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dat</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>DRES</span>, <span class='no'>sexsat1.1</span>:<span class='no'>sexsat5.2</span>)
-<span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span> <span class='kw'>=</span> <span class='st'>"sexsat"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
-<span class='no'>perm</span> <span class='kw'>=</span> <span class='fu'>dyRand</span>(<span class='no'>dvn</span>, <span class='no'>dat</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>dat</span> <span class='op'>=</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>DRES</span>, <span class='va'>sexsat1.1</span><span class='op'>:</span><span class='va'>sexsat5.2</span><span class='op'>)</span>
+<span class='va'>dvn</span> <span class='op'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span><span class='op'>(</span><span class='va'>dat</span>, xvar <span class='op'>=</span> <span class='st'>"sexsat"</span>, sep <span class='op'>=</span> <span class='st'>"."</span>, distinguish1 <span class='op'>=</span> <span class='st'>"1"</span>, distinguish2 <span class='op'>=</span> <span class='st'>"2"</span><span class='op'>)</span>
+<span class='va'>perm</span> <span class='op'>=</span> <span class='fu'>dyRand</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>dat</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -175,7 +176,7 @@ dyadic invariance for ostensibly indistinguishable dyads.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -83,7 +83,7 @@ It is used primarily to guide the syntax-writing of the other dySEM functions." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9039</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9040</span>
       </span>
     </div>
 
@@ -132,24 +132,24 @@ and indexes which indicators correspond to which partner, for which LV.
 It is used primarily to guide the syntax-writing of the other dySEM functions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scrapeVarLong</span>(
-  <span class='no'>dat</span>,
-  <span class='kw'>x_order</span> <span class='kw'>=</span> <span class='st'>"spi"</span>,
-  <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>x_stem</span>,
-  <span class='kw'>x_delim1</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>x_delim2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>x_delim3</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>x_item_num</span> <span class='kw'>=</span> <span class='st'>"\\d+"</span>,
-  <span class='kw'>distinguish_1</span> <span class='kw'>=</span> <span class='st'>"1"</span>,
-  <span class='kw'>distinguish_2</span> <span class='kw'>=</span> <span class='st'>"2"</span>,
-  <span class='kw'>y_order</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>y_stem</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>y_delim1</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>y_delim2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>y_delim3</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>y_item_num</span> <span class='kw'>=</span> <span class='st'>"\\d+"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>scrapeVarLong</span><span class='op'>(</span>
+  <span class='va'>dat</span>,
+  x_order <span class='op'>=</span> <span class='st'>"spi"</span>,
+  time <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>x_stem</span>,
+  x_delim1 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  x_delim2 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  x_delim3 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  x_item_num <span class='op'>=</span> <span class='st'>"\\d+"</span>,
+  distinguish_1 <span class='op'>=</span> <span class='st'>"1"</span>,
+  distinguish_2 <span class='op'>=</span> <span class='st'>"2"</span>,
+  y_order <span class='op'>=</span> <span class='cn'>NULL</span>,
+  y_stem <span class='op'>=</span> <span class='cn'>NULL</span>,
+  y_delim1 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  y_delim2 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  y_delim3 <span class='op'>=</span> <span class='cn'>NULL</span>,
+  y_item_num <span class='op'>=</span> <span class='st'>"\\d+"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -233,8 +233,9 @@ characters distinguishing partners, and total number of indicators</p>
 <code><a href='scrapeVarCross.html'>scrapeVarCross</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>&lt;-</span> <span class='fu'>scrapeVarLong</span>(<span class='kw'>dat</span> <span class='kw'>=</span> <span class='no'>dat.pkg</span>, <span class='kw'>x_order</span> <span class='kw'>=</span> <span class='st'>"sip"</span>, <span class='kw'>x_stem</span> <span class='kw'>=</span> <span class='st'>"X"</span>, <span class='kw'>x_delim2</span><span class='kw'>=</span><span class='st'>"."</span>, <span class='kw'>x_item_num</span><span class='kw'>=</span><span class='st'>"\\d+"</span>, <span class='kw'>distinguish_1</span><span class='kw'>=</span><span class='st'>"1"</span>, <span class='kw'>distinguish_2</span><span class='kw'>=</span><span class='st'>"2"</span>,
-<span class='kw'>y_order</span><span class='kw'>=</span><span class='st'>"sip"</span>, <span class='kw'>y_stem</span><span class='kw'>=</span><span class='st'>"Y"</span>, <span class='kw'>y_delim2</span><span class='kw'>=</span><span class='st'>"."</span>, <span class='kw'>y_item_num</span><span class='kw'>=</span><span class='st'>"\\d+"</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>&lt;-</span> <span class='fu'>scrapeVarLong</span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>dat.pkg</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"X"</span>, x_delim2<span class='op'>=</span><span class='st'>"."</span>, x_item_num<span class='op'>=</span><span class='st'>"\\d+"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span>,
+y_order<span class='op'>=</span><span class='st'>"sip"</span>, y_stem<span class='op'>=</span><span class='st'>"Y"</span>, y_delim2<span class='op'>=</span><span class='st'>"."</span>, y_item_num<span class='op'>=</span><span class='st'>"\\d+"</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -250,7 +251,7 @@ characters distinguishing partners, and total number of indicators</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

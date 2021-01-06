@@ -86,7 +86,7 @@ measurement models, and particular types of structural comparisons." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9039</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9040</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@ also invoke configural, loading, and/or intercept invariant
 measurement models, and particular types of structural comparisons.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scriptCFM</span>(<span class='no'>dvn</span>, <span class='no'>lvxname</span>, <span class='no'>lvyname</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</pre>
+    <pre class="usage"><span class='fu'>scriptCFM</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>lvxname</span>, <span class='va'>lvyname</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,8 +178,9 @@ with containing X or Y variables, they are alerted to respecify the dvn object.<
 <code><a href='scriptISAT.html'>scriptISAT</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dvn</span> <span class='kw'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span>(<span class='no'>dat</span>, <span class='kw'>xvar</span><span class='kw'>=</span><span class='st'>"X"</span>, <span class='kw'>yvar</span><span class='kw'>=</span><span class='st'>"Y"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"."</span>,<span class='kw'>distinguish1</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='kw'>distinguish2</span> <span class='kw'>=</span> <span class='st'>"2"</span>)
-<span class='no'>cfm.script.config</span> <span class='kw'>=</span> <span class='fu'>scriptCFM</span>(<span class='no'>dvn</span>, <span class='kw'>lvxname</span> <span class='kw'>=</span> <span class='st'>"Conflict"</span>, <span class='kw'>lvyname</span> <span class='kw'>=</span> <span class='st'>"Satisfaction"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"configural"</span>)</div><div class='output co'>#&gt; <span style='color: #BBBB00;'>Caution: Common fate models should probably be fit with loading invariance </span><span></div></span></pre>
+    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span><span class='op'>(</span><span class='va'>dat</span>, xvar<span class='op'>=</span><span class='st'>"X"</span>, yvar<span class='op'>=</span><span class='st'>"Y"</span>, sep <span class='op'>=</span> <span class='st'>"."</span>,distinguish1 <span class='op'>=</span> <span class='st'>"1"</span>, distinguish2 <span class='op'>=</span> <span class='st'>"2"</span><span class='op'>)</span>
+<span class='va'>cfm.script.config</span> <span class='op'>=</span> <span class='fu'>scriptCFM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Conflict"</span>, lvyname <span class='op'>=</span> <span class='st'>"Satisfaction"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #BBBB00;'>Caution: Common fate models should probably be fit with loading invariance </span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -195,7 +196,7 @@ with containing X or Y variables, they are alerted to respecify the dvn object.<
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
