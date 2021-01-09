@@ -14,7 +14,11 @@
 #' @rdname cfa_funs
 loads <- function(dvn, lvname, partner="1", type = "free"){
 
-  if(partner == "1" & type == "free"){
+  if(partner == "1" & type == "fixed"){
+    eta_x = sprintf("%s%s =~ 1*",lvname, dvn[["dist1"]])
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "1" & type == "free"){
     eta_x = sprintf("%s%s =~ NA*",lvname, dvn[["dist1"]])
     eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
@@ -25,6 +29,10 @@ loads <- function(dvn, lvname, partner="1", type = "free"){
       eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p1xvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "2" & type == "fixed"){
+    eta_x = sprintf("%s%s =~ 1*",lvname, dvn[["dist2"]])
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
   }else if(partner == "2" & type == "free"){
     eta_x = sprintf("%s%s =~ NA*",lvname, dvn[["dist2"]])
@@ -60,7 +68,15 @@ loads <- function(dvn, lvname, partner="1", type = "free"){
 
 #' @rdname cfa_funs
 intercepts <- function(dvn, partner="1", type = "free"){
-  if(partner == "1" & type == "free"){
+  if(partner == "1" & type == "fixed"){
+    xints = list()
+    xints[[1]] = sprintf("%s ~ 0*1", dvn[["p1xvarnames"]][1])
+    for (i in 2:dvn[["indper"]]) {
+      xints[[i]]=sprintf("%s ~ 1", dvn[["p1xvarnames"]][i])
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "1" & type == "free"){
     xints = list()
     for (i in 1:dvn[["indper"]]) {
       xints[[i]]=sprintf("%s ~ 1", dvn[["p1xvarnames"]][i])
@@ -71,6 +87,14 @@ intercepts <- function(dvn, partner="1", type = "free"){
     xints = list()
     for (i in 1:dvn[["indper"]]) {
       xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p1xvarnames"]][i], i)
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "2" & type == "fixed"){
+    xints = list()
+    xints[[1]] = sprintf("%s ~ 0*1", dvn[["p2xvarnames"]][1])
+    for (i in 2:dvn[["indper"]]) {
+      xints[[i]]=sprintf("%s ~ 1", dvn[["p2xvarnames"]][i])
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
