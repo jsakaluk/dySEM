@@ -6,7 +6,7 @@
 #' @param dvn input object from dyadVarNames()
 #' @param lvname input character to (arbitrarily) name LV in lavaan syntax
 #' @param partner input character to indicate parameters for first or second dyad member
-#' @param type input character to indicate whether parameters "fixed", "free" or "equated" in estimation
+#' @param type input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation
 #'
 #' @seealso \code{\link{dyadCFA}} which this function supplies
 #' @export
@@ -30,6 +30,14 @@ loads <- function(dvn, lvname, partner="1", type = "free"){
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
+  }else if(partner == "1" & type == "equated_mv"){
+    eta_x = sprintf("%s%s =~ 1*%s+",lvname, dvn[["dist1"]], dvn[["p1xvarnames"]][1])
+    eta.x = list()
+    for (i in 1:dvn[["indper"]]) {
+      eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p1xvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
+    return(eta.x)
   }else if(partner == "2" & type == "fixed"){
     eta_x = sprintf("%s%s =~ 1*",lvname, dvn[["dist2"]])
     eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
@@ -40,6 +48,14 @@ loads <- function(dvn, lvname, partner="1", type = "free"){
     return(eta.x)
   }else if(partner == "2" & type == "equated"){
     eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist2"]], dvn[["p2xvarnames"]][1])
+    eta.x = list()
+    for (i in 1:dvn[["indper"]]) {
+      eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p2xvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "2" & type == "equated_mv"){
+    eta_x = sprintf("%s%s =~ 1*%s+",lvname, dvn[["dist2"]], dvn[["p2xvarnames"]][1])
     eta.x = list()
     for (i in 1:dvn[["indper"]]) {
       eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p2xvarnames"]][i])
@@ -90,6 +106,15 @@ intercepts <- function(dvn, partner="1", type = "free"){
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
+  }else if(partner == "1" & type == "equated_mv"){
+    xints = list()
+    xints[[1]] <- sprintf("%s ~ 0*1 + t1*1", dvn[["p1xvarnames"]][1])
+
+    for (i in 2:dvn[["indper"]]) {
+      xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p1xvarnames"]][i], i)
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
   }else if(partner == "2" & type == "fixed"){
     xints = list()
     xints[[1]] = sprintf("%s ~ 0*1", dvn[["p2xvarnames"]][1])
@@ -108,6 +133,15 @@ intercepts <- function(dvn, partner="1", type = "free"){
   }else if(partner == "2" & type == "equated"){
     xints = list()
     for (i in 1:dvn[["indper"]]) {
+      xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p2xvarnames"]][i], i)
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "2" & type == "equated_mv"){
+    xints = list()
+    xints[[1]] <- sprintf("%s ~ 0*1 + t1*1", dvn[["p2xvarnames"]][1])
+
+    for (i in 2:dvn[["indper"]]) {
       xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p2xvarnames"]][i], i)
     }
     xints = paste(xints, collapse = "\n")

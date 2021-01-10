@@ -5,12 +5,15 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting Latent Dyadic Measurement and Invariance Models}
 \usage{
-scriptCFA(dvn, lvname = "X", model = "configural")
+scriptCFA(dvn, lvname = "X", scaleset = "FF", model = "configural")
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
 
 \item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
+
+\item{scaleset}{input character to specify how to set the scale of the latent variable(s). Default is
+"FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)}
 
 \item{model}{input character used to specify which level of invariance is
 modeled ("configural", "loading", "intercept", "residual", or "indistinguishable"). Defaults to "configural".}
@@ -27,6 +30,19 @@ This function takes the outputted object from dyadVarNames()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
 for specifying dyadic configural, loading, and intercept invariant
 measurement models for either a specified X or Y factor.
+}
+\details{
+By default, many dySEM:: functions (including scriptCFA() default to
+a fixed-factor method of scale-setting, whereby the latent variance of
+a given factor is constrained to 1 for both partners in the configurally invariant
+#model, and then one of these variances is freely estimated in subsequent
+#models of the invariance testing sequence. We have selected this default
+for two reasons: (1) the selection of a marker-variable is usually arbitrary,
+yet can have a large influence on the estimation and testing of of structural
+parameters (see https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732); and (2) the selection of a non-invariant marker-variable
+can have disastrous down-stream consequences for the identification of
+non-invariant measurement parameters, following a the rejection of an omnibus
+#invariance constraint set (see Lee, Preacher, & Little, 2011).
 }
 \examples{
 dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")

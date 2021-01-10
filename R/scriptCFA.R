@@ -5,10 +5,25 @@
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
 #' for specifying dyadic configural, loading, and intercept invariant
 #' measurement models for either a specified X or Y factor.
+#'
+#' By default, many dySEM:: functions (including scriptCFA() default to
+#' a fixed-factor method of scale-setting, whereby the latent variance of
+#' a given factor is constrained to 1 for both partners in the configurally invariant
+#' #model, and then one of these variances is freely estimated in subsequent
+#' #models of the invariance testing sequence. We have selected this default
+#' for two reasons: (1) the selection of a marker-variable is usually arbitrary,
+#' yet can have a large influence on the estimation and testing of of structural
+#' parameters (see https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732); and (2) the selection of a non-invariant marker-variable
+#' can have disastrous down-stream consequences for the identification of
+#' non-invariant measurement parameters, following a the rejection of an omnibus
+#' #invariance constraint set (see Lee, Preacher, & Little, 2011).
+#'
 #' @param dvn input object from dyadVarNames()
 #' @param lvname input character to (arbitrarily) name LV in lavaan syntax
 #' @param lvnum optional input character to indicate which LV is modeled ("one" or "two").
 #' Only necessary if dvn contains both X and Y information and user wants CFA for Y
+#' @param scaleset input character to specify how to set the scale of the latent variable(s). Default is
+#' "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)
 #' @param model input character used to specify which level of invariance is
 #' modeled ("configural", "loading", "intercept", "residual", or "indistinguishable"). Defaults to "configural".
 #' @return character object of lavaan script that can be passed immediately to
@@ -21,16 +36,27 @@
 #' con.config.script = scriptCFA(dvn, lvname = "Conflict", model = "configural")
 #' con.loading.script = scriptCFA(dvn, lvname = "Conflict",  model = "loading")
 #' con.intercept.script = scriptCFA(dvn, lvname = "Conflict",  model = "intercept")
-scriptCFA = function(dvn, lvname = "X", model = "configural"){
+scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
   dirs("scripts")
   if(model == "configural"){
     #Loadings
-    eta.x1 = loads(dvn, lvname, partner="1", type = "free")
-    eta.x2 = loads(dvn, lvname, partner="2", type = "free")
+    if(scaleset == "FF"){
+      eta.x1 = loads(dvn, lvname, partner="1", type = "free")
+      eta.x2 = loads(dvn, lvname, partner="2", type = "free")
+    }else if(scaleset == "MV"){
+      eta.x1 = loads(dvn, lvname, partner="1", type = "fixed")
+      eta.x2 = loads(dvn, lvname, partner="2", type = "fixed")
+    }
 
     #Latent (co)variances
-    psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
-    psi_x2 = lvars(dvn, lvname, partner = "2", type = "fixed")
+    if(scaleset == "FF"){
+      psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
+      psi_x2 = lvars(dvn, lvname, partner = "2", type = "fixed")
+    }else if(scaleset == "MV"){
+      psi_x1 = lvars(dvn, lvname, partner = "1", type = "free")
+      psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    }
+
     psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
     #Correlated residuals
@@ -45,12 +71,22 @@ scriptCFA = function(dvn, lvname = "X", model = "configural"){
     res2 = resids(dvn, partner="2", type = "free")
 
     #Intercepts
-    xints1 = intercepts(dvn, partner="1", type = "free")
-    xints2 = intercepts(dvn, partner="2", type = "free")
+    if(scaleset == "FF"){
+      xints1 = intercepts(dvn, partner="1", type = "free")
+      xints2 = intercepts(dvn, partner="2", type = "free")
+    }else if(scaleset == "MV"){
+      xints1 = intercepts(dvn, partner="1", type = "fixed")
+      xints2 = intercepts(dvn, partner="2", type = "fixed")
+    }
 
     #Latent Means
-    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
-    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "fixed")
+    if(scaleset == "FF"){
+      alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
+      alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "fixed")
+    }else if(scaleset == "MV"){
+      alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "free")
+      alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+    }
 
     #Script Creation Syntax
     configural.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
@@ -59,12 +95,23 @@ scriptCFA = function(dvn, lvname = "X", model = "configural"){
   }
   else if (model == "loading"){
     #Loadings
-    eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
-    eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+    if(scaleset == "FF"){
+      eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
+      eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+    }else if(scaleset == "MV"){
+      eta.x1 = loads(dvn, lvname, partner="1", type = "equated_mv")
+      eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+    }
 
     #Latent (co)variances
-    psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
-    psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    if(scaleset == "FF"){
+      psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
+      psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    }else if(scaleset == "MV"){
+      psi_x1 = lvars(dvn, lvname, partner = "1", type = "free")
+      psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    }
+
     psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
     #Correlated residuals
@@ -79,12 +126,22 @@ scriptCFA = function(dvn, lvname = "X", model = "configural"){
     res2 = resids(dvn, partner="2", type = "free")
 
     #Intercepts
-    xints1 = intercepts(dvn, partner="1", type = "free")
-    xints2 = intercepts(dvn, partner="2", type = "free")
+    if(scaleset == "FF"){
+      xints1 = intercepts(dvn, partner="1", type = "free")
+      xints2 = intercepts(dvn, partner="2", type = "free")
+    }else if(scaleset == "MV"){
+      xints1 = intercepts(dvn, partner="1", type = "fixed")
+      xints2 = intercepts(dvn, partner="2", type = "fixed")
+    }
 
     #Latent Means
-    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
-    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "fixed")
+    if(scaleset == "FF"){
+      alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
+      alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "fixed")
+    }else if(scaleset == "MV"){
+      alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "free")
+      alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+    }
 
     #Script Creation Syntax
     loading.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
@@ -93,12 +150,23 @@ scriptCFA = function(dvn, lvname = "X", model = "configural"){
   }
   else if (model == "intercept"){
     #Loadings
-    eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
-    eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+    if(scaleset == "FF"){
+      eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
+      eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+    }else if(scaleset == "MV"){
+      eta.x1 = loads(dvn, lvname, partner="1", type = "equated_mv")
+      eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+    }
 
     #Latent (co)variances
-    psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
-    psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    if(scaleset == "FF"){
+      psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
+      psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    }else if(scaleset == "MV"){
+      psi_x1 = lvars(dvn, lvname, partner = "1", type = "free")
+      psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    }
+
     psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
     #Correlated residuals
@@ -113,11 +181,22 @@ scriptCFA = function(dvn, lvname = "X", model = "configural"){
     res2 = resids(dvn, partner="2", type = "free")
 
     #Intercepts
-    xints1 = intercepts(dvn, partner="1", type = "equated")
-    xints2 = intercepts(dvn, partner="2", type = "equated")
+    if(scaleset == "FF"){
+      xints1 = intercepts(dvn, partner="1", type = "equated")
+      xints2 = intercepts(dvn, partner="2", type = "equated")
+    }else if(scaleset == "MV"){
+      xints1 = intercepts(dvn, partner="1", type = "equated_mv")
+      xints2 = intercepts(dvn, partner="2", type = "equated")
+    }
 
-    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
-    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+    #Latent Means
+    if(scaleset == "FF"){
+      alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
+      alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+    }else if(scaleset == "MV"){
+      alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "free")
+      alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+    }
 
     #Script Creation Syntax
     intercept.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
@@ -126,12 +205,23 @@ scriptCFA = function(dvn, lvname = "X", model = "configural"){
   }
   else if (model == "residual"){
     #Loadings
-    eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
-    eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+    if(scaleset == "FF"){
+      eta.x1 = loads(dvn, lvname, partner="1", type = "equated")
+      eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+    }else if(scaleset == "MV"){
+      eta.x1 = loads(dvn, lvname, partner="1", type = "equated_mv")
+      eta.x2 = loads(dvn, lvname, partner="2", type = "equated")
+    }
 
     #Latent (co)variances
-    psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
-    psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    if(scaleset == "FF"){
+      psi_x1 = lvars(dvn, lvname, partner = "1", type = "fixed")
+      psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    }else if(scaleset == "MV"){
+      psi_x1 = lvars(dvn, lvname, partner = "1", type = "free")
+      psi_x2 = lvars(dvn, lvname, partner = "2", type = "free")
+    }
+
     psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
 
     #Correlated residuals
@@ -146,11 +236,22 @@ scriptCFA = function(dvn, lvname = "X", model = "configural"){
     res2 = resids(dvn, partner="2", type = "equated")
 
     #Intercepts
-    xints1 = intercepts(dvn, partner="1", type = "equated")
-    xints2 = intercepts(dvn, partner="2", type = "equated")
+    if(scaleset == "FF"){
+      xints1 = intercepts(dvn, partner="1", type = "equated")
+      xints2 = intercepts(dvn, partner="2", type = "equated")
+    }else if(scaleset == "MV"){
+      xints1 = intercepts(dvn, partner="1", type = "equated_mv")
+      xints2 = intercepts(dvn, partner="2", type = "equated")
+    }
 
-    alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
-    alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+    #Latent Means
+    if(scaleset == "FF"){
+      alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "fixed")
+      alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+    }else if(scaleset == "MV"){
+      alpha_x1 <- lmeans(dvn, lvname, partner="1", type = "free")
+      alpha_x2 <- lmeans(dvn, lvname, partner="2", type = "free")
+    }
 
     #Script Creation Syntax
     residual.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)

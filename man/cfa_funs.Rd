@@ -26,7 +26,7 @@ lmeans(dvn, lvname, partner = "1", type = "free")
 
 \item{partner}{input character to indicate parameters for first or second dyad member}
 
-\item{type}{input character to indicate whether parameters "fixed", "free" or "equated" in estimation}
+\item{type}{input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation}
 }
 \description{
 Functions for dyadCFA() for scripting free or fixed families of parameters
