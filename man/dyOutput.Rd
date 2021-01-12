@@ -56,7 +56,7 @@ apim.script.load = apimSEM(dvn, lvxname = "Conflict",
 lvyname = "Satisfaction", model = "loading")
 apim.fit.load <- lavaan::cfa(apim.script.load, data = dat, std.lv = FALSE,
 auto.fix.first= FALSE, meanstructure = TRUE)
-dyOutput(dvn, model = "apim", apim.fit.load, tabletype = "both", figtype = "unstandardized")
+dyOutput(dvn, model = "cfa", fit, figure = FALSE, dydMACS.x = sexsat.dmacs)
 }
 \seealso{
 \code{\link{dyadVarNames}} \code{\link{apimSEM}} \code{\link{dydMACS}} which this function relies on

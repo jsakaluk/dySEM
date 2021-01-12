@@ -29,7 +29,7 @@
 #' lvyname = "Satisfaction", model = "loading")
 #' apim.fit.load <- lavaan::cfa(apim.script.load, data = dat, std.lv = FALSE,
 #' auto.fix.first= FALSE, meanstructure = TRUE)
-#' dyOutput(dvn, model = "apim", apim.fit.load, tabletype = "both", figtype = "unstandardized")
+#' dyOutput(dvn, model = "cfa", fit, figure = FALSE, dydMACS.x = sexsat.dmacs)
 
 dyOutput = function(dvn, model = NULL, fit, table = TRUE, tabletype = NULL,
                     figure = TRUE, figtype = NULL,
@@ -266,6 +266,7 @@ dyOutput = function(dvn, model = NULL, fit, table = TRUE, tabletype = NULL,
 
       measurement.param = measurement.param %>%
         dplyr::mutate_if(is.numeric, round, digits = 3)
+
 
       measure = sjPlot::tab_df(measurement.param, title = "Measurement Model Parameters",
                                file = sprintf("./output/tables/%s Measurement.doc",stringr::str_remove_all(as.character(fit@call$model), "[.]")

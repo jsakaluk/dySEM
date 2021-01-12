@@ -12,11 +12,11 @@
 #'
 #' @examples
 #' dat <-  DRES
-#' dvn <- dvn2(dat, x_order = "sip", x_stem = "sexsat", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
-#' config.script<- dyadCFA(dvn, lvname = "SexSat",  model = "configural")
+#' dvn <- scrapeVarCross(dat, x_order = "sip", x_stem = "sexsat", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
+#' config.script<- scriptCFA(dvn, lvname = "SexSat",  model = "configural")
 #' fit <- lavaan::cfa(config.script, data = dat, std.lv = FALSE,
 #' auto.fix.first= FALSE, meanstructure = TRUE)
-#' sexsat.dmacs <- get_dydmacs(dat, fit)
+#' sexsat.dmacs <- get_dydmacs(dat, dvn, fit)
 get_dydmacs <- function(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5){
 
   #Get indicator names --> # of indicators

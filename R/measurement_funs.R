@@ -69,14 +69,14 @@ loadings <- function(dvn, fit){
 xintercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-    dplyr::filter(.data$op == "~1")
-  x.int.list <- c()
+    dplyr::filter(.data$op == "~1") %>%
+    select(.data$est)
+
+  intercept.param <- dplyr::rename(intercept.param, intercept = est)
   x.int.num <- dvn[[3]]*2#number of x intercepts (*2 for dyads)
-  #Only keep indicator intercepts
-  for(i in 1:x.int.num){
-    x.int.list[[i]]<- intercept.param$est[i]
-  }
-  return(x.int.list)
+  intercept.param <- intercept.param[1:x.int.num,]
+
+  return(intercept.param)
 }
 
 #' @rdname measurement_funs
