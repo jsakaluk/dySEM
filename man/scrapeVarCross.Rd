@@ -65,8 +65,9 @@ and indexes which indicators correspond to which partner, for which LV.
 It is used primarily to guide the syntax-writing of the other dySEM functions.
 }
 \examples{
-dvn <- scrapeVarCross(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2",
-y_order="sip", y_stem="Y", y_delim2=".", y_item_num="\\\\d+")
+dvnx <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
+dvnxy <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2",
+y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\\\d+")
 }
 \seealso{
 Other variable-scraping functions: 

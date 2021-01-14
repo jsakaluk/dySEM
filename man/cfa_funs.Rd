@@ -9,18 +9,20 @@
 \alias{lmeans}
 \title{Functions for dyadCFA() for scripting free or fixed families of parameters}
 \usage{
-loads(dvn, lvname, partner = "1", type = "free")
+loads(dvn, lvar = "X", lvname, partner = "1", type = "free")
 
-intercepts(dvn, partner = "1", type = "free")
+intercepts(dvn, lvar = "X", partner = "1", type = "free")
 
-resids(dvn, partner = "1", type = "free")
+resids(dvn, lvar = "X", partner = "1", type = "free")
 
-lvars(dvn, lvname, partner = "1", type = "free")
+lvars(dvn, lvar = "X", lvname, partner = "1", type = "free")
 
-lmeans(dvn, lvname, partner = "1", type = "free")
+lmeans(dvn, lvar = "X", lvname, partner = "1", type = "free")
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
+
+\item{lvar}{input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn}
 
 \item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
 

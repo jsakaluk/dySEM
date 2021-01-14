@@ -29,8 +29,9 @@
 #' @family variable-scraping functions
 #' @export
 #' @examples
-#' dvn <- scrapeVarCross(dat = dat.pkg, x_order = "sip", x_stem = "X", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
-#' y_order="sip", y_stem="Y", y_delim2=".", y_item_num="\\d+")
+#' dvnx <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
+#' dvnxy <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
+#' y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\d+")
 
 scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2=NULL, x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
                 y_order=NULL, y_stem=NULL, y_delim1=NULL, y_delim2=NULL, y_item_num="\\d+"){
@@ -50,7 +51,7 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
     if(num_x1_var == num_x2_var){
       varlist <- list(p1xvarnames = x1vars,
                       p2xvarnames = x2vars,
-                      indper = num_x1_var,
+                      xindper = num_x1_var,
                       dist1 =dist_1,
                       dist2 = dist_2,
                       indnum = tot_var)
@@ -88,7 +89,7 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
                       p2xvarnames = x2vars,
                       xindper = num_x1_var,
                       dist1 = dist_1,
-                      dist1 = dist_2,
+                      dist2 = dist_2,
                       p1yvarnames = y1vars,
                       p2yvarnames = y2vars,
                       yindper =num_y1_var,

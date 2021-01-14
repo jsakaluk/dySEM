@@ -4,6 +4,7 @@
 #' @title Functions for dyadCFA() for scripting free or fixed families of parameters
 #'
 #' @param dvn input object from dyadVarNames()
+#' @param lvar input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn
 #' @param lvname input character to (arbitrarily) name LV in lavaan syntax
 #' @param partner input character to indicate parameters for first or second dyad member
 #' @param type input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation
@@ -12,69 +13,117 @@
 #' @export
 
 #' @rdname cfa_funs
-loads <- function(dvn, lvname, partner="1", type = "free"){
+loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
 
-  if(partner == "1" & type == "fixed"){
+  if(partner == "1" & type == "fixed" & lvar == "X"){
     eta_x = sprintf("%s%s =~ 1*",lvname, dvn[["dist1"]])
     eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
-  }else if(partner == "1" & type == "free"){
+  }else if(partner == "1" & type == "fixed" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ 1*",lvname, dvn[["dist1"]])
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1yvarnames"]], collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "1" & type == "free" & lvar == "X"){
     eta_x = sprintf("%s%s =~ NA*",lvname, dvn[["dist1"]])
     eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
-  }else if(partner == "1" & type == "equated"){
+  }else if(partner == "1" & type == "free" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ NA*",lvname, dvn[["dist1"]])
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1yvarnames"]], collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "1" & type == "equated" & lvar == "X"){
     eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist1"]], dvn[["p1xvarnames"]][1])
     eta.x = list()
-    for (i in 1:dvn[["indper"]]) {
-      eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p1xvarnames"]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      eta.x[[i]]=sprintf("lx%s*%s",i, dvn[["p1xvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
-  }else if(partner == "1" & type == "equated_mv"){
+  }else if(partner == "1" & type == "equated" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist1"]], dvn[["p1yvarnames"]][1])
+    eta.x = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x[[i]]=sprintf("ly%s*%s",i, dvn[["p1yvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "1" & type == "equated_mv" & lvar == "X"){
     eta_x = sprintf("%s%s =~ 1*%s+",lvname, dvn[["dist1"]], dvn[["p1xvarnames"]][1])
     eta.x = list()
-    for (i in 1:dvn[["indper"]]) {
-      eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p1xvarnames"]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      eta.x[[i]]=sprintf("lx%s*%s",i, dvn[["p1xvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
-  }else if(partner == "2" & type == "fixed"){
+  }else if(partner == "1" & type == "equated_mv" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ 1*%s+",lvname, dvn[["dist1"]], dvn[["p1yvarnames"]][1])
+    eta.x = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x[[i]]=sprintf("ly%s*%s",i, dvn[["p1yvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "2" & type == "fixed" & lvar == "X"){
     eta_x = sprintf("%s%s =~ 1*",lvname, dvn[["dist2"]])
     eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
-  }else if(partner == "2" & type == "free"){
+  }else if(partner == "2" & type == "fixed" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ 1*",lvname, dvn[["dist2"]])
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "2" & type == "free" & lvar == "X"){
     eta_x = sprintf("%s%s =~ NA*",lvname, dvn[["dist2"]])
     eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
-  }else if(partner == "2" & type == "equated"){
+  }else if(partner == "2" & type == "free" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ NA*",lvname, dvn[["dist2"]])
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "2" & type == "equated" & lvar == "X"){
     eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist2"]], dvn[["p2xvarnames"]][1])
     eta.x = list()
-    for (i in 1:dvn[["indper"]]) {
-      eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p2xvarnames"]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      eta.x[[i]]=sprintf("lx%s*%s",i, dvn[["p2xvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
-  }else if(partner == "2" & type == "equated_mv"){
+  }else if(partner == "2" & type == "equated" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist2"]], dvn[["p2yvarnames"]][1])
+    eta.x = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x[[i]]=sprintf("ly%s*%s",i, dvn[["p2yvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "2" & type == "equated_mv" & lvar == "X"){
     eta_x = sprintf("%s%s =~ 1*%s+",lvname, dvn[["dist2"]], dvn[["p2xvarnames"]][1])
     eta.x = list()
-    for (i in 1:dvn[["indper"]]) {
-      eta.x[[i]]=sprintf("l%s*%s",i, dvn[["p2xvarnames"]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      eta.x[[i]]=sprintf("lx%s*%s",i, dvn[["p2xvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
-  }else if(partner == "g" & type == "free"){
+  }else if(partner == "2" & type == "equated_mv" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ 1*%s+",lvname, dvn[["dist2"]], dvn[["p2yvarnames"]][1])
+    eta.x = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x[[i]]=sprintf("ly%s*%s",i, dvn[["p2yvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "g" & type == "free" & lvar == "X"){
     eta_x = sprintf("%sDy =~ NA*",lvname)
     eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+"), "+",paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
-  }else if(partner == "g" & type == "equated"){
+  }else if(partner == "g" & type == "equated" & lvar == "X"){
     eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[["p1xvarnames"]][1])
     eta.x1 = list()
-    for (i in 1:dvn[["indper"]]) {
-      eta.x1[[i]]=sprintf("l%s*%s",(dvn[["indper"]]*2+i), dvn[["p1xvarnames"]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      eta.x1[[i]]=sprintf("l%s*%s",(dvn[["xindper"]]*2+i), dvn[["p1xvarnames"]][i])
     }
     eta.x2 = list()
-    for (i in 1:dvn[["indper"]]) {
-      eta.x2[[i]]=sprintf("l%s*%s",(dvn[["indper"]]*2+i), dvn[["p2xvarnames"]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      eta.x2[[i]]=sprintf("l%s*%s",(dvn[["xindper"]]*2+i), dvn[["p2xvarnames"]][i])
     }
 
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
@@ -83,66 +132,128 @@ loads <- function(dvn, lvname, partner="1", type = "free"){
 }
 
 #' @rdname cfa_funs
-intercepts <- function(dvn, partner="1", type = "free"){
-  if(partner == "1" & type == "fixed"){
+intercepts <- function(dvn, lvar = "X", partner="1", type = "free"){
+  if(partner == "1" & type == "fixed" & lvar == "X"){
     xints = list()
     xints[[1]] = sprintf("%s ~ 0*1", dvn[["p1xvarnames"]][1])
-    for (i in 2:dvn[["indper"]]) {
+    for (i in 2:dvn[["xindper"]]) {
       xints[[i]]=sprintf("%s ~ 1", dvn[["p1xvarnames"]][i])
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
-  }else if(partner == "1" & type == "free"){
+  }else if(partner == "1" & type == "fixed" & lvar == "Y"){
     xints = list()
-    for (i in 1:dvn[["indper"]]) {
+    xints[[1]] = sprintf("%s ~ 0*1", dvn[["p1yvarnames"]][1])
+    for (i in 2:dvn[["yindper"]]) {
+      xints[[i]]=sprintf("%s ~ 1", dvn[["p1yvarnames"]][i])
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "1" & type == "free" & lvar == "X"){
+    xints = list()
+    for (i in 1:dvn[["xindper"]]) {
       xints[[i]]=sprintf("%s ~ 1", dvn[["p1xvarnames"]][i])
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
-  }else if(partner == "1" & type == "equated"){
+  }else if(partner == "1" & type == "free" & lvar == "Y"){
     xints = list()
-    for (i in 1:dvn[["indper"]]) {
-      xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p1xvarnames"]][i], i)
+    for (i in 1:dvn[["yindper"]]) {
+      xints[[i]]=sprintf("%s ~ 1", dvn[["p1yvarnames"]][i])
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
-  }else if(partner == "1" & type == "equated_mv"){
+  }else if(partner == "1" & type == "equated" & lvar == "X"){
     xints = list()
-    xints[[1]] <- sprintf("%s ~ 0*1 + t1*1", dvn[["p1xvarnames"]][1])
+    for (i in 1:dvn[["xindper"]]) {
+      xints[[i]]=sprintf("%s ~ tx%s*1", dvn[["p1xvarnames"]][i], i)
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "1" & type == "equated" & lvar == "Y"){
+    xints = list()
+    for (i in 1:dvn[["yindper"]]) {
+      xints[[i]]=sprintf("%s ~ ty%s*1", dvn[["p1yvarnames"]][i], i)
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "1" & type == "equated_mv" & lvar == "X"){
+    xints = list()
+    xints[[1]] <- sprintf("%s ~ 0*1 + tx1*1", dvn[["p1xvarnames"]][1])
 
-    for (i in 2:dvn[["indper"]]) {
-      xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p1xvarnames"]][i], i)
+    for (i in 2:dvn[["xindper"]]) {
+      xints[[i]]=sprintf("%s ~ tx%s*1", dvn[["p1xvarnames"]][i], i)
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
-  }else if(partner == "2" & type == "fixed"){
+  }else if(partner == "1" & type == "equated_mv" & lvar == "Y"){
+    xints = list()
+    xints[[1]] <- sprintf("%s ~ 0*1 + ty1*1", dvn[["p1yvarnames"]][1])
+
+    for (i in 2:dvn[["yindper"]]) {
+      xints[[i]]=sprintf("%s ~ ty%s*1", dvn[["p1yvarnames"]][i], i)
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "2" & type == "fixed" & lvar == "X"){
     xints = list()
     xints[[1]] = sprintf("%s ~ 0*1", dvn[["p2xvarnames"]][1])
-    for (i in 2:dvn[["indper"]]) {
+    for (i in 2:dvn[["xindper"]]) {
       xints[[i]]=sprintf("%s ~ 1", dvn[["p2xvarnames"]][i])
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
-  }else if(partner == "2" & type == "free"){
+  }else if(partner == "2" & type == "fixed" & lvar == "Y"){
     xints = list()
-    for (i in 1:dvn[["indper"]]) {
+    xints[[1]] = sprintf("%s ~ 0*1", dvn[["p2yvarnames"]][1])
+    for (i in 2:dvn[["yindper"]]) {
+      xints[[i]]=sprintf("%s ~ 1", dvn[["p2yvarnames"]][i])
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "2" & type == "free" & lvar == "X"){
+    xints = list()
+    for (i in 1:dvn[["xindper"]]) {
       xints[[i]]=sprintf("%s ~ 1", dvn[["p2xvarnames"]][i])
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
-  }else if(partner == "2" & type == "equated"){
+  }else if(partner == "2" & type == "free" & lvar == "Y"){
     xints = list()
-    for (i in 1:dvn[["indper"]]) {
-      xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p2xvarnames"]][i], i)
+    for (i in 1:dvn[["yindper"]]) {
+      xints[[i]]=sprintf("%s ~ 1", dvn[["p2yvarnames"]][i])
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
-  }else if(partner == "2" & type == "equated_mv"){
+  }else if(partner == "2" & type == "equated" & lvar == "X"){
     xints = list()
-    xints[[1]] <- sprintf("%s ~ 0*1 + t1*1", dvn[["p2xvarnames"]][1])
+    for (i in 1:dvn[["xindper"]]) {
+      xints[[i]]=sprintf("%s ~ tx%s*1", dvn[["p2xvarnames"]][i], i)
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "2" & type == "equated" & lvar == "Y"){
+    xints = list()
+    for (i in 1:dvn[["yindper"]]) {
+      xints[[i]]=sprintf("%s ~ ty%s*1", dvn[["p2yvarnames"]][i], i)
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "2" & type == "equated_mv" & lvar == "X"){
+    xints = list()
+    xints[[1]] <- sprintf("%s ~ 0*1 + tx1*1", dvn[["p2xvarnames"]][1])
 
-    for (i in 2:dvn[["indper"]]) {
-      xints[[i]]=sprintf("%s ~ t%s*1", dvn[["p2xvarnames"]][i], i)
+    for (i in 2:dvn[["xindper"]]) {
+      xints[[i]]=sprintf("%s ~ tx%s*1", dvn[["p2xvarnames"]][i], i)
+    }
+    xints = paste(xints, collapse = "\n")
+    return(xints)
+  }else if(partner == "2" & type == "equated_mv" & lvar == "Y"){
+    xints = list()
+    xints[[1]] <- sprintf("%s ~ 0*1 + ty1*1", dvn[["p2yvarnames"]][1])
+
+    for (i in 2:dvn[["yindper"]]) {
+      xints[[i]]=sprintf("%s ~ ty%s*1", dvn[["p2yvarnames"]][i], i)
     }
     xints = paste(xints, collapse = "\n")
     return(xints)
@@ -150,32 +261,60 @@ intercepts <- function(dvn, partner="1", type = "free"){
 }
 
 #' @rdname cfa_funs
-resids <- function(dvn, partner="1", type = "free"){
-  if(partner == "1" & type == "free"){
+resids <- function(dvn, lvar = "X", partner="1", type = "free"){
+  if(partner == "1" & type == "free" & lvar == "X"){
     res = list()
-    for (i in 1:dvn[["indper"]]) {
+    for (i in 1:dvn[["xindper"]]) {
       res[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p1xvarnames"]][i])
     }
     res = paste(res, collapse = "\n")
     return(res)
-  }else if(partner == "1" & type == "equated"){
+  }else if(partner == "1" & type == "free" & lvar == "Y"){
     res = list()
-    for (i in 1:dvn[["indper"]]) {
-      res[[i]]=sprintf("%s ~~ th%s*%s",dvn[["p1xvarnames"]][i],i, dvn[["p1xvarnames"]][i])
+    for (i in 1:dvn[["yindper"]]) {
+      res[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p1yvarnames"]][i])
     }
     res = paste(res, collapse = "\n")
     return(res)
-  }else if(partner == "2" & type == "free"){
+  }else if(partner == "1" & type == "equated" & lvar == "X"){
     res = list()
-    for (i in 1:dvn[["indper"]]) {
+    for (i in 1:dvn[["xindper"]]) {
+      res[[i]]=sprintf("%s ~~ thx%s*%s",dvn[["p1xvarnames"]][i],i, dvn[["p1xvarnames"]][i])
+    }
+    res = paste(res, collapse = "\n")
+    return(res)
+  }else if(partner == "1" & type == "equated" & lvar == "Y"){
+    res = list()
+    for (i in 1:dvn[["yindper"]]) {
+      res[[i]]=sprintf("%s ~~ thy%s*%s",dvn[["p1yvarnames"]][i],i, dvn[["p1yvarnames"]][i])
+    }
+    res = paste(res, collapse = "\n")
+    return(res)
+  }else if(partner == "2" & type == "free" & lvar == "X"){
+    res = list()
+    for (i in 1:dvn[["xindper"]]) {
       res[[i]]=sprintf("%s ~~ %s",dvn[["p2xvarnames"]][i], dvn[["p2xvarnames"]][i])
     }
     res = paste(res, collapse = "\n")
     return(res)
-  }else if(partner == "2" & type == "equated"){
+  }else if(partner == "2" & type == "free" & lvar == "Y"){
     res = list()
-    for (i in 1:dvn[["indper"]]) {
-      res[[i]]=sprintf("%s ~~ th%s*%s",dvn[["p2xvarnames"]][i],i, dvn[["p2xvarnames"]][i])
+    for (i in 1:dvn[["yindper"]]) {
+      res[[i]]=sprintf("%s ~~ %s",dvn[["p2yvarnames"]][i], dvn[["p2yvarnames"]][i])
+    }
+    res = paste(res, collapse = "\n")
+    return(res)
+  }else if(partner == "2" & type == "equated" & lvar == "X"){
+    res = list()
+    for (i in 1:dvn[["xindper"]]) {
+      res[[i]]=sprintf("%s ~~ thx%s*%s",dvn[["p2xvarnames"]][i],i, dvn[["p2xvarnames"]][i])
+    }
+    res = paste(res, collapse = "\n")
+    return(res)
+  }else if(partner == "2" & type == "equated" & lvar == "Y"){
+    res = list()
+    for (i in 1:dvn[["yindper"]]) {
+      res[[i]]=sprintf("%s ~~ thy%s*%s",dvn[["p2yvarnames"]][i],i, dvn[["p2yvarnames"]][i])
     }
     res = paste(res, collapse = "\n")
     return(res)
@@ -183,7 +322,7 @@ resids <- function(dvn, partner="1", type = "free"){
 }
 
 #' @rdname cfa_funs
-lvars <- function(dvn, lvname, partner = "1", type = "free"){
+lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
   if(partner == "1" & type == "fixed"){
     lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
     return(lvar)
@@ -191,7 +330,11 @@ lvars <- function(dvn, lvname, partner = "1", type = "free"){
     lvar <- sprintf("%s%s ~~ NA*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
     return(lvar)
   }else if(partner == "1" & type == "equated"){
-    lvar <- sprintf("%s%s ~~ psi*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
+    if(lvar == "X"){
+      lvar <- sprintf("%s%s ~~ psix*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
+    }else if(lavar == "Y"){
+      lvar <- sprintf("%s%s ~~ psiy*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
+    }
     return(lvar)
   }else if (partner == "2" & type == "fixed"){
     lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
@@ -200,14 +343,18 @@ lvars <- function(dvn, lvname, partner = "1", type = "free"){
     lvar <- sprintf("%s%s ~~ NA*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
     return(lvar)
   }else if(partner == "2" & type == "equated"){
-    lvar <- sprintf("%s%s ~~ psi*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
+    if(lvar == "X"){
+      lvar <- sprintf("%s%s ~~ psix*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
+    }else if(lvar == "Y"){
+      lvar <- sprintf("%s%s ~~ psiy*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
+    }
     return(lvar)
   }
 
 }
 
 #' @rdname cfa_funs
-lmeans <- function(dvn, lvname, partner = "1", type = "free"){
+lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
   if(partner == "1" & type == "fixed"){
     alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[["dist1"]])
     return(alpha)
@@ -215,7 +362,11 @@ lmeans <- function(dvn, lvname, partner = "1", type = "free"){
     alpha <- sprintf("%s%s ~ NA*1",lvname, dvn[["dist1"]])
     return(alpha)
   }else if(partner == "1" & type == "equated"){
-    alpha <- sprintf("%s%s ~ alpha*1",lvname, dvn[["dist1"]])
+    if(lvar == "X"){
+      alpha <- sprintf("%s%s ~ alphax*1",lvname, dvn[["dist1"]])
+    }else if(lvar == "Y"){
+      alpha <- sprintf("%s%s ~ alphay*1",lvname, dvn[["dist1"]])
+    }
     return(alpha)
   }else if (partner == "2" & type == "fixed"){
     alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[["dist2"]])
@@ -224,7 +375,11 @@ lmeans <- function(dvn, lvname, partner = "1", type = "free"){
     alpha <- sprintf("%s%s ~ NA*1",lvname, dvn[["dist2"]])
     return(alpha)
   }else if(partner == "2" & type == "equated"){
-    alpha <- sprintf("%s%s ~ alpha*1",lvname, dvn[["dist2"]])
+    if(lvar == "X"){
+      alpha <- sprintf("%s%s ~ alphax*1",lvname, dvn[["dist2"]])
+    }else if(lvar == "Y"){
+      alpha <- sprintf("%s%s ~ alphay*1",lvname, dvn[["dist2"]])
+    }
     return(alpha)
   }
 }
