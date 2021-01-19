@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9040</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9045</span>
       </span>
     </div>
 
@@ -48,7 +48,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -185,7 +185,7 @@
 <li>the <code>dvn</code> object (e.g., from <code>scrapeVarCross</code>) to be used to script the model 1.arbitrary name(s) for the latent variable(s) you are modeling</li>
 <li>the kind of parameter equality constraints that you wish to be imposed (if any)</li>
 </ol>
-<!-- end list --><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">qual.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, model <span class="op">=</span> <span class="st">"configural"</span><span class="op">)</span></code></pre></div>
 <p>This function returns a character object with <code>lavaan</code> compliant syntax for your chosen model, as well as exporting a reproducible .txt of the scripted model to a /scripts folder in your working directory.</p>
 </div>

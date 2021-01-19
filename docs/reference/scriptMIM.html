@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>A Function That Writes, Saves, and Exports Syntax for
-Fitting Latent Actor-Partner Interdependence Models — scriptAPIM • dySEM</title>
+Fitting Latent Mutual influence Model — scriptMIM • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,10 +48,10 @@ Fitting Latent Actor-Partner Interdependence Models — scriptAPIM • dySEM</ti
 
 
 <meta property="og:title" content="A Function That Writes, Saves, and Exports Syntax for
-Fitting Latent Actor-Partner Interdependence Models — scriptAPIM" />
+Fitting Latent Mutual influence Model — scriptMIM" />
 <meta property="og:description" content="This function takes the outputted object from dyadVarNames()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
-for specifying Actor-Partner Interdependence Models (APIMs). Users can
+for specifying Mutual Influence Models (MIMs). Users can
 also invoke configural, loading, and/or intercept invariant
 measurement models, and particular types of structural comparisons." />
 <meta property="og:image" content="/logo.png" />
@@ -124,20 +124,20 @@ measurement models, and particular types of structural comparisons." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A Function That Writes, Saves, and Exports Syntax for
-Fitting Latent Actor-Partner Interdependence Models</h1>
+Fitting Latent Mutual influence Model</h1>
     
-    <div class="hidden name"><code>scriptAPIM.Rd</code></div>
+    <div class="hidden name"><code>scriptMIM.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>This function takes the outputted object from dyadVarNames()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
-for specifying Actor-Partner Interdependence Models (APIMs). Users can
+for specifying Mutual Influence Models (MIMs). Users can
 also invoke configural, loading, and/or intercept invariant
 measurement models, and particular types of structural comparisons.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scriptAPIM</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>scriptMIM</span><span class='op'>(</span>
   <span class='va'>dvn</span>,
   scaleset <span class='op'>=</span> <span class='st'>"FF"</span>,
   <span class='va'>lvxname</span>,
@@ -184,7 +184,7 @@ require an intercept-invariant model to be specified, otherwise a warning is ret
     <tr>
       <th>k</th>
       <td><p>input logical for whether Kenny &amp; Ledermann's (2010) k parameter should be
-calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
+calculated to characterize the dyadic pattern in the mim. Defaults FALSE, and requires at least
 a loading-invariant model to be specified, otherwise a warning is returned.</p></td>
     </tr>
     </table>
@@ -199,23 +199,23 @@ with containing X or Y variables, they are alerted to respecify the dvn object.<
 
     <div class='dont-index'><p><code><a href='dyadVarNames.html'>dyadVarNames</a></code> which this function relies on</p>
 <p>Other script-writing functions: 
+<code><a href='scriptAPIM.html'>scriptAPIM</a>()</code>,
 <code><a href='scriptBifactor.html'>scriptBifactor</a>()</code>,
 <code><a href='scriptCFA.html'>scriptCFA</a>()</code>,
 <code><a href='scriptCFM.html'>scriptCFM</a>()</code>,
 <code><a href='scriptINULL.html'>scriptINULL</a>()</code>,
-<code><a href='scriptISAT.html'>scriptISAT</a>()</code>,
-<code><a href='scriptMIM.html'>scriptMIM</a>()</code></p></div>
+<code><a href='scriptISAT.html'>scriptISAT</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>&lt;-</span> <span class='fu'><a href='scrapeVarCross.html'>scrapeVarCross</a></span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>DRES</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"PRQC"</span>, x_delim1 <span class='op'>=</span> <span class='st'>"_"</span>, x_delim2<span class='op'>=</span><span class='st'>"."</span>, x_item_num<span class='op'>=</span><span class='st'>"\\d+"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span>,
                     y_order<span class='op'>=</span><span class='st'>"sip"</span>, y_stem<span class='op'>=</span><span class='st'>"sexsat"</span>, y_delim2<span class='op'>=</span><span class='st'>"."</span>, y_item_num<span class='op'>=</span><span class='st'>"\\d+"</span><span class='op'>)</span>
-<span class='va'>apim.script.config</span> <span class='op'>=</span> <span class='fu'>scriptAPIM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Quality"</span>,
+<span class='va'>mim.script.config</span> <span class='op'>=</span> <span class='fu'>scriptMIM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Quality"</span>,
 lvyname <span class='op'>=</span> <span class='st'>"SexSat"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span>, scaleset <span class='op'>=</span> <span class='st'>"MV"</span><span class='op'>)</span>
-<span class='va'>apim.script.load</span> <span class='op'>=</span> <span class='fu'>scriptAPIM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Quality"</span>,
+<span class='va'>mim.script.load</span> <span class='op'>=</span> <span class='fu'>scriptMIM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Quality"</span>,
 lvyname <span class='op'>=</span> <span class='st'>"SexSat"</span>, model <span class='op'>=</span> <span class='st'>"loading"</span>, scaleset <span class='op'>=</span> <span class='st'>"MV"</span><span class='op'>)</span>
-<span class='va'>apim.script.int</span> <span class='op'>=</span> <span class='fu'>scriptAPIM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Quality"</span>,
+<span class='va'>mim.script.int</span> <span class='op'>=</span> <span class='fu'>scriptMIM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Quality"</span>,
 lvyname <span class='op'>=</span> <span class='st'>"SexSat"</span>, model <span class='op'>=</span> <span class='st'>"intercept"</span>, scaleset <span class='op'>=</span> <span class='st'>"MV"</span><span class='op'>)</span>
-<span class='va'>apim.script.load.actor</span> <span class='op'>=</span> <span class='fu'>scriptAPIM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Quality"</span>,
+<span class='va'>mim.script.load.actor</span> <span class='op'>=</span> <span class='fu'>scriptMIM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Quality"</span>,
 lvyname <span class='op'>=</span> <span class='st'>"SexSat"</span>, model <span class='op'>=</span> <span class='st'>"loading"</span>, equate <span class='op'>=</span> <span class='st'>"actor"</span><span class='op'>)</span>
 </div></pre>
   </div>

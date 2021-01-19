@@ -12,8 +12,8 @@
 #' @export
 #' @examples
 #' dvn <- dvn2(DRES, x_order = "sip", x_stem = "sexsat", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
-#' load.script = dyadCFA(dvn, lvname = "SexSat",  model = "intercept")
-#' fit <- lavaan::cfa(load.script, data = dat, std.lv = FALSE,
+#' config.script = dyadCFA(dvn, lvname = "SexSat",  model = "configural")
+#' fit <- lavaan::cfa(config.script, data = DRES, std.lv = FALSE,
 #' auto.fix.first= FALSE, meanstructure = TRUE)
 #' dydMACS(con.fit.config)
 dyInvarEs<- function(fit.cfa){

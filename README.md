@@ -37,11 +37,11 @@ types of latent dyadic data models:
 
 Additional features currently include:
 
-  - Automated specification of invariance constraints for any model,
+-   Automated specification of invariance constraints for any model,
     including full indistinguishability
-  - Functions to assist with reproducible creation of path diagrams and
+-   Functions to assist with reproducible creation of path diagrams and
     tables of statistical output
-  - Functions to calculate supplemental statistical information (e.g.,
+-   Functions to calculate supplemental statistical information (e.g.,
     omega reliability, noninvariance effect sizes, corrected model fit
     indexes)
 
@@ -88,7 +88,7 @@ Briefly, these steps include:
 4.  **Fit** and **Inspect** your model via `lavaan`
 5.  **Output** statistical visualizations and/or tables
 
-### 1\. Import and wrangle **data**
+### 1. Import and wrangle **data**
 
 Structural equation modeling (SEM) programs like `lavaan` require dyadic
 data to be in dyad structure data set, whereby each row contains the
@@ -115,7 +115,7 @@ DRES
 #> #   PRQC_6.2 <dbl>, PRQC_7.2 <dbl>, PRQC_8.2 <dbl>, PRQC_9.2 <dbl>
 ```
 
-### 2\. **Scrape** variables from your data frame
+### 2. **Scrape** variables from your data frame
 
 The `dySEM` scrapers consider appropriately repetitously named
 indicators as consisting of at least three distinct elements: stem,
@@ -128,7 +128,7 @@ what order the elements of variable names are ordered.
 dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_delim2=".",  distinguish_1="1", distinguish_2="2")
 ```
 
-### 3\. **Script** your preferred model
+### 3. **Script** your preferred model
 
 *Scripter* functions like
 [`scriptCFA`](https://github.com/jsakaluk/dySEM/blob/master/R/scriptCFA.R)
@@ -140,8 +140,6 @@ typically require only three arguments to be specified:
 2.  the kind of parameter equality constraints that you wish to be
     imposed (if any)
 
-<!-- end list -->
-
 ``` r
 qual.config.script <- scriptCFA(dvn, lvname = "Quality", model = "configural")
 ```
@@ -150,7 +148,7 @@ This function returns a character object with `lavaan` compliant syntax
 for your chosen model, as well as exporting a reproducible .txt of the
 scripted model to a /scripts folder in your working directory.
 
-### 4\. **Fit** and **Inspect** your model via `lavaan`
+### 4. **Fit** and **Inspect** your model via `lavaan`
 
 You can immediately pass any script(s) returned from a `dySEM` scripter
 to your preferred `lavaan` wrapper, with your estimator and missing data
@@ -167,7 +165,7 @@ at your disposal. For example:
 summary(qual.config.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 ```
 
-### 5\. **Output** statistical visualizations and/or tables
+### 5. **Output** statistical visualizations and/or tables
 
 `dySEM` also contains functionality to help you quickly, correctly, and
 reproducibly generate output from your fitted model(s), in the forms of

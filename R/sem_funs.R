@@ -66,8 +66,5 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
   }
 }
 
-#' @rdname sem_funs
-ktest <- function(){
 
-}
 

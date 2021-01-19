@@ -1,9 +1,9 @@
 #' A Function That Writes, Saves, and Exports Syntax for
-#' Fitting Latent Actor-Partner Interdependence Models
+#' Fitting Latent Mutual influence Model
 #'
 #' This function takes the outputted object from dyadVarNames()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
-#' for specifying Actor-Partner Interdependence Models (APIMs). Users can
+#' for specifying Mutual Influence Models (MIMs). Users can
 #' also invoke configural, loading, and/or intercept invariant
 #' measurement models, and particular types of structural comparisons.
 #' @param dvn input object from dyadVarNames()
@@ -20,7 +20,7 @@
 #' require at least a loading-invariant model to be specified, otherwise a warning is returned; mean constraints
 #' require an intercept-invariant model to be specified, otherwise a warning is returned.
 #' @param k input logical for whether Kenny & Ledermann's (2010) k parameter should be
-#' calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
+#' calculated to characterize the dyadic pattern in the mim. Defaults FALSE, and requires at least
 #' a loading-invariant model to be specified, otherwise a warning is returned.
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
@@ -32,16 +32,16 @@
 #' @examples
 #' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
 #'                     y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\d+")
-#' apim.script.config = scriptAPIM(dvn, lvxname = "Quality",
+#' mim.script.config = scriptMIM(dvn, lvxname = "Quality",
 #' lvyname = "SexSat", model = "configural", scaleset = "MV")
-#' apim.script.load = scriptAPIM(dvn, lvxname = "Quality",
+#' mim.script.load = scriptMIM(dvn, lvxname = "Quality",
 #' lvyname = "SexSat", model = "loading", scaleset = "MV")
-#' apim.script.int = scriptAPIM(dvn, lvxname = "Quality",
+#' mim.script.int = scriptMIM(dvn, lvxname = "Quality",
 #' lvyname = "SexSat", model = "intercept", scaleset = "MV")
-#' apim.script.load.actor = scriptAPIM(dvn, lvxname = "Quality",
+#' mim.script.load.actor = scriptMIM(dvn, lvxname = "Quality",
 #' lvyname = "SexSat", model = "loading", equate = "actor")
 
-scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural", equate="none", k = FALSE){
+scriptMIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural", equate="none", k = FALSE){
   dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){
@@ -133,10 +133,10 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
       }
       #Partner effects
       if(equate=="none"|equate=="actor"|equate=="means"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "free")
       }
       else if(equate=="partner"|equate=="all_effects"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "equated")
       }
 
       #parameter k
@@ -184,7 +184,7 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                     k1, k2
         )
       }
-      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_apim_configural.txt",lvyname,lvxname))
+      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_mim_configural.txt",lvyname,lvxname))
       if(equate=="actor"|equate=="partner"|equate=="all_effects"|k == TRUE){
         cat(crayon::yellow("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant"))
         #message("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant")
@@ -284,10 +284,10 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
       }
       #Partner effects
       if(equate=="none"|equate=="actor"|equate=="means"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "free")
       }
       else if(equate=="partner"|equate=="all_effects"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "equated")
       }
 
       #parameter k
@@ -335,7 +335,7 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                     k1, k2
         )
       }
-      cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+      cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_mim_loading.txt",lvyname,lvxname))
 
       if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
         cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
@@ -432,10 +432,10 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
       }
       #Partner effects
       if(equate=="none"|equate=="actor"|equate=="means"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "free")
       }
       else if(equate=="partner"|equate=="all_effects"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "equated")
       }
 
       #parameter k
@@ -483,7 +483,7 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                  k1, k2
         )
       }
-      cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_mim_intercept.txt",lvyname,lvxname))
       return(intercept.script)
     }
     else if (model == "residual"){
@@ -575,10 +575,10 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
       }
       #Partner effects
       if(equate=="none"|equate=="actor"|equate=="means"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "free")
       }
       else if(equate=="partner"|equate=="all_effects"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "equated")
       }
 
       #parameter k
@@ -626,7 +626,7 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                    k1, k2
         )
       }
-      cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_mim_intercept.txt",lvyname,lvxname))
       return(residual.script)
     }
     else if (model == "lvariance"){
@@ -718,10 +718,10 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
       }
       #Partner effects
       if(equate=="none"|equate=="actor"|equate=="means"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "free")
       }
       else if(equate=="partner"|equate=="all_effects"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "equated")
       }
 
       #parameter k
@@ -769,7 +769,7 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                  k1, k2
         )
       }
-      cat(lvariance.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+      cat(lvariance.script,"\n", file = sprintf("./scripts/%s_%s_mim_loading.txt",lvyname,lvxname))
 
       if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
         cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
@@ -869,10 +869,10 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
       }
       #Partner effects
       if(equate=="none"|equate=="actor"|equate=="means"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "free")
       }
       else if(equate=="partner"|equate=="all_effects"){
-        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+        partners <- lregs(dvn, param = "mim_part", lvxname, lvyname, type = "equated")
       }
 
       #parameter k
@@ -920,7 +920,7 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                   k1, k2
         )
       }
-      cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_mim_intercept.txt",lvyname,lvxname))
       return(indist.script)
     }
   }

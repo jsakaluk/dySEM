@@ -155,7 +155,7 @@ qual.int.script <- scriptCFA(dvn, lvname = "Quality", model = "intercept")
 
 qual.res.script <- scriptCFA(dvn, lvname = "Quality", model = "residual")
 
-qual.ind.script <- scriptCFA(dvn, lvname = "Quality", model = "indistinguishable")
+qual.ind.script <- scriptCFA(dvn, lvname = "Quality", model = "indist")
 ```
 
 The scripting of longitudinal dyadic SEM models is not yet supported by `dySEM`, but we hope to develop this functionality over the Spring/Summer 2021. 
@@ -194,7 +194,7 @@ summary(qual.config.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRU
 `anova`, meanwhile, will enable you to perform comparisons of competing nested dyadic models. For example:
 
 ```{r anova}
-anova(qual.load.fit, qual.config.fit)
+anova(qual.config.fit, qual.load.fit, qual.int.fit, qual.res.fit, qual.ind.fit)
 ```
 You can learn about what other kinds of detail you can extract from a fitted `lavaan` model [here](https://lavaan.ugent.be/tutorial/inspect.html).
 

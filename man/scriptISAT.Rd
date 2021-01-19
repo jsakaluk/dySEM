@@ -5,12 +5,14 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting the I-SAT model for indistinguishable dyads}
 \usage{
-scriptISAT(dvn, lvname = "X")
+scriptISAT(dvn, lvxname = "X", lvyname = NULL)
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
 
-\item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
+\item{lvxname}{input character to (arbitrarily) name X LV in lavaan syntax}
+
+\item{lvyname}{(optional) input character to (arbitrarily) name X LV in lavaan syntax}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -33,6 +35,7 @@ Other script-writing functions:
 \code{\link{scriptBifactor}()},
 \code{\link{scriptCFA}()},
 \code{\link{scriptCFM}()},
-\code{\link{scriptINULL}()}
+\code{\link{scriptINULL}()},
+\code{\link{scriptMIM}()}
 }
 \concept{script-writing functions}

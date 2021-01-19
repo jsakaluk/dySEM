@@ -83,7 +83,7 @@ It is used primarily to guide the syntax-writing of the other dySEM functions." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9040</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9045</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@ It is used primarily to guide the syntax-writing of the other dySEM functions." 
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -222,9 +222,10 @@ characters distinguishing partners, and total number of indicators</p>
 <code><a href='scrapeVarLong.html'>scrapeVarLong</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>&lt;-</span> <span class='fu'>scrapeVarCross</span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>dat.pkg</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"X"</span>, x_delim2<span class='op'>=</span><span class='st'>"."</span>, x_item_num<span class='op'>=</span><span class='st'>"\\d+"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span>,
-y_order<span class='op'>=</span><span class='st'>"sip"</span>, y_stem<span class='op'>=</span><span class='st'>"Y"</span>, y_delim2<span class='op'>=</span><span class='st'>"."</span>, y_item_num<span class='op'>=</span><span class='st'>"\\d+"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in stri_extract_first_regex(string, pattern, opts_regex = opts(pattern)): object 'dat.pkg' not found</span></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>dvnx</span> <span class='op'>&lt;-</span> <span class='fu'>scrapeVarCross</span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>DRES</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"PRQC"</span>, x_delim1 <span class='op'>=</span> <span class='st'>"_"</span>, x_delim2<span class='op'>=</span><span class='st'>"."</span>, x_item_num<span class='op'>=</span><span class='st'>"\\d+"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span><span class='op'>)</span>
+<span class='va'>dvnxy</span> <span class='op'>&lt;-</span> <span class='fu'>scrapeVarCross</span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>DRES</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"PRQC"</span>, x_delim1 <span class='op'>=</span> <span class='st'>"_"</span>, x_delim2<span class='op'>=</span><span class='st'>"."</span>, x_item_num<span class='op'>=</span><span class='st'>"\\d+"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span>,
+y_order<span class='op'>=</span><span class='st'>"sip"</span>, y_stem<span class='op'>=</span><span class='st'>"sexsat"</span>, y_delim2<span class='op'>=</span><span class='st'>"."</span>, y_item_num<span class='op'>=</span><span class='st'>"\\d+"</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

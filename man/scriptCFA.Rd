@@ -62,6 +62,7 @@ Other script-writing functions:
 \code{\link{scriptBifactor}()},
 \code{\link{scriptCFM}()},
 \code{\link{scriptINULL}()},
-\code{\link{scriptISAT}()}
+\code{\link{scriptISAT}()},
+\code{\link{scriptMIM}()}
 }
 \concept{script-writing functions}

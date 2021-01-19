@@ -5,12 +5,14 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting the I-NULL model for indistinguishable dyads}
 \usage{
-scriptINULL(dvn, lvname = "X")
+scriptINULL(dvn, lvxname = "X", lvyname = NULL)
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
 
-\item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
+\item{lvxname}{input character to (arbitrarily) name X LV in lavaan syntax}
+
+\item{lvyname}{(optional) input character to (arbitrarily) name Y LV in lavaan syntax}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -33,6 +35,7 @@ Other script-writing functions:
 \code{\link{scriptBifactor}()},
 \code{\link{scriptCFA}()},
 \code{\link{scriptCFM}()},
-\code{\link{scriptISAT}()}
+\code{\link{scriptISAT}()},
+\code{\link{scriptMIM}()}
 }
 \concept{script-writing functions}

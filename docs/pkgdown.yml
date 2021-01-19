@@ -1,7 +1,7 @@
-pandoc: 2.7.3
+pandoc: 2.11.2
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   dySEM: dySEM.html
-last_built: 2021-01-06T15:50Z
+last_built: 2021-01-19T18:53Z
 

@@ -85,7 +85,7 @@ measurement models for either a specified X or Y factor." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9040</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9045</span>
       </span>
     </div>
 
@@ -93,7 +93,7 @@ measurement models for either a specified X or Y factor." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -135,7 +135,7 @@ for specifying dyadic configural, loading, and intercept invariant
 measurement models for either a specified X or Y factor.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"X"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"X"</span>, scaleset <span class='op'>=</span> <span class='st'>"FF"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,9 +149,14 @@ measurement models for either a specified X or Y factor.</p>
       <td><p>input character to (arbitrarily) name LV in lavaan syntax</p></td>
     </tr>
     <tr>
+      <th>scaleset</th>
+      <td><p>input character to specify how to set the scale of the latent variable(s). Default is
+"FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)</p></td>
+    </tr>
+    <tr>
       <th>model</th>
       <td><p>input character used to specify which level of invariance is
-modeled ("configural", "loading", "intercept", "residual", or "indistinguishable"). Defaults to "configural".</p></td>
+modeled ("configural", "loading", "intercept", "residual", or "indist"). Defaults to "configural".</p></td>
     </tr>
     <tr>
       <th>lvnum</th>
@@ -164,6 +169,19 @@ Only necessary if dvn contains both X and Y information and user wants CFA for Y
 
     <p>character object of lavaan script that can be passed immediately to
 lavaan functions</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>By default, many dySEM:: functions (including scriptCFA() default to
+a fixed-factor method of scale-setting, whereby the latent variance of
+a given factor is constrained to 1 for both partners in the configurally invariant
+#model, and then one of these variances is freely estimated in subsequent
+#models of the invariance testing sequence. We have selected this default
+for two reasons: (1) the selection of a marker-variable is usually arbitrary,
+yet can have a large influence on the estimation and testing of of structural
+parameters (see https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732); and (2) the selection of a non-invariant marker-variable
+can have disastrous down-stream consequences for the identification of
+non-invariant measurement parameters, following a the rejection of an omnibus
+#invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='dyadVarNames.html'>dyadVarNames</a></code> which this function relies on</p>
@@ -172,14 +190,19 @@ lavaan functions</p>
 <code><a href='scriptBifactor.html'>scriptBifactor</a>()</code>,
 <code><a href='scriptCFM.html'>scriptCFM</a>()</code>,
 <code><a href='scriptINULL.html'>scriptINULL</a>()</code>,
-<code><a href='scriptISAT.html'>scriptISAT</a>()</code></p></div>
+<code><a href='scriptISAT.html'>scriptISAT</a>()</code>,
+<code><a href='scriptMIM.html'>scriptMIM</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span><span class='op'>(</span><span class='va'>dat</span>, xvar<span class='op'>=</span><span class='st'>"X"</span>, sep <span class='op'>=</span> <span class='st'>"."</span>,distinguish1 <span class='op'>=</span> <span class='st'>"1"</span>, distinguish2 <span class='op'>=</span> <span class='st'>"2"</span><span class='op'>)</span>
-<span class='va'>con.config.script</span> <span class='op'>=</span> <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in 1:dvn[["indper"]]: argument of length 0</span></div><div class='input'><span class='va'>con.loading.script</span> <span class='op'>=</span> <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>,  model <span class='op'>=</span> <span class='st'>"loading"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in 1:dvn[["indper"]]: argument of length 0</span></div><div class='input'><span class='va'>con.intercept.script</span> <span class='op'>=</span> <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>,  model <span class='op'>=</span> <span class='st'>"intercept"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in 1:dvn[["indper"]]: argument of length 0</span></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>&lt;-</span> <span class='fu'><a href='scrapeVarCross.html'>scrapeVarCross</a></span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>DRES</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"PRQC"</span>, x_delim1 <span class='op'>=</span> <span class='st'>"_"</span>, x_delim2<span class='op'>=</span><span class='st'>"."</span>, x_item_num<span class='op'>=</span><span class='st'>"\\d+"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span><span class='op'>)</span>
+<span class='va'>qual.config.script</span> <span class='op'>&lt;-</span>  <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Qual"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span>
+<span class='va'>qual.loading.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Qual"</span>,  model <span class='op'>=</span> <span class='st'>"loading"</span><span class='op'>)</span>
+<span class='va'>qual.intercept.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Qual"</span>,  model <span class='op'>=</span> <span class='st'>"intercept"</span><span class='op'>)</span>
+<span class='va'>qual.residual.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Qual"</span>,  model <span class='op'>=</span> <span class='st'>"residual"</span><span class='op'>)</span>
+<span class='va'>qual.variance.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Qual"</span>,  model <span class='op'>=</span> <span class='st'>"lvariance"</span><span class='op'>)</span>
+<span class='va'>qual.means.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Qual"</span>,  model <span class='op'>=</span> <span class='st'>"lmean"</span><span class='op'>)</span>
+<span class='va'>qual.indist.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptCFA</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Qual"</span>,  model <span class='op'>=</span> <span class='st'>"indist"</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
