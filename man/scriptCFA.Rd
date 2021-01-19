@@ -16,7 +16,7 @@ scriptCFA(dvn, lvname = "X", scaleset = "FF", model = "configural")
 "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)}
 
 \item{model}{input character used to specify which level of invariance is
-modeled ("configural", "loading", "intercept", "residual", or "indistinguishable"). Defaults to "configural".}
+modeled ("configural", "loading", "intercept", "residual", or "indist"). Defaults to "configural".}
 
 \item{lvnum}{optional input character to indicate which LV is modeled ("one" or "two").
 Only necessary if dvn contains both X and Y information and user wants CFA for Y}
@@ -45,10 +45,14 @@ non-invariant measurement parameters, following a the rejection of an omnibus
 #invariance constraint set (see Lee, Preacher, & Little, 2011).
 }
 \examples{
-dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
-con.config.script = scriptCFA(dvn, lvname = "Conflict", model = "configural")
-con.loading.script = scriptCFA(dvn, lvname = "Conflict",  model = "loading")
-con.intercept.script = scriptCFA(dvn, lvname = "Conflict",  model = "intercept")
+dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
+qual.config.script <-  scriptCFA(dvn, lvname = "Qual", model = "configural")
+qual.loading.script <- scriptCFA(dvn, lvname = "Qual",  model = "loading")
+qual.intercept.script <- scriptCFA(dvn, lvname = "Qual",  model = "intercept")
+qual.residual.script <- scriptCFA(dvn, lvname = "Qual",  model = "residual")
+qual.variance.script <- scriptCFA(dvn, lvname = "Qual",  model = "lvariance")
+qual.means.script <- scriptCFA(dvn, lvname = "Qual",  model = "lmean")
+qual.indist.script <- scriptCFA(dvn, lvname = "Qual",  model = "indist")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on
