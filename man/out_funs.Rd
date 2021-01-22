@@ -3,12 +3,17 @@
 \name{out_funs}
 \alias{out_funs}
 \alias{makeTable}
+\alias{makeFigure}
 \title{Functions for scripting structural parameters}
 \usage{
 makeTable(dvn, fit, model, tabletype)
+
+makeFigure(fit, type)
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
+
+\item{type}{input character to indicate whether parameters "free" or "equated" in estimation}
 
 \item{param}{input character for what kind of parameter is being scripted ("act", "apim_part", "mim_part", "cf")}
 
@@ -19,8 +24,6 @@ makeTable(dvn, fit, model, tabletype)
 \item{lvyname}{input character to (arbitrarily) name LV Y in lavaan syntax}
 
 \item{partner}{input character to indicate parameters for first or second dyad member}
-
-\item{type}{input character to indicate whether parameters "free" or "equated" in estimation}
 }
 \description{
 Functions for scripting structural parameters

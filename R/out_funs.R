@@ -59,6 +59,8 @@ makeTable <- function(dvn, fit, model, tabletype){
   }
 }
 
+#' @rdname out_funs
+
 makeFigure <- function(fit, type){
   if(type == "raw"){
     semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,

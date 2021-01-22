@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9046</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9047</span>
       </span>
     </div>
 
@@ -126,7 +126,9 @@
     <p>Functions for scripting structural parameters</p>
     </div>
 
-    <pre class="usage"><span class='fu'>makeTable</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span>, <span class='va'>model</span>, <span class='va'>tabletype</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>makeTable</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span>, <span class='va'>model</span>, <span class='va'>tabletype</span><span class='op'>)</span>
+
+<span class='fu'>makeFigure</span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>type</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,6 +136,10 @@
     <tr>
       <th>dvn</th>
       <td><p>input object from dyadVarNames()</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>input character to indicate whether parameters "free" or "equated" in estimation</p></td>
     </tr>
     <tr>
       <th>param</th>
@@ -154,10 +160,6 @@
     <tr>
       <th>partner</th>
       <td><p>input character to indicate parameters for first or second dyad member</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>input character to indicate whether parameters "free" or "equated" in estimation</p></td>
     </tr>
     </table>
 
