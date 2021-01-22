@@ -129,7 +129,9 @@ summary(qual.config.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRU
 
 `dySEM` also contains functionality to help you quickly, correctly, and reproducibly generate output from your fitted model(s), in the forms of path diagrams and/or tables of statistical values. 
 
-```{r dyoutput, eval = FALSE}
-dyOutput(dvn, model = "cfa", qual.config.fit, tabletype = "measurement", figtype = "unstandardized")
+```{r outputModel, eval = FALSE}
+outputModel(dvn, model = "cfa", fit = qual.config.fit, 
+            table = TRUE, tabletype = "measurement", 
+            figure = TRUE, figtype = "unstandardized")
 ```
 

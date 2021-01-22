@@ -920,7 +920,7 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                   k1, k2
         )
       }
-      cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_indist.txt",lvyname,lvxname))
       return(indist.script)
     }
   }

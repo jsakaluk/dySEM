@@ -61,7 +61,7 @@ loadings <- function(dvn, fit){
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
     dplyr::filter(.data$op == "=~") %>%
     dplyr::select('Latent Factor'=.data$lhs, Indicator=.data$rhs, Loading=.data$est, SE=.data$se, Z=.data$z,
-                  'p-value'=.data$pvalue, Std.Loading=.data$std.all)
+                  'p-value'=.data$pvalue, 'Std. Loading'=.data$std.all)
   return(load)
 }
 
@@ -70,7 +70,7 @@ xintercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
     dplyr::filter(.data$op == "~1") %>%
-    select(.data$est)
+    dplyr::select(.data$est)
 
   intercept.param <- dplyr::rename(intercept.param, intercept = est)
   x.int.num <- dvn[[3]]*2#number of x intercepts (*2 for dyads)
@@ -80,17 +80,13 @@ xintercepts <- function(dvn, fit){
 }
 
 #' @rdname measurement_funs
-yintercepts <- function(dvn, fit){
+xyintercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-    dplyr::filter(.data$op == "~1")
-  y.int.list <- c()
-  x.int.num <- dvn[[3]]*2#number of x intercepts (*2 for dyads)
-  ystart<- (x.int.num+1) #intercept where y begins
-  #Only keep indicator intercepts
-  for(i in ystart:dvn[[9]]){
-    y.int.list[[i]]<- intercept.param$est[i]
-  }
-  y.int.list = y.int.list[!is.na(y.int.list)]
-  return(y.int.list)
+    dplyr::filter(.data$op == "~1") %>%
+    dplyr::select(.data$est)
+
+  intercept.param <- intercept.param$est[1:(length(intercept.param$est)-4)]
+
+  return(intercept.param)
 }

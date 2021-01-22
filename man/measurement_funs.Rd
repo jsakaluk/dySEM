@@ -9,7 +9,7 @@
 \alias{xtheta12}
 \alias{loadings}
 \alias{xintercepts}
-\alias{yintercepts}
+\alias{xyintercepts}
 \title{Functions for extracting measurement model output}
 \usage{
 xlamda1(dvn, fit)
@@ -26,7 +26,7 @@ loadings(dvn, fit)
 
 xintercepts(dvn, fit)
 
-yintercepts(dvn, fit)
+xyintercepts(dvn, fit)
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}

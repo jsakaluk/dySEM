@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs • dySEM</title>
+<title>A Function That Exports Tables and/or SEM Digrams based on dySEM models — outputModel • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs" />
-<meta property="og:description" content="Functions for dyadCFA() for scripting free or fixed families of parameters" />
+<meta property="og:title" content="A Function That Exports Tables and/or SEM Digrams based on dySEM models — outputModel" />
+<meta property="og:description" content="This function takes the  model from fitted dySEM() scripts and
+exports table(s) and/or a path diagram figure of expected output." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -117,24 +118,25 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Functions for dyadCFA() for scripting free or fixed families of parameters</h1>
+    <h1>A Function That Exports Tables and/or SEM Digrams based on dySEM models</h1>
     
-    <div class="hidden name"><code>cfa_funs.Rd</code></div>
+    <div class="hidden name"><code>outputModel.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Functions for dyadCFA() for scripting free or fixed families of parameters</p>
+    <p>This function takes the  model from fitted dySEM() scripts and
+exports table(s) and/or a path diagram figure of expected output.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>loads</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, <span class='va'>lvname</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span>
-
-<span class='fu'>intercepts</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span>
-
-<span class='fu'>resids</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span>
-
-<span class='fu'>lvars</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, <span class='va'>lvname</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span>
-
-<span class='fu'>lmeans</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, <span class='va'>lvname</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>outputModel</span><span class='op'>(</span>
+  <span class='va'>dvn</span>,
+  model <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>fit</span>,
+  table <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  tabletype <span class='op'>=</span> <span class='cn'>NULL</span>,
+  figure <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  figtype <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,27 +146,51 @@
       <td><p>input object from dyadVarNames()</p></td>
     </tr>
     <tr>
-      <th>lvar</th>
-      <td><p>input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn</p></td>
+      <th>model</th>
+      <td><p>character input specying type of model to output (e.g., "cfa", "apim", "cfm")</p></td>
     </tr>
     <tr>
-      <th>lvname</th>
-      <td><p>input character to (arbitrarily) name LV in lavaan syntax</p></td>
+      <th>fit</th>
+      <td><p>input object from fitted lavaan model</p></td>
     </tr>
     <tr>
-      <th>partner</th>
-      <td><p>input character to indicate parameters for first or second dyad member</p></td>
+      <th>table</th>
+      <td><p>logical input of whether table output is desired. Default is TRUE</p></td>
     </tr>
     <tr>
-      <th>type</th>
-      <td><p>input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation</p></td>
+      <th>tabletype</th>
+      <td><p>character input of what type of table(s) is(are) desired.
+options are "measurement" (i.e,, slopes, intercepts, and (optionally) dMACS),
+"structural" (i.e., latent slopes, such as actor/partner effects, k parameters), or "both"
+(i.e., both measurement and structural tables)</p></td>
+    </tr>
+    <tr>
+      <th>figure</th>
+      <td><p>logical input of whether figure output is desired. Default is TRUE</p></td>
+    </tr>
+    <tr>
+      <th>figtype</th>
+      <td><p>character input of what type of figure is desired.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Ignore console (prints unneccessary semPlot::semPaths details). More importantly,
+prints word files for the table(s) and/or figure, outputed to the users working directory</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>dyadCFA</code> which this function supplies</p></div>
+    <div class='dont-index'><p><code><a href='dyadVarNames.html'>dyadVarNames</a></code> <code>apimSEM</code> <code><a href='dydMACS.html'>dydMACS</a></code> which this function relies on</p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>=</span> <span class='fu'><a href='dyadVarNames.html'>dyadVarNames</a></span><span class='op'>(</span><span class='va'>dat</span>, xvar<span class='op'>=</span><span class='st'>"X"</span>, yvar<span class='op'>=</span><span class='st'>"Y"</span>, sep <span class='op'>=</span> <span class='st'>"."</span>,
+distinguish1 <span class='op'>=</span> <span class='st'>"1"</span>, distinguish2 <span class='op'>=</span> <span class='st'>"2"</span><span class='op'>)</span>
+<span class='va'>apim.script.load</span> <span class='op'>=</span> <span class='fu'>apimSEM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Conflict"</span>,
+lvyname <span class='op'>=</span> <span class='st'>"Satisfaction"</span>, model <span class='op'>=</span> <span class='st'>"loading"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in apimSEM(dvn, lvxname = "Conflict", lvyname = "Satisfaction",     model = "loading"): could not find function "apimSEM"</span></div><div class='input'><span class='va'>apim.fit.load</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>apim.script.load</span>, data <span class='op'>=</span> <span class='va'>dat</span>, std.lv <span class='op'>=</span> <span class='cn'>FALSE</span>,
+auto.fix.first<span class='op'>=</span> <span class='cn'>FALSE</span>, meanstructure <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in lavaan::lavaan(model = apim.script.load, data = dat, std.lv = FALSE,     auto.fix.first = TRUE, meanstructure = TRUE, model.type = "cfa",     int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.single = TRUE,     auto.var = TRUE, auto.cov.lv.x = TRUE, auto.cov.y = TRUE,     auto.th = TRUE, auto.delta = TRUE, auto.efa = TRUE): object 'apim.script.load' not found</span></div><div class='input'><span class='fu'>dyOutput</span><span class='op'>(</span><span class='va'>dvn</span>, model <span class='op'>=</span> <span class='st'>"cfa"</span>, <span class='va'>fit</span>, figure <span class='op'>=</span> <span class='cn'>FALSE</span>, dydMACS.x <span class='op'>=</span> <span class='va'>sexsat.dmacs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in dyOutput(dvn, model = "cfa", fit, figure = FALSE, dydMACS.x = sexsat.dmacs): could not find function "dyOutput"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

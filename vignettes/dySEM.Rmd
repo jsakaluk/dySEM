@@ -202,15 +202,16 @@ You can learn about what other kinds of detail you can extract from a fitted `la
 
 `dySEM` also contains functionality to help you quickly, correctly, and reproducibly generate output from your fitted model(s), in the forms of path diagrams and/or tables of statistical values. Path diagram creation is supported via the [`semPlot`](https://cran.r-project.org/web/packages/semPlot/index.html) package's `semPaths` function, whereas table creation is currently supported by the [`sjPlot`](https://strengejacke.github.io/sjPlot/) package's `tab_df` function, though users should be aware that [we are considering](https://github.com/jsakaluk/dySEM/issues/28) a move to the [`gt`](https://gt.rstudio.com) package for improved tabling capacity.
 
-The `dyOutput` function is currenty `dySEM`'s all-purpose outputting function. 
-
+The `outputModel` function is currenty `dySEM`'s all-purpose outputting function. 
 
 The useR must specify the `dvn` of scraped variables used to script the model and the type of model being outputted (e.g., "cfa"). UseRs can specify whether they only want a path diagram or some table(s) to be outputted (e.g., by setting either `figure = FALSE` or `table = FALSE`), but by default both are created and written to an `output` folder in your working directory. UseRs can further specify what kind of path diagram (e.g., using standardized or unstandardized value) or tables (e.g., featuring measurement- or structural-model parameter, or both) are created.
 
-Whatever options the useR specifies, `dyOutput` is typically run without assigning its output to an object, as it's mostly to facilitate statistical reporting for scientific articles: 
+Whatever options the useR specifies, `outputModel` is typically run without assigning its output to an object, as it's mostly to facilitate statistical reporting for scientific articles: 
 
 **TODO**: CORRECT CODE GOES HERE
 
 ```{r dyoutput, eval = FALSE}
-dyOutput(dvn, model = "cfa", qual.config.fit, tabletype = "measurement", figtype = "unstandardized")
+outputModel(dvn, model = "cfa", fit = qual.config.fit, 
+            table = TRUE, tabletype = "measurement", 
+            figure = TRUE, figtype = "unstandardized")
 ```

@@ -13,12 +13,13 @@ status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/
 
 ## Summary
 
-`dySEM` helps automate the process of scripting, fitting, and reporting
-on latent models of dyadic data via [`lavaan`](http://lavaan.ugent.be).
-The package was developed and used in the course of the research
-described in [Sakaluk, Fisher, & Kilshaw](https://psyarxiv.com/9vcnz/)
-(in press). We are targeting the first stable release for \~end of March
-2021, and hope to submit the package to CRAN sometime in the summer.
+The `dySEM` helps automate the process of scripting, fitting, and
+reporting on latent models of dyadic data via
+[`lavaan`](http://lavaan.ugent.be). The package was developed and used
+in the course of the research described in [Sakaluk, Fisher, &
+Kilshaw](https://psyarxiv.com/9vcnz/) (in press). We are targeting the
+first stable release for \~end of March 2021, and hope to submit the
+package to CRAN sometime in the summer.
 
 The `dySEM` logo was designed by Wolfgang Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
@@ -172,5 +173,7 @@ reproducibly generate output from your fitted model(s), in the forms of
 path diagrams and/or tables of statistical values.
 
 ``` r
-dyOutput(dvn, model = "cfa", qual.config.fit, tabletype = "measurement", figtype = "unstandardized")
+outputModel(dvn, model = "cfa", fit = qual.config.fit, 
+            table = TRUE, tabletype = "measurement", 
+            figure = TRUE, figtype = "unstandardized")
 ```

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs • dySEM</title>
+<title>Functions for scripting structural parameters — out_funs • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Functions for dyadCFA() for scripting free or fixed families of parameters — cfa_funs" />
-<meta property="og:description" content="Functions for dyadCFA() for scripting free or fixed families of parameters" />
+<meta property="og:title" content="Functions for scripting structural parameters — out_funs" />
+<meta property="og:description" content="Functions for scripting structural parameters" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -117,24 +117,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Functions for dyadCFA() for scripting free or fixed families of parameters</h1>
+    <h1>Functions for scripting structural parameters</h1>
     
-    <div class="hidden name"><code>cfa_funs.Rd</code></div>
+    <div class="hidden name"><code>out_funs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Functions for dyadCFA() for scripting free or fixed families of parameters</p>
+    <p>Functions for scripting structural parameters</p>
     </div>
 
-    <pre class="usage"><span class='fu'>loads</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, <span class='va'>lvname</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span>
-
-<span class='fu'>intercepts</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span>
-
-<span class='fu'>resids</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span>
-
-<span class='fu'>lvars</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, <span class='va'>lvname</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span>
-
-<span class='fu'>lmeans</span><span class='op'>(</span><span class='va'>dvn</span>, lvar <span class='op'>=</span> <span class='st'>"X"</span>, <span class='va'>lvname</span>, partner <span class='op'>=</span> <span class='st'>"1"</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>makeTable</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span>, <span class='va'>model</span>, <span class='va'>tabletype</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,12 +136,20 @@
       <td><p>input object from dyadVarNames()</p></td>
     </tr>
     <tr>
+      <th>param</th>
+      <td><p>input character for what kind of parameter is being scripted ("act", "apim_part", "mim_part", "cf")</p></td>
+    </tr>
+    <tr>
       <th>lvar</th>
       <td><p>input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn</p></td>
     </tr>
     <tr>
-      <th>lvname</th>
-      <td><p>input character to (arbitrarily) name LV in lavaan syntax</p></td>
+      <th>lvxname</th>
+      <td><p>input character to (arbitrarily) name LV X in lavaan syntax</p></td>
+    </tr>
+    <tr>
+      <th>lvyname</th>
+      <td><p>input character to (arbitrarily) name LV Y in lavaan syntax</p></td>
     </tr>
     <tr>
       <th>partner</th>
@@ -157,7 +157,7 @@
     </tr>
     <tr>
       <th>type</th>
-      <td><p>input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation</p></td>
+      <td><p>input character to indicate whether parameters "free" or "equated" in estimation</p></td>
     </tr>
     </table>
 
