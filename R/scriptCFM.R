@@ -19,42 +19,59 @@
 #' @family script-writing functions
 #' @export
 #' @examples
-#' dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",distinguish1 = "1", distinguish2 = "2")
-#' cfm.script.config = scriptCFM(dvn, lvxname = "Conflict", lvyname = "Satisfaction", model = "configural")
-
+#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
+#' y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\d+")
+#'cfm.script.config = scriptCFM(dvn, lvxname = "Quality",
+#' lvyname = "SexSat", model = "configural", scaleset = "MV")
 scriptCFM = function(dvn, lvxname, lvyname, model = "configural"){
   dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){
       #Loadings
-      eta_x1 = sprintf("%s%s =~ NA*",lvxname, dvn[[4]])
-      eta.x1 = gsub(" ", "",paste(eta_x1,paste(dvn[[1]], collapse = "+")), fixed = T)
-      eta_x2 = sprintf("%s%s =~ NA*",lvxname, dvn[[5]])
-      eta.x2 = gsub(" ", "",paste(eta_x2,paste(dvn[[2]], collapse = "+")), fixed = T)
+      if(scaleset == "FF"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
 
-      eta_y1 = sprintf("%s%s =~ NA*",lvyname, dvn[[4]])
-      eta.y1 = gsub(" ", "",paste(eta_y1,paste(dvn[[6]], collapse = "+")), fixed = T)
-      eta_y2 = sprintf("%s%s =~ NA*",lvyname, dvn[[5]])
-      eta.y2 = gsub(" ", "",paste(eta_y2,paste(dvn[[7]], collapse = "+")), fixed = T)
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+      }else if(scaleset == "MV"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "fixed")
 
-      eta.cx = sprintf("%s =~ lx*%s%s + lx*%s%s", lvxname, lvxname, dvn[[4]], lvxname, dvn[[5]])
-      eta.cy = sprintf("%s =~ ly*%s%s + ly*%s%s", lvyname, lvyname, dvn[[4]], lvyname, dvn[[5]])
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "fixed")
+      }
 
-      #Latent (co)variances
-      psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvxname, dvn[[4]],lvxname, dvn[[4]])
-      psi_x2 = sprintf("%s%s ~~ 1*%s%s",lvxname, dvn[[5]],lvxname, dvn[[5]])
+      #Common Fate Loadings
+      if(scaleset == "FF"){
+        eta.c <- cfloads(dvn, lvxname = lvxname, lvyname = lvyname, type = "equated")
 
-      psi_y1 = sprintf("%s%s ~~ 1*%s%s",lvyname, dvn[[4]],lvyname, dvn[[4]])
-      psi_y2 = sprintf("%s%s ~~ 1*%s%s",lvyname, dvn[[5]],lvyname, dvn[[5]])
+      }else if(scaleset == "MV"){
+        eta.c <- cfloads(dvn, lvxname = lvxname, lvyname = lvyname, type = "fixed")
+      }
 
+      #Latent Variances
+      if(scaleset == "FF"){
+        psi_x <- cfvars(lvname = lvxname, type = "fixed")
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "free")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+
+        psi_y <- cfvars(lvname = lvyname, type = "fixed")
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "free")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
+      }else if(scaleset == "MV"){
+        psi_x <- cfvars(lvname = lvxname, type = "free")
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "free")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+
+        psi_y <- cfvars(lvname = lvyname, type = "free")
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "free")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
+      }
+
+      #Latent Covariances
       psi_x1y1 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvyname, dvn[[4]])
       psi_x2y2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[5]],lvyname, dvn[[5]])
-
-      psi_x = sprintf("%s ~~ 1*%s", lvxname, lvxname)
-      psi_y = sprintf("%s ~~ 1*%s", lvyname, lvyname)
-
-      #Common Fate effects
-      beta_yx = sprintf("%s ~ %s",lvyname, lvxname)
 
       #Correlated residuals
       resids.x = list()
@@ -69,81 +86,93 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural"){
       }
       resids.y = paste(resids.y, collapse = "\n")
 
-      #Intercepts
-      xints1 = list()
-      xints2 = list()
-      for (i in 1:dvn[[3]]) {
-        xints1[[i]]=sprintf("%s ~ 1", dvn[[1]][i])
-        xints2[[i]]=sprintf("%s ~ 1", dvn[[2]][i])
-      }
-      xints1 = paste(xints1, collapse = "\n")
-      xints2 = paste(xints2, collapse = "\n")
+      #Residual variances
+      resx1 = resids(dvn, lvar = "X", partner="1", type = "free")
+      resx2 = resids(dvn, lvar = "X", partner="2", type = "free")
+      resy1 = resids(dvn, lvar = "Y", partner="1", type = "free")
+      resy2 = resids(dvn, lvar = "Y", partner="2", type = "free")
 
-      yints1 = list()
-      yints2 = list()
-      for (i in 1:dvn[[8]]) {
-        yints1[[i]]=sprintf("%s ~ 1", dvn[[6]][i])
-        yints2[[i]]=sprintf("%s ~ 1", dvn[[7]][i])
+      #Intercepts
+      if(scaleset == "FF"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "free")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "free")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "free")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "free")
+      }else if(scaleset == "MV"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "fixed")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "fixed")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "fixed")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "fixed")
       }
-      yints1 = paste(yints1, collapse = "\n")
-      yints2 = paste(yints2, collapse = "\n")
+
+      #Latent Means
+      if(scaleset == "FF"){
+        alpha_x <- cfmeans(lvname = lvxname, type = "fixed")
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+
+        alpha_y <- cfmeans(lvname = lvyname, type = "fixed")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+      }else if(scaleset == "MV"){
+        alpha_x <- cfmeans(lvname = lvxname, type = "free")
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+
+        alpha_y <- cfmeans(lvname = lvyname, type = "free")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+      }
+
+      beta <- lregs(dvn, param = "cf", lvxname = lvxname, lvyname = lvyname)
 
       #Script Creation Syntax
-      configural.script = sprintf("#Loadings\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n#Common Fate Effects\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
-                                  eta.x1, eta.x2, eta.cx, eta.y1,eta.y2, eta.cy, psi_x1, psi_x2, psi_y1, psi_y2, psi_x1y1, psi_x2y2, beta_yx, resids.x, resids.y, xints1, xints2, yints1, yints2)
-      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_cfm_configural.txt",lvyname,lvxname))
-      cat(crayon::yellow("Caution: Common fate models should probably be fit with loading invariance "))
 
+        configural.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Common Fate Slope\n%s",
+                                    eta.x1, eta.x2,eta.y1,eta.y2,eta.c,
+                                    psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2,
+                                    resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                    xints1, xints2, yints1, yints2,
+                                    alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y,
+                                    beta)
+
+      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_cfm_configural.txt",lvyname,lvxname))
       return(configural.script)
     }
     else if (model == "loading"){
       #Loadings
-      eta_x1 = sprintf("%s%s =~ NA*%s+",lvxname, dvn[[4]], dvn[[1]][1])
-      eta.x1 = list()
-      for (i in 1:dvn[[3]]) {
-        eta.x1[[i]]=sprintf("l%s*%s",i, dvn[[1]][i])
+      if(scaleset == "FF"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated_mv")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated_mv")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
       }
-      eta.x1 = gsub(" ", "",paste(eta_x1,paste(eta.x1, collapse = "+")), fixed = T)
 
-      eta_x2 = sprintf("%s%s =~ NA*%s+",lvxname, dvn[[5]], dvn[[2]][1])
-      eta.x2 = list()
-      for (i in 1:dvn[[3]]) {
-        eta.x2[[i]]=sprintf("l%s*%s",i, dvn[[2]][i])
+      #Latent Variances
+      if(scaleset == "FF"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "fixed")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
+      }else if(scaleset == "MV"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "free")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "free")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
       }
-      eta.x2 = gsub(" ", "",paste(eta_x2,paste(eta.x2, collapse = "+")), fixed = T)
 
-      eta_y1 = sprintf("%s%s =~ NA*%s+",lvyname, dvn[[4]], dvn[[6]][1])
-      eta.y1 = list()
-      for (i in 1:dvn[[8]]) {
-        eta.y1[[i]]=sprintf("l%s*%s",i+dvn[[3]], dvn[[6]][i])
-      }
-      eta.y1 = gsub(" ", "",paste(eta_y1,paste(eta.y1, collapse = "+")), fixed = T)
-
-      eta_y2 = sprintf("%s%s =~ NA*%s+",lvyname, dvn[[5]], dvn[[7]][1])
-      eta.y2 = list()
-      for (i in 1:dvn[[8]]) {
-        eta.y2[[i]]=sprintf("l%s*%s",i+dvn[[3]], dvn[[7]][i])
-      }
-      eta.y2 = gsub(" ", "",paste(eta_y2,paste(eta.y2, collapse = "+")), fixed = T)
-
-      eta.cx = sprintf("%s =~ lx*%s%s + lx*%s%s", lvxname, lvxname, dvn[[4]], lvxname, dvn[[5]])
-      eta.cy = sprintf("%s =~ ly*%s%s + ly*%s%s", lvyname, lvyname, dvn[[4]], lvyname, dvn[[5]])
-
-      #Latent (co)variances
-      psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvxname, dvn[[4]],lvxname, dvn[[4]])
-      psi_x2 = sprintf("%s%s ~~ NA*%s%s",lvxname, dvn[[5]],lvxname, dvn[[5]])
-
-      psi_y1 = sprintf("%s%s ~~ 1*%s%s",lvyname, dvn[[4]],lvyname, dvn[[4]])
-      psi_y2 = sprintf("%s%s ~~ NA*%s%s",lvyname, dvn[[5]],lvyname, dvn[[5]])
-
-      psi_x1y1 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvyname, dvn[[4]])
-      psi_x2y2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[5]],lvyname, dvn[[5]])
-
-      psi_x = sprintf("%s ~~ 1*%s", lvxname, lvxname)
-      psi_y = sprintf("%s ~~ 1*%s", lvyname, lvyname)
-
-      #Common fate effects
-      beta_yx = sprintf("%s ~ %s",lvyname, lvxname)
+      #Latent Covariances
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
 
       #Correlated residuals
       resids.x = list()
@@ -157,80 +186,141 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural"){
         resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
+
+      #Residual variances
+      resx1 = resids(dvn, lvar = "X", partner="1", type = "free")
+      resx2 = resids(dvn, lvar = "X", partner="2", type = "free")
+      resy1 = resids(dvn, lvar = "Y", partner="1", type = "free")
+      resy2 = resids(dvn, lvar = "Y", partner="2", type = "free")
+
       #Intercepts
-      xints1 = list()
-      xints2 = list()
-      for (i in 1:dvn[[3]]) {
-        xints1[[i]]=sprintf("%s ~ 1", dvn[[1]][i])
-        xints2[[i]]=sprintf("%s ~ 1", dvn[[2]][i])
+      if(scaleset == "FF"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "free")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "free")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "free")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "free")
+      }else if(scaleset == "MV"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "fixed")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "fixed")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "fixed")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "fixed")
       }
-      xints1 = paste(xints1, collapse = "\n")
-      xints2 = paste(xints2, collapse = "\n")
 
-      yints1 = list()
-      yints2 = list()
-      for (i in 1:dvn[[8]]) {
-        yints1[[i]]=sprintf("%s ~ 1", dvn[[6]][i])
-        yints2[[i]]=sprintf("%s ~ 1", dvn[[7]][i])
+      #Latent Means
+      if(scaleset == "FF"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "fixed")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "fixed")
+      }else if(scaleset == "MV"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
       }
-      yints1 = paste(yints1, collapse = "\n")
-      yints2 = paste(yints2, collapse = "\n")
 
-      #Script Creation Syntax
-      loading.script = sprintf("#Loadings\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n#Common Fate Effects\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
-                               eta.x1, eta.x2, eta.cx, eta.y1,eta.y2, eta.cy, psi_x1, psi_x2, psi_y1, psi_y2, psi_x1y1, psi_x2y2, beta_yx, resids.x, resids.y, xints1, xints2, yints1, yints2)
-      cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_cfm_loading.txt",lvyname,lvxname))
+      #Actor effects
+      if(equate=="none"|equate=="partner"|equate=="means"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="actor"|equate=="all_effects"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "equated")
+      }
+      #Partner effects
+      if(equate=="none"|equate=="actor"|equate=="means"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="partner"|equate=="all_effects"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+      }
 
+      #parameter k
+      if(k == TRUE & equate=="none"){
+        k1 = paste("k1 := p1/a1")
+        k2 = paste("k2 := p2/a2")
+      }else if(k == TRUE & equate=="actor"){
+        k1 = paste("k1 := p1/a")
+        k2 = paste("k2 := p2/a")
+      }else if(k == TRUE & equate=="partner"){
+        k1 = paste("k1 := p/a1")
+        k2 = paste("k2 := p/a2")
+      }else if(k == TRUE & equate=="all_effects"){
+        k1 = paste("k := p/a")
+      }
+
+      #Script Creation Syntax (contingent on whether k ==T and pattern of a/p constraints)
+      if(k == FALSE){
+        loading.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s",
+                                 eta.x1, eta.x2,eta.y1,eta.y2,
+                                 psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                 resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                 xints1, xints2, yints1, yints2,
+                                 alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                 actors, partners
+        )
+      }else if(k == TRUE & equate=="all_effects"){
+        loading.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s",
+                                 eta.x1, eta.x2,eta.y1,eta.y2,
+                                 psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                 resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                 xints1, xints2, yints1, yints2,
+                                 alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                 actors, partners,
+                                 k1
+        )
+      }else{
+        loading.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s\n%s",
+                                 eta.x1, eta.x2,eta.y1,eta.y2,
+                                 psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                 resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                 xints1, xints2, yints1, yints2,
+                                 alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                 actors, partners,
+                                 k1, k2
+        )
+      }
+      cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+
+      if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
+        cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
+        #message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
+      }
       return(loading.script)
     }
     else if (model == "intercept"){
       #Loadings
-      eta_x1 = sprintf("%s%s =~ NA*%s+",lvxname, dvn[[4]], dvn[[1]][1])
-      eta.x1 = list()
-      for (i in 1:dvn[[3]]) {
-        eta.x1[[i]]=sprintf("l%s*%s",i, dvn[[1]][i])
+      if(scaleset == "FF"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated_mv")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated_mv")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
       }
-      eta.x1 = gsub(" ", "",paste(eta_x1,paste(eta.x1, collapse = "+")), fixed = T)
 
-      eta_x2 = sprintf("%s%s =~ NA*%s+",lvxname, dvn[[5]], dvn[[2]][1])
-      eta.x2 = list()
-      for (i in 1:dvn[[3]]) {
-        eta.x2[[i]]=sprintf("l%s*%s",i, dvn[[2]][i])
+      #Latent Variances
+      if(scaleset == "FF"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "fixed")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
+      }else if(scaleset == "MV"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "free")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "free")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
       }
-      eta.x2 = gsub(" ", "",paste(eta_x2,paste(eta.x2, collapse = "+")), fixed = T)
 
-      eta_y1 = sprintf("%s%s =~ NA*%s+",lvyname, dvn[[4]], dvn[[6]][1])
-      eta.y1 = list()
-      for (i in 1:dvn[[8]]) {
-        eta.y1[[i]]=sprintf("l%s*%s",i+dvn[[3]], dvn[[6]][i])
-      }
-      eta.y1 = gsub(" ", "",paste(eta_y1,paste(eta.y1, collapse = "+")), fixed = T)
-
-      eta_y2 = sprintf("%s%s =~ NA*%s+",lvyname, dvn[[5]], dvn[[7]][1])
-      eta.y2 = list()
-      for (i in 1:dvn[[8]]) {
-        eta.y2[[i]]=sprintf("l%s*%s",i+dvn[[3]], dvn[[7]][i])
-      }
-      eta.y2 = gsub(" ", "",paste(eta_y2,paste(eta.y2, collapse = "+")), fixed = T)
-
-      eta.cx = sprintf("%s =~ lx*%s%s + lx*%s%s", lvxname, lvxname, dvn[[4]], lvxname, dvn[[5]])
-      eta.cy = sprintf("%s =~ ly*%s%s + ly*%s%s", lvyname, lvyname, dvn[[4]], lvyname, dvn[[5]])
-
-      #Latent (co)variances
-      psi_x1 = sprintf("%s%s ~~ 1*%s%s",lvxname, dvn[[4]],lvxname, dvn[[4]])
-      psi_x2 = sprintf("%s%s ~~ NA*%s%s",lvxname, dvn[[5]],lvxname, dvn[[5]])
-
-      psi_y1 = sprintf("%s%s ~~ 1*%s%s",lvyname, dvn[[4]],lvyname, dvn[[4]])
-      psi_y2 = sprintf("%s%s ~~ NA*%s%s",lvyname, dvn[[5]],lvyname, dvn[[5]])
-
-      psi_x1y1 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvyname, dvn[[4]])
-      psi_x2y2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[5]],lvyname, dvn[[5]])
-
-      psi_x = sprintf("%s ~~ 1*%s", lvxname, lvxname)
-      psi_y = sprintf("%s ~~ 1*%s", lvyname, lvyname)
-
-      #Common fate effects
-      beta_yx = sprintf("%s ~ %s",lvyname, lvxname)
+      #Latent Covariances
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
 
       #Correlated residuals
       resids.x = list()
@@ -245,29 +335,537 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural"){
       }
       resids.y = paste(resids.y, collapse = "\n")
 
-      #Intercepts
-      xints1 = list()
-      xints2 = list()
-      for (i in 1:dvn[[3]]) {
-        xints1[[i]]=sprintf("%s ~ t%s*1", dvn[[1]][i], i)
-        xints2[[i]]=sprintf("%s ~ t%s*1", dvn[[2]][i], i)
-      }
-      xints1 = paste(xints1, collapse = "\n")
-      xints2 = paste(xints2, collapse = "\n")
+      #Residual variances
+      resx1 = resids(dvn, lvar = "X", partner="1", type = "free")
+      resx2 = resids(dvn, lvar = "X", partner="2", type = "free")
+      resy1 = resids(dvn, lvar = "Y", partner="1", type = "free")
+      resy2 = resids(dvn, lvar = "Y", partner="2", type = "free")
 
-      yints1 = list()
-      yints2 = list()
-      for (i in 1:dvn[[8]]) {
-        yints1[[i]]=sprintf("%s ~ t%s*1", dvn[[6]][i], i+dvn[[3]])
-        yints2[[i]]=sprintf("%s ~ t%s*1", dvn[[7]][i], i+dvn[[3]])
+      #Intercepts
+      if(scaleset == "FF"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated_mv")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated_mv")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
       }
-      yints1 = paste(yints1, collapse = "\n")
-      yints2 = paste(yints2, collapse = "\n")
-      #Script Creation Syntax
-      intercept.script = sprintf("#Loadings\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n#Common Fate Effects\n%s\n\n#Residuals\n%s\n\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s",
-                                 eta.x1, eta.x2, eta.cx, eta.y1,eta.y2, eta.cy, psi_x1, psi_x2, psi_y1, psi_y2, psi_x1y1, psi_x2y2, beta_yx, resids.x, resids.y, xints1, xints2, yints1, yints2)
-      cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_cfm_intercept.txt",lvyname,lvxname))
+
+      #Latent Means
+      if(scaleset == "FF"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+      }else if(scaleset == "MV"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+      }
+
+      #Actor effects
+      if(equate=="none"|equate=="partner"|equate=="means"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="actor"|equate=="all_effects"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "equated")
+      }
+      #Partner effects
+      if(equate=="none"|equate=="actor"|equate=="means"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="partner"|equate=="all_effects"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+      }
+
+      #parameter k
+      if(k == TRUE & equate=="none"){
+        k1 = paste("k1 := p1/a1")
+        k2 = paste("k2 := p2/a2")
+      }else if(k == TRUE & equate=="actor"){
+        k1 = paste("k1 := p1/a")
+        k2 = paste("k2 := p2/a")
+      }else if(k == TRUE & equate=="partner"){
+        k1 = paste("k1 := p/a1")
+        k2 = paste("k2 := p/a2")
+      }else if(k == TRUE & equate=="all_effects"){
+        k1 = paste("k := p/a")
+      }
+
+      #Script Creation Syntax (contingent on whether k ==T and pattern of a/p constraints)
+      if(k == FALSE){
+        intercept.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s",
+                                   eta.x1, eta.x2,eta.y1,eta.y2,
+                                   psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                   resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                   xints1, xints2, yints1, yints2,
+                                   alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                   actors, partners
+        )
+      }else if(k == TRUE & equate=="all_effects"){
+        intercept.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s",
+                                   eta.x1, eta.x2,eta.y1,eta.y2,
+                                   psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                   resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                   xints1, xints2, yints1, yints2,
+                                   alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                   actors, partners,
+                                   k1
+        )
+      }else{
+        intercept.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s\n%s",
+                                   eta.x1, eta.x2,eta.y1,eta.y2,
+                                   psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                   resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                   xints1, xints2, yints1, yints2,
+                                   alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                   actors, partners,
+                                   k1, k2
+        )
+      }
+      cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
       return(intercept.script)
+    }
+    else if (model == "residual"){
+      #Loadings
+      if(scaleset == "FF"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated_mv")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated_mv")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }
+
+      #Latent Variances
+      if(scaleset == "FF"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "fixed")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
+      }else if(scaleset == "MV"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "free")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "free")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
+      }
+
+      #Latent Covariances
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
+
+      #Correlated residuals
+      resids.x = list()
+      for (i in 1:dvn[[3]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      }
+      resids.x = paste(resids.x, collapse = "\n")
+
+      resids.y = list()
+      for (i in 1:dvn[[8]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      }
+      resids.y = paste(resids.y, collapse = "\n")
+
+      #Residual variances
+      resx1 = resids(dvn, lvar = "X", partner="1", type = "equated")
+      resx2 = resids(dvn, lvar = "X", partner="2", type = "equated")
+      resy1 = resids(dvn, lvar = "Y", partner="1", type = "equated")
+      resy2 = resids(dvn, lvar = "Y", partner="2", type = "equated")
+
+      #Intercepts
+      if(scaleset == "FF"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated_mv")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated_mv")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
+      }
+
+      #Latent Means
+      if(scaleset == "FF"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+      }else if(scaleset == "MV"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+      }
+
+      #Actor effects
+      if(equate=="none"|equate=="partner"|equate=="means"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="actor"|equate=="all_effects"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "equated")
+      }
+      #Partner effects
+      if(equate=="none"|equate=="actor"|equate=="means"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="partner"|equate=="all_effects"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+      }
+
+      #parameter k
+      if(k == TRUE & equate=="none"){
+        k1 = paste("k1 := p1/a1")
+        k2 = paste("k2 := p2/a2")
+      }else if(k == TRUE & equate=="actor"){
+        k1 = paste("k1 := p1/a")
+        k2 = paste("k2 := p2/a")
+      }else if(k == TRUE & equate=="partner"){
+        k1 = paste("k1 := p/a1")
+        k2 = paste("k2 := p/a2")
+      }else if(k == TRUE & equate=="all_effects"){
+        k1 = paste("k := p/a")
+      }
+
+      #Script Creation Syntax (contingent on whether k ==T and pattern of a/p constraints)
+      if(k == FALSE){
+        residual.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s",
+                                  eta.x1, eta.x2,eta.y1,eta.y2,
+                                  psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                  resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                  xints1, xints2, yints1, yints2,
+                                  alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                  actors, partners
+        )
+      }else if(k == TRUE & equate=="all_effects"){
+        residual.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s",
+                                  eta.x1, eta.x2,eta.y1,eta.y2,
+                                  psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                  resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                  xints1, xints2, yints1, yints2,
+                                  alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                  actors, partners,
+                                  k1
+        )
+      }else{
+        residual.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s\n%s",
+                                  eta.x1, eta.x2,eta.y1,eta.y2,
+                                  psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                  resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                  xints1, xints2, yints1, yints2,
+                                  alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                  actors, partners,
+                                  k1, k2
+        )
+      }
+      cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      return(residual.script)
+    }
+    else if (model == "lvariance"){
+      #Loadings
+      if(scaleset == "FF"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated_mv")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated_mv")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }
+
+      #Latent Variances
+      if(scaleset == "FF"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "fixed")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "fixed")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "fixed")
+      }else if(scaleset == "MV"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "equated")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "equated")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "equated")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "equated")
+      }
+
+      #Latent Covariances
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
+
+      #Correlated residuals
+      resids.x = list()
+      for (i in 1:dvn[[3]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      }
+      resids.x = paste(resids.x, collapse = "\n")
+
+      resids.y = list()
+      for (i in 1:dvn[[8]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      }
+      resids.y = paste(resids.y, collapse = "\n")
+
+      #Residual variances
+      resx1 = resids(dvn, lvar = "X", partner="1", type = "free")
+      resx2 = resids(dvn, lvar = "X", partner="2", type = "free")
+      resy1 = resids(dvn, lvar = "Y", partner="1", type = "free")
+      resy2 = resids(dvn, lvar = "Y", partner="2", type = "free")
+
+      #Intercepts
+      if(scaleset == "FF"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "free")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "free")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "free")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "free")
+      }else if(scaleset == "MV"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "fixed")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "fixed")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "fixed")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "fixed")
+      }
+
+      #Latent Means
+      if(scaleset == "FF"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "fixed")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "fixed")
+      }else if(scaleset == "MV"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+      }
+
+      #Actor effects
+      if(equate=="none"|equate=="partner"|equate=="means"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="actor"|equate=="all_effects"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "equated")
+      }
+      #Partner effects
+      if(equate=="none"|equate=="actor"|equate=="means"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="partner"|equate=="all_effects"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+      }
+
+      #parameter k
+      if(k == TRUE & equate=="none"){
+        k1 = paste("k1 := p1/a1")
+        k2 = paste("k2 := p2/a2")
+      }else if(k == TRUE & equate=="actor"){
+        k1 = paste("k1 := p1/a")
+        k2 = paste("k2 := p2/a")
+      }else if(k == TRUE & equate=="partner"){
+        k1 = paste("k1 := p/a1")
+        k2 = paste("k2 := p/a2")
+      }else if(k == TRUE & equate=="all_effects"){
+        k1 = paste("k := p/a")
+      }
+
+      #Script Creation Syntax (contingent on whether k ==T and pattern of a/p constraints)
+      if(k == FALSE){
+        lvariance.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s",
+                                   eta.x1, eta.x2,eta.y1,eta.y2,
+                                   psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                   resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                   xints1, xints2, yints1, yints2,
+                                   alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                   actors, partners
+        )
+      }else if(k == TRUE & equate=="all_effects"){
+        lvariance.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s",
+                                   eta.x1, eta.x2,eta.y1,eta.y2,
+                                   psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                   resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                   xints1, xints2, yints1, yints2,
+                                   alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                   actors, partners,
+                                   k1
+        )
+      }else{
+        lvariance.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s\n%s",
+                                   eta.x1, eta.x2,eta.y1,eta.y2,
+                                   psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                   resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                   xints1, xints2, yints1, yints2,
+                                   alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                   actors, partners,
+                                   k1, k2
+        )
+      }
+      cat(lvariance.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+
+      if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
+        cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
+        #message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
+      }
+      return(lvariance.script)
+    }
+    else if(model == "lmean"){
+      #Check on equate option; might be able to get away with if statements in other models
+    }
+    else if(model == "indist"){
+      #Loadings
+      if(scaleset == "FF"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        eta.x1 = loads(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated_mv")
+        eta.x2 = loads(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+
+        eta.y1 = loads(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated_mv")
+        eta.y2 = loads(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }
+
+      #Latent Variances
+      if(scaleset == "FF"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "fixed")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "fixed")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "fixed")
+      }else if(scaleset == "MV"){
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "equated")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "equated")
+
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "equated")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "equated")
+      }
+
+      #Latent Covariances
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
+
+      #Correlated residuals
+      resids.x = list()
+      for (i in 1:dvn[[3]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      }
+      resids.x = paste(resids.x, collapse = "\n")
+
+      resids.y = list()
+      for (i in 1:dvn[[8]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      }
+      resids.y = paste(resids.y, collapse = "\n")
+
+      #Residual variances
+      resx1 = resids(dvn, lvar = "X", partner="1", type = "equated")
+      resx2 = resids(dvn, lvar = "X", partner="2", type = "equated")
+      resy1 = resids(dvn, lvar = "Y", partner="1", type = "equated")
+      resy2 = resids(dvn, lvar = "Y", partner="2", type = "equated")
+
+      #Intercepts
+      if(scaleset == "FF"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated_mv")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated_mv")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
+      }
+
+      #Latent Means
+      if(scaleset == "FF"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "fixed")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "fixed")
+      }else if(scaleset == "MV"){
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }
+
+      #Actor effects
+      if(equate=="none"|equate=="partner"|equate=="means"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="actor"|equate=="all_effects"){
+        actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "equated")
+      }
+      #Partner effects
+      if(equate=="none"|equate=="actor"|equate=="means"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "free")
+      }
+      else if(equate=="partner"|equate=="all_effects"){
+        partners <- lregs(dvn, param = "apim_part", lvxname, lvyname, type = "equated")
+      }
+
+      #parameter k
+      if(k == TRUE & equate=="none"){
+        k1 = paste("k1 := p1/a1")
+        k2 = paste("k2 := p2/a2")
+      }else if(k == TRUE & equate=="actor"){
+        k1 = paste("k1 := p1/a")
+        k2 = paste("k2 := p2/a")
+      }else if(k == TRUE & equate=="partner"){
+        k1 = paste("k1 := p/a1")
+        k2 = paste("k2 := p/a2")
+      }else if(k == TRUE & equate=="all_effects"){
+        k1 = paste("k := p/a")
+      }
+
+      #Script Creation Syntax (contingent on whether k ==T and pattern of a/p constraints)
+      if(k == FALSE){
+        indist.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s",
+                                eta.x1, eta.x2,eta.y1,eta.y2,
+                                psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                xints1, xints2, yints1, yints2,
+                                alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                actors, partners
+        )
+      }else if(k == TRUE & equate=="all_effects"){
+        indist.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s",
+                                eta.x1, eta.x2,eta.y1,eta.y2,
+                                psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                xints1, xints2, yints1, yints2,
+                                alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                actors, partners,
+                                k1
+        )
+      }else{
+        indist.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n\n#Actor and Partner Effects\n%s\n%s\n\n#k Parameter\n%s\n%s",
+                                eta.x1, eta.x2,eta.y1,eta.y2,
+                                psi_x1, psi_x2, psi_x1x2, psi_y1, psi_y2, psi_y1y2,
+                                resx1, resx2, resy1, resy2, resids.x, resids.y,
+                                xints1, xints2, yints1, yints2,
+                                alpha_x1, alpha_x2, alpha_y1, alpha_y2,
+                                actors, partners,
+                                k1, k2
+        )
+      }
+      cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_indist.txt",lvyname,lvxname))
+      return(indist.script)
     }
   }
   else if(length(dvn)==6){

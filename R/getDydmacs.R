@@ -2,7 +2,7 @@
 #'
 #' @param dat data frame of indicators
 #' @param dvn dvn for the dyadic cfa measurement model
-#' @param fit outputted dyadic cfa lavaan object
+#' @param fit outputted dyadic cfa lavaan object; should be from a partial-invariance model
 #' @param nodewidth space between nodes during quadrature approximation (default = .01)
 #' @param lowerLV lowest latent variable value evaluated (default = -5)
 #' @param upperLV greatest latent variable value evaluated (default = 5)
@@ -11,13 +11,12 @@
 #' @export
 #'
 #' @examples
-#' dat <-  DRES
-#' dvn <- scrapeVarCross(dat, x_order = "sip", x_stem = "sexsat", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
-#' config.script<- scriptCFA(dvn, lvname = "SexSat",  model = "configural")
-#' fit <- lavaan::cfa(config.script, data = dat, std.lv = FALSE,
-#' auto.fix.first= FALSE, meanstructure = TRUE)
-#' sexsat.dmacs <- get_dydmacs(dat, dvn, fit)
-get_dydmacs <- function(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5){
+#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
+#' qual.config.script <-  scriptCFA(dvn, lvname = "Qual", model = "configural")
+#' qual.config.mod <- cfa(qual.config.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' qual.dmacs <- getDydmacs(DRES, dvn, qual.config.mod)
+#'
+getDydmacs <- function(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5){
 
   #Get indicator names --> # of indicators
   indnames <- lavaan::parameterestimates(fit) %>% #names of indicators

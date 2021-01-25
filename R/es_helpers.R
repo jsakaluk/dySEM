@@ -1,7 +1,7 @@
 #' @name es_helpers
 #' @rdname es_helpers
 #'
-#' @title Helper functions for noninvariance effect size functions
+#' @title Helper-functions for noninvariance effect size functions
 #'
 #' @param dat data frame of indicators
 #' @param dvn dvn from which to take indicator names

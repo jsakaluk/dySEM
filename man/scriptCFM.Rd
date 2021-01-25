@@ -31,8 +31,10 @@ also invoke configural, loading, and/or intercept invariant
 measurement models, and particular types of structural comparisons.
 }
 \examples{
-dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",distinguish1 = "1", distinguish2 = "2")
-cfm.script.config = scriptCFM(dvn, lvxname = "Conflict", lvyname = "Satisfaction", model = "configural")
+dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2",
+y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\\\d+")
+cfm.script.config = scriptCFM(dvn, lvxname = "Quality",
+lvyname = "SexSat", model = "configural", scaleset = "MV")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on

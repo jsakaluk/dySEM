@@ -24,8 +24,8 @@ and automatically writes, returns, and exports (.txt) lavaan() syntax
 for the I-NULL model described in Olsen & Kenny (2006)
 }
 \examples{
-dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
-inull.mod = scriptINULL(dvn, lvname = "X")
+dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
+qual.inull.script <- scriptINULL(dvn, lvxname = "Qual")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on

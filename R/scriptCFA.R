@@ -28,7 +28,6 @@
 #' modeled ("configural", "loading", "intercept", "residual", or "indist"). Defaults to "configural".
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
-#' @seealso \code{\link{dyadVarNames}} which this function relies on
 #' @family script-writing functions
 #' @export
 #' @examples

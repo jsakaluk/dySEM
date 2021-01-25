@@ -7,7 +7,7 @@
 \alias{resids}
 \alias{lvars}
 \alias{lmeans}
-\title{Functions for dyadCFA() for scripting free or fixed families of parameters}
+\title{Helper-functions for scripting free, fixed, and equated families of parameters}
 \usage{
 loads(dvn, lvar = "X", lvname, partner = "1", type = "free")
 
@@ -31,8 +31,5 @@ lmeans(dvn, lvar = "X", lvname, partner = "1", type = "free")
 \item{type}{input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation}
 }
 \description{
-Functions for dyadCFA() for scripting free or fixed families of parameters
-}
-\seealso{
-\code{\link{dyadCFA}} which this function supplies
+Helper-functions for scripting free, fixed, and equated families of parameters
 }

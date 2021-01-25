@@ -13,8 +13,8 @@
 #' @family script-writing functions
 #' @export
 #' @examples
-#' dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
-#' inull.mod = scriptINULL(dvn, lvname = "X")
+#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
+#' qual.inull.script <- scriptINULL(dvn, lvxname = "Qual")
 scriptINULL = function(dvn, lvxname = "X", lvyname = NULL){
   dirs("scripts")
 

@@ -55,8 +55,6 @@ qual.means.script <- scriptCFA(dvn, lvname = "Qual",  model = "lmean")
 qual.indist.script <- scriptCFA(dvn, lvname = "Qual",  model = "indist")
 }
 \seealso{
-\code{\link{dyadVarNames}} which this function relies on
-
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},
 \code{\link{scriptBifactor}()},

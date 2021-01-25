@@ -7,7 +7,7 @@
 \alias{groupindsds}
 \alias{grouplvmean}
 \alias{grouplvsd}
-\title{Helper functions for noninvariance effect size functions}
+\title{Helper-functions for noninvariance effect size functions}
 \usage{
 grouploads(fit, dvn, source)
 
@@ -29,5 +29,5 @@ grouplvsd(fit, source)
 \item{dat}{data frame of indicators}
 }
 \description{
-Helper functions for noninvariance effect size functions
+Helper-functions for noninvariance effect size functions
 }

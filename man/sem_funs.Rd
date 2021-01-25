@@ -3,9 +3,18 @@
 \name{sem_funs}
 \alias{sem_funs}
 \alias{lregs}
+\alias{cfloads}
+\alias{cfvars}
+\alias{cfmeans}
 \title{Functions for scripting structural parameters}
 \usage{
 lregs(dvn, param, lvxname, lvyname, type = "free")
+
+cfloads(dvn, lvxname, lvyname, type = "equated")
+
+cfvars(lvname, type)
+
+cfmeans(lvname, type)
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}

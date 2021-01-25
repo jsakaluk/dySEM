@@ -30,7 +30,8 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
 
       return(betas)
     }
-  }else if(param == "apim_part"){
+  }
+  else if(param == "apim_part"){
     if(type == "free"){
       beta_y1x2 = sprintf("%s%s ~ p1*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
       beta_y2x1 = sprintf("%s%s ~ p2*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist1"]])
@@ -44,7 +45,8 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
       betas <- paste(beta_y1x2, beta_y2x1, sep = "\n")
       return(betas)
     }
-  }else if(param == "mim_part"){
+  }
+  else if(param == "mim_part"){
     if(type == "free"){
       beta_y1y2 = sprintf("%s%s ~ p1*%s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
       beta_y2y1 = sprintf("%s%s ~ p2*%s%s",lvyname, dvn[["dist2"]],lvyname, dvn[["dist1"]])
@@ -58,7 +60,8 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
       betas <- paste(beta_y1y2, beta_y2y1, sep = "\n")
       return(betas)
     }
-  }else if(param == "cf"){
+  }
+  else if(param == "cf"){
     beta_yx <- sprintf("%s ~ %s", lvyname, lvxname)
 
     betas <- paste(beta_yx)
@@ -66,5 +69,39 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
   }
 }
 
+#' @rdname sem_funs
+cfloads <- function(dvn, lvxname, lvyname, type = "equated"){
+  if(type == "equated"){
+    eta.cx <-  sprintf("%s =~ cfx*%s%s + cfx*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
+    eta.cy <- sprintf("%s =~ cfy*%s%s + cfy*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
+    cfloads <- paste(eta.cx, eta.cy, sep = "\n")
+    return(cfloads)
+  }else if(type == "fixed"){
+    eta.cx <-  sprintf("%s =~ 1*%s%s + 1*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
+    eta.cy <- sprintf("%s =~ 1*%s%s + 1*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
+    cfloads <- paste(eta.cx, eta.cy, sep = "\n")
+    return(cfloads)
+  }
+}
 
+#' @rdname sem_funs
+cfvars <- function(lvname, type){
+  if(type == "fixed"){
+    lvar <- sprintf("%s ~~ 1*%s",lvname, lvname)
+    return(lvar)
+  }else if(partner == "cf" & type == "free"){
+    lvar <- sprintf("%s ~~ NA*%s",lvname, lvname)
+    return(lvar)
+  }
+}
 
+#' @rdname sem_funs
+cfmeans <- function(lvname, type){
+  if(type == "fixed"){
+    lmean <- sprintf("%s ~ 0*1",lvname, lvname)
+    return(lmean)
+  }else if(partner == "cf" & type == "free"){
+    lmean <- sprintf("%s ~ NA*1",lvname, lvname)
+    return(lmean)
+  }
+}

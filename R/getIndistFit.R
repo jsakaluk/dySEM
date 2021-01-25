@@ -1,25 +1,25 @@
 ##' A Function that Computes Corrected Fit Indexes According to the ISAT and INULL Models of Olsen & Kenny (2006)
 #'
-#' This function takes the outputted object from dyadVarNames()
-#' and automatically writes, returns, and exports (.txt) lavaan() syntax
-#' for specifying dyadic configural, loading, and intercept invariant
-#' measurement models for either a specified X or Y factor.
+#' This function takes the outputted model fit using scriptCFA() with model = "indist",
+#' as well as scriptISAT(), and scriptINULL() and computes corrected model fit indexes according
+#' to the approach outlined by Olsen & Kenny (2006)
+#'
 #' @param indmodel input lavaan model fitted using dyadCFA(model = "indistinguishable")
 #' @param isatmod input lavaan model fitted using ISAT()
 #' @param inullmod input lavaan model fitted using INULL()
 #' @return A data frame of the original and corrected chi sq, df, p, rmsea, and tli
 #' @export
 #' @examples
-#' dvn = dyadVarNames(dat, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
-#' indist.script <- dyadCFA(dvn, lvname = "Conflict", model = "indistinguishable")
-#' indist.fit <- cfa(indist.script, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
-#' isat.mod <- ISAT(dvn, lvname = "Conflict")
-#' isat.fit <- cfa(isat.mod, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
-#' inull.mod <- INULL(dvn, lvname = "Conflict")
-#' inull.fit <- cfa(inull.mod, data = dat, std.lv = F, auto.fix.first= F, meanstructure = T)
-#' ind.fit <- indistFit(indmodel = indist.fit, isatmod = isat.fit, inullmod = inull.fit)
-
-indistFit <- function(indmodel, isatmod, inullmod){
+#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
+#' qual.indist.script <-  scriptCFA(dvn, lvname = "Qual", model = "indist")
+#' qual.indist.mod <- cfa(qual.indist.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' qual.isat.script <- scriptISAT(dvn, lvxname = "Qual")
+#' qual.isat.mod <- cfa(qual.isat.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' qual.inull.script <- scriptINULL(dvn, lvxname = "Qual")
+#' qual.inull.mod <- cfa(qual.isat.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' corr.fit <- getIndistFit(qual.indist.mod, qual.isat.mod, qual.inull.mod)
+#'
+getIndistFit <- function(indmodel, isatmod, inullmod){
   #Extract and transpose indistinguishable model fit indexes
   mod.fit <- data.frame(lavaan::fitMeasures(indmodel))
   mod.fit <- data.frame(t(mod.fit))

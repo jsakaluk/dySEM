@@ -1,7 +1,7 @@
 #' @name cfa_funs
 #' @rdname cfa_funs
 #'
-#' @title Functions for dyadCFA() for scripting free or fixed families of parameters
+#' @title Helper-functions for scripting free, fixed, and equated families of parameters
 #'
 #' @param dvn input object from dyadVarNames()
 #' @param lvar input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn
@@ -9,7 +9,6 @@
 #' @param partner input character to indicate parameters for first or second dyad member
 #' @param type input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation
 #'
-#' @seealso \code{\link{dyadCFA}} which this function supplies
 #' @export
 
 #' @rdname cfa_funs
@@ -350,7 +349,6 @@ lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
     }
     return(lvar)
   }
-
 }
 
 #' @rdname cfa_funs
