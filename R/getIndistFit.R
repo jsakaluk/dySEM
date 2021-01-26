@@ -8,6 +8,7 @@
 #' @param isatmod input lavaan model fitted using ISAT()
 #' @param inullmod input lavaan model fitted using INULL()
 #' @return A data frame of the original and corrected chi sq, df, p, rmsea, and tli
+#' @family supplemental model calculators
 #' @export
 #' @examples
 #' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")

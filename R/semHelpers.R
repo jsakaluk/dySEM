@@ -1,5 +1,5 @@
-#' @name sem_funs
-#' @rdname sem_funs
+#' @name semHelpers
+#' @rdname semHelpers
 #'
 #' @title Functions for scripting structural parameters
 #'
@@ -10,11 +10,10 @@
 #' @param lvyname input character to (arbitrarily) name LV Y in lavaan syntax
 #' @param partner input character to indicate parameters for first or second dyad member
 #' @param type input character to indicate whether parameters "free" or "equated" in estimation
-#'
-#' @seealso \code{\link{dyadCFA}} which this function supplies
+#' @family helpers
 #' @export
 
-#' @rdname sem_funs
+#' @rdname semHelpers
 lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
   if(param == "act"){
     if(type == "free"){
@@ -69,7 +68,7 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
   }
 }
 
-#' @rdname sem_funs
+#' @rdname semHelpers
 cfloads <- function(dvn, lvxname, lvyname, type = "equated"){
   if(type == "equated"){
     eta.cx <-  sprintf("%s =~ cfx*%s%s + cfx*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
@@ -84,7 +83,7 @@ cfloads <- function(dvn, lvxname, lvyname, type = "equated"){
   }
 }
 
-#' @rdname sem_funs
+#' @rdname semHelpers
 cfvars <- function(lvname, type){
   if(type == "fixed"){
     lvar <- sprintf("%s ~~ 1*%s",lvname, lvname)
@@ -95,7 +94,7 @@ cfvars <- function(lvname, type){
   }
 }
 
-#' @rdname sem_funs
+#' @rdname semHelpers
 cfmeans <- function(lvname, type){
   if(type == "fixed"){
     lmean <- sprintf("%s ~ 0*1",lvname, lvname)

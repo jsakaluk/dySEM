@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ratings of relational satisfaction and commitment from 282 (Q)ueer couples — commitmentQ • dySEM</title>
+<title>Functions for extracting measurement model output — outHelpers • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,13 +46,8 @@
 
 
 
-<meta property="og:title" content="Ratings of relational satisfaction and commitment from 282 (Q)ueer couples — commitmentQ" />
-<meta property="og:description" content="A data set containing 5 ratings of satisfaction and 5 ratings of commitment for each
-member of a same-sex romantic dyad. Measured using the Investment Model Scale subscales
-(Rubult, Martz, &amp;amp; Agnew, 1998). Data are from analyses under review (Sakaluk, Fisher, and Kilshaw).
-Variable names follow a stem-partner-item (&quot;spi&quot;) order, with a delimiter (&quot;.&quot;) between
-the stem and distinguishing partner character, and another delimiter (&quot;_&quot;) between the
-distinguishing partner character and item number." />
+<meta property="og:title" content="Functions for extracting measurement model output — outHelpers" />
+<meta property="og:description" content="Functions for extracting measurement model output" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -122,36 +117,51 @@ distinguishing partner character and item number." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Ratings of relational satisfaction and commitment from 282 (Q)ueer couples</h1>
+    <h1>Functions for extracting measurement model output</h1>
     
-    <div class="hidden name"><code>commitmentQ.Rd</code></div>
+    <div class="hidden name"><code>outHelpers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A data set containing 5 ratings of satisfaction and 5 ratings of commitment for each
-member of a same-sex romantic dyad. Measured using the Investment Model Scale subscales
-(Rubult, Martz, &amp; Agnew, 1998). Data are from analyses under review (Sakaluk, Fisher, and Kilshaw).
-Variable names follow a stem-partner-item ("spi") order, with a delimiter (".") between
-the stem and distinguishing partner character, and another delimiter ("_") between the
-distinguishing partner character and item number.</p>
+    <p>Functions for extracting measurement model output</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>commitmentQ</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>xlamda1</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
 
+<span class='fu'>xlamda2</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+<span class='fu'>xtheta1</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
 
-    <p>A data frame with 118 rows and 20 variables:</p><dl>
-<dt>sat.g.1_1</dt><dd><p>Satisfaction items for female partner</p></dd>
-<dt>com.1_1</dt><dd><p>Commitment items items for female partner</p></dd>
-<dt>sat.g.2_1</dt><dd><p>Satisfaction items for male partner</p></dd>
-<dt>com.2_1</dt><dd><p>Commitment items items for male partner</p></dd>
+<span class='fu'>xtheta2</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
 
-</dl>
+<span class='fu'>xtheta12</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
 
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+<span class='fu'>loadings</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
 
-    <p>Sakaluk, J. K., Fisher, A. N., &amp; Kilshaw, R. E.(in press). Dyadic measurement invariance and its importance for replicability in romantic relationship research. <em>Personal Relationships</em>.</p>
+<span class='fu'>xintercepts</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
+
+<span class='fu'>xyintercepts</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dvn</th>
+      <td><p>input object from dyadVarNames()</p></td>
+    </tr>
+    <tr>
+      <th>fit</th>
+      <td><p>input object from fitted lavaan model</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other helpers: 
+<code><a href='esHelpers.html'>esHelpers</a></code>,
+<code><a href='scrapeHelpers.html'>scrapeHelpers</a></code>,
+<code><a href='scriptHelpers.html'>scriptHelpers</a></code>,
+<code><a href='semHelpers.html'>semHelpers</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

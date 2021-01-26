@@ -6,7 +6,7 @@
 #' @param nodewidth space between nodes during quadrature approximation (default = .01)
 #' @param lowerLV lowest latent variable value evaluated (default = -5)
 #' @param upperLV greatest latent variable value evaluated (default = 5)
-#'
+#' @family supplemental model calculators
 #' @return
 #' @export
 #'

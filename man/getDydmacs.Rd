@@ -32,3 +32,9 @@ qual.config.mod <- cfa(qual.config.script, data = DRES, std.lv = F, auto.fix.fir
 qual.dmacs <- getDydmacs(DRES, dvn, qual.config.mod)
 
 }
+\seealso{
+Other supplemental model calculators: 
+\code{\link{getDyReliability}()},
+\code{\link{getIndistFit}()}
+}
+\concept{supplemental model calculators}

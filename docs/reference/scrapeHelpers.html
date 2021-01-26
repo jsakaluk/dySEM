@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ratings of relational satisfaction and commitment from 282 (Q)ueer couples — commitmentQ • dySEM</title>
+<title>Helper-functions for scraping variable names and data set properties — scrapeHelpers • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,13 +46,8 @@
 
 
 
-<meta property="og:title" content="Ratings of relational satisfaction and commitment from 282 (Q)ueer couples — commitmentQ" />
-<meta property="og:description" content="A data set containing 5 ratings of satisfaction and 5 ratings of commitment for each
-member of a same-sex romantic dyad. Measured using the Investment Model Scale subscales
-(Rubult, Martz, &amp;amp; Agnew, 1998). Data are from analyses under review (Sakaluk, Fisher, and Kilshaw).
-Variable names follow a stem-partner-item (&quot;spi&quot;) order, with a delimiter (&quot;.&quot;) between
-the stem and distinguishing partner character, and another delimiter (&quot;_&quot;) between the
-distinguishing partner character and item number." />
+<meta property="og:title" content="Helper-functions for scraping variable names and data set properties — scrapeHelpers" />
+<meta property="og:description" content="Helper-functions for scraping variable names and data set properties" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -122,36 +117,67 @@ distinguishing partner character and item number." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Ratings of relational satisfaction and commitment from 282 (Q)ueer couples</h1>
+    <h1>Helper-functions for scraping variable names and data set properties</h1>
     
-    <div class="hidden name"><code>commitmentQ.Rd</code></div>
+    <div class="hidden name"><code>scrapeHelpers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A data set containing 5 ratings of satisfaction and 5 ratings of commitment for each
-member of a same-sex romantic dyad. Measured using the Investment Model Scale subscales
-(Rubult, Martz, &amp; Agnew, 1998). Data are from analyses under review (Sakaluk, Fisher, and Kilshaw).
-Variable names follow a stem-partner-item ("spi") order, with a delimiter (".") between
-the stem and distinguishing partner character, and another delimiter ("_") between the
-distinguishing partner character and item number.</p>
+    <p>Helper-functions for scraping variable names and data set properties</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>commitmentQ</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>sipExtractor</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>stem</span>, <span class='va'>delim1</span>, <span class='va'>item_num</span>, <span class='va'>delim2</span>, <span class='va'>distinguish</span><span class='op'>)</span>
 
+<span class='fu'>spiExtractor</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>stem</span>, <span class='va'>delim1</span>, <span class='va'>item_num</span>, <span class='va'>delim2</span>, <span class='va'>distinguish</span><span class='op'>)</span>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+<span class='fu'>spitExtractor</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>stem</span>, <span class='va'>delim1</span>, <span class='va'>item_num</span>, <span class='va'>delim2</span>, <span class='va'>distinguish</span>, <span class='va'>delim3</span>, <span class='va'>wave</span><span class='op'>)</span>
 
-    <p>A data frame with 118 rows and 20 variables:</p><dl>
-<dt>sat.g.1_1</dt><dd><p>Satisfaction items for female partner</p></dd>
-<dt>com.1_1</dt><dd><p>Commitment items items for female partner</p></dd>
-<dt>sat.g.2_1</dt><dd><p>Satisfaction items for male partner</p></dd>
-<dt>com.2_1</dt><dd><p>Commitment items items for male partner</p></dd>
+<span class='fu'>siptExtractor</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>stem</span>, <span class='va'>delim1</span>, <span class='va'>item_num</span>, <span class='va'>delim2</span>, <span class='va'>distinguish</span>, <span class='va'>delim3</span>, <span class='va'>wave</span><span class='op'>)</span></pre>
 
-</dl>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dat</th>
+      <td><p>input data frame of indicators of a particular LV</p></td>
+    </tr>
+    <tr>
+      <th>stem</th>
+      <td><p>input character stem of indicator variables for LV</p></td>
+    </tr>
+    <tr>
+      <th>delim1</th>
+      <td><p>optional input character of first delimiting character</p></td>
+    </tr>
+    <tr>
+      <th>item_num</th>
+      <td><p>optional input character to indicate range of variable numbers (defaults to scrape any digits)</p></td>
+    </tr>
+    <tr>
+      <th>delim2</th>
+      <td><p>optional input character of second delimiting character</p></td>
+    </tr>
+    <tr>
+      <th>distinguish</th>
+      <td><p>input character used as the identifier a particular partner</p></td>
+    </tr>
+    <tr>
+      <th>delim3</th>
+      <td><p>optional input character of second delimiting character</p></td>
+    </tr>
+    <tr>
+      <th>wave</th>
+      <td><p>input character for the particular wave of a longitudinal design</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Sakaluk, J. K., Fisher, A. N., &amp; Kilshaw, R. E.(in press). Dyadic measurement invariance and its importance for replicability in romantic relationship research. <em>Personal Relationships</em>.</p>
+    <div class='dont-index'><p>Other helpers: 
+<code><a href='esHelpers.html'>esHelpers</a></code>,
+<code><a href='outHelpers.html'>outHelpers</a></code>,
+<code><a href='scriptHelpers.html'>scriptHelpers</a></code>,
+<code><a href='semHelpers.html'>semHelpers</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

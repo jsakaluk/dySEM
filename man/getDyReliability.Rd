@@ -24,3 +24,9 @@ qual.config.script <-  scriptCFA(dvn, lvname = "Qual", model = "configural")
 qual.config.mod <- cfa(qual.config.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
 getDyReliability(dvn, qual.config.mod)
 }
+\seealso{
+Other supplemental model calculators: 
+\code{\link{getDydmacs}()},
+\code{\link{getIndistFit}()}
+}
+\concept{supplemental model calculators}

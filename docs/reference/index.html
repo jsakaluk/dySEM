@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9048</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9049</span>
       </span>
     </div>
 
@@ -148,12 +148,6 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="cfa_funs.html">loads()</a></code> <code><a href="cfa_funs.html">intercepts()</a></code> <code><a href="cfa_funs.html">resids()</a></code> <code><a href="cfa_funs.html">lvars()</a></code> <code><a href="cfa_funs.html">lmeans()</a></code> </p>
-        </td>
-        <td><p>Helper-functions for scripting free, fixed, and equated families of parameters</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="commitmentM.html">commitmentM</a></code> </p>
         </td>
         <td><p>Ratings of relational satisfaction and commitment from 282 (M)ixed-sex couples</p></td>
@@ -172,7 +166,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="es_helpers.html">grouploads()</a></code> <code><a href="es_helpers.html">groupints()</a></code> <code><a href="es_helpers.html">groupindsds()</a></code> <code><a href="es_helpers.html">grouplvmean()</a></code> <code><a href="es_helpers.html">grouplvsd()</a></code> </p>
+          <p><code><a href="esHelpers.html">grouploads()</a></code> <code><a href="esHelpers.html">groupints()</a></code> <code><a href="esHelpers.html">groupindsds()</a></code> <code><a href="esHelpers.html">grouplvmean()</a></code> <code><a href="esHelpers.html">grouplvsd()</a></code> </p>
         </td>
         <td><p>Helper-functions for noninvariance effect size functions</p></td>
       </tr><tr>
@@ -196,13 +190,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="lavaanscript_funs.html">x1_loads()</a></code> </p>
-        </td>
-        <td><p>Functions for scripting portions of lavaan() code.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="measurement_funs.html">xlamda1()</a></code> <code><a href="measurement_funs.html">xlamda2()</a></code> <code><a href="measurement_funs.html">xtheta1()</a></code> <code><a href="measurement_funs.html">xtheta2()</a></code> <code><a href="measurement_funs.html">xtheta12()</a></code> <code><a href="measurement_funs.html">loadings()</a></code> <code><a href="measurement_funs.html">xintercepts()</a></code> <code><a href="measurement_funs.html">xyintercepts()</a></code> </p>
+          <p><code><a href="outHelpers.html">xlamda1()</a></code> <code><a href="outHelpers.html">xlamda2()</a></code> <code><a href="outHelpers.html">xtheta1()</a></code> <code><a href="outHelpers.html">xtheta2()</a></code> <code><a href="outHelpers.html">xtheta12()</a></code> <code><a href="outHelpers.html">loadings()</a></code> <code><a href="outHelpers.html">xintercepts()</a></code> <code><a href="outHelpers.html">xyintercepts()</a></code> </p>
         </td>
         <td><p>Functions for extracting measurement model output</p></td>
       </tr><tr>
@@ -217,6 +205,12 @@
           <p><code><a href="outputModel.html">outputModel()</a></code> </p>
         </td>
         <td><p>A Function That Exports Tables and/or SEM Digrams based on dySEM models</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="scrapeHelpers.html">sipExtractor()</a></code> <code><a href="scrapeHelpers.html">spiExtractor()</a></code> <code><a href="scrapeHelpers.html">spitExtractor()</a></code> <code><a href="scrapeHelpers.html">siptExtractor()</a></code> </p>
+        </td>
+        <td><p>Helper-functions for scraping variable names and data set properties</p></td>
       </tr><tr>
         
         <td>
@@ -260,6 +254,12 @@ Fitting Latent Common Fate Models</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="scriptHelpers.html">loads()</a></code> <code><a href="scriptHelpers.html">intercepts()</a></code> <code><a href="scriptHelpers.html">resids()</a></code> <code><a href="scriptHelpers.html">lvars()</a></code> <code><a href="scriptHelpers.html">lmeans()</a></code> </p>
+        </td>
+        <td><p>Helper-functions for scripting free, fixed, and equated families of parameters</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="scriptINULL.html">scriptINULL()</a></code> </p>
         </td>
         <td><p>A Function That Writes, Saves, and Exports Syntax for
@@ -281,55 +281,9 @@ Fitting Latent Mutual influence Model</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="sem_funs.html">lregs()</a></code> <code><a href="sem_funs.html">cfloads()</a></code> <code><a href="sem_funs.html">cfvars()</a></code> <code><a href="sem_funs.html">cfmeans()</a></code> </p>
+          <p><code><a href="semHelpers.html">lregs()</a></code> <code><a href="semHelpers.html">cfloads()</a></code> <code><a href="semHelpers.html">cfvars()</a></code> <code><a href="semHelpers.html">cfmeans()</a></code> </p>
         </td>
         <td><p>Functions for scripting structural parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="sipExtractor.html">sipExtractor()</a></code> </p>
-        </td>
-        <td><p>A helper function for scraping variable names from (S)tem-(I)tem-(P)artner
-formatted variables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="siptExtractor.html">siptExtractor()</a></code> </p>
-        </td>
-        <td><p>A helper function for scraping variable names from (S)tem-(I)tem-(P)artner-(T)ime
-formatted variables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="spiExtractor.html">spiExtractor()</a></code> </p>
-        </td>
-        <td><p>A helper function for scraping variable names from (S)tem-(P)artner-(I)tem
-formatted variables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="spitExtractor.html">spitExtractor()</a></code> </p>
-        </td>
-        <td><p>A helper function for scraping variable names from (S)tem-(P)artner-(I)tem
-formatted variables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="transDtoP.html">transDtoP()</a></code> </p>
-        </td>
-        <td><p>A function for transforming (D)yad datasets in(to) (P)airwise datasets (UPDATE EXAMPLE)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="transPtoD.html">transPtoD()</a></code> </p>
-        </td>
-        <td><p>A function for transforming (P)airwise datasets in(to) (D)yad datasets (UPDATE EXAMPLE)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="varextract_funs.html">x2vars()</a></code> <code><a href="varextract_funs.html">y1vars()</a></code> <code><a href="varextract_funs.html">y2vars()</a></code> <code><a href="varextract_funs.html">x1vars()</a></code> <code><a href="varextract_funs.html">x2vars()</a></code> <code><a href="varextract_funs.html">y1vars()</a></code> <code><a href="varextract_funs.html">y2vars()</a></code> </p>
-        </td>
-        <td><p>Functions for dyadVarNames() for extracting item information</p></td>
       </tr>
     </tbody>
     </table>

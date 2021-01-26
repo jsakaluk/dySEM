@@ -1,16 +1,16 @@
-#' @name measurement_funs
-#' @rdname measurement_funs
+#' @name outHelpers
+#' @rdname outHelpers
 #'
 #' @title Functions for extracting measurement model output
 #'
 #' @param dvn input object from dyadVarNames()
 #' @param fit input object from fitted lavaan model
-#'
-#' @seealso \code{\link{dyOutput}} which this function supplies
+#' @family helpers
+
 #' @export
 #'
 
-#' @rdname measurement_funs
+#' @rdname outHelpers
 xlamda1 <- function(dvn, fit){
   #Extract loadings
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -19,7 +19,7 @@ xlamda1 <- function(dvn, fit){
   return(load)
 }
 
-#' @rdname measurement_funs
+#' @rdname outHelpers
 xlamda2 <- function(dvn, fit){
   #Extract loadings
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -28,7 +28,7 @@ xlamda2 <- function(dvn, fit){
   return(load)
 }
 
-#' @rdname measurement_funs
+#' @rdname outHelpers
 xtheta1 <- function(dvn, fit){
   #Extract resicual variances
   error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -37,7 +37,7 @@ xtheta1 <- function(dvn, fit){
   return(error)
 }
 
-#' @rdname measurement_funs
+#' @rdname outHelpers
 xtheta2 <- function(dvn, fit){
   #Extract residual variances
   error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -46,7 +46,7 @@ xtheta2 <- function(dvn, fit){
   return(error)
 }
 
-#' @rdname measurement_funs
+#' @rdname outHelpers
 xtheta12 <- function(dvn, fit){
   #Extract loadings
   corerror = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -55,7 +55,7 @@ xtheta12 <- function(dvn, fit){
   return(corerror)
 }
 
-#' @rdname measurement_funs
+#' @rdname outHelpers
 loadings <- function(dvn, fit){
   #Extract loadings, SEs, Z, p,
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -65,7 +65,7 @@ loadings <- function(dvn, fit){
   return(load)
 }
 
-#' @rdname measurement_funs
+#' @rdname outHelpers
 xintercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -79,7 +79,7 @@ xintercepts <- function(dvn, fit){
   return(intercept.param)
 }
 
-#' @rdname measurement_funs
+#' @rdname outHelpers
 xyintercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%

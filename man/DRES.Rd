@@ -19,9 +19,9 @@ data(DRES)
 \description{
 A dataset containing 9 observed indicators of relationship quality (PRQC)
 and 5 observed indicators of sexual satisfaction from 121 couples
-in the DRES (Daily Relationship Experiences Study; Raposo & Muise, under review)
+in the DRES (Daily Relationship Experiences Study; Raposo, Impett, & Muise, in press)
 }
 \references{
-Raposo, S., & Muise, A. (Under review). Perceived Partner Sexual Responsiveness Buffers Anxiously Attached Individuals from Lower Relationship and Sexual Quality in Daily Life. Social Psychological and Personality Science.
+Raposo, S., Impett, E. A., & Muise, A. (in Press). Avoidantly Attached Individuals Are More Exchange‐Oriented and Less Communal in the Bedroom. \emph{Archives of Sexual Behavior}. https://doi.org/10.1007/s10508-020-01813-9
 }
 \keyword{datasets}

@@ -1,5 +1,5 @@
-#' @name es_helpers
-#' @rdname es_helpers
+#' @name esHelpers
+#' @rdname esHelpers
 #'
 #' @title Helper-functions for noninvariance effect size functions
 #'
@@ -7,10 +7,11 @@
 #' @param dvn dvn from which to take indicator names
 #' @param fit outputted from dyadic cfa lavaan object
 #' @param source character for whether parameter of interest should be extracted for group "1", "2", or from the "nogroup" model
+#' @family helpers
 #'
 #' @export
 
-#' @rdname es_helpers
+#' @rdname esHelpers
 grouploads <- function(fit, dvn, source){
   if(source == "1"){
     loads <- dplyr::filter(lavaan::parameterEstimates(fit), op == "=~" & rhs %in% {{dvn}}[[1]]) %>%
@@ -22,7 +23,7 @@ grouploads <- function(fit, dvn, source){
   return(loads)
 }
 
-#' @rdname es_helpers
+#' @rdname esHelpers
 groupints <- function(fit, dvn,source){
   if(source == "1"){
     ints <- lavaan::parameterEstimates(fit) %>%
@@ -36,7 +37,7 @@ groupints <- function(fit, dvn,source){
   return(ints)
 }
 
-#' @rdname es_helpers
+#' @rdname esHelpers
 groupindsds <- function(dat, dvn, source){
 
   if(source == 1){
@@ -52,7 +53,7 @@ groupindsds <- function(dat, dvn, source){
   return(sds)
 }
 
-#' @rdname es_helpers
+#' @rdname esHelpers
 grouplvmean <- function(fit, source){
   if(source == "1"){
     lvmean <- dplyr::filter(lavaan::parameterEstimates(fit), op == "~1" & lhs == lavaan::lavNames(fit, type = "lv")[[1]]) %>%
@@ -66,7 +67,7 @@ grouplvmean <- function(fit, source){
   return(lvmean)
 }
 
-#' @rdname es_helpers
+#' @rdname esHelpers
 grouplvsd <- function(fit, source){
   if(source == "1"){
     lvsd <- dplyr::filter(lavaan::parameterEstimates(fit), op == "~~"& lhs == lavaan::lavNames(fit, type = "lv")[[1]] & rhs == lavaan::lavNames(fit, type = "lv")[[1]]) %>%

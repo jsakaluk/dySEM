@@ -32,3 +32,9 @@ qual.inull.mod <- cfa(qual.isat.script, data = DRES, std.lv = F, auto.fix.first=
 corr.fit <- getIndistFit(qual.indist.mod, qual.isat.mod, qual.inull.mod)
 
 }
+\seealso{
+Other supplemental model calculators: 
+\code{\link{getDyReliability}()},
+\code{\link{getDydmacs}()}
+}
+\concept{supplemental model calculators}
