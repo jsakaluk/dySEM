@@ -214,7 +214,7 @@
 <code class="sourceCode R"><span class="va">qual.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, model <span class="op">=</span> <span class="st">"configural"</span><span class="op">)</span></code></pre></div>
 <p><code>scriptCFA</code> returns to your environment an (ugly, to the human-eyes) character object consisting of the <code>lavaan</code> syntax corresponding to the model that matches the <em>Scripter</em> function (i.e., in this case a CFA) and input for the <code>model</code> argument (i.e., configurally invariant).</p>
 <p>Meanwhile, behind the scenes, <code>scriptCFA</code> has created a folder in your working directory called “scripts”, and has stored a .txt file containing the (less-ugly, to the human eyes) <code>lavaan</code> syntax for your model. The file will be named as a combination of your <code>lvname</code> and <code>model</code> arguments.</p>
-<p><strong>TODO</strong>: Show image of directory + file and .txt</p>
+<p><img src="../../../R%20Packages/dySEM/vignettes/scripts.png" width="1901"></p>
 <p>We think this syntax-exporting-.txt feature serves three important purposes:</p>
 <ol style="list-style-type: decimal">
 <li>It makes it easy to immediately share your analytic code (i.e., just drop the .txt file in your OSF project)</li>
