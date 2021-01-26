@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A Function That Writes, Saves, and Exports Syntax for
-Fitting the I-NULL model for indistinguishable dyads — scriptINULL • dySEM</title>
+<title>Functions for extracting measurement model parameter output — outParamHelpers • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,11 +46,8 @@ Fitting the I-NULL model for indistinguishable dyads — scriptINULL • dySEM</
 
 
 
-<meta property="og:title" content="A Function That Writes, Saves, and Exports Syntax for
-Fitting the I-NULL model for indistinguishable dyads — scriptINULL" />
-<meta property="og:description" content="This function takes the outputted object from dyadVarNames()
-and automatically writes, returns, and exports (.txt) lavaan() syntax
-for the I-NULL model described in Olsen &amp;amp; Kenny (2006)" />
+<meta property="og:title" content="Functions for extracting measurement model parameter output — outParamHelpers" />
+<meta property="og:description" content="Functions for extracting measurement model parameter output" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -121,19 +117,30 @@ for the I-NULL model described in Olsen &amp;amp; Kenny (2006)" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A Function That Writes, Saves, and Exports Syntax for
-Fitting the I-NULL model for indistinguishable dyads</h1>
+    <h1>Functions for extracting measurement model parameter output</h1>
     
-    <div class="hidden name"><code>scriptINULL.Rd</code></div>
+    <div class="hidden name"><code>outParamHelpers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function takes the outputted object from dyadVarNames()
-and automatically writes, returns, and exports (.txt) lavaan() syntax
-for the I-NULL model described in Olsen &amp; Kenny (2006)</p>
+    <p>Functions for extracting measurement model parameter output</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scriptINULL</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"X"</span>, lvyname <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>xlamda1</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
+
+<span class='fu'>xlamda2</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
+
+<span class='fu'>xtheta1</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
+
+<span class='fu'>xtheta2</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
+
+<span class='fu'>xtheta12</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
+
+<span class='fu'>loadings</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
+
+<span class='fu'>xintercepts</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
+
+<span class='fu'>xyintercepts</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,34 +150,20 @@ for the I-NULL model described in Olsen &amp; Kenny (2006)</p>
       <td><p>input object from dyadVarNames()</p></td>
     </tr>
     <tr>
-      <th>lvxname</th>
-      <td><p>input character to (arbitrarily) name X LV in lavaan syntax</p></td>
-    </tr>
-    <tr>
-      <th>lvyname</th>
-      <td><p>(optional) input character to (arbitrarily) name Y LV in lavaan syntax</p></td>
+      <th>fit</th>
+      <td><p>input object from fitted lavaan model</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>character object of lavaan script that can be passed immediately to
-lavaan functions</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>dyadVarNames</code> which this function relies on</p>
-<p>Other script-writing functions: 
-<code><a href='scriptAPIM.html'>scriptAPIM</a>()</code>,
-<code><a href='scriptBifactor.html'>scriptBifactor</a>()</code>,
-<code><a href='scriptCFA.html'>scriptCFA</a>()</code>,
-<code><a href='scriptCFM.html'>scriptCFM</a>()</code>,
-<code><a href='scriptISAT.html'>scriptISAT</a>()</code>,
-<code><a href='scriptMIM.html'>scriptMIM</a>()</code></p></div>
+    <div class='dont-index'><p>Other helpers: 
+<code><a href='esHelpers.html'>esHelpers</a></code>,
+<code><a href='outHelpers.html'>outHelpers</a></code>,
+<code><a href='scrapeHelpers.html'>scrapeHelpers</a></code>,
+<code><a href='scriptHelpers.html'>scriptHelpers</a></code>,
+<code><a href='semHelpers.html'>semHelpers</a></code></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>&lt;-</span> <span class='fu'><a href='scrapeVarCross.html'>scrapeVarCross</a></span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>DRES</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"PRQC"</span>, x_delim1 <span class='op'>=</span> <span class='st'>"_"</span>, x_delim2<span class='op'>=</span><span class='st'>"."</span>, x_item_num<span class='op'>=</span><span class='st'>"\\d+"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span><span class='op'>)</span>
-<span class='va'>qual.inull.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptINULL</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Qual"</span><span class='op'>)</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9049</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9050</span>
       </span>
     </div>
 
@@ -96,7 +96,8 @@
 <div id="the-dysem-workflow-at-a-glance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-dysem-workflow-at-a-glance" class="anchor"></a>The <code>dySEM</code> Workflow at a Glance</h2>
-<p><strong>TODO</strong>: MENTION REPRODUCIBLE WORKFLOWS BEING NECESSARY FOR MANY BENEFITS</p>
+<p><code>dySEM</code> is designed to be maximally useful if you are following some best-practices for reproducibility when using <em>R</em>. Namely, using a separate directory with an R Studio Project (<code>.Rproj</code>, see <a href="https://r4ds.had.co.nz/workflow-projects.html">here</a> if you are new to using projects) will allow <code>dySEM</code> to be more helpful, by creating sub-folders for your <code>scripts</code> and <code>output</code> where it will automatically save any scripts you create, or any tables and/or figures of output that you create. <code>dySEM</code> will still do these things without the use of an R Studio project, but all bets are off for where R Studio will attempt to save them.</p>
+<p>A typical <code>dySEM</code> workflow is then as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Import and wrangle your <strong>Data</strong> to a <em>dyad structure data set</em>
 </li>
@@ -110,16 +111,15 @@
 <li>
 <strong>Output</strong> statisitcal table(s) and or visualization(s)</li>
 </ol>
-<p>You might also use <strong>optional</strong> <code>dySEM</code> functions after Step 3 to calculate/output some additional information.</p>
-<p>These families of functions–<strong><em>Scrapers</em></strong>, <strong><em>Scripters</em></strong>, and <strong><em>Outputters</em></strong>–are listed and described in the Reference (LINK)</p>
-<p>We now demonstrate a typical <code>dySEM</code> workflow, using the built-in <a href="https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R"><code>DRES</code></a> <strong>data</strong> (Raposso &amp; Muise, 2020), in order to perform dyadic confirmatory factor analysis (CFA).</p>
+<p>You might also use optional <code>dySEM</code> calculators after Step 3 to <strong>get</strong> some additional information.</p>
+<p>These families of functions–<strong><em>Scrapers</em></strong>, <strong><em>Scripters</em></strong>, and <strong><em>Outputters</em></strong>, and <strong><em>Getters</em></strong>–are listed and described in the <a href="https://jsakaluk.github.io/dySEM/reference/index.html">Reference</a></p>
+<p>We now demonstrate a typical <code>dySEM</code> workflow, using the built-in <a href="https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R"><code>DRES</code></a> data (Raposso, Impett, &amp; Muise, 2020), in order to perform dyadic confirmatory factor analysis (CFA). More elaborate and specific vignettes are forthcoming to provide didactic materials for conducting other sorts of dyadic data analyses via <code>dySEM</code>.</p>
 </div>
 <div id="import-and-wrangle-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#import-and-wrangle-data" class="anchor"></a>1. Import and Wrangle Data</h2>
-<p>We will use a subset of <a href="https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R"><code>DRES</code></a>, consisting of 121 dyadic couples’ ratings of relationship quality on 9 of the <a href="https://journals.sagepub.com/doi/abs/10.1177/0146167200265007">PRQC</a> indicators (1 = <em>not at all</em>, 7 = <em>extremely</em>; all indicators positively keyed). Structural equation modeling (SEM) programs like <code>lavaan</code> require dyadic data to be in <em>dyad structure dataset</em>, whereby each row contains the data for one dyad, with separate columns for each observation (in this case, indicator variables of latent relationship quality) made for each member of the dyad.</p>
-<p><strong>TODO</strong>: Mention pivot_ family for data transformation needs</p>
-<p>However, like many real-world analytic contexts, <a href="https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R"><code>DRES</code></a> contains a number of other variables that we aren’t interested in modeling at this time (specifically, 5 indicators of sexual satisfaction from the <a href="https://www.tandfonline.com/doi/abs/10.1080/00224490509552264">GMSEX</a> for each dyad member). This wil not be a problem for <code>dySEM</code>.</p>
+<p>We will use a subset of <a href="https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R"><code>DRES</code></a>, consisting of 121 dyadic couples’ ratings of relationship quality on 9 of the <a href="https://journals.sagepub.com/doi/abs/10.1177/0146167200265007">PRQC</a> indicators (1 = <em>not at all</em>, 7 = <em>extremely</em>; all indicators positively keyed). Structural equation modeling (SEM) programs like <code>lavaan</code> require dyadic data to be in <em>dyad structure dataset</em>, whereby each row contains the data for one dyad, with separate columns for each observation (in this case, indicator variables of latent relationship quality) made for each member of the dyad. We may eventually build in data-transformation functions to go from various data structures to a <em>dyad structure</em>, but for now, we recommend <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html"><code>tidyr::pivot_wider</code></a> or the tools provided by <a href="http://davidakenny.net/RDDD.htm">Ledermann &amp; Kenny (2014)</a></p>
+<p>Like many real-world analytic contexts, <a href="https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R"><code>DRES</code></a> contains a number of other variables that we aren’t interested in modeling at this time (specifically, 5 indicators of sexual satisfaction from the <a href="https://www.tandfonline.com/doi/abs/10.1080/00224490509552264">GMSEX</a> for each dyad member). This wil not be a problem for <code>dySEM</code>.</p>
 <p>Our data set therefore results in a tibble that is 121 (# of couples) x 28 ((9 PRQC items + 5 GMSEX items) x 2 (# of dyad members)):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">DRES</span>
@@ -276,7 +276,6 @@
 <p>The <code>outputModel</code> function is currenty <code>dySEM</code>’s all-purpose outputting function.</p>
 <p>The useR must specify the <code>dvn</code> of scraped variables used to script the model and the type of model being outputted (e.g., “cfa”). UseRs can specify whether they only want a path diagram or some table(s) to be outputted (e.g., by setting either <code>figure = FALSE</code> or <code>table = FALSE</code>), but by default both are created and written to an <code>output</code> folder in your working directory. UseRs can further specify what kind of path diagram (e.g., using standardized or unstandardized value) or tables (e.g., featuring measurement- or structural-model parameter, or both) are created.</p>
 <p>Whatever options the useR specifies, <code>outputModel</code> is typically run without assigning its output to an object, as it’s mostly to facilitate statistical reporting for scientific articles:</p>
-<p><strong>TODO</strong>: CORRECT CODE GOES HERE</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/outputModel.html">outputModel</a></span><span class="op">(</span><span class="va">dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">qual.config.fit</span>, 
             table <span class="op">=</span> <span class="cn">TRUE</span>, tabletype <span class="op">=</span> <span class="st">"measurement"</span>, 

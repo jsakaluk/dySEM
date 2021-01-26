@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Functions for extracting measurement model output — outHelpers • dySEM</title>
+<title>Helpers for creating output files — outHelpers • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Functions for extracting measurement model output — outHelpers" />
-<meta property="og:description" content="Functions for extracting measurement model output" />
+<meta property="og:title" content="Helpers for creating output files — outHelpers" />
+<meta property="og:description" content="Helpers for creating output files" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9049</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9050</span>
       </span>
     </div>
 
@@ -117,30 +117,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Functions for extracting measurement model output</h1>
+    <h1>Helpers for creating output files</h1>
     
     <div class="hidden name"><code>outHelpers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Functions for extracting measurement model output</p>
+    <p>Helpers for creating output files</p>
     </div>
 
-    <pre class="usage"><span class='fu'>xlamda1</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>makeTable</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span>, <span class='va'>model</span>, <span class='va'>tabletype</span><span class='op'>)</span>
 
-<span class='fu'>xlamda2</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
-
-<span class='fu'>xtheta1</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
-
-<span class='fu'>xtheta2</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
-
-<span class='fu'>xtheta12</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
-
-<span class='fu'>loadings</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
-
-<span class='fu'>xintercepts</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span>
-
-<span class='fu'>xyintercepts</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>fit</span><span class='op'>)</span></pre>
+<span class='fu'>makeFigure</span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>type</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,8 +138,28 @@
       <td><p>input object from dyadVarNames()</p></td>
     </tr>
     <tr>
-      <th>fit</th>
-      <td><p>input object from fitted lavaan model</p></td>
+      <th>type</th>
+      <td><p>input character to indicate whether parameters "free" or "equated" in estimation</p></td>
+    </tr>
+    <tr>
+      <th>param</th>
+      <td><p>input character for what kind of parameter is being scripted ("act", "apim_part", "mim_part", "cf")</p></td>
+    </tr>
+    <tr>
+      <th>lvar</th>
+      <td><p>input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn</p></td>
+    </tr>
+    <tr>
+      <th>lvxname</th>
+      <td><p>input character to (arbitrarily) name LV X in lavaan syntax</p></td>
+    </tr>
+    <tr>
+      <th>lvyname</th>
+      <td><p>input character to (arbitrarily) name LV Y in lavaan syntax</p></td>
+    </tr>
+    <tr>
+      <th>partner</th>
+      <td><p>input character to indicate parameters for first or second dyad member</p></td>
     </tr>
     </table>
 
@@ -159,6 +167,7 @@
 
     <div class='dont-index'><p>Other helpers: 
 <code><a href='esHelpers.html'>esHelpers</a></code>,
+<code><a href='outParamHelpers.html'>outParamHelpers</a></code>,
 <code><a href='scrapeHelpers.html'>scrapeHelpers</a></code>,
 <code><a href='scriptHelpers.html'>scriptHelpers</a></code>,
 <code><a href='semHelpers.html'>semHelpers</a></code></p></div>

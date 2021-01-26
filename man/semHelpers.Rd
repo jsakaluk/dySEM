@@ -38,6 +38,7 @@ Functions for scripting structural parameters
 Other helpers: 
 \code{\link{esHelpers}},
 \code{\link{outHelpers}},
+\code{\link{outParamHelpers}},
 \code{\link{scrapeHelpers}},
 \code{\link{scriptHelpers}}
 }

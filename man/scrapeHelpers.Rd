@@ -40,6 +40,7 @@ Helper-functions for scraping variable names and data set properties
 Other helpers: 
 \code{\link{esHelpers}},
 \code{\link{outHelpers}},
+\code{\link{outParamHelpers}},
 \code{\link{scriptHelpers}},
 \code{\link{semHelpers}}
 }

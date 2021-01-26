@@ -2,43 +2,36 @@
 % Please edit documentation in R/outHelpers.R
 \name{outHelpers}
 \alias{outHelpers}
-\alias{xlamda1}
-\alias{xlamda2}
-\alias{xtheta1}
-\alias{xtheta2}
-\alias{xtheta12}
-\alias{loadings}
-\alias{xintercepts}
-\alias{xyintercepts}
-\title{Functions for extracting measurement model output}
+\alias{makeTable}
+\alias{makeFigure}
+\title{Helpers for creating output files}
 \usage{
-xlamda1(dvn, fit)
+makeTable(dvn, fit, model, tabletype)
 
-xlamda2(dvn, fit)
-
-xtheta1(dvn, fit)
-
-xtheta2(dvn, fit)
-
-xtheta12(dvn, fit)
-
-loadings(dvn, fit)
-
-xintercepts(dvn, fit)
-
-xyintercepts(dvn, fit)
+makeFigure(fit, type)
 }
 \arguments{
 \item{dvn}{input object from dyadVarNames()}
 
-\item{fit}{input object from fitted lavaan model}
+\item{type}{input character to indicate whether parameters "free" or "equated" in estimation}
+
+\item{param}{input character for what kind of parameter is being scripted ("act", "apim_part", "mim_part", "cf")}
+
+\item{lvar}{input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn}
+
+\item{lvxname}{input character to (arbitrarily) name LV X in lavaan syntax}
+
+\item{lvyname}{input character to (arbitrarily) name LV Y in lavaan syntax}
+
+\item{partner}{input character to indicate parameters for first or second dyad member}
 }
 \description{
-Functions for extracting measurement model output
+Helpers for creating output files
 }
 \seealso{
 Other helpers: 
 \code{\link{esHelpers}},
+\code{\link{outParamHelpers}},
 \code{\link{scrapeHelpers}},
 \code{\link{scriptHelpers}},
 \code{\link{semHelpers}}

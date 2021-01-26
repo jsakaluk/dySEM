@@ -30,7 +30,9 @@ DRES <- as_tibble(DRES)
 
 ## The `dySEM` Workflow at a Glance
 
-**TODO**: MENTION REPRODUCIBLE WORKFLOWS BEING NECESSARY FOR MANY BENEFITS
+`dySEM` is designed to be maximally useful if you are following some best-practices for reproducibility when using *R*. Namely, using a separate directory with an R Studio Project (`.Rproj`, see [here](https://r4ds.had.co.nz/workflow-projects.html) if you are new to using projects) will allow `dySEM` to be more helpful, by creating sub-folders for your `scripts` and `output` where it will automatically save any scripts you create, or any tables and/or figures of output that you create. `dySEM` will still do these things without the use of an R Studio project, but all bets are off for where R Studio will attempt to save them. 
+
+A typical `dySEM` workflow is then as follows: 
 
 1. Import and wrangle your **Data** to a *dyad structure data set*
 1. **Scrape** variables from your data frame
@@ -38,19 +40,17 @@ DRES <- as_tibble(DRES)
 1. **Fit** and **Inspect** your scripted model using `lavaan`
 1. **Output** statisitcal table(s) and or visualization(s) 
 
-You might also use **optional** `dySEM` functions after Step 3 to calculate/output some additional information. 
+You might also use optional `dySEM` calculators after Step 3 to **get** some additional information. 
 
-These families of functions--***Scrapers***, ***Scripters***, and ***Outputters***--are listed and described in the Reference (LINK)
+These families of functions--***Scrapers***, ***Scripters***, and ***Outputters***, and ***Getters***--are listed and described in the [Reference](https://jsakaluk.github.io/dySEM/reference/index.html)
 
-We now demonstrate a typical `dySEM` workflow, using the built-in [`DRES`](https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R) **data** (Raposso & Muise, 2020), in order to perform dyadic confirmatory factor analysis (CFA).
+We now demonstrate a typical `dySEM` workflow, using the built-in [`DRES`](https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R) data (Raposso, Impett, & Muise, 2020), in order to perform dyadic confirmatory factor analysis (CFA). More elaborate and specific vignettes are forthcoming to provide didactic materials for conducting other sorts of dyadic data analyses via `dySEM`. 
 
 ## 1. Import and Wrangle Data
 
-We will use a subset of  [`DRES`](https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R), consisting of 121 dyadic couples' ratings of relationship quality on 9 of the [PRQC](https://journals.sagepub.com/doi/abs/10.1177/0146167200265007) indicators (1 = *not at all*, 7 = *extremely*; all indicators positively keyed). Structural equation modeling (SEM) programs like `lavaan` require dyadic data to be in *dyad structure dataset*, whereby each row contains the data for one dyad, with separate columns for each observation (in this case, indicator variables of latent relationship quality) made for each member of the dyad. 
+We will use a subset of  [`DRES`](https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R), consisting of 121 dyadic couples' ratings of relationship quality on 9 of the [PRQC](https://journals.sagepub.com/doi/abs/10.1177/0146167200265007) indicators (1 = *not at all*, 7 = *extremely*; all indicators positively keyed). Structural equation modeling (SEM) programs like `lavaan` require dyadic data to be in *dyad structure dataset*, whereby each row contains the data for one dyad, with separate columns for each observation (in this case, indicator variables of latent relationship quality) made for each member of the dyad. We may eventually build in data-transformation functions to go from various data structures to a *dyad structure*, but for now, we recommend [`tidyr::pivot_wider`](https://tidyr.tidyverse.org/reference/pivot_wider.html) or the tools provided by [Ledermann & Kenny (2014)](http://davidakenny.net/RDDD.htm)
 
-**TODO**: Mention pivot_ family for data transformation needs
-
-However, like many real-world analytic contexts, [`DRES`](https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R) contains a number of other variables that we aren't interested in modeling at this time (specifically, 5 indicators of sexual satisfaction from the [GMSEX](https://www.tandfonline.com/doi/abs/10.1080/00224490509552264) for each dyad member). This wil not be a problem for `dySEM`. 
+Like many real-world analytic contexts, [`DRES`](https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R) contains a number of other variables that we aren't interested in modeling at this time (specifically, 5 indicators of sexual satisfaction from the [GMSEX](https://www.tandfonline.com/doi/abs/10.1080/00224490509552264) for each dyad member). This wil not be a problem for `dySEM`. 
 
 Our data set therefore results in a tibble that is 121 (# of couples) x 28 ((9 PRQC items + 5 GMSEX items) x 2 (# of dyad members)): 
 
@@ -208,7 +208,6 @@ The useR must specify the `dvn` of scraped variables used to script the model an
 
 Whatever options the useR specifies, `outputModel` is typically run without assigning its output to an object, as it's mostly to facilitate statistical reporting for scientific articles: 
 
-**TODO**: CORRECT CODE GOES HERE
 
 ```{r dyoutput, eval = FALSE}
 outputModel(dvn, model = "cfa", fit = qual.config.fit, 

@@ -37,6 +37,7 @@ Helper-functions for scripting free, fixed, and equated families of parameters
 Other helpers: 
 \code{\link{esHelpers}},
 \code{\link{outHelpers}},
+\code{\link{outParamHelpers}},
 \code{\link{scrapeHelpers}},
 \code{\link{semHelpers}}
 }
