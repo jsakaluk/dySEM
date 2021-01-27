@@ -13,11 +13,11 @@
 #' @examples
 #' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
 #' qual.indist.script <-  scriptCFA(dvn, lvname = "Qual", model = "indist")
-#' qual.indist.mod <- cfa(qual.indist.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' qual.indist.mod <- lavaan::cfa(qual.indist.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
 #' qual.isat.script <- scriptISAT(dvn, lvxname = "Qual")
-#' qual.isat.mod <- cfa(qual.isat.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' qual.isat.mod <- lavaan::cfa(qual.isat.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
 #' qual.inull.script <- scriptINULL(dvn, lvxname = "Qual")
-#' qual.inull.mod <- cfa(qual.isat.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' qual.inull.mod <- lavaan::cfa(qual.isat.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
 #' corr.fit <- getIndistFit(qual.indist.mod, qual.isat.mod, qual.inull.mod)
 #'
 getIndistFit <- function(indmodel, isatmod, inullmod){

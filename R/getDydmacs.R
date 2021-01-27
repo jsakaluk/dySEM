@@ -13,7 +13,7 @@
 #' @examples
 #' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
 #' qual.config.script <-  scriptCFA(dvn, lvname = "Qual", model = "configural")
-#' qual.config.mod <- cfa(qual.config.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' qual.config.mod <- lavaan::cfa(qual.config.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
 #' qual.dmacs <- getDydmacs(DRES, dvn, qual.config.mod)
 #'
 getDydmacs <- function(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5){

@@ -21,7 +21,7 @@ for each dyad member following Formula 2 in McNeish (2018).
 \examples{
 dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
 qual.config.script <-  scriptCFA(dvn, lvname = "Qual", model = "configural")
-qual.config.mod <- cfa(qual.config.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
+qual.config.mod <- lavaan::cfa(qual.config.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
 getDyReliability(dvn, qual.config.mod)
 }
 \seealso{
