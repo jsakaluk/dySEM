@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Functions for scripting structural parameters — semHelpers • dySEM</title>
+<title>A Function That Writes, Saves, and Exports Syntax for
+Fitting BiDY  Models — scriptBiDy • dySEM</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +47,12 @@
 
 
 
-<meta property="og:title" content="Functions for scripting structural parameters — semHelpers" />
-<meta property="og:description" content="Functions for scripting structural parameters" />
+<meta property="og:title" content="A Function That Writes, Saves, and Exports Syntax for
+Fitting BiDY  Models — scriptBiDy" />
+<meta property="og:description" content="This function takes the outputted object from scrapeVarCross()
+and automatically writes, returns, and exports (.txt) lavaan() syntax
+for specifying dyadic configural, loading, and intercept invariant
+BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-setting" />
 <meta property="og:image" content="https://jsakaluk.github.io/dySEM/logo.png" />
 
 
@@ -117,22 +122,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Functions for scripting structural parameters</h1>
+    <h1>A Function That Writes, Saves, and Exports Syntax for
+Fitting BiDY  Models</h1>
     
-    <div class="hidden name"><code>semHelpers.Rd</code></div>
+    <div class="hidden name"><code>scriptBiDy.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Functions for scripting structural parameters</p>
+    <p>This function takes the outputted object from scrapeVarCross()
+and automatically writes, returns, and exports (.txt) lavaan() syntax
+for specifying dyadic configural, loading, and intercept invariant
+BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-setting</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lregs</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>param</span>, <span class='va'>lvxname</span>, <span class='va'>lvyname</span>, type <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span>
-
-<span class='fu'>cfloads</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>lvxname</span>, <span class='va'>lvyname</span>, type <span class='op'>=</span> <span class='st'>"equated"</span><span class='op'>)</span>
-
-<span class='fu'>cfvars</span><span class='op'>(</span><span class='va'>lvname</span>, <span class='va'>type</span><span class='op'>)</span>
-
-<span class='fu'>cfmeans</span><span class='op'>(</span><span class='va'>lvname</span>, <span class='va'>type</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>scriptBiDy</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"X"</span>, type <span class='op'>=</span> <span class='st'>"C"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,40 +145,41 @@
       <td><p>input dvn list from scrapeVarCross</p></td>
     </tr>
     <tr>
-      <th>param</th>
-      <td><p>input character for what kind of parameter is being scripted ("act", "apim_part", "mim_part", "cf")</p></td>
-    </tr>
-    <tr>
-      <th>lvxname</th>
-      <td><p>input character to (arbitrarily) name LV X in lavaan syntax</p></td>
-    </tr>
-    <tr>
-      <th>lvyname</th>
-      <td><p>input character to (arbitrarily) name LV Y in lavaan syntax</p></td>
+      <th>lvname</th>
+      <td><p>input character to (arbitrarily) name LV in lavaan syntax</p></td>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>input character to indicate whether parameters "free" or "equated" in estimation</p></td>
+      <td><p>input character used to specify what kind of BiDy model to specify ("C" for BiDy-C, or "S" for BiDy-S)</p></td>
     </tr>
     <tr>
-      <th>lvar</th>
-      <td><p>input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn</p></td>
-    </tr>
-    <tr>
-      <th>partner</th>
-      <td><p>input character to indicate parameters for first or second dyad member</p></td>
+      <th>model</th>
+      <td><p>input character used to specify which level of invariance is
+modeled ("configural", "loading", "intercept", "residual", or "indistinguishable"). Defaults to "configural".</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>character object of lavaan script that can be passed immediately to
+lavaan functions</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other helpers: 
-<code><a href='esHelpers.html'>esHelpers</a></code>,
-<code><a href='outHelpers.html'>outHelpers</a></code>,
-<code><a href='outParamHelpers.html'>outParamHelpers</a></code>,
-<code><a href='scrapeHelpers.html'>scrapeHelpers</a></code>,
-<code><a href='scriptHelpers.html'>scriptHelpers</a></code></p></div>
+    <div class='dont-index'><p><code>dyadVarNames</code> which this function relies on</p>
+<p>Other script-writing functions: 
+<code><a href='scriptAPIM.html'>scriptAPIM</a>()</code>,
+<code><a href='scriptCFA.html'>scriptCFA</a>()</code>,
+<code><a href='scriptCFM.html'>scriptCFM</a>()</code>,
+<code><a href='scriptINULL.html'>scriptINULL</a>()</code>,
+<code><a href='scriptISAT.html'>scriptISAT</a>()</code>,
+<code><a href='scriptMIM.html'>scriptMIM</a>()</code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>=</span> <span class='fu'>dyadVarNames</span><span class='op'>(</span><span class='va'>DRES</span>, xvar<span class='op'>=</span><span class='st'>"X"</span>, sep <span class='op'>=</span> <span class='st'>"."</span>,distinguish1 <span class='op'>=</span> <span class='st'>"1"</span>, distinguish2 <span class='op'>=</span> <span class='st'>"2"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in dyadVarNames(DRES, xvar = "X", sep = ".", distinguish1 = "1",     distinguish2 = "2"): could not find function "dyadVarNames"</span></div><div class='input'><span class='va'>con.bidy.config.script</span> <span class='op'>=</span> <span class='fu'>scriptBifactor</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in scriptBifactor(dvn, lvname = "Conflict", model = "configural"): could not find function "scriptBifactor"</span></div><div class='input'><span class='va'>con.bidy.loading.script</span> <span class='op'>=</span> <span class='fu'>scriptBifactor</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>,  model <span class='op'>=</span> <span class='st'>"loading"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in scriptBifactor(dvn, lvname = "Conflict", model = "loading"): could not find function "scriptBifactor"</span></div><div class='input'><span class='va'>con.bidy.intercept.script</span> <span class='op'>=</span> <span class='fu'>scriptBifactor</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>,  model <span class='op'>=</span> <span class='st'>"intercept"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in scriptBifactor(dvn, lvname = "Conflict", model = "intercept"): could not find function "scriptBifactor"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -177,3 +177,9 @@ outputModel(dvn, model = "cfa", fit = qual.config.fit,
             table = TRUE, tabletype = "measurement", 
             figure = TRUE, figtype = "unstandardized")
 ```
+
+## Code of Conduct
+
+Please note that the dySEM project is released with a [Contributor Code
+of Conduct](https://jsakaluk.github.io/dySEM/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.

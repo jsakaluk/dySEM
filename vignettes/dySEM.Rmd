@@ -1,5 +1,7 @@
 ---
 title: "dySEM overview"
+resource_files:
+  - img/scripts.png
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{dySEM-overview}
@@ -139,7 +141,7 @@ qual.config.script <- scriptCFA(dvn, lvname = "Quality", model = "configural")
 Meanwhile, behind the scenes, `scriptCFA` has created a folder in your working directory called "scripts", and has stored a .txt file containing the (less-ugly, to the human eyes) `lavaan` syntax for your model. The file will be named as a combination of your `lvname` and `model` arguments. 
 
 ```{r, echo = FALSE}
-    knitr::include_graphics("./scripts.png", dpi = 144)
+    knitr::include_graphics("scripts.png", dpi = 400)
 ```
 
 We think this syntax-exporting-.txt feature serves three important purposes: 
