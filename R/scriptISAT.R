@@ -4,7 +4,7 @@
 #' This function takes the outputted object from dyadVarNames()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
 #' for the I-SAT model described in Olsen & Kenny (2006)
-#' @param dvn input object from dyadVarNames()
+#' @param dvn input dvn list from scrapeVarCross
 #' @param lvxname input character to (arbitrarily) name X LV in lavaan syntax
 #' @param lvyname (optional) input character to (arbitrarily) name X LV in lavaan syntax
 #' @return character object of lavaan script that can be passed immediately to

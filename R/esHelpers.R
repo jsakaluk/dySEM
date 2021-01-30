@@ -4,8 +4,8 @@
 #' @title Helper-functions for noninvariance effect size functions
 #'
 #' @param dat data frame of indicators
-#' @param dvn dvn from which to take indicator names
-#' @param fit outputted from dyadic cfa lavaan object
+#' @param dvn input dvn list from scrapeVarCross
+#' @param fit outputted dyadic cfa lavaan object
 #' @param source character for whether parameter of interest should be extracted for group "1", "2", or from the "nogroup" model
 #' @family helpers
 #'

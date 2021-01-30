@@ -3,7 +3,7 @@
 #'
 #' @title Functions for scripting structural parameters
 #'
-#' @param dvn input object from dyadVarNames()
+#' @param dvn input dvn list from scrapeVarCross
 #' @param param input character for what kind of parameter is being scripted ("act", "apim_part", "mim_part", "cf")
 #' @param lvar input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn
 #' @param lvxname input character to (arbitrarily) name LV X in lavaan syntax

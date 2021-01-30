@@ -29,7 +29,7 @@ xintercepts(dvn, fit)
 xyintercepts(dvn, fit)
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{fit}{input object from fitted lavaan model}
 }

@@ -9,7 +9,7 @@ getDydmacs(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5)
 \arguments{
 \item{dat}{data frame of indicators}
 
-\item{dvn}{dvn for the dyadic cfa measurement model}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{fit}{outputted dyadic cfa lavaan object; should be from a partial-invariance model}
 
@@ -26,10 +26,10 @@ getDydmacs(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5)
 Calculates dmacs difference in expected indicator scores for between dyad members
 }
 \examples{
-dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
-qual.config.script <-  scriptCFA(dvn, lvname = "Qual", model = "configural")
-qual.config.mod <- cfa(qual.config.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
-qual.dmacs <- getDydmacs(DRES, dvn, qual.config.mod)
+dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
+sat.config.mod <- cfa(sat.config.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+sat.dmacs <- getDydmacs(commitmentQ, dvn, sat.config.mod)
 
 }
 \seealso{

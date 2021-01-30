@@ -8,7 +8,7 @@ Fitting the I-NULL model for indistinguishable dyads}
 scriptINULL(dvn, lvxname = "X", lvyname = NULL)
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{lvxname}{input character to (arbitrarily) name X LV in lavaan syntax}
 
@@ -32,7 +32,7 @@ qual.inull.script <- scriptINULL(dvn, lvxname = "Qual")
 
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},
-\code{\link{scriptBifactor}()},
+\code{\link{scriptBiDy}()},
 \code{\link{scriptCFA}()},
 \code{\link{scriptCFM}()},
 \code{\link{scriptISAT}()},

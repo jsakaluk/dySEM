@@ -8,7 +8,7 @@ Fitting the I-SAT model for indistinguishable dyads}
 scriptISAT(dvn, lvxname = "X", lvyname = NULL)
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{lvxname}{input character to (arbitrarily) name X LV in lavaan syntax}
 
@@ -32,7 +32,7 @@ qual.isat.script <- scriptISAT(dvn, lvxname = "Qual")
 
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},
-\code{\link{scriptBifactor}()},
+\code{\link{scriptBiDy}()},
 \code{\link{scriptCFA}()},
 \code{\link{scriptCFM}()},
 \code{\link{scriptINULL}()},

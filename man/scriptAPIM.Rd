@@ -16,7 +16,7 @@ scriptAPIM(
 )
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{scaleset}{input character to specify how to set the scale of the latent variable(s). Default is
 "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)}
@@ -53,22 +53,18 @@ also invoke configural, loading, and/or intercept invariant
 measurement models, and particular types of structural comparisons.
 }
 \examples{
-dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2",
-                    y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\\\d+")
-apim.script.config = scriptAPIM(dvn, lvxname = "Quality",
-lvyname = "SexSat", model = "configural", scaleset = "MV")
-apim.script.load = scriptAPIM(dvn, lvxname = "Quality",
-lvyname = "SexSat", model = "loading", scaleset = "MV")
-apim.script.int = scriptAPIM(dvn, lvxname = "Quality",
-lvyname = "SexSat", model = "intercept", scaleset = "MV")
-apim.script.load.actor = scriptAPIM(dvn, lvxname = "Quality",
-lvyname = "SexSat", model = "loading", equate = "actor")
+dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "configural")
+apim.script.load <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "loading")
+apim.script.int  <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "intercept")
+apim.script.ind <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "ind")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on
 
 Other script-writing functions: 
-\code{\link{scriptBifactor}()},
+\code{\link{scriptBiDy}()},
 \code{\link{scriptCFA}()},
 \code{\link{scriptCFM}()},
 \code{\link{scriptINULL}()},

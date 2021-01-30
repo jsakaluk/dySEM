@@ -6,7 +6,7 @@
 #' for specifying Common Fate Models (CFMs). Users can
 #' also invoke configural, loading, and/or intercept invariant
 #' measurement models, and particular types of structural comparisons.
-#' @param dvn input object from dyadVarNames()
+#' @param dvn input dvn list from scrapeVarCross
 #' @param lvxname input character to (arbitrarily) name LV X in lavaan syntax
 #' @param lvyname input character to (arbitrarily) name LV Y in lavaan syntax
 #' @param model input character used to specify which level of invariance is

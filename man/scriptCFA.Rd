@@ -8,7 +8,7 @@ Fitting Latent Dyadic Measurement and Invariance Models}
 scriptCFA(dvn, lvname = "X", scaleset = "FF", model = "configural")
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
 
@@ -45,19 +45,19 @@ non-invariant measurement parameters, following a the rejection of an omnibus
 #invariance constraint set (see Lee, Preacher, & Little, 2011).
 }
 \examples{
-dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
-qual.config.script <-  scriptCFA(dvn, lvname = "Qual", model = "configural")
-qual.loading.script <- scriptCFA(dvn, lvname = "Qual",  model = "loading")
-qual.intercept.script <- scriptCFA(dvn, lvname = "Qual",  model = "intercept")
-qual.residual.script <- scriptCFA(dvn, lvname = "Qual",  model = "residual")
-qual.variance.script <- scriptCFA(dvn, lvname = "Qual",  model = "lvariance")
-qual.means.script <- scriptCFA(dvn, lvname = "Qual",  model = "lmean")
-qual.indist.script <- scriptCFA(dvn, lvname = "Qual",  model = "indist")
+dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
+sat.loading.script <- scriptCFA(dvn, lvname = "Sat",  model = "loading")
+sat.intercept.script <- scriptCFA(dvn, lvname = "Sat",  model = "intercept")
+sat.residual.script <- scriptCFA(dvn, lvname = "Sat",  model = "residual")
+sat.variance.script <- scriptCFA(dvn, lvname = "Sat",  model = "lvariance")
+sat.means.script <- scriptCFA(dvn, lvname = "Sat",  model = "lmean")
+sat.indist.script <- scriptCFA(dvn, lvname = "Sat",  model = "indist")
 }
 \seealso{
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},
-\code{\link{scriptBifactor}()},
+\code{\link{scriptBiDy}()},
 \code{\link{scriptCFM}()},
 \code{\link{scriptINULL}()},
 \code{\link{scriptISAT}()},

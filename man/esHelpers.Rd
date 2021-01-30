@@ -20,9 +20,9 @@ grouplvmean(fit, source)
 grouplvsd(fit, source)
 }
 \arguments{
-\item{fit}{outputted from dyadic cfa lavaan object}
+\item{fit}{outputted dyadic cfa lavaan object}
 
-\item{dvn}{dvn from which to take indicator names}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{source}{character for whether parameter of interest should be extracted for group "1", "2", or from the "nogroup" model}
 

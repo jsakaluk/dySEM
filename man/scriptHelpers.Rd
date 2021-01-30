@@ -20,7 +20,7 @@ lvars(dvn, lvar = "X", lvname, partner = "1", type = "free")
 lmeans(dvn, lvar = "X", lvname, partner = "1", type = "free")
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{lvar}{input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn}
 

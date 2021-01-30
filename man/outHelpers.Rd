@@ -11,7 +11,7 @@ makeTable(dvn, fit, model, tabletype)
 makeFigure(fit, type)
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{type}{input character to indicate whether parameters "free" or "equated" in estimation}
 

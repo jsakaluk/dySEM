@@ -55,7 +55,7 @@ Will be updated to allow particular range of values, to make more sub-scale frie
 \item{distinguish2}{input character used as the identifier for the first partner}
 }
 \value{
-list containing variable names for p1, p2, # of items per LV,
+a list, referred in short-hand as a "dvn" (dyad variable names list) containing variable names for p1, p2, # of items per LV,
 characters distinguishing partners, and total number of indicators
 }
 \description{
@@ -65,9 +65,9 @@ and indexes which indicators correspond to which partner, for which LV.
 It is used primarily to guide the syntax-writing of the other dySEM functions.
 }
 \examples{
-dvnx <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
-dvnxy <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2",
-y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\\\d+")
+dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 }
 \seealso{
 Other variable-scraping functions: 

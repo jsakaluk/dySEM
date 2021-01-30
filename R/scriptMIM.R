@@ -6,7 +6,7 @@
 #' for specifying Mutual Influence Models (MIMs). Users can
 #' also invoke configural, loading, and/or intercept invariant
 #' measurement models, and particular types of structural comparisons.
-#' @param dvn input object from dyadVarNames()
+#' @param dvn input dvn list from scrapeVarCross
 #' @param scaleset input character to specify how to set the scale of the latent variable(s). Default is
 #' "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)
 #' @param lvxname input character to (arbitrarily) name LV X in lavaan syntax

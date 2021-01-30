@@ -1,18 +1,18 @@
 #' A Function Calculates Omega Total Coefficients from a Dyadic CFA
 #'
 #' This function takes the  model from fitted scriptCFA() scripts and returns omega total coefficients
-#' for each dyad member following Formula 2 in McNeish (2018).
+#' for each dyad member, adapted following Formula 2 in McNeish (2018).
 #'
-#' @param dvn input object from dyadVarNames()
-#' @param fit input object from fitted lavaan model based on the default (i.e., "configural") dyadCFA() function
+#' @param dvn input dvn list from scrapeVarCross
+#' @param fit outputted dyadic cfa lavaan object based on the default (i.e., "configural") dyadCFA() function
 #' @return Calculated omega total coefficients for dyad Member 1 and Member 2
 #' @export
 #' @family supplemental model calculators
 #' @examples
-#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
-#' qual.config.script <-  scriptCFA(dvn, lvname = "Qual", model = "configural")
-#' qual.config.mod <- cfa(qual.config.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
-#' getDyReliability(dvn, qual.config.mod)
+#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+#' sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
+#' sat.config.mod <- cfa(sat.config.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' getDyReliability(dvn, sat.config.mod)
 
 getDyReliability <- function(dvn, fit){
 

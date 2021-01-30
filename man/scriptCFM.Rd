@@ -8,7 +8,7 @@ Fitting Latent Common Fate Models}
 scriptCFM(dvn, lvxname, lvyname, model = "configural")
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{lvxname}{input character to (arbitrarily) name LV X in lavaan syntax}
 
@@ -41,7 +41,7 @@ lvyname = "SexSat", model = "configural", scaleset = "MV")
 
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},
-\code{\link{scriptBifactor}()},
+\code{\link{scriptBiDy}()},
 \code{\link{scriptCFA}()},
 \code{\link{scriptINULL}()},
 \code{\link{scriptISAT}()},

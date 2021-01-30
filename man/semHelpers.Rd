@@ -17,7 +17,7 @@ cfvars(lvname, type)
 cfmeans(lvname, type)
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{param}{input character for what kind of parameter is being scripted ("act", "apim_part", "mim_part", "cf")}
 

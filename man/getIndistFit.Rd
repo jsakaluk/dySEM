@@ -7,11 +7,11 @@
 getIndistFit(indmodel, isatmod, inullmod)
 }
 \arguments{
-\item{indmodel}{input lavaan model fitted using dyadCFA(model = "indistinguishable")}
+\item{indmodel}{input lavaan model object fitted using dyadCFA(model = "indistinguishable")}
 
-\item{isatmod}{input lavaan model fitted using ISAT()}
+\item{isatmod}{input lavaan model object fitted using ISAT()}
 
-\item{inullmod}{input lavaan model fitted using INULL()}
+\item{inullmod}{input lavaan model object fitted using INULL()}
 }
 \value{
 A data frame of the original and corrected chi sq, df, p, rmsea, and tli
@@ -22,14 +22,14 @@ as well as scriptISAT(), and scriptINULL() and computes corrected model fit inde
 to the approach outlined by Olsen & Kenny (2006)
 }
 \examples{
-dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
-qual.indist.script <-  scriptCFA(dvn, lvname = "Qual", model = "indist")
-qual.indist.mod <- cfa(qual.indist.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
-qual.isat.script <- scriptISAT(dvn, lvxname = "Qual")
-qual.isat.mod <- cfa(qual.isat.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
-qual.inull.script <- scriptINULL(dvn, lvxname = "Qual")
-qual.inull.mod <- cfa(qual.isat.script, data = DRES, std.lv = F, auto.fix.first= F, meanstructure = T)
-corr.fit <- getIndistFit(qual.indist.mod, qual.isat.mod, qual.inull.mod)
+dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+sat.indist.script <-  scriptCFA(dvn, lvname = "Sat", model = "indist")
+sat.indist.mod <- cfa(sat.indist.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+sat.isat.script <- scriptISAT(dvn, lvxname = "Sat")
+sat.isat.mod <- cfa(sat.isat.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+sat.inull.script <- scriptINULL(dvn, lvxname = "Sat")
+sat.inull.mod <- cfa(sat.inull.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+sat.corr.fit <- getIndistFit(sat.indist.mod, sat.isat.mod, sat.inull.mod)
 
 }
 \seealso{

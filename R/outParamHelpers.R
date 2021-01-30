@@ -3,7 +3,7 @@
 #'
 #' @title Functions for extracting measurement model parameter output
 #'
-#' @param dvn input object from dyadVarNames()
+#' @param dvn input dvn list from scrapeVarCross
 #' @param fit input object from fitted lavaan model
 #' @family helpers
 

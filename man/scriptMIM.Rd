@@ -16,7 +16,7 @@ scriptMIM(
 )
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{scaleset}{input character to specify how to set the scale of the latent variable(s). Default is
 "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)}
@@ -69,7 +69,7 @@ lvyname = "SexSat", model = "loading", equate = "actor")
 
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},
-\code{\link{scriptBifactor}()},
+\code{\link{scriptBiDy}()},
 \code{\link{scriptCFA}()},
 \code{\link{scriptCFM}()},
 \code{\link{scriptINULL}()},

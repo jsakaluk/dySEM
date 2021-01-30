@@ -15,7 +15,7 @@ outputModel(
 )
 }
 \arguments{
-\item{dvn}{input object from dyadVarNames()}
+\item{dvn}{input dvn list from scrapeVarCross}
 
 \item{model}{character input specying type of model to output (e.g., "cfa", "apim", "cfm")}
 
@@ -24,7 +24,7 @@ outputModel(
 \item{table}{logical input of whether table output is desired. Default is TRUE}
 
 \item{tabletype}{character input of what type of table(s) is(are) desired.
-options are "measurement" (i.e,, slopes, intercepts, and (optionally) dMACS),
+options are "measurement" (i.e,, loadings, intercepts,),
 "structural" (i.e., latent slopes, such as actor/partner effects, k parameters), or "both"
 (i.e., both measurement and structural tables)}
 
@@ -41,14 +41,13 @@ This function takes the  model from fitted dySEM() scripts and
 exports table(s) and/or a path diagram figure of expected output.
 }
 \examples{
-dvn = dyadVarNames(dat, xvar="X", yvar="Y", sep = ".",
-distinguish1 = "1", distinguish2 = "2")
-apim.script.load = apimSEM(dvn, lvxname = "Conflict",
-lvyname = "Satisfaction", model = "loading")
-apim.fit.load <- lavaan::cfa(apim.script.load, data = dat, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = TRUE)
-dyOutput(dvn, model = "cfa", fit, figure = FALSE, dydMACS.x = sexsat.dmacs)
-}
-\seealso{
-\code{\link{dyadVarNames}} \code{\link{apimSEM}} \code{\link{dydMACS}} which this function relies on
+dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+sat.config.script <-  scriptCFA(dvnx, lvname = "Sat", model = "configural")
+sat.config.mod <- cfa(sat.config.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+outputModel(dvnx, model = "cfa", fit = sat.config.mod, table = TRUE, tabletype = "measurement", figure = "TRUE", figtype = "standardized")
+dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+apim.script.config <-  scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", model = "configural")
+apim.config.fit <- cfa(apim.script.config, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+outputModel(dvnxy, model = "apim", fit = apim.config.fit, table = TRUE, tabletype = "measurement", figure = "TRUE", figtype = "standardized")
 }

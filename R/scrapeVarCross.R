@@ -24,14 +24,14 @@
 #' from final element of variable name
 #' @param y_item_num defaults to scrape all items that match the stem with any digits that follow.
 #' Will be updated to allow particular range of values, to make more sub-scale friendly.
-#' @return list containing variable names for p1, p2, # of items per LV,
+#' @return a list, referred in short-hand as a "dvn" (dyad variable names list) containing variable names for p1, p2, # of items per LV,
 #'characters distinguishing partners, and total number of indicators
 #' @family variable-scraping functions
 #' @export
 #' @examples
-#' dvnx <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
-#' dvnxy <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
-#' y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\d+")
+#' dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+#' dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+#' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 
 scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2=NULL, x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
                 y_order=NULL, y_stem=NULL, y_delim1=NULL, y_delim2=NULL, y_item_num="\\d+"){
@@ -65,8 +65,8 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
       x2vars <- sipExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_2)
 
     }else if(x_order == "spi"){
-      x1vars <- spiExtractor(dat.qual, x_stem, x_delim1, x_item_num, x_delim2, distinguish_1)
-      x2vars <- spiExtractor(dat.qual, x_stem, x_delim1, x_item_num, x_delim2, distinguish_2)
+      x1vars <- spiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_1)
+      x2vars <- spiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_2)
     }
     if(y_order == "sip"){
       y1vars <- sipExtractor(dat, y_stem, y_delim1, y_item_num, y_delim2, distinguish_1)
