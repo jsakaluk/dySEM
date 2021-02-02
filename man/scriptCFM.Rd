@@ -5,7 +5,7 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting Latent Common Fate Models}
 \usage{
-scriptCFM(dvn, lvxname, lvyname, model = "configural")
+scriptCFM(dvn, lvxname, lvyname, model = "configural", scaleset = "FF")
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
@@ -16,6 +16,9 @@ scriptCFM(dvn, lvxname, lvyname, model = "configural")
 
 \item{model}{input character used to specify which level of invariance is
 modeled. Defaults to "configural"}
+
+\item{scaleset}{input character to specify how to set the scale of the latent variable(s). Default is
+"FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -34,7 +37,7 @@ measurement models, and particular types of structural comparisons.
 dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2",
 y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\\\d+")
 cfm.script.config = scriptCFM(dvn, lvxname = "Quality",
-lvyname = "SexSat", model = "configural", scaleset = "MV")
+lvyname = "SexSat", model = "configural")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on

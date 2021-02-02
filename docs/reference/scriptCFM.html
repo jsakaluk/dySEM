@@ -86,7 +86,7 @@ measurement models, and particular types of structural comparisons." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9051</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9052</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@ also invoke configural, loading, and/or intercept invariant
 measurement models, and particular types of structural comparisons.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scriptCFM</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>lvxname</span>, <span class='va'>lvyname</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>scriptCFM</span><span class='op'>(</span><span class='va'>dvn</span>, <span class='va'>lvxname</span>, <span class='va'>lvyname</span>, model <span class='op'>=</span> <span class='st'>"configural"</span>, scaleset <span class='op'>=</span> <span class='st'>"FF"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,6 +158,11 @@ measurement models, and particular types of structural comparisons.</p>
       <th>model</th>
       <td><p>input character used to specify which level of invariance is
 modeled. Defaults to "configural"</p></td>
+    </tr>
+    <tr>
+      <th>scaleset</th>
+      <td><p>input character to specify how to set the scale of the latent variable(s). Default is
+"FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)</p></td>
     </tr>
     </table>
 
@@ -182,8 +187,8 @@ with containing X or Y variables, they are alerted to respecify the dvn object.<
     <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>&lt;-</span> <span class='fu'><a href='scrapeVarCross.html'>scrapeVarCross</a></span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>DRES</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"PRQC"</span>, x_delim1 <span class='op'>=</span> <span class='st'>"_"</span>, x_delim2<span class='op'>=</span><span class='st'>"."</span>, x_item_num<span class='op'>=</span><span class='st'>"\\d+"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span>,
 y_order<span class='op'>=</span><span class='st'>"sip"</span>, y_stem<span class='op'>=</span><span class='st'>"sexsat"</span>, y_delim2<span class='op'>=</span><span class='st'>"."</span>, y_item_num<span class='op'>=</span><span class='st'>"\\d+"</span><span class='op'>)</span>
 <span class='va'>cfm.script.config</span> <span class='op'>=</span> <span class='fu'>scriptCFM</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Quality"</span>,
-lvyname <span class='op'>=</span> <span class='st'>"SexSat"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span>, scaleset <span class='op'>=</span> <span class='st'>"MV"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat", model = "configural",     scaleset = "MV"): unused argument (scaleset = "MV")</span></div></pre>
+lvyname <span class='op'>=</span> <span class='st'>"SexSat"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

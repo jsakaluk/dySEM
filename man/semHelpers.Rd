@@ -14,7 +14,7 @@ cfloads(dvn, lvxname, lvyname, type = "equated")
 
 cfvars(lvname, type)
 
-cfmeans(lvname, type)
+cfmeans(lvname, type, lvar = "X")
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}

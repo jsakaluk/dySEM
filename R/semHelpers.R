@@ -71,8 +71,8 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
 #' @rdname semHelpers
 cfloads <- function(dvn, lvxname, lvyname, type = "equated"){
   if(type == "equated"){
-    eta.cx <-  sprintf("%s =~ cfx*%s%s + cfx*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
-    eta.cy <- sprintf("%s =~ cfy*%s%s + cfy*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
+    eta.cx <-  sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
+    eta.cy <- sprintf("%s =~ NA*%s%s + cfy*%s%s + cfy*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
     cfloads <- paste(eta.cx, eta.cy, sep = "\n")
     return(cfloads)
   }else if(type == "fixed"){
@@ -88,18 +88,18 @@ cfvars <- function(lvname, type){
   if(type == "fixed"){
     lvar <- sprintf("%s ~~ 1*%s",lvname, lvname)
     return(lvar)
-  }else if(partner == "cf" & type == "free"){
+  }else if(type == "free"){
     lvar <- sprintf("%s ~~ NA*%s",lvname, lvname)
     return(lvar)
   }
 }
 
 #' @rdname semHelpers
-cfmeans <- function(lvname, type){
+cfmeans <- function(lvname, type, lvar = "X"){
   if(type == "fixed"){
     lmean <- sprintf("%s ~ 0*1",lvname, lvname)
     return(lmean)
-  }else if(partner == "cf" & type == "free"){
+  }else if(type == "free"){
     lmean <- sprintf("%s ~ NA*1",lvname, lvname)
     return(lmean)
   }

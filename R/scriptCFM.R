@@ -11,6 +11,8 @@
 #' @param lvyname input character to (arbitrarily) name LV Y in lavaan syntax
 #' @param model input character used to specify which level of invariance is
 #' modeled. Defaults to "configural"
+#' @param scaleset input character to specify how to set the scale of the latent variable(s). Default is
+#' "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
@@ -22,8 +24,8 @@
 #' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
 #' y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\d+")
 #'cfm.script.config = scriptCFM(dvn, lvxname = "Quality",
-#' lvyname = "SexSat", model = "configural", scaleset = "MV")
-scriptCFM = function(dvn, lvxname, lvyname, model = "configural"){
+#' lvyname = "SexSat", model = "configural")
+scriptCFM = function(dvn, lvxname, lvyname, model = "configural", scaleset = "FF"){
   dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){
@@ -53,12 +55,12 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural"){
       #Latent Variances
       if(scaleset == "FF"){
         psi_x <- cfvars(lvname = lvxname, type = "fixed")
-        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "free")
-        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+        psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+        psi_x2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "fixed")
 
         psi_y <- cfvars(lvname = lvyname, type = "fixed")
-        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "free")
-        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
+        psi_y1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "fixed")
+        psi_y2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "fixed")
       }else if(scaleset == "MV"){
         psi_x <- cfvars(lvname = lvxname, type = "free")
         psi_x1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "free")
@@ -108,20 +110,20 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural"){
       #Latent Means
       if(scaleset == "FF"){
         alpha_x <- cfmeans(lvname = lvxname, type = "fixed")
-        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
-        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "fixed")
 
         alpha_y <- cfmeans(lvname = lvyname, type = "fixed")
-        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
-        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "fixed")
       }else if(scaleset == "MV"){
         alpha_x <- cfmeans(lvname = lvxname, type = "free")
-        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
-        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+        alpha_x1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated")
+        alpha_x2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
 
         alpha_y <- cfmeans(lvname = lvyname, type = "free")
-        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
-        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+        alpha_y1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated")
+        alpha_y2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
       }
 
       beta <- lregs(dvn, param = "cf", lvxname = lvxname, lvyname = lvyname)
