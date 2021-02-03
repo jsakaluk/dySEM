@@ -359,7 +359,7 @@ lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
   }else if(partner == "1" & type == "equated"){
     if(lvar == "X"){
       lvar <- sprintf("%s%s ~~ psix*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
-    }else if(lavar == "Y"){
+    }else if(lvar == "Y"){
       lvar <- sprintf("%s%s ~~ psiy*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
     }
     return(lvar)
