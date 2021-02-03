@@ -28,10 +28,10 @@ for specifying dyadic configural, loading, and intercept invariant
 BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-setting
 }
 \examples{
-dvn = dyadVarNames(DRES, xvar="X", sep = ".",distinguish1 = "1", distinguish2 = "2")
-con.bidy.config.script = scriptBifactor(dvn, lvname = "Conflict", model = "configural")
-con.bidy.loading.script = scriptBifactor(dvn, lvname = "Conflict",  model = "loading")
-con.bidy.intercept.script = scriptBifactor(dvn, lvname = "Conflict",  model = "intercept")
+dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",  x_delim2=".", distinguish_1="1", distinguish_2="2")
+sexsat.bidy.config.script <- scriptBiDy(dvn, lvname = "SexSat", model = "configural", type = "C")
+sexsat.bidy.loadsource.script <- scriptBiDy(dvn, lvname = "SexSat", model = "loading_source", type = "C")
+sexsat.bidy.loadreleq.script <- scriptBiDy(dvn, lvname = "SexSat", model = "loading_releq", type = "C")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on

@@ -69,8 +69,4 @@ dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_d
 dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 }
-\seealso{
-Other variable-scraping functions: 
-\code{\link{scrapeVarLong}()}
-}
 \concept{variable-scraping functions}
