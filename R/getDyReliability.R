@@ -11,7 +11,7 @@
 #' @examples
 #' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
 #' sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
-#' sat.config.mod <- cfa(sat.config.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
 #' getDyReliability(dvn, sat.config.mod)
 
 getDyReliability <- function(dvn, fit){

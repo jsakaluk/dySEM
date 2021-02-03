@@ -24,11 +24,11 @@ to the approach outlined by Olsen & Kenny (2006)
 \examples{
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
 sat.indist.script <-  scriptCFA(dvn, lvname = "Sat", model = "indist")
-sat.indist.mod <- cfa(sat.indist.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+sat.indist.mod <- lavaan::cfa(sat.indist.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
 sat.isat.script <- scriptISAT(dvn, lvxname = "Sat")
-sat.isat.mod <- cfa(sat.isat.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+sat.isat.mod <- lavaan::cfa(sat.isat.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
 sat.inull.script <- scriptINULL(dvn, lvxname = "Sat")
-sat.inull.mod <- cfa(sat.inull.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+sat.inull.mod <- lavaan::cfa(sat.inull.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
 sat.corr.fit <- getIndistFit(sat.indist.mod, sat.isat.mod, sat.inull.mod)
 
 }
