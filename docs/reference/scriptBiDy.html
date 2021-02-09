@@ -85,7 +85,7 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9052</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.0</span>
       </span>
     </div>
 
@@ -135,7 +135,14 @@ for specifying dyadic configural, loading, and intercept invariant
 BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-setting</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scriptBiDy</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"X"</span>, type <span class='op'>=</span> <span class='st'>"C"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>scriptBiDy</span><span class='op'>(</span>
+  <span class='va'>dvn</span>,
+  <span class='va'>lvxname</span>,
+  <span class='va'>lvyname</span>,
+  type <span class='op'>=</span> <span class='st'>"C"</span>,
+  model <span class='op'>=</span> <span class='st'>"configural"</span>,
+  equate <span class='op'>=</span> <span class='st'>"none"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,8 +152,12 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
       <td><p>input dvn list from scrapeVarCross</p></td>
     </tr>
     <tr>
-      <th>lvname</th>
-      <td><p>input character to (arbitrarily) name LV in lavaan syntax</p></td>
+      <th>lvxname</th>
+      <td><p>input character to (arbitrarily) name LV X in lavaan syntax</p></td>
+    </tr>
+    <tr>
+      <th>lvyname</th>
+      <td><p>input character to (arbitrarily) name LV Y in lavaan syntax</p></td>
     </tr>
     <tr>
       <th>type</th>
@@ -155,7 +166,9 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
     <tr>
       <th>model</th>
       <td><p>input character used to specify which level of invariance is
-modeled ("configural", "loading", "intercept", "residual", or "indistinguishable"). Defaults to "configural".</p></td>
+modeled (for BiDys, options thus far are "loading", "loading_source", and "loading_releq"). Defaults to "configural".
+' @param equate input character to specify which type of structural parameters
+("actor" = actor effects)</p></td>
     </tr>
     </table>
 
@@ -165,8 +178,7 @@ modeled ("configural", "loading", "intercept", "residual", or "indistinguishable
 lavaan functions</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>dyadVarNames</code> which this function relies on</p>
-<p>Other script-writing functions: 
+    <div class='dont-index'><p>Other script-writing functions: 
 <code><a href='scriptAPIM.html'>scriptAPIM</a>()</code>,
 <code><a href='scriptCFA.html'>scriptCFA</a>()</code>,
 <code><a href='scriptCFM.html'>scriptCFM</a>()</code>,
@@ -175,11 +187,16 @@ lavaan functions</p>
 <code><a href='scriptMIM.html'>scriptMIM</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>=</span> <span class='fu'>dyadVarNames</span><span class='op'>(</span><span class='va'>DRES</span>, xvar<span class='op'>=</span><span class='st'>"X"</span>, sep <span class='op'>=</span> <span class='st'>"."</span>,distinguish1 <span class='op'>=</span> <span class='st'>"1"</span>, distinguish2 <span class='op'>=</span> <span class='st'>"2"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in dyadVarNames(DRES, xvar = "X", sep = ".", distinguish1 = "1",     distinguish2 = "2"): could not find function "dyadVarNames"</span></div><div class='input'><span class='va'>con.bidy.config.script</span> <span class='op'>=</span> <span class='fu'>scriptBifactor</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in scriptBifactor(dvn, lvname = "Conflict", model = "configural"): could not find function "scriptBifactor"</span></div><div class='input'><span class='va'>con.bidy.loading.script</span> <span class='op'>=</span> <span class='fu'>scriptBifactor</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>,  model <span class='op'>=</span> <span class='st'>"loading"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in scriptBifactor(dvn, lvname = "Conflict", model = "loading"): could not find function "scriptBifactor"</span></div><div class='input'><span class='va'>con.bidy.intercept.script</span> <span class='op'>=</span> <span class='fu'>scriptBifactor</span><span class='op'>(</span><span class='va'>dvn</span>, lvname <span class='op'>=</span> <span class='st'>"Conflict"</span>,  model <span class='op'>=</span> <span class='st'>"intercept"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in scriptBifactor(dvn, lvname = "Conflict", model = "intercept"): could not find function "scriptBifactor"</span></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>dvn</span> <span class='op'>&lt;-</span> <span class='fu'><a href='scrapeVarCross.html'>scrapeVarCross</a></span><span class='op'>(</span><span class='va'>DRES</span>, x_order <span class='op'>=</span> <span class='st'>"sip"</span>, x_stem <span class='op'>=</span> <span class='st'>"sexsat"</span>,  x_delim2<span class='op'>=</span><span class='st'>"."</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span><span class='op'>)</span>
+<span class='va'>sexsat.bidyc.config.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptBiDy</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"SexSat"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span>, type <span class='op'>=</span> <span class='st'>"C"</span><span class='op'>)</span>
+<span class='va'>sexsat.bidyc.loadsource.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptBiDy</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"SexSat"</span>, model <span class='op'>=</span> <span class='st'>"loading_source"</span>, type <span class='op'>=</span> <span class='st'>"C"</span><span class='op'>)</span>
+<span class='va'>sexsat.bidyc.loadreleq.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptBiDy</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"SexSat"</span>, model <span class='op'>=</span> <span class='st'>"loading_releq"</span>, type <span class='op'>=</span> <span class='st'>"C"</span><span class='op'>)</span>
+
+<span class='va'>dvn</span> <span class='op'>&lt;-</span> <span class='fu'><a href='scrapeVarCross.html'>scrapeVarCross</a></span><span class='op'>(</span>dat <span class='op'>=</span> <span class='va'>commitmentQ</span>, x_order <span class='op'>=</span> <span class='st'>"spi"</span>, x_stem <span class='op'>=</span> <span class='st'>"sat.g"</span>, x_delim1 <span class='op'>=</span> <span class='st'>"."</span>, x_delim2<span class='op'>=</span><span class='st'>"_"</span>, distinguish_1<span class='op'>=</span><span class='st'>"1"</span>, distinguish_2<span class='op'>=</span><span class='st'>"2"</span>,
+y_order<span class='op'>=</span><span class='st'>"spi"</span>, y_stem<span class='op'>=</span><span class='st'>"com"</span>, y_delim1 <span class='op'>=</span> <span class='st'>"."</span>, y_delim2<span class='op'>=</span><span class='st'>"_"</span><span class='op'>)</span>
+
+<span class='va'>comsat.bidys.config.script</span> <span class='op'>&lt;-</span> <span class='fu'>scriptBiDy</span><span class='op'>(</span><span class='va'>dvn</span>, lvxname <span class='op'>=</span> <span class='st'>"Sat"</span>, lvyname <span class='op'>=</span> <span class='st'>"Com"</span>, model <span class='op'>=</span> <span class='st'>"configural"</span>, type <span class='op'>=</span> <span class='st'>"S"</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

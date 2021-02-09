@@ -30,6 +30,20 @@ makeTable <- function(dvn, fit, model, tabletype){
     tab <- gt::gt(tab)
     return(tab)
   }
+  else if(length(dvn) == 6 & model == "bidyc" & tabletype == "measurement"){
+    #Extract intercepts
+    xints <- xbidyIntercepts(dvn, fit)
+
+    #Extract loadings, SEs, Z, p,
+    tab <- bidyLoadings(dvn, fit)
+    tab$Intercept = xints
+    tab = tab %>%
+      dplyr::mutate_if(is.numeric, round, digits = 3)
+    tab$'p-value'[tab$'p-value' < .001] = "< .001"
+
+    tab <- gt::gt(tab)
+    return(tab)
+  }
   else if(length(dvn) == 9 & model == "apim" & tabletype == "measurement"){
     #Extract intercepts
     xyints <- xyintercepts(dvn, fit)
@@ -46,9 +60,92 @@ makeTable <- function(dvn, fit, model, tabletype){
   }
   else if(length(dvn) == 9 & model == "apim" & tabletype == "structural"){
     tab = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-      dplyr::filter(.data$op == "~"|.data$op == ":=") %>%
-      dplyr::select('Outcome'=.data$lhs, "Predictor"=.data$rhs, "Label" = .data$label, "Slope"=.data$est, "SE"=.data$se,
+      dplyr::filter(.data$op == "~"|.data$op == ":="|.data$op == "~~") %>%
+      dplyr::filter(!lhs %in% dvn[["p1xvarnames"]]&!lhs %in% dvn[["p2xvarnames"]]&!lhs %in% dvn[["p1yvarnames"]]&!lhs %in% dvn[["p2yvarnames"]]) %>%
+      dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, "Slope"=.data$est, "SE"=.data$se,
                     'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Slope"=.data$std.all)
+    tab = tab %>%
+      dplyr::mutate_if(is.numeric, round, digits = 3)
+    tab$'p-value'[tab$'p-value' < .001] = "< .001"
+
+    tab <- gt::gt(tab)
+    return(tab)
+  }
+  else if(length(dvn) == 9 & model == "mim" & tabletype == "measurement"){
+    #Extract intercepts
+    xyints <- xyintercepts(dvn, fit)
+
+    #Extract loadings, SEs, Z, p,
+    tab <- loadings(dvn, fit)
+    tab$Intercept = xyints
+    tab = tab %>%
+      dplyr::mutate_if(is.numeric, round, digits = 3)
+    tab$'p-value'[tab$'p-value' < .001] = "< .001"
+
+    tab <- gt::gt(tab)
+    return(tab)
+  }
+  else if(length(dvn) == 9 & model == "mim" & tabletype == "structural"){
+    tab = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+      dplyr::filter(.data$op == "~"|.data$op == ":="|.data$op == "~~") %>%
+      dplyr::filter(!lhs %in% dvn[["p1xvarnames"]]&!lhs %in% dvn[["p2xvarnames"]]&!lhs %in% dvn[["p1yvarnames"]]&!lhs %in% dvn[["p2yvarnames"]]) %>%
+      dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, "Slope"=.data$est, "SE"=.data$se,
+                    'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Slope"=.data$std.all)
+    tab = tab %>%
+      dplyr::mutate_if(is.numeric, round, digits = 3)
+    tab$'p-value'[tab$'p-value' < .001] = "< .001"
+
+    tab <- gt::gt(tab)
+    return(tab)
+  }
+  else if(length(dvn) == 9 & model == "cfm" & tabletype == "measurement"){
+    #Extract intercepts
+    xyints <- xyintercepts(dvn, fit)
+
+    #Extract loadings, SEs, Z, p,
+    tab <- loadings(dvn, fit)
+    tab$Intercept = xyints
+    tab = tab %>%
+      dplyr::mutate_if(is.numeric, round, digits = 3)
+    tab$'p-value'[tab$'p-value' < .001] = "< .001"
+
+    tab <- gt::gt(tab)
+    return(tab)
+  }
+  else if(length(dvn) == 9 & model == "cfm" & tabletype == "structural"){
+    tab = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+      dplyr::filter(.data$op == "~"|.data$op == ":="|.data$op == "~~") %>%
+      dplyr::filter(!lhs %in% dvn[["p1xvarnames"]]&!lhs %in% dvn[["p2xvarnames"]]&!lhs %in% dvn[["p1yvarnames"]]&!lhs %in% dvn[["p2yvarnames"]]) %>%
+      dplyr::select(.data$lhs, .data$op,.data$rhs, .data$est, "SE"=.data$se,
+                    'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Est"=.data$std.all)
+    tab = tab %>%
+      dplyr::mutate_if(is.numeric, round, digits = 3)
+    tab$'p-value'[tab$'p-value' < .001] = "< .001"
+
+    tab <- gt::gt(tab)
+    return(tab)
+  }
+  else if(length(dvn) == 9 & model == "bidys" & tabletype == "measurement"){
+    #Extract intercepts
+    xyints <- xybidyIntercepts(dvn, fit)
+
+    #Extract loadings, SEs, Z, p,
+    tab <- bidyLoadings(dvn, fit)
+    tab$Intercept = xyints
+    tab = tab %>%
+      dplyr::mutate_if(is.numeric, round, digits = 3)
+    tab$'p-value'[tab$'p-value' < .001] = "< .001"
+
+    tab <- gt::gt(tab)
+    return(tab)
+  }
+  else if(length(dvn) == 9 & model == "bidys" & tabletype == "structural"){
+    tab = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+      dplyr::filter(.data$op == "~"|.data$op == ":="|.data$op == "~~") %>%
+      dplyr::filter(!lhs %in% dvn[["p1xvarnames"]]&!lhs %in% dvn[["p2xvarnames"]]&!lhs %in% dvn[["p1yvarnames"]]&!lhs %in% dvn[["p2yvarnames"]]) %>%
+      dplyr::filter(!is.na(.data$z)) %>%
+      dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, .data$est, "SE"=.data$se,
+                    'p-value'=.data$pvalue, "95%CI LL" = .data$ci.lower, "95%CI UL" = .data$ci.upper, "Std. Est"=.data$std.all)
     tab = tab %>%
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"

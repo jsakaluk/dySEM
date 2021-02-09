@@ -55,7 +55,7 @@ measurement models, and particular types of structural comparisons.
 \examples{
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
-apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "configural")
+apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "configural", k = TRUE)
 apim.script.load <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "loading")
 apim.script.int  <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "intercept")
 apim.script.ind <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "ind")

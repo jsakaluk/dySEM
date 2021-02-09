@@ -8,8 +8,11 @@
 \alias{xtheta2}
 \alias{xtheta12}
 \alias{loadings}
+\alias{bidyLoadings}
 \alias{xintercepts}
+\alias{xbidyIntercepts}
 \alias{xyintercepts}
+\alias{xybidyIntercepts}
 \title{Functions for extracting measurement model parameter output}
 \usage{
 xlamda1(dvn, fit)
@@ -24,9 +27,15 @@ xtheta12(dvn, fit)
 
 loadings(dvn, fit)
 
+bidyLoadings(dvn, fit)
+
 xintercepts(dvn, fit)
 
+xbidyIntercepts(dvn, fit)
+
 xyintercepts(dvn, fit)
+
+xybidyIntercepts(dvn, fit)
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}

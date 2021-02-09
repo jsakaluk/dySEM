@@ -56,12 +56,16 @@ high-priority items include:
     factors, common fate growth)
 2.  Latent dyadic response surface analysis scripting and visualization
     functions
-3.  Unit test creation
+3.  Multi-group dyadic model scripting (e.g., comparing models from
+    samples of heterosexual vs. LGBTQ+ dyads)
+4.  Simulation functions to aid in sample size planning
+5.  Unit test creation
 
 ## Collaboration
 
 Please submit any feature requests via the `dySEM`
-[issues](https://github.com/jsakaluk/dySEM/issues) page.
+[issues](https://github.com/jsakaluk/dySEM/issues) page, using the
+“Wishlist for dySEM Package Development” tag.
 
 If you are interested in collaborating on the development of `dySEM`,
 please contact Dr. Sakaluk.
@@ -88,6 +92,11 @@ Briefly, these steps include:
 3.  **Script** your preferred model
 4.  **Fit** and **Inspect** your model via `lavaan`
 5.  **Output** statistical visualizations and/or tables
+
+There are additional optional functions, as well, that help users to
+calculate certain additional quantitative values (e.g., reliability,
+corrected model fit indexes in models with indistinguishable dyad
+members).
 
 ### 1. Import and wrangle **data**
 

@@ -62,6 +62,19 @@ loadings <- function(dvn, fit){
     dplyr::filter(.data$op == "=~") %>%
     dplyr::select('Latent Factor'=.data$lhs, Indicator=.data$rhs, Loading=.data$est, SE=.data$se, Z=.data$z,
                   'p-value'=.data$pvalue, 'Std. Loading'=.data$std.all)
+  load <- load[1:dvn[["indnum"]],]
+
+  return(load)
+}
+
+#' @rdname outParamHelpers
+bidyLoadings <- function(dvn, fit){
+  #Extract loadings, SEs, Z, p,
+  load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+    dplyr::filter(.data$op == "=~") %>%
+    dplyr::select('Latent Factor'=.data$lhs, Indicator=.data$rhs, Loading=.data$est, SE=.data$se, Z=.data$z,
+                  'p-value'=.data$pvalue, 'Std. Loading'=.data$std.all)
+
   return(load)
 }
 
@@ -80,13 +93,51 @@ xintercepts <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+xbidyIntercepts <- function(dvn, fit){
+  #Extract intercepts
+  intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+    dplyr::filter(.data$op == "~1") %>%
+    dplyr::select(.data$est)
+
+  intercept.param <- dplyr::rename(intercept.param, intercept = est)
+  x.int.num <- dvn[[3]]*2#number of x intercepts (*2 for dyads)
+  intercept.param <- intercept.param[1:x.int.num,]
+
+  half <- x.int.num/2
+  inthalf1 <- intercept.param[1:half]
+  inthalf2 <- intercept.param[(half+1):x.int.num]
+  missing <- rep(NA, x.int.num)
+  intercept.param <- c(inthalf1, missing, inthalf2)
+  return(intercept.param)
+}
+#' @rdname outParamHelpers
 xyintercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
     dplyr::filter(.data$op == "~1") %>%
     dplyr::select(.data$est)
 
-  intercept.param <- intercept.param$est[1:(length(intercept.param$est)-4)]
+  intercept.param <- intercept.param$est[1:dvn[["indnum"]]]
+
+  return(intercept.param)
+}
+
+#' @rdname outParamHelpers
+xybidyIntercepts <- function(dvn, fit){
+  #Extract intercepts
+  intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
+    dplyr::filter(.data$op == "~1") %>%
+    dplyr::filter(lhs %in% dvn[["p1xvarnames"]]|lhs %in% dvn[["p2xvarnames"]]|lhs %in% dvn[["p1yvarnames"]]|lhs %in% dvn[["p2yvarnames"]]) %>%
+    dplyr::select(.data$est)
+
+  intx1 <- intercept.param$est[1:dvn[["xindper"]]]
+  intx2 <- intercept.param$est[(dvn[["xindper"]]+1):(dvn[["xindper"]]*2)]
+  inty1 <- intercept.param$est[((dvn[["xindper"]]*2)+1):((dvn[["xindper"]]*2)+dvn[["yindper"]])]
+  inty2 <- intercept.param$est[((dvn[["xindper"]]*2)+dvn[["yindper"]]+1):((dvn[["xindper"]]*2)+2*dvn[["yindper"]])]
+  missing1 <- rep(NA, (2*dvn[["xindper"]]))
+  missing2 <- rep(NA, (2*dvn[["yindper"]]))
+
+  intercept.param <- c(intx1, missing1, intx2, inty1, missing2, inty2)
 
   return(intercept.param)
 }
