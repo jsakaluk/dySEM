@@ -66,7 +66,15 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
     eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist1"]], dvn[["p1xvarnames"]][1])
     eta.x1 = list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]]=sprintf("l%s*%s",i, dvn[["p1xvarnames"]][i])
+      eta.x1[[i]]=sprintf("lx%s*%s",i, dvn[["p1xvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "1" & type == "equated_source" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist1"]], dvn[["p1yvarnames"]][1])
+    eta.x1 = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x1[[i]]=sprintf("ly%s*%s",i, dvn[["p1yvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+")), fixed = T)
     return(eta.x)
@@ -122,7 +130,15 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
     eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist2"]], dvn[["p2xvarnames"]][1])
     eta.x1 = list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]]=sprintf("l%s*%s",(dvn[["xindper"]]+i), dvn[["p2xvarnames"]][i])
+      eta.x1[[i]]=sprintf("lx%s*%s",(dvn[["xindper"]]+i), dvn[["p2xvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "2" & type == "equated_source" & lvar == "Y"){
+    eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist2"]], dvn[["p2yvarnames"]][1])
+    eta.x1 = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x1[[i]]=sprintf("ly%s*%s",(dvn[["yindper"]]+i), dvn[["p2yvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+")), fixed = T)
     return(eta.x)
@@ -130,28 +146,56 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
     eta_x = sprintf("%sDy =~ NA*",lvname)
     eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+"), "+",paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
+  }else if(partner == "g" & type == "free" & lvar == "Y"){
+    eta_x = sprintf("%sDy =~ NA*",lvname)
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1yvarnames"]], collapse = "+"), "+",paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    return(eta.x)
   }else if(partner == "g" & type == "equated" & lvar == "X"){
     eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[["p1xvarnames"]][1])
     eta.x1 = list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]]=sprintf("l%s*%s",i, dvn[["p1xvarnames"]][i])
+      eta.x1[[i]]=sprintf("lx%s*%s",i, dvn[["p1xvarnames"]][i])
     }
     eta.x2 = list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x2[[i]]=sprintf("l%s*%s",i, dvn[["p2xvarnames"]][i])
+      eta.x2[[i]]=sprintf("lx%s*%s",i, dvn[["p2xvarnames"]][i])
     }
 
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "g" & type == "equated" & lvar == "Y"){
+    eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[["p1yvarnames"]][1])
+    eta.x1 = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x1[[i]]=sprintf("ly%s*%s",i, dvn[["p1yvarnames"]][i])
+    }
+    eta.x2 = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x2[[i]]=sprintf("ly%s*%s",i, dvn[["p2yvarnames"]][i])
+    }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
   }else if(partner == "g" & type == "equated_source" & lvar == "X"){
     eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[["p1xvarnames"]][1])
     eta.x1 = list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]]=sprintf("l%s*%s",i, dvn[["p1xvarnames"]][i])
+      eta.x1[[i]]=sprintf("lx%s*%s",i, dvn[["p1xvarnames"]][i])
     }
     eta.x2 = list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x2[[i]]=sprintf("l%s*%s",(dvn[["xindper"]]+i), dvn[["p2xvarnames"]][i])
+      eta.x2[[i]]=sprintf("lx%s*%s",(dvn[["xindper"]]+i), dvn[["p2xvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
+    return(eta.x)
+  }else if(partner == "g" & type == "equated_source" & lvar == "Y"){
+    eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[["p1yvarnames"]][1])
+    eta.x1 = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x1[[i]]=sprintf("ly%s*%s",i, dvn[["p1yvarnames"]][i])
+    }
+    eta.x2 = list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x2[[i]]=sprintf("ly%s*%s",(dvn[["yindper"]]+i), dvn[["p2yvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)

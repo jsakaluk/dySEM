@@ -5,17 +5,28 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting BiDY  Models}
 \usage{
-scriptBiDy(dvn, lvname = "X", type = "C", model = "configural")
+scriptBiDy(
+  dvn,
+  lvxname,
+  lvyname,
+  type = "C",
+  model = "configural",
+  equate = "none"
+)
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
 
-\item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
+\item{lvxname}{input character to (arbitrarily) name LV X in lavaan syntax}
+
+\item{lvyname}{input character to (arbitrarily) name LV Y in lavaan syntax}
 
 \item{type}{input character used to specify what kind of BiDy model to specify ("C" for BiDy-C, or "S" for BiDy-S)}
 
 \item{model}{input character used to specify which level of invariance is
-modeled ("configural", "loading", "intercept", "residual", or "indistinguishable"). Defaults to "configural".}
+modeled (for BiDys, options thus far are "loading", "loading_source", and "loading_releq"). Defaults to "configural".
+' @param equate input character to specify which type of structural parameters
+("actor" = actor effects)}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -29,13 +40,16 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
 }
 \examples{
 dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",  x_delim2=".", distinguish_1="1", distinguish_2="2")
-sexsat.bidy.config.script <- scriptBiDy(dvn, lvname = "SexSat", model = "configural", type = "C")
-sexsat.bidy.loadsource.script <- scriptBiDy(dvn, lvname = "SexSat", model = "loading_source", type = "C")
-sexsat.bidy.loadreleq.script <- scriptBiDy(dvn, lvname = "SexSat", model = "loading_releq", type = "C")
+sexsat.bidyc.config.script <- scriptBiDy(dvn, lvxname = "SexSat", model = "configural", type = "C")
+sexsat.bidyc.loadsource.script <- scriptBiDy(dvn, lvxname = "SexSat", model = "loading_source", type = "C")
+sexsat.bidyc.loadreleq.script <- scriptBiDy(dvn, lvxname = "SexSat", model = "loading_releq", type = "C")
+
+dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+
+comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat", lvyname = "Com", model = "configural", type = "S")
 }
 \seealso{
-\code{\link{dyadVarNames}} which this function relies on
-
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},
 \code{\link{scriptCFA}()},
