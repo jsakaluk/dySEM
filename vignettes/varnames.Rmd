@@ -2,7 +2,7 @@
 title: "Anatomy of a Variable Name"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Dyad Variable Names}
+  %\VignetteIndexEntry{anatomy}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -38,7 +38,7 @@ Try to remember the last spreadsheet of data you interacted with. Now think of t
 ### Some Examples of Ambigious Variable Names
 
 
-![*Ambigious Name*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p1.jpeg){width=70%} 
+![ ](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p1.jpeg){width=70%} 
 
 
 
@@ -46,55 +46,89 @@ Other variable name stems, meanwhile, were probably more intuitive. Variables co
 
 ### Some Examples of Intuitive Variable Names
 
-![*Intuitive Name*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p2.jpeg){width=70%} 
 
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p2.jpeg){width=70%} 
+
+                                                   
 The second dimension, ***repetition***, is sometimes so subtle you might not immediately recognize it as a feature of variable name stems (and an important feature at that!). Some variable names--even if they refer to a set of related variables--might be highly inconsistent or idiosyncratic. The same exemplar variables corresponding to the *18 Experiences in Close Relationships* survey items might be named with different descriptive text in each variable name, or using different patterns of text casing or delimitation. This kind of inconsistent naming might strike you as unlikely to occur “in the wild”. We agree, and we have therefore developed dySEM accordingly, betting that they are the exception, not the rule. The point, however, is that inconsistent variable names are, strictly speaking, conceivable. But for the most part, we anticipate related variables will be named repetitiously: the stem, casing, and delimitation applied to one of many related variables will be applied to all. 
 
 ### Some Examples of Inconsistent (oh, the horror) and Consistent Variable Names
 
-![*Inconsistent and Consistent Names*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p3.png){width=70%}  
+
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p3.png){width=70%}  
+
+<br>
 
 These two dimensions of variable name styling play important, but different, roles when *scraping* variable information via dySEM. Clear names are not essential for scraping functions (e.g., `scrapeVarCross()`) to work properly, but they will make for quicker and less error-prone coding. Repetitious names, meanwhile, are (for now, at least) **essential** for scraping functions. Thus, be sure to export or prepare your dataset in such a way that the related set(s) of variables you intend to use in dySEM have repetitious names.
 
-![*The Perfect Name*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p4.png){width=70%}
+<br> 
+
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p4.png){width=70%}
+
+<br>
 
 ## Double-Trouble with Dyadic Variable Names
 Variable names get a bit more complicated in the context of “dyad” (KENNY REF) or “=ide” (MLM REF) datasets, because these datasets contain the same variable twice, in two different columns: one for each member of a dyad. 
 
-![*Dyadic Variable Names*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p5.png){width=70%}
+<br>
+
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p5.png){width=70%}
+
+<br>
 
 Each variable needs its own unique name, and so typically, dyad datasets involve appending a distinguishing character(s) or number(s) to make clear to which partner’s value a given variable refers. These ***distinguishers*** come in one of two varieties, corresponding to the type of dyads under study. If the dyads in the dataset are “indistinguishable”--that is, there’s no systematic and consistent way to assign dyad members to a particular role (e.g., friends, coworkers)--then distinguishers are usually arbitrary in name and designation. For example, some partner’s variables might be given the distinguisher “1” or “A”, while the other partner’s variables might be given the distinguisher “2” or “B”. The particular two distinguishers selected in these cases ultimately do not matter (as they do not convey any meaningful role-based information), as long as they are applied repetitiously between dyad members. 
 
-![*Distinguisher*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p6.png){width=70%}
+<br>
 
-If, alternatively, the dyads in the dataset are “distinguishable”--that is, there’s a systematic role that defines members within a dyad (e.g., heterosexual romantic partners, parent and child, manager and employee, therapist and client)--then there is the opportunity for distinguishers for variable names to be selected for clarity to help you (and others) intuit which partner’s data is captured in which columns. 
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p6.png){width=70%}
 
-![*Intuitive Distinguisher*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p7.jpeg){width=70%}
+<br>
+
+If, alternatively, the dyads in the dataset are “distinguishable”--that is, there’s a systematic role that defines members within a dyad (e.g., heterosexual romantic partners, parent and child, manager and employee, therapist and client)--then there is the opportunity for distinguishers for variable names to be selected for clarity to help you (and others) intuit which partner’s data is captured in which columns.   
+  
+<br>
+
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p7.jpeg){width=70%}
+
+<br>
 
 ## Dissecting Dyadic Dataset Variable Names
 At this point, we have already previewed all of the major features of a variable name in a dyadic dataset--we just need to bring them all together. Understanding these specific features and the labels we use in *dySEM* to refer to them will make it much easier for you when you go to use a scraping function (e.g., `scrapeVarCross()`). 
 
-Let’s imagine a hypothetical dataset in which managers and employee dyads both reported on how positively they felt about their respective jobs, using a three-item questionnaire:
 
-![*Dissecting Dyadic Dataset Variable Names*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p8.png){width=70%}
+Let’s imagine a hypothetical dataset in which managers and employee dyads both reported on how positively they felt about their respective jobs, using a three-item questionnaire:  
 
+<br>
+
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p8.png){width=70%}  
+  
+<br>
+  
 Breaking these names down, we are left with the following component features:
--The variable ***stem***: characters that (ambiguous, or [ideally] intuitive) are consistent across all variables, for both partners that we are interested in (e.g., pos)
--The ***item number***: a number that only appears twice (once per partner) that indicates which specific variable within those sharing its stem is being referenced (e.g., 2)
--And the ***partner distinguisher***: the character that indicates which variables correspond to which partner (e.g., m or e)
--***Delimiters*** such as “.” or “_” can also be used to separate the 1st feature from the 2nd, and the 2nd from the 3rd. Sometimes a name might include one delimiter; other times (as in this case), it might include two.
+The variable ***stem***: characters that (ambiguous, or [ideally] intuitive) are consistent across all variables, for both partners that we are interested in (e.g., pos)
+The ***item number***: a number that only appears twice (once per partner) that indicates which specific variable within those sharing its stem is being referenced (e.g., 2)
+And the ***partner distinguisher***: the character that indicates which variables correspond to which partner (e.g., m or e)
+***Delimiters*** such as “.” or “_” can also be used to separate the 1st feature from the 2nd, and the 2nd from the 3rd. Sometimes a name might include one delimiter; other times (as in this case), it might include two.
+  
+<br>
 
-![*SIP Names*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p9.png){width=70%}
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p9.png){width=70%}
 
+<br>  
+  
 When dyadic dataset variable name features are arranged in this order (*S*tem, *I*tem number, *P*artner distinguisher), we refer to them as **“sip”-ordered** when using dySEM. We do this because variable naming conventions are somewhat arbitrary and varied; people can and do arrange dyadic variable names in other orders. For example, another common ordering is *S*tem, *P*artner distinguisher, *I*tem number, which we refer to as **“spi”-ordered** when using *dySEM*. “spi”-ordered variable names tend to be more common if you used an online survey program like Qualtrics to collect your data (e.g., with questions for both partners embedded in different sections of the same survey).
 
 ## Spi-Ordered Dyadic Variable
-![*SPI Name*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p10.png){width=70%}
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p10.png){width=70%}
+
+<br>
 
 If you can identity your variable ***stem***, ***item number***, and ***partner distinguishers*** (and any ***delimiters*** between these elements), and can correctly determine if your variable names are “sip”-ordered or “spi”-ordered, then you are all set to learn about the first step in using *dySEM*: scraping variable information.
 #link to the url for the scraping vignette
 
-![*MyData*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p11.png){width=80%}
+<br>
+  
+![](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p11.png){width=80%}
 
 
 
