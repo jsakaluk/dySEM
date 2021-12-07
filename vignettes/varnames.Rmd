@@ -38,7 +38,7 @@ Try to remember the last spreadsheet of data you interacted with. Now think of t
 ### Some Examples of Ambigious Variable Names
 
 
-![*Ambigious Name*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p1.png){width=70%} 
+![*Ambigious Name*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p1.jpeg){width=70%} 
 
 
 
@@ -46,7 +46,7 @@ Other variable name stems, meanwhile, were probably more intuitive. Variables co
 
 ### Some Examples of Intuitive Variable Names
 
-![*Intuitive Name*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p2.png){width=70%} 
+![*Intuitive Name*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p2.jpeg){width=70%} 
 
 The second dimension, ***repetition***, is sometimes so subtle you might not immediately recognize it as a feature of variable name stems (and an important feature at that!). Some variable names--even if they refer to a set of related variables--might be highly inconsistent or idiosyncratic. The same exemplar variables corresponding to the *18 Experiences in Close Relationships* survey items might be named with different descriptive text in each variable name, or using different patterns of text casing or delimitation. This kind of inconsistent naming might strike you as unlikely to occur “in the wild”. We agree, and we have therefore developed dySEM accordingly, betting that they are the exception, not the rule. The point, however, is that inconsistent variable names are, strictly speaking, conceivable. But for the most part, we anticipate related variables will be named repetitiously: the stem, casing, and delimitation applied to one of many related variables will be applied to all. 
 
@@ -69,7 +69,7 @@ Each variable needs its own unique name, and so typically, dyad datasets involve
 
 If, alternatively, the dyads in the dataset are “distinguishable”--that is, there’s a systematic role that defines members within a dyad (e.g., heterosexual romantic partners, parent and child, manager and employee, therapist and client)--then there is the opportunity for distinguishers for variable names to be selected for clarity to help you (and others) intuit which partner’s data is captured in which columns. 
 
-![*Intuitive Distinguisher*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p7.png){width=70%}
+![*Intuitive Distinguisher*](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p7.jpeg){width=70%}
 
 ## Dissecting Dyadic Dataset Variable Names
 At this point, we have already previewed all of the major features of a variable name in a dyadic dataset--we just need to bring them all together. Understanding these specific features and the labels we use in *dySEM* to refer to them will make it much easier for you when you go to use a scraping function (e.g., `scrapeVarCross()`). 
