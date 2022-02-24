@@ -45,15 +45,12 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
   if(model == "configural"){
     #Loadings
     if(scaleset == "FF"){
-      if(!is.true(group)){
-        eta.x1 = loads(dvn, lvar = "X", lvname, partner="1", type = "free")
-        eta.x2 = loads(dvn, lvar = "X", lvname, partner="2", type = "free")
-      }
+
+      eta.x1 = loads(dvn, lvar = "X", lvname, partner="1", type = "free")
+      eta.x2 = loads(dvn, lvar = "X", lvname, partner="2", type = "free")
     }else if(scaleset == "MV"){
-      if(!is.true(group)){
-        eta.x1 = loads(dvn, lvar = "X", lvname, partner="1", type = "fixed")
-        eta.x2 = loads(dvn, lvar = "X", lvname, partner="2", type = "fixed")
-      }
+      eta.x1 = loads(dvn, lvar = "X", lvname, partner="1", type = "fixed")
+      eta.x2 = loads(dvn, lvar = "X", lvname, partner="2", type = "fixed")
     }
 
     #Latent (co)variances
