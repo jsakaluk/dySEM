@@ -11,8 +11,10 @@
 #' @param type input character used to specify what kind of BiDy model to specify ("C" for BiDy-C, or "S" for BiDy-S)
 #' @param model input character used to specify which level of invariance is
 #' modeled (for BiDys, options thus far are "loading", "loading_source", and "loading_releq"). Defaults to "configural".
-#' ' @param equate input character to specify which type of structural parameters
+#' @param equate input character to specify which type of structural parameters
 #' ("actor" = actor effects)
+#' @param writescript input logical (default FALSE) for whether lavaan script should
+#' be concatenated and written to current working directory (in subdirectory "scripts")
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @family script-writing functions
@@ -29,7 +31,9 @@
 #' comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat", lvyname = "Com", model = "configural", type = "S")
 
 
-scriptBiDy = function(dvn, lvxname, lvyname, type = "C", model = "configural", equate="none"){
+scriptBiDy = function(dvn, lvxname, lvyname,
+                      type = "C", model = "configural", equate="none",
+                      writescript = FALSE){
   dirs("scripts")
   if(type == "C"){
     if(model == "configural"){
@@ -75,7 +79,10 @@ scriptBiDy = function(dvn, lvxname, lvyname, type = "C", model = "configural", e
                                   resids, res1, res2,
                                   xints1, xints2,
                                   alpha_gx, alpha_x1, alpha_x2)
-      cat(configural.script,"\n", file = sprintf("./scripts/%s_bidyc_configural.txt",lvxname))
+
+      if(isTRUE(writescript)){
+        cat(configural.script,"\n", file = sprintf("./scripts/%s_bidyc_configural.txt",lvxname))
+      }
       return(configural.script)
     }
     else if (model == "loading"){
@@ -122,7 +129,9 @@ scriptBiDy = function(dvn, lvxname, lvyname, type = "C", model = "configural", e
                                resids, res1, res2,
                                xints1, xints2,
                                alpha_gx, alpha_x1, alpha_x2)
-      cat(loading.script,"\n", file = sprintf("./scripts/%s_bidy_loading.txt",lvxname))
+      if(isTRUE(writescript)){
+        cat(loading.script,"\n", file = sprintf("./scripts/%s_bidy_loading.txt",lvxname))
+      }
       return(loading.script)
     }
     else if (model == "loading_source"){
@@ -169,7 +178,9 @@ scriptBiDy = function(dvn, lvxname, lvyname, type = "C", model = "configural", e
                                resids, res1, res2,
                                xints1, xints2,
                                alpha_gx, alpha_x1, alpha_x2)
-      cat(loading.script,"\n", file = sprintf("./scripts/%s_bidy_loading_src.txt",lvxname))
+      if(isTRUE(writescript)){
+        cat(loading.script,"\n", file = sprintf("./scripts/%s_bidy_loading_src.txt",lvxname))
+      }
       return(loading.script)
     }
     else if (model == "loading_releq"){
@@ -215,7 +226,10 @@ scriptBiDy = function(dvn, lvxname, lvyname, type = "C", model = "configural", e
                                   resids, res1, res2,
                                   xints1, xints2,
                                   alpha_gx, alpha_x1, alpha_x2)
-      cat(loading.script,"\n", file = sprintf("./scripts/%s_bidyc_loading_releq.txt",lvxname))
+
+      if(isTRUE(writescript)){
+        cat(loading.script,"\n", file = sprintf("./scripts/%s_bidyc_loading_releq.txt",lvxname))
+      }
       return(loading.script)
     }
   }
@@ -316,7 +330,10 @@ scriptBiDy = function(dvn, lvxname, lvyname, type = "C", model = "configural", e
                                   xints1, xints2, yints1, yints2,
                                   alpha_gx, alpha_x1, alpha_x2,
                                   alpha_gy, alpha_y1, alpha_y2)
-      cat(configural.script,"\n", file = sprintf("./scripts/%s%s_bidys_configural.txt",lvxname, lvyname))
+
+      if(isTRUE(writescript)){
+        cat(configural.script,"\n", file = sprintf("./scripts/%s%s_bidys_configural.txt",lvxname, lvyname))
+      }
       return(configural.script)
     }
     else if(model == "loading"){
@@ -415,7 +432,9 @@ scriptBiDy = function(dvn, lvxname, lvyname, type = "C", model = "configural", e
                                   xints1, xints2, yints1, yints2,
                                   alpha_gx, alpha_x1, alpha_x2,
                                   alpha_gy, alpha_y1, alpha_y2)
-      cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading.txt",lvxname, lvyname))
+      if(isTRUE(writescript)){
+        cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading.txt",lvxname, lvyname))
+      }
       return(loading.script)
     }
     else if(model == "loading_source"){
@@ -514,7 +533,10 @@ scriptBiDy = function(dvn, lvxname, lvyname, type = "C", model = "configural", e
                                xints1, xints2, yints1, yints2,
                                alpha_gx, alpha_x1, alpha_x2,
                                alpha_gy, alpha_y1, alpha_y2)
-      cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading_source.txt",lvxname, lvyname))
+
+      if(isTRUE(writescript)){
+        cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading_source.txt",lvxname, lvyname))
+      }
       return(loading.script)
     }
     else if(model == "loading_releq"){
@@ -613,7 +635,9 @@ scriptBiDy = function(dvn, lvxname, lvyname, type = "C", model = "configural", e
                                   xints1, xints2, yints1, yints2,
                                   alpha_gx, alpha_x1, alpha_x2,
                                   alpha_gy, alpha_y1, alpha_y2)
-      cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading_releq.txt",lvxname, lvyname))
+      if(isTRUE(writescript)){
+        cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading_releq.txt",lvxname, lvyname))
+      }
       return(loading.script)
     }
   }
