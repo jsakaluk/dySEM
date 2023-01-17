@@ -13,6 +13,8 @@
 #' modeled. Defaults to "configural"
 #' @param scaleset input character to specify how to set the scale of the latent variable(s). Default is
 #' "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)
+#' @param writescript input logical (default FALSE) for whether lavaan script should
+#' be concatenated and written to current working directory (in subdirectory "scripts")
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
@@ -28,7 +30,8 @@
 #' cfm.script.int  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat", model = "intercept", scaleset = "FF")
 #' cfm.script.ind  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat", model = "indist", scaleset = "FF")
 
-scriptCFM = function(dvn, lvxname, lvyname, model = "configural", scaleset = "FF"){
+scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
+                     writescript = FALSE){
   dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){
@@ -138,7 +141,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural", scaleset = "FF
                                     xints1, xints2, yints1, yints2,
                                     alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
-      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_cfm_configural.txt",lvyname,lvxname))
+      if(isTRUE(writescript)){
+        cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_cfm_configural.txt",lvyname,lvxname))
+      }
       return(configural.script)
     }
     else if (model == "loading"){
@@ -248,7 +253,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural", scaleset = "FF
                                   xints1, xints2, yints1, yints2,
                                   alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
-     cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+     if(isTRUE(writescript)){
+       cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+     }
 
      return(loading.script)
     }
@@ -359,7 +366,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural", scaleset = "FF
                                xints1, xints2, yints1, yints2,
                                alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
-      cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      if(isTRUE(writescript)){
+        cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      }
       return(intercept.script)
     }
     else if (model == "residual"){
@@ -469,7 +478,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural", scaleset = "FF
                                  xints1, xints2, yints1, yints2,
                                  alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
-      cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      if(isTRUE(writescript)){
+        cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      }
       return(residual.script)
     }
     else if(model == "indist"){
@@ -579,7 +590,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "configural", scaleset = "FF
                                 xints1, xints2, yints1, yints2,
                                 alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
-      cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_indist.txt",lvyname,lvxname))
+      if(isTRUE(writescript)){
+        cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_indist.txt",lvyname,lvxname))
+      }
       return(indist.script)
     }
   }
