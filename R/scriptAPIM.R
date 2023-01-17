@@ -22,6 +22,8 @@
 #' @param k input logical for whether Kenny & Ledermann's (2010) k parameter should be
 #' calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
 #' a loading-invariant model to be specified, otherwise a warning is returned.
+#' @param writescript input logical (default FALSE) for whether lavaan script should
+#' be concatenated and written to current working directory (in subdirectory "scripts")
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
@@ -35,9 +37,12 @@
 #' apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "configural", k = TRUE)
 #' apim.script.load <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "loading")
 #' apim.script.int  <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "intercept")
-#' apim.script.ind <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "ind")
+#' apim.script.ind <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "indist")
 
-scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural", equate="none", k = FALSE){
+scriptAPIM = function(dvn, scaleset = "FF",
+                      lvxname, lvyname,
+                      model = "indist", equate="none", k = FALSE,
+                      writescript = FALSE){
   dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){
@@ -180,7 +185,11 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                     k1, k2
         )
       }
-      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_apim_configural.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_apim_configural.txt",lvyname,lvxname))
+      }
+
       if(equate=="actor"|equate=="partner"|equate=="all_effects"|k == TRUE){
         cat(crayon::yellow("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant"))
         #message("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant")
@@ -331,7 +340,10 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                     k1, k2
         )
       }
-      cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+      }
 
       if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
         cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
@@ -479,7 +491,11 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                  k1, k2
         )
       }
-      cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      }
+
       return(intercept.script)
     }
     else if (model == "residual"){
@@ -622,7 +638,10 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                    k1, k2
         )
       }
-      cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+      }
       return(residual.script)
     }
     else if (model == "lvariance"){
@@ -765,7 +784,10 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                  k1, k2
         )
       }
-      cat(lvariance.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        cat(lvariance.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+      }
 
       if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
         cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
@@ -916,7 +938,9 @@ scriptAPIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configura
                                   k1, k2
         )
       }
-      cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_indist.txt",lvyname,lvxname))
+      if(isTRUE(writescript)){
+        cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_indist.txt",lvyname,lvxname))
+      }
       return(indist.script)
     }
   }

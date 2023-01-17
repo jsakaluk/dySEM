@@ -62,6 +62,8 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
+  }else if(partner == "1" & type == "grpfree_free" & lvar == "X"){
+
   }else if(partner == "1" & type == "equated_source" & lvar == "X"){
     eta_x = sprintf("%s%s =~ NA*%s+",lvname, dvn[["dist1"]], dvn[["p1xvarnames"]][1])
     eta.x1 = list()
