@@ -26,6 +26,8 @@
 #' "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)
 #' @param model input character used to specify which level of invariance is
 #' modeled ("configural", "loading", "intercept", "residual", or "indist"). Defaults to "configural".
+#' @param writescript input logical (default FALSE) for whether lavaan script should
+#' be concatenated and written to current working directory (in subdirectory "scripts")
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @family script-writing functions
@@ -40,7 +42,8 @@
 #' sat.means.script <- scriptCFA(dvn, lvname = "Sat",  model = "lmean")
 #' sat.indist.script <- scriptCFA(dvn, lvname = "Sat",  model = "indist")
 
-scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
+scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
+                     writescript = FALSE){
   dirs("scripts")
   if(model == "configural"){
     #Loadings
@@ -95,7 +98,11 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
 
     #Script Creation Syntax
     configural.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
-    cat(configural.script,"\n", file = sprintf("./scripts/%s_dyadic_configural.txt",lvname))
+
+    if(isTRUE(writescript)){
+      cat(configural.script,"\n", file = sprintf("./scripts/%s_dyadic_configural.txt",lvname))
+    }
+
     return(configural.script)
   }
   else if (model == "loading"){
@@ -150,7 +157,11 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
 
     #Script Creation Syntax
     loading.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
-    cat(loading.script,"\n", file = sprintf("./scripts/%s_dyadic_loading.txt",lvname))
+
+    if(isTRUE(writescript)){
+      cat(loading.script,"\n", file = sprintf("./scripts/%s_dyadic_loading.txt",lvname))
+    }
+
     return(loading.script)
   }
   else if (model == "intercept"){
@@ -205,7 +216,10 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
 
     #Script Creation Syntax
     intercept.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
-    cat(intercept.script,"\n", file = sprintf("./scripts/%s_dyadic_intercept.txt",lvname))
+
+    if(isTRUE(writescript)){
+      cat(intercept.script,"\n", file = sprintf("./scripts/%s_dyadic_intercept.txt",lvname))
+    }
     return(intercept.script)
   }
   else if (model == "residual"){
@@ -260,7 +274,10 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
 
     #Script Creation Syntax
     residual.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
-    cat(residual.script,"\n", file = sprintf("./scripts/%s_dyadic_residual.txt",lvname))
+
+    if(isTRUE(writescript)){
+      cat(residual.script,"\n", file = sprintf("./scripts/%s_dyadic_residual.txt",lvname))
+    }
     return(residual.script)
   }
   else if (model == "lvariance"){
@@ -315,7 +332,11 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
 
     #Script Creation Syntax
     lvariance.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
-    cat(lvariance.script,"\n", file = sprintf("./scripts/%s_dyadic_lvariance.txt",lvname))
+
+    if(isTRUE(writescript)){
+      cat(lvariance.script,"\n", file = sprintf("./scripts/%s_dyadic_lvariance.txt",lvname))
+    }
+
     return(lvariance.script)
   }
   else if (model == "lmean"){
@@ -369,7 +390,10 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
     }
     #Script Creation Syntax
     lmean.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
-    cat(lmean.script,"\n", file = sprintf("./scripts/%s_dyadic_lmean.txt",lvname))
+
+    if(isTRUE(writescript)){
+      cat(lmean.script,"\n", file = sprintf("./scripts/%s_dyadic_lmean.txt",lvname))
+    }
     return(lmean.script)
   }
   else if (model == "indist"){
@@ -423,7 +447,11 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "configural"){
     }
     #Script Creation Syntax
     indist.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
-    cat(indist.script,"\n", file = sprintf("./scripts/%s_dyadic_indistinguishable.txt",lvname))
+
+    if(isTRUE(writescript)){
+      cat(indist.script,"\n", file = sprintf("./scripts/%s_dyadic_indistinguishable.txt",lvname))
+    }
+
     return(indist.script)
   }
 }
