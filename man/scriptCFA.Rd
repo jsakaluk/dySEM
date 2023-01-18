@@ -5,7 +5,13 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting Latent Dyadic Measurement and Invariance Models}
 \usage{
-scriptCFA(dvn, lvname = "X", scaleset = "FF", model = "configural")
+scriptCFA(
+  dvn,
+  lvname = "X",
+  scaleset = "FF",
+  model = "indist",
+  writescript = FALSE
+)
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
@@ -17,6 +23,9 @@ scriptCFA(dvn, lvname = "X", scaleset = "FF", model = "configural")
 
 \item{model}{input character used to specify which level of invariance is
 modeled ("configural", "loading", "intercept", "residual", or "indist"). Defaults to "configural".}
+
+\item{writescript}{input logical (default FALSE) for whether lavaan script should
+be concatenated and written to current working directory (in subdirectory "scripts")}
 
 \item{lvnum}{optional input character to indicate which LV is modeled ("one" or "two").
 Only necessary if dvn contains both X and Y information and user wants CFA for Y}

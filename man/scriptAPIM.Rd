@@ -10,9 +10,10 @@ scriptAPIM(
   scaleset = "FF",
   lvxname,
   lvyname,
-  model = "configural",
+  model = "indist",
   equate = "none",
-  k = FALSE
+  k = FALSE,
+  writescript = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ require an intercept-invariant model to be specified, otherwise a warning is ret
 \item{k}{input logical for whether Kenny & Ledermann's (2010) k parameter should be
 calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
 a loading-invariant model to be specified, otherwise a warning is returned.}
+
+\item{writescript}{input logical (default FALSE) for whether lavaan script should
+be concatenated and written to current working directory (in subdirectory "scripts")}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -58,7 +62,7 @@ y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "configural", k = TRUE)
 apim.script.load <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "loading")
 apim.script.int  <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "intercept")
-apim.script.ind <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "ind")
+apim.script.ind <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "indist")
 }
 \seealso{
 \code{\link{dyadVarNames}} which this function relies on

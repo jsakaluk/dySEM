@@ -19,9 +19,6 @@ getDydmacs(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5)
 
 \item{upperLV}{greatest latent variable value evaluated (default = 5)}
 }
-\value{
-
-}
 \description{
 Calculates dmacs difference in expected indicator scores for between dyad members
 }

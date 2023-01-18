@@ -5,7 +5,14 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting Latent Common Fate Models}
 \usage{
-scriptCFM(dvn, lvxname, lvyname, model = "configural", scaleset = "FF")
+scriptCFM(
+  dvn,
+  lvxname,
+  lvyname,
+  model = "indist",
+  scaleset = "FF",
+  writescript = FALSE
+)
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
@@ -19,6 +26,9 @@ modeled. Defaults to "configural"}
 
 \item{scaleset}{input character to specify how to set the scale of the latent variable(s). Default is
 "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)}
+
+\item{writescript}{input logical (default FALSE) for whether lavaan script should
+be concatenated and written to current working directory (in subdirectory "scripts")}
 }
 \value{
 character object of lavaan script that can be passed immediately to

@@ -11,7 +11,8 @@ scriptBiDy(
   lvyname,
   type = "C",
   model = "configural",
-  equate = "none"
+  equate = "none",
+  writescript = FALSE
 )
 }
 \arguments{
@@ -24,9 +25,13 @@ scriptBiDy(
 \item{type}{input character used to specify what kind of BiDy model to specify ("C" for BiDy-C, or "S" for BiDy-S)}
 
 \item{model}{input character used to specify which level of invariance is
-modeled (for BiDys, options thus far are "loading", "loading_source", and "loading_releq"). Defaults to "configural".
-' @param equate input character to specify which type of structural parameters
+modeled (for BiDys, options thus far are "loading", "loading_source", and "loading_releq"). Defaults to "configural".}
+
+\item{equate}{input character to specify which type of structural parameters
 ("actor" = actor effects)}
+
+\item{writescript}{input logical (default FALSE) for whether lavaan script should
+be concatenated and written to current working directory (in subdirectory "scripts")}
 }
 \value{
 character object of lavaan script that can be passed immediately to
