@@ -81,6 +81,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
       psi_x1y1 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvyname, dvn[[4]])
       psi_x2y2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[5]],lvyname, dvn[[5]])
 
+      #Latent Slope
+      beta_yx <- paste(lvyname, "~", lvxname)
+
       #Correlated residuals
       resids.x = list()
       for (i in 1:dvn[[3]]) {
@@ -134,9 +137,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
 
       #Script Creation Syntax
 
-        configural.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
+        configural.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Dyadic Effect\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
                                     eta.x1, eta.x2, eta.c, eta.y1,eta.y2,
-                                    psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2,
+                                    psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2,beta_yx,
                                     resx1, resx2, resy1, resy2, resids.x, resids.y,
                                     xints1, xints2, yints1, yints2,
                                     alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
@@ -193,6 +196,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
       psi_x1y1 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvyname, dvn[[4]])
       psi_x2y2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[5]],lvyname, dvn[[5]])
 
+      #Latent Slope
+      beta_yx <- paste(lvyname, "~", lvxname)
+
       #Correlated residuals
       resids.x = list()
       for (i in 1:dvn[[3]]) {
@@ -246,9 +252,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
 
       #Script Creation Syntax
 
-     loading.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
+     loading.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Dyadic Effect\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
                                   eta.x1, eta.x2,eta.y1,eta.y2,eta.c,
-                                  psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2,
+                                  psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2,beta_yx,
                                   resx1, resx2, resy1, resy2, resids.x, resids.y,
                                   xints1, xints2, yints1, yints2,
                                   alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
@@ -306,6 +312,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
       psi_x1y1 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvyname, dvn[[4]])
       psi_x2y2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[5]],lvyname, dvn[[5]])
 
+      #Latent Slope
+      beta_yx <- paste(lvyname, "~", lvxname)
+
       #Correlated residuals
       resids.x = list()
       for (i in 1:dvn[[3]]) {
@@ -359,9 +368,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
 
       #Script Creation Syntax
 
-      intercept.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
+      intercept.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Dyadic Effect\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
                                eta.x1, eta.x2,eta.y1,eta.y2,eta.c,
-                               psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2,
+                               psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2, beta_yx,
                                resx1, resx2, resy1, resy2, resids.x, resids.y,
                                xints1, xints2, yints1, yints2,
                                alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
@@ -418,6 +427,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
       psi_x1y1 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvyname, dvn[[4]])
       psi_x2y2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[5]],lvyname, dvn[[5]])
 
+      #Latent Slope
+      beta_yx <- paste(lvyname, "~", lvxname)
+
       #Correlated residuals
       resids.x = list()
       for (i in 1:dvn[[3]]) {
@@ -471,9 +483,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
 
       #Script Creation Syntax
 
-      residual.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
+      residual.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Dyadic Effect\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
                                  eta.x1, eta.x2,eta.y1,eta.y2,eta.c,
-                                 psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2,
+                                 psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2, beta_yx,
                                  resx1, resx2, resy1, resy2, resids.x, resids.y,
                                  xints1, xints2, yints1, yints2,
                                  alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
@@ -530,6 +542,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
       psi_x1y1 = sprintf("%s%s ~~ psyxy*%s%s",lvxname, dvn[[4]],lvyname, dvn[[4]])
       psi_x2y2 = sprintf("%s%s ~~ psyxy*%s%s",lvxname, dvn[[5]],lvyname, dvn[[5]])
 
+      #Latent Slope
+      beta_yx <- paste(lvyname, "~", lvxname)
+
       #Correlated residuals
       resids.x = list()
       for (i in 1:dvn[[3]]) {
@@ -583,9 +598,9 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
 
       #Script Creation Syntax
 
-      indist.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
+      indist.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n\n#Latent (Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Dyadic Effect\n%s\n\n#Residual (Co)variances\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
                                 eta.x1, eta.x2,eta.y1,eta.y2,eta.c,
-                                psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2,
+                                psi_x1, psi_x2,psi_x, psi_y1, psi_y2,psi_y, psi_x1y1, psi_x2y2, beta_yx,
                                 resx1, resx2, resy1, resy2, resids.x, resids.y,
                                 xints1, xints2, yints1, yints2,
                                 alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
