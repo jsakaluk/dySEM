@@ -11,7 +11,8 @@ outputModel(
   table = TRUE,
   tabletype = NULL,
   figure = TRUE,
-  figtype = NULL
+  figtype = NULL,
+  writeout = FALSE
 )
 }
 \arguments{
@@ -30,7 +31,10 @@ options are "measurement" (i.e,, loadings, intercepts,),
 
 \item{figure}{logical input of whether figure output is desired. Default is TRUE}
 
-\item{figtype}{character input of what type of figure is desired.}
+\item{figtype}{character input of what type of figure is desired}
+
+\item{writeout}{logical (default is FALSE) for whether outputted table and/or figure
+should be written to an output subdirectory in current working directory}
 }
 \value{
 Ignore console (prints unneccessary semPlot::semPaths details). More importantly,
@@ -41,13 +45,19 @@ This function takes the  model from fitted dySEM() scripts and
 exports table(s) and/or a path diagram figure of expected output.
 }
 \examples{
-dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+x_delim2="_", distinguish_1="1", distinguish_2="2")
 sat.config.script <-  scriptCFA(dvnx, lvname = "Sat", model = "configural")
-sat.config.mod <- cfa(sat.config.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
-outputModel(dvnx, model = "cfa", fit = sat.config.mod, table = TRUE, tabletype = "measurement", figure = "TRUE", figtype = "standardized")
-dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
+auto.fix.first= FALSE, meanstructure = TRUE)
+outputModel(dvnx, model = "cfa", fit = sat.config.mod, table = TRUE,
+tabletype = "measurement", figure = "TRUE", figtype = "standardized")
+dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
+x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 apim.script.config <-  scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", model = "configural")
-apim.config.fit <- cfa(apim.script.config, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
-outputModel(dvnxy, model = "apim", fit = apim.config.fit, table = TRUE, tabletype = "measurement", figure = "TRUE", figtype = "standardized")
+apim.config.fit <- lavaan::cfa(apim.script.config, data = commitmentQ, std.lv = FALSE,
+auto.fix.first= FALSE, meanstructure = TRUE)
+outputModel(dvnxy, model = "apim", fit = apim.config.fit, table = TRUE,
+tabletype = "measurement", figure = "TRUE", figtype = "standardized")
 }

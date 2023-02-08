@@ -12,7 +12,8 @@ scriptMIM(
   lvyname,
   model = "configural",
   equate = "none",
-  k = FALSE
+  k = FALSE,
+  writescript = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ require an intercept-invariant model to be specified, otherwise a warning is ret
 \item{k}{input logical for whether Kenny & Ledermann's (2010) k parameter should be
 calculated to characterize the dyadic pattern in the mim. Defaults FALSE, and requires at least
 a loading-invariant model to be specified, otherwise a warning is returned.}
+
+\item{writescript}{input logical (default FALSE) for whether lavaan script should
+be concatenated and written to current working directory (in subdirectory "scripts")}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -46,14 +50,15 @@ when the recommended level of invariance is not also specified. If user supplies
 with containing X or Y variables, they are alerted to respecify the dvn object.
 }
 \description{
-This function takes the outputted object from dyadVarNames()
+This function takes the outputted object from scrapeVarCross()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
 for specifying Mutual Influence Models (MIMs). Users can
 also invoke configural, loading, and/or intercept invariant
 measurement models, and particular types of structural comparisons.
 }
 \examples{
-dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2",
+dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_",
+x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2",
                     y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\\\d+")
 mim.script.config = scriptMIM(dvn, lvxname = "Quality",
 lvyname = "SexSat", model = "configural", scaleset = "MV")
@@ -65,7 +70,7 @@ mim.script.load.actor = scriptMIM(dvn, lvxname = "Quality",
 lvyname = "SexSat", model = "loading", equate = "actor")
 }
 \seealso{
-\code{\link{dyadVarNames}} which this function relies on
+\code{\link{scrapeVarCross}} which this function relies on
 
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},

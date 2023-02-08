@@ -20,8 +20,6 @@
 #'
 #' @param dvn input dvn list from scrapeVarCross
 #' @param lvname input character to (arbitrarily) name LV in lavaan syntax
-#' @param lvnum optional input character to indicate which LV is modeled ("one" or "two").
-#' Only necessary if dvn contains both X and Y information and user wants CFA for Y
 #' @param scaleset input character to specify how to set the scale of the latent variable(s). Default is
 #' "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)
 #' @param model input character used to specify which level of invariance is
@@ -30,10 +28,12 @@
 #' be concatenated and written to current working directory (in subdirectory "scripts")
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
+#' @seealso \code{\link{scrapeVarCross}} which this function relies on
 #' @family script-writing functions
 #' @export
 #' @examples
-#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#' x_delim2="_", distinguish_1="1", distinguish_2="2")
 #' sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
 #' sat.loading.script <- scriptCFA(dvn, lvname = "Sat",  model = "loading")
 #' sat.intercept.script <- scriptCFA(dvn, lvname = "Sat",  model = "intercept")
@@ -44,7 +44,6 @@
 
 scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
                      writescript = FALSE){
-  dirs("scripts")
   if(model == "configural"){
     #Loadings
     if(scaleset == "FF"){
@@ -100,6 +99,7 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
     configural.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
 
     if(isTRUE(writescript)){
+      dirs("scripts")
       cat(configural.script,"\n", file = sprintf("./scripts/%s_dyadic_configural.txt",lvname))
     }
 
@@ -159,6 +159,7 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
     loading.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
 
     if(isTRUE(writescript)){
+      dirs("scripts")
       cat(loading.script,"\n", file = sprintf("./scripts/%s_dyadic_loading.txt",lvname))
     }
 
@@ -218,6 +219,7 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
     intercept.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
 
     if(isTRUE(writescript)){
+      dirs("scripts")
       cat(intercept.script,"\n", file = sprintf("./scripts/%s_dyadic_intercept.txt",lvname))
     }
     return(intercept.script)
@@ -276,6 +278,7 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
     residual.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
 
     if(isTRUE(writescript)){
+      dirs("scripts")
       cat(residual.script,"\n", file = sprintf("./scripts/%s_dyadic_residual.txt",lvname))
     }
     return(residual.script)
@@ -334,6 +337,7 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
     lvariance.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
 
     if(isTRUE(writescript)){
+      dirs("scripts")
       cat(lvariance.script,"\n", file = sprintf("./scripts/%s_dyadic_lvariance.txt",lvname))
     }
 
@@ -392,6 +396,7 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
     lmean.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
 
     if(isTRUE(writescript)){
+      dirs("scripts")
       cat(lmean.script,"\n", file = sprintf("./scripts/%s_dyadic_lmean.txt",lvname))
     }
     return(lmean.script)
@@ -449,6 +454,7 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
     indist.script = sprintf("#Loadings\n%s\n%s\n\n#Latent Variances\n%s\n%s\n\n#Latent Covariance\n%s\n\n#Residual Covariances\n%s\n\n#Residual Variances\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s", eta.x1, eta.x2, psi_x1, psi_x2, psi_x1x2, resids, res1, res2, xints1, xints2, alpha_x1, alpha_x2)
 
     if(isTRUE(writescript)){
+      dirs("scripts")
       cat(indist.script,"\n", file = sprintf("./scripts/%s_dyadic_indistinguishable.txt",lvname))
     }
 

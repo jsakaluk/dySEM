@@ -1,10 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jsakaluk.github.io/dySEM/404.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/articles/dySEM.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/articles/varnames.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/authors.html</loc>
+  </url>
+  <url>
     <loc>https://jsakaluk.github.io/dySEM/index.html</loc>
   </url>
   <url>
+    <loc>https://jsakaluk.github.io/dySEM/news/index.html</loc>
+  </url>
+  <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/DRES.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/INULL.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/ISAT.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/apimSEM.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/cfSEM.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/cfa_funs.html</loc>
   </url>
   <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/commitmentM.html</loc>
@@ -13,10 +52,52 @@
     <loc>https://jsakaluk.github.io/dySEM/reference/commitmentQ.html</loc>
   </url>
   <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dat.html</loc>
+  </url>
+  <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/dirs.html</loc>
   </url>
   <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dvn2.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyCurvF.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyInvarEs.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyMIOutput.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyOutput.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyRand.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyRandPermFit.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyRandPermTest.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyReliability.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyadCFA.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dyadVarNames.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/dydMACS.html</loc>
+  </url>
+  <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/esHelpers.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/es_helpers.html</loc>
   </url>
   <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/getDyReliability.html</loc>
@@ -28,10 +109,31 @@
     <loc>https://jsakaluk.github.io/dySEM/reference/getIndistFit.html</loc>
   </url>
   <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/get_dydmacs.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/indistFit.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/lavaanscript_funs.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/longcfa_funs.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/measurement_funs.html</loc>
+  </url>
+  <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/outHelpers.html</loc>
   </url>
   <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/outParamHelpers.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/out_funs.html</loc>
   </url>
   <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/outputModel.html</loc>
@@ -46,10 +148,16 @@
     <loc>https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html</loc>
   </url>
   <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/scrapeVarLong.html</loc>
+  </url>
+  <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/scriptAPIM.html</loc>
   </url>
   <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/scriptBiDy.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/scriptBifactor.html</loc>
   </url>
   <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/scriptCFA.html</loc>
@@ -70,12 +178,33 @@
     <loc>https://jsakaluk.github.io/dySEM/reference/scriptMIM.html</loc>
   </url>
   <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/scriptObsAPIM.html</loc>
+  </url>
+  <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/semHelpers.html</loc>
   </url>
   <url>
-    <loc>https://jsakaluk.github.io/dySEM/articles/dySEM.html</loc>
+    <loc>https://jsakaluk.github.io/dySEM/reference/sem_funs.html</loc>
   </url>
   <url>
-    <loc>https://jsakaluk.github.io/dySEM/articles/varnames.html</loc>
+    <loc>https://jsakaluk.github.io/dySEM/reference/sipExtractor.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/siptExtractor.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/spiExtractor.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/spitExtractor.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/transDtoP.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/transPtoD.html</loc>
+  </url>
+  <url>
+    <loc>https://jsakaluk.github.io/dySEM/reference/varextract_funs.html</loc>
   </url>
 </urlset>

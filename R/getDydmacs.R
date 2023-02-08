@@ -7,22 +7,24 @@
 #' @param lowerLV lowest latent variable value evaluated (default = -5)
 #' @param upperLV greatest latent variable value evaluated (default = 5)
 #' @family supplemental model calculators
-#' @return
+#' @return vector of d_macs values
 #' @export
 #'
 #' @examples
-#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#' x_delim2="_", distinguish_1="1", distinguish_2="2")
 #' sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
-#' sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = F, auto.fix.first= F, meanstructure = T)
+#' sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
+#' auto.fix.first= FALSE, meanstructure = TRUE)
 #' sat.dmacs <- getDydmacs(commitmentQ, dvn, sat.config.mod)
 #'
 getDydmacs <- function(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5){
 
   #Get indicator names --> # of indicators
   indnames <- lavaan::parameterestimates(fit) %>% #names of indicators
-    dplyr::filter(., op == "=~") %>%
-    dplyr::select(., rhs) %>%
-    unique(.)
+    dplyr::filter(.data$op == "=~") %>%
+    dplyr::select(.data$rhs) %>%
+    unique()
 
   p <- length(unique(indnames$rhs))/2
 
@@ -72,7 +74,7 @@ getDydmacs <- function(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 
       # Calculate difference in expected indicator scores between groups 1 and 2
       DiffExpScore[k,j] <- (intercept1[j]-intercept2[j]) + (loading1[j]-loading2[j])*LV[k]
       # probability density function for sample estimate of group 2 latent variable distribution
-      pdfLV2[k] = dnorm(LV[k], mean=fmean2, sd=fsd2)
+      pdfLV2[k] = stats::dnorm(LV[k], mean=fmean2, sd=fsd2)
 
       # Multiply by latent variable distribution to calculate individual data point in numerator
       dmacsNumerator[k,j] = DiffExpScore[k,j]*DiffExpScore[k,j]*pdfLV2[k]*nodewidth

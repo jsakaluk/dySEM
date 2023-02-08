@@ -30,11 +30,12 @@ The `dySEM` logo was designed by Wolfgang Deranleau (for logo design inquiries, 
 The package currently provides functionality regarding the following types of latent dyadic data models: 
 
 1. **Dyadic Confirmatory Factor Analysis** 
-1. **Latent Actor-Partner Interdependence Models**
+1. **Latent Actor-Partner Interdependence Models (APIM)**
 1. **I-SAT Models**
 1. **I-NULL Models**
-1. **Latent Common Fate Models**
-1. **Bi-Dy Models**
+1. **Latent Common Fate Models (CFM)**
+1. **Latent Bifactor Dyadic (Bi-Dy) Models**
+1. **Observed Actor-Partner Interdependence (APIM)**
   
 Additional features currently include:
 

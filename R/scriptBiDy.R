@@ -15,26 +15,32 @@
 #' ("actor" = actor effects)
 #' @param writescript input logical (default FALSE) for whether lavaan script should
 #' be concatenated and written to current working directory (in subdirectory "scripts")
+#' @importFrom rlang .data
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @family script-writing functions
 #' @export
 #' @examples
-#' dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",  x_delim2=".", distinguish_1="1", distinguish_2="2")
-#' sexsat.bidyc.config.script <- scriptBiDy(dvn, lvxname = "SexSat", model = "configural", type = "C")
-#' sexsat.bidyc.loadsource.script <- scriptBiDy(dvn, lvxname = "SexSat", model = "loading_source", type = "C")
-#' sexsat.bidyc.loadreleq.script <- scriptBiDy(dvn, lvxname = "SexSat", model = "loading_releq", type = "C")
+#' dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",
+#' x_delim2=".", distinguish_1="1", distinguish_2="2")
+#' sexsat.bidyc.config.script <- scriptBiDy(dvn, lvxname = "SexSat",
+#' model = "configural", type = "C")
+#' sexsat.bidyc.loadsource.script <- scriptBiDy(dvn, lvxname = "SexSat",
+#' model = "loading_source", type = "C")
+#' sexsat.bidyc.loadreleq.script <- scriptBiDy(dvn, lvxname = "SexSat",
+#' model = "loading_releq", type = "C")
 #'
-#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#' x_delim2="_", distinguish_1="1", distinguish_2="2",
 #' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 #'
-#' comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat", lvyname = "Com", model = "configural", type = "S")
+#' comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat",
+#' lvyname = "Com", model = "configural", type = "S")
 
 
 scriptBiDy = function(dvn, lvxname, lvyname,
                       type = "C", model = "configural", equate="none",
                       writescript = FALSE){
-  dirs("scripts")
   if(type == "C"){
     if(model == "configural"){
       #Loadings
@@ -81,6 +87,7 @@ scriptBiDy = function(dvn, lvxname, lvyname,
                                   alpha_gx, alpha_x1, alpha_x2)
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(configural.script,"\n", file = sprintf("./scripts/%s_bidyc_configural.txt",lvxname))
       }
       return(configural.script)
@@ -130,6 +137,7 @@ scriptBiDy = function(dvn, lvxname, lvyname,
                                xints1, xints2,
                                alpha_gx, alpha_x1, alpha_x2)
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(loading.script,"\n", file = sprintf("./scripts/%s_bidy_loading.txt",lvxname))
       }
       return(loading.script)
@@ -179,6 +187,7 @@ scriptBiDy = function(dvn, lvxname, lvyname,
                                xints1, xints2,
                                alpha_gx, alpha_x1, alpha_x2)
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(loading.script,"\n", file = sprintf("./scripts/%s_bidy_loading_src.txt",lvxname))
       }
       return(loading.script)
@@ -228,6 +237,7 @@ scriptBiDy = function(dvn, lvxname, lvyname,
                                   alpha_gx, alpha_x1, alpha_x2)
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(loading.script,"\n", file = sprintf("./scripts/%s_bidyc_loading_releq.txt",lvxname))
       }
       return(loading.script)
@@ -332,6 +342,7 @@ scriptBiDy = function(dvn, lvxname, lvyname,
                                   alpha_gy, alpha_y1, alpha_y2)
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(configural.script,"\n", file = sprintf("./scripts/%s%s_bidys_configural.txt",lvxname, lvyname))
       }
       return(configural.script)
@@ -433,6 +444,7 @@ scriptBiDy = function(dvn, lvxname, lvyname,
                                   alpha_gx, alpha_x1, alpha_x2,
                                   alpha_gy, alpha_y1, alpha_y2)
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading.txt",lvxname, lvyname))
       }
       return(loading.script)
@@ -535,6 +547,7 @@ scriptBiDy = function(dvn, lvxname, lvyname,
                                alpha_gy, alpha_y1, alpha_y2)
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading_source.txt",lvxname, lvyname))
       }
       return(loading.script)
@@ -636,6 +649,7 @@ scriptBiDy = function(dvn, lvxname, lvyname,
                                   alpha_gx, alpha_x1, alpha_x2,
                                   alpha_gy, alpha_y1, alpha_y2)
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading_releq.txt",lvxname, lvyname))
       }
       return(loading.script)

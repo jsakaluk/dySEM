@@ -13,8 +13,8 @@
 #' from final element of variable name
 #' @param x_item_num defaults to scrape all items that match the stem with any digits that follow.
 #' Will be updated to allow particular range of values, to make more sub-scale friendly.
-#' @param distinguish1 input character used as the identifier for the first partner
-#' @param distinguish2 input character used as the identifier for the first partner
+#' @param distinguish_1 input character used as the identifier for the first partner
+#' @param distinguish_2 input character used as the identifier for the first partner
 #' @param y_order optional character for order of (S)tem, (P)artner number, and (Item) number
 #' when creating variable names. Defaults to "spi" (qualtrics-friendly). This and other Y-arguments
 #' only necessary if there is a latent Y variable to model
@@ -29,8 +29,10 @@
 #' @family variable-scraping functions
 #' @export
 #' @examples
-#' dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
-#' dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+#' dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#' x_delim2="_", distinguish_1="1", distinguish_2="2")
+#' dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#' x_delim2="_", distinguish_1="1", distinguish_2="2",
 #' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 
 scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2=NULL, x_item_num="\\d+", distinguish_1="1", distinguish_2="2",

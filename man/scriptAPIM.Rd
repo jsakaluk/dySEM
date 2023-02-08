@@ -50,22 +50,24 @@ when the recommended level of invariance is not also specified. If user supplies
 with containing X or Y variables, they are alerted to respecify the dvn object.
 }
 \description{
-This function takes the outputted object from dyadVarNames()
+This function takes the outputted object from scrapeVarCross()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
 for specifying Actor-Partner Interdependence Models (APIMs). Users can
 also invoke configural, loading, and/or intercept invariant
 measurement models, and particular types of structural comparisons.
 }
 \examples{
-dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
-apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "configural", k = TRUE)
+apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com",
+model = "configural", k = TRUE)
 apim.script.load <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "loading")
 apim.script.int  <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "intercept")
 apim.script.ind <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "indist")
 }
 \seealso{
-\code{\link{dyadVarNames}} which this function relies on
+\code{\link{scrapeVarCross}} which this function relies on
 
 Other script-writing functions: 
 \code{\link{scriptBiDy}()},

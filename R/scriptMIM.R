@@ -1,7 +1,7 @@
 #' A Function That Writes, Saves, and Exports Syntax for
 #' Fitting Latent Mutual influence Model
 #'
-#' This function takes the outputted object from dyadVarNames()
+#' This function takes the outputted object from scrapeVarCross()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
 #' for specifying Mutual Influence Models (MIMs). Users can
 #' also invoke configural, loading, and/or intercept invariant
@@ -22,15 +22,18 @@
 #' @param k input logical for whether Kenny & Ledermann's (2010) k parameter should be
 #' calculated to characterize the dyadic pattern in the mim. Defaults FALSE, and requires at least
 #' a loading-invariant model to be specified, otherwise a warning is returned.
+#' @param writescript input logical (default FALSE) for whether lavaan script should
+#' be concatenated and written to current working directory (in subdirectory "scripts")
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
 #' with containing X or Y variables, they are alerted to respecify the dvn object.
-#' @seealso \code{\link{dyadVarNames}} which this function relies on
+#' @seealso \code{\link{scrapeVarCross}} which this function relies on
 #' @family script-writing functions
 #' @export
 #' @examples
-#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
+#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_",
+#' x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
 #'                     y_order="sip", y_stem="sexsat", y_delim2=".", y_item_num="\\d+")
 #' mim.script.config = scriptMIM(dvn, lvxname = "Quality",
 #' lvyname = "SexSat", model = "configural", scaleset = "MV")
@@ -41,8 +44,11 @@
 #' mim.script.load.actor = scriptMIM(dvn, lvxname = "Quality",
 #' lvyname = "SexSat", model = "loading", equate = "actor")
 
-scriptMIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural", equate="none", k = FALSE){
-  dirs("scripts")
+scriptMIM = function(dvn, scaleset = "FF",
+                     lvxname, lvyname,
+                     model = "configural",
+                     equate="none", k = FALSE,
+                     writescript = FALSE){
   if(length(dvn)==9){
     if(model == "configural"){
       #Loadings
@@ -184,7 +190,12 @@ scriptMIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural
                                     k1, k2
         )
       }
-      cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_mim_configural.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        dirs("scripts")
+        cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_mim_configural.txt",lvyname,lvxname))
+      }
+
       if(equate=="actor"|equate=="partner"|equate=="all_effects"|k == TRUE){
         cat(crayon::yellow("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant"))
         #message("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant")
@@ -335,7 +346,10 @@ scriptMIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural
                                     k1, k2
         )
       }
-      cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_mim_loading.txt",lvyname,lvxname))
+      if(isTRUE(writescript)){
+        dirs("scripts")
+        cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_mim_loading.txt",lvyname,lvxname))
+      }
 
       if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
         cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
@@ -483,7 +497,12 @@ scriptMIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural
                                  k1, k2
         )
       }
-      cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_mim_intercept.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        dirs("scripts")
+        cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_mim_intercept.txt",lvyname,lvxname))
+      }
+
       return(intercept.script)
     }
     else if (model == "residual"){
@@ -626,7 +645,12 @@ scriptMIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural
                                    k1, k2
         )
       }
-      cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_mim_intercept.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        dirs("scripts")
+        cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_mim_intercept.txt",lvyname,lvxname))
+      }
+
       return(residual.script)
     }
     else if (model == "lvariance"){
@@ -769,7 +793,11 @@ scriptMIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural
                                  k1, k2
         )
       }
-      cat(lvariance.script,"\n", file = sprintf("./scripts/%s_%s_mim_loading.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        dirs("scripts")
+        cat(lvariance.script,"\n", file = sprintf("./scripts/%s_%s_mim_loading.txt",lvyname,lvxname))
+      }
 
       if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
         cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
@@ -920,7 +948,12 @@ scriptMIM = function(dvn, scaleset = "FF", lvxname, lvyname, model = "configural
                                   k1, k2
         )
       }
-      cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_mim_intercept.txt",lvyname,lvxname))
+
+      if(isTRUE(writescript)){
+        dirs("scripts")
+        cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_mim_intercept.txt",lvyname,lvxname))
+      }
+
       return(indist.script)
     }
   }

@@ -14,7 +14,6 @@
 #' @family helpers
 #' @export
 
-#' @rdname scrapeHelpers
 sipExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
   stem_delim <-stringr::str_c(stem, delim1)
   delim_distinguish <- stringr::str_c(delim2, distinguish)

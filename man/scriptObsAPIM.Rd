@@ -40,3 +40,10 @@ lavaan functions.
 A Function That Writes, Saves, and Exports Syntax for
 Fitting Observed Actor-Partner Interdependence Models
 }
+\examples{
+
+obsAPIMScript <- scriptObsAPIM (X1 = "SexSatA", Y1 = "RelSatA",
+X2 = "SexSatB", Y2 = "RelSatB",
+equate = "none")
+
+}

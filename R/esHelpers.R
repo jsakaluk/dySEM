@@ -11,14 +11,15 @@
 #'
 #' @export
 
-#' @rdname esHelpers
 grouploads <- function(fit, dvn, source){
   if(source == "1"){
-    loads <- dplyr::filter(lavaan::parameterEstimates(fit), op == "=~" & rhs %in% {{dvn}}[[1]]) %>%
-      dplyr::select(., est)
+    loads <- lavaan::parameterEstimates(fit) %>%
+      dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[[1]]) %>%
+      dplyr::select(.data$est)
   }else if(source == "2"){
-    loads <- dplyr::filter(lavaan::parameterEstimates(fit), op == "=~" & rhs %in% {{dvn}}[[2]]) %>%
-      dplyr::select(., est)
+    loads <- lavaan::parameterEstimates(fit) %>%
+      dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[[2]]) %>%
+      dplyr::select(.data$est)
   }
   return(loads)
 }
@@ -27,12 +28,12 @@ grouploads <- function(fit, dvn, source){
 groupints <- function(fit, dvn,source){
   if(source == "1"){
     ints <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(., op == "~1" & lhs %in% {{dvn}}[[1]]) %>%
-      dplyr::select(., est)
+      dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[[1]]) %>%
+      dplyr::select(.data$est)
   }else if(source == "2"){
     ints <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(., op == "~1" & lhs %in% {{dvn}}[[2]]) %>%
-      dplyr::select(., est)
+      dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[[2]]) %>%
+      dplyr::select(.data$est)
   }
   return(ints)
 }
@@ -41,13 +42,13 @@ groupints <- function(fit, dvn,source){
 groupindsds <- function(dat, dvn, source){
 
   if(source == 1){
-    sds <- dat %>% dplyr::select(., paste({{dvn}}[[1]])) %>%
-      dplyr::summarise_all(., sd, na.rm = TRUE) %>%
-      as.numeric(.)
+    sds <- dat %>% dplyr::select(paste({{dvn}}[[1]])) %>%
+      dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
+      as.numeric()
   }else if(source == 2){
-    sds <- dat %>% dplyr::select(., paste({{dvn}}[[2]])) %>%
-      dplyr::summarise_all(., sd, na.rm = TRUE) %>%
-      as.numeric(.)
+    sds <- dat %>% dplyr::select(paste({{dvn}}[[2]])) %>%
+      dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
+      as.numeric()
   }
 
   return(sds)
@@ -56,13 +57,15 @@ groupindsds <- function(dat, dvn, source){
 #' @rdname esHelpers
 grouplvmean <- function(fit, source){
   if(source == "1"){
-    lvmean <- dplyr::filter(lavaan::parameterEstimates(fit), op == "~1" & lhs == lavaan::lavNames(fit, type = "lv")[[1]]) %>%
-      dplyr::select(., est) %>%
-      as.numeric(.)
+    lvmean <- lavaan::parameterEstimates(fit) %>%
+      dplyr::filter(.data$op == "~1" & .data$lhs == lavaan::lavNames(fit, type = "lv")[[1]]) %>%
+      dplyr::select(.data$est) %>%
+      as.numeric()
   }else if(source == "2"){
-    lvmean <- dplyr::filter(lavaan::parameterEstimates(fit), op == "~1" & lhs == lavaan::lavNames(fit, type = "lv")[[2]]) %>%
-      dplyr::select(., est)%>%
-      as.numeric(.)
+    lvmean <- lavaan::parameterEstimates(fit) %>%
+      dplyr::filter(.data$op == "~1" & .data$lhs == lavaan::lavNames(fit, type = "lv")[[2]]) %>%
+      dplyr::select(.data$est)%>%
+      as.numeric()
   }
   return(lvmean)
 }
@@ -70,15 +73,17 @@ grouplvmean <- function(fit, source){
 #' @rdname esHelpers
 grouplvsd <- function(fit, source){
   if(source == "1"){
-    lvsd <- dplyr::filter(lavaan::parameterEstimates(fit), op == "~~"& lhs == lavaan::lavNames(fit, type = "lv")[[1]] & rhs == lavaan::lavNames(fit, type = "lv")[[1]]) %>%
-      dplyr::select(., est) %>%
-      sqrt(.) %>%
-      as.numeric(.)
+    lvsd <- lavaan::parameterEstimates(fit) %>%
+      dplyr::filter(.data$op == "~~"& .data$lhs == lavaan::lavNames(fit, type = "lv")[[1]] & .data$rhs == lavaan::lavNames(fit, type = "lv")[[1]]) %>%
+      dplyr::select(.data$est) %>%
+      sqrt() %>%
+      as.numeric()
   }else if(source == "2"){
-    lvsd <- dplyr::filter(lavaan::parameterEstimates(fit), op == "~~"& lhs == lavaan::lavNames(fit, type = "lv")[[2]] & rhs == lavaan::lavNames(fit, type = "lv")[[2]]) %>%
-      dplyr::select(., est) %>%
-      sqrt(.) %>%
-      as.numeric(.)
+    lvsd <- lavaan::parameterEstimates(fit) %>%
+      dplyr::filter(.data$op == "~~"& .data$lhs == lavaan::lavNames(fit, type = "lv")[[2]] & .data$rhs == lavaan::lavNames(fit, type = "lv")[[2]]) %>%
+      dplyr::select(.data$est) %>%
+      sqrt() %>%
+      as.numeric()
   }
   return(lvsd)
 }

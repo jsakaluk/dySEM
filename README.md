@@ -30,21 +30,22 @@ The package currently provides functionality regarding the following
 types of latent dyadic data models:
 
 1.  **Dyadic Confirmatory Factor Analysis**
-2.  **Latent Actor-Partner Interdependence Models**
+2.  **Latent Actor-Partner Interdependence Models (APIM)**
 3.  **I-SAT Models**
 4.  **I-NULL Models**
-5.  **Latent Common Fate Models**
-6.  **Bi-Dy Models**
+5.  **Latent Common Fate Models (CFM)**
+6.  **Latent Bifactor Dyadic (Bi-Dy) Models**
+7.  **Observed Actor-Partner Interdependence (APIM)**
 
 Additional features currently include:
 
--   Automated specification of invariance constraints for any model,
-    including full indistinguishability
--   Functions to assist with reproducible creation of path diagrams and
-    tables of statistical output
--   Functions to calculate supplemental statistical information (e.g.,
-    omega reliability, noninvariance effect sizes, corrected model fit
-    indexes)
+- Automated specification of invariance constraints for any model,
+  including full indistinguishability
+- Functions to assist with reproducible creation of path diagrams and
+  tables of statistical output
+- Functions to calculate supplemental statistical information (e.g.,
+  omega reliability, noninvariance effect sizes, corrected model fit
+  indexes)
 
 ## Future Functionality
 
@@ -107,29 +108,30 @@ each member of the dyad. For example:
 
 ``` r
 DRES
-#> # A tibble: 121 x 18
-#>    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_7.1 PRQC_8.1
-#>       <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
-#>  1        7        7        7        7        7        7        7        5
-#>  2        6        6        6        7        7        6        5        5
-#>  3        7        7        7        7        7        7        7        6
-#>  4        6        6        6        7        7        6        5        6
-#>  5        7        7        7        7        7        6        7        6
-#>  6        6        6        6        6        6        3        6        5
-#>  7        7        6        7        6        6        6        5        6
-#>  8        6        7        7        7        7        6        5        6
-#>  9        7        7        7        7        7        6        6        6
-#> 10        6        6        6        7        7        7        4        4
-#> # … with 111 more rows, and 10 more variables: PRQC_9.1 <dbl>, PRQC_1.2 <dbl>,
-#> #   PRQC_2.2 <dbl>, PRQC_3.2 <dbl>, PRQC_4.2 <dbl>, PRQC_5.2 <dbl>,
-#> #   PRQC_6.2 <dbl>, PRQC_7.2 <dbl>, PRQC_8.2 <dbl>, PRQC_9.2 <dbl>
+#> # A tibble: 121 × 18
+#>    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_…¹ PRQC_…² PRQC_…³
+#>       <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>   <dbl>   <dbl>   <dbl>
+#>  1        7        7        7        7        7        7       7       5       5
+#>  2        6        6        6        7        7        6       5       5       5
+#>  3        7        7        7        7        7        7       7       6       5
+#>  4        6        6        6        7        7        6       5       6       6
+#>  5        7        7        7        7        7        6       7       6       6
+#>  6        6        6        6        6        6        3       6       5       5
+#>  7        7        6        7        6        6        6       5       6       6
+#>  8        6        7        7        7        7        6       5       6       6
+#>  9        7        7        7        7        7        6       6       6       6
+#> 10        6        6        6        7        7        7       4       4       4
+#> # … with 111 more rows, 9 more variables: PRQC_1.2 <dbl>, PRQC_2.2 <dbl>,
+#> #   PRQC_3.2 <dbl>, PRQC_4.2 <dbl>, PRQC_5.2 <dbl>, PRQC_6.2 <dbl>,
+#> #   PRQC_7.2 <dbl>, PRQC_8.2 <dbl>, PRQC_9.2 <dbl>, and abbreviated variable
+#> #   names ¹​PRQC_7.1, ²​PRQC_8.1, ³​PRQC_9.1
 ```
 
 ### 2. **Scrape** variables from your data frame
 
 The `dySEM` scrapers consider appropriately repetitously named
 indicators as consisting of at least three distinct elements: stem,
-item, and partner. **Delimiter** characters (e.g., “.”, "\_") are
+item, and partner. **Delimiter** characters (e.g., “.”, “\_“) are
 commonly–but not always–used to separate some/all of these
 elements.`dySEM` scrapers largely function by asking you to specify in
 what order the elements of variable names are ordered.

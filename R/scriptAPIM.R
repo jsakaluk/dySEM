@@ -1,7 +1,7 @@
 #' A Function That Writes, Saves, and Exports Syntax for
 #' Fitting Latent Actor-Partner Interdependence Models
 #'
-#' This function takes the outputted object from dyadVarNames()
+#' This function takes the outputted object from scrapeVarCross()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
 #' for specifying Actor-Partner Interdependence Models (APIMs). Users can
 #' also invoke configural, loading, and/or intercept invariant
@@ -28,13 +28,15 @@
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
 #' with containing X or Y variables, they are alerted to respecify the dvn object.
-#' @seealso \code{\link{dyadVarNames}} which this function relies on
+#' @seealso \code{\link{scrapeVarCross}} which this function relies on
 #' @family script-writing functions
 #' @export
 #' @examples
-#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#' x_delim2="_", distinguish_1="1", distinguish_2="2",
 #' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
-#' apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "configural", k = TRUE)
+#' apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com",
+#' model = "configural", k = TRUE)
 #' apim.script.load <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "loading")
 #' apim.script.int  <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "intercept")
 #' apim.script.ind <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "indist")
@@ -43,7 +45,6 @@ scriptAPIM = function(dvn, scaleset = "FF",
                       lvxname, lvyname,
                       model = "indist", equate="none", k = FALSE,
                       writescript = FALSE){
-  dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){
       #Loadings
@@ -187,6 +188,7 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_apim_configural.txt",lvyname,lvxname))
       }
 
@@ -342,6 +344,7 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
       }
 
@@ -493,6 +496,7 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
       }
 
@@ -640,6 +644,7 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
       }
       return(residual.script)
@@ -786,6 +791,7 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(lvariance.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
       }
 
@@ -939,6 +945,7 @@ scriptAPIM = function(dvn, scaleset = "FF",
         )
       }
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_indist.txt",lvyname,lvxname))
       }
       return(indist.script)

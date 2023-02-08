@@ -27,9 +27,9 @@ cfmeans(lvname, type, lvar = "X")
 
 \item{type}{input character to indicate whether parameters "free" or "equated" in estimation}
 
-\item{lvar}{input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn}
+\item{lvname}{input character for name of a given lv}
 
-\item{partner}{input character to indicate parameters for first or second dyad member}
+\item{lvar}{input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn}
 }
 \description{
 Functions for scripting structural parameters

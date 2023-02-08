@@ -1,29 +1,38 @@
 Package: dySEM
-Title: dySEM: Dyadic Data Analysis of Latent Variables
-Version: 0.0.1.1
-Authors@R: 
-    c(person(given = "John",
-             family = "Sakaluk",
-             role = "cre",
-             email = "jksakaluk@gmail.com",
-             comment = c(ORCID = "0000-0002-2515-9822")),
-      person(given = "Robyn",
-             family = "Kilshaw",
-             role = "aut",
-             email = "robyn.bates@gmail.com"),
-      person(given = "Alexandra",
-             family = "Fisher",
-             role = "aut",
-             email = "anfisher@uvic.ca"))
-Description: Functions for Automated lavaan() Scripting of
-    Dyadic Data Analysis with Latent Variables. Includes dyadic CFA and
-    invariance models, APIMs, and CFMs
+Title: Dyadic Structural Equation Modeling
+Version: 0.0.2.0
+Authors@R: c(
+    person("John", "Sakaluk", , "jksakaluk@gmail.com", role = c("cre", "cph"),
+           comment = c(ORCID = "0000-0002-2515-9822")),
+    person("Robyn", "Kilshaw", , "robyn.bates@gmail.com", role = "aut"),
+    person("Alexandra", "Fisher", , "anfisher@uvic.ca", role = "aut")
+  )
+Description: Scripting of structural equation models via `lavaan` for
+    Dyadic Data Analysis, and helper functions for supplemental
+    calculations, tabling, and model visualization.  Current models
+    supported include: Dyadic CFA, APIM (observed and latent), CFM
+    (observed and latent), MIM (latent), and the BiDy Model (latent).
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+URL: https://github.com/jsakaluk/dySEM,
+    https://jsakaluk.github.io/dySEM/
+BugReports: https://github.com/jsakaluk/dySEM/issues
+Imports: 
+    crayon,
+    dplyr,
+    gt,
+    lavaan,
+    magrittr,
+    rlang,
+    semPlot,
+    stringr,
+    tibble
 Suggests: 
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+LazyData: true
+Depends: 
+    R (>= 2.10)

@@ -1,22 +1,24 @@
 #' A Function That Writes, Saves, and Exports Syntax for
 #' Fitting the I-NULL model for indistinguishable dyads
 #'
-#' This function takes the outputted object from dyadVarNames()
+#' This function takes the outputted object from scrapeVarCross()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
 #' for the I-NULL model described in Olsen & Kenny (2006)
 #' @param dvn input dvn list from scrapeVarCross
 #' @param lvxname input character to (arbitrarily) name X LV in lavaan syntax
 #' @param lvyname (optional) input character to (arbitrarily) name Y LV in lavaan syntax
+#' @param writescript input logical (default FALSE) for whether lavaan script should
+#' be concatenated and written to current working directory (in subdirectory "scripts")
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
-#' @seealso \code{\link{dyadVarNames}} which this function relies on
+#' @seealso \code{\link{scrapeVarCross}} which this function relies on
 #' @family script-writing functions
 #' @export
 #' @examples
-#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
+#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_",
+#' x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
 #' qual.inull.script <- scriptINULL(dvn, lvxname = "Qual")
-scriptINULL = function(dvn, lvxname = "X", lvyname = NULL){
-  dirs("scripts")
+scriptINULL = function(dvn, lvxname = "X", lvyname = NULL, writescript =FALSE){
 
   #Intercepts equated between partners
   xints1 = intercepts(dvn, lvar = "X", partner = "1", type  = "equated")
@@ -92,14 +94,22 @@ scriptINULL = function(dvn, lvxname = "X", lvyname = NULL){
                            xints1, xints2,
                            xvars1, xvars2,
                            covars)
-    cat(INULL.script,"\n", file = sprintf("./scripts/%s_INULL.txt",lvxname))
+
+    if(isTRUE(writescript)){
+      dirs("scripts")
+      cat(INULL.script,"\n", file = sprintf("./scripts/%s_INULL.txt",lvxname))
+    }
+
   }else if(length(dvn) == 9){
     INULL.script = sprintf("#Equated Means\n%s\n%s\n%s\n%s\n\n#Equated Variances\n%s\n%s\n%s\n%s\n\n#No Covariances\n%s",
                            xints1, xints2, yints1, yints2,
                            xvars1, xvars2, yvars1, yvars2,
                            covars)
-    cat(INULL.script,"\n", file = sprintf("./scripts/%s_%s_INULL.txt",lvxname, lvyname))
 
+    if(isTRUE(writescript)){
+      dirs("scripts")
+      cat(INULL.script,"\n", file = sprintf("./scripts/%s_%s_INULL.txt",lvxname, lvyname))
+    }
   }
 
   return(INULL.script)

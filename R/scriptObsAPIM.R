@@ -17,6 +17,10 @@
 #'
 #' @examples
 #'
+#' obsAPIMScript <- scriptObsAPIM (X1 = "SexSatA", Y1 = "RelSatA",
+#' X2 = "SexSatB", Y2 = "RelSatB",
+#' equate = "none")
+#'
 scriptObsAPIM <- function(X1 = NULL, Y1 = NULL,
                           X2 = NULL, Y2 = NULL,
                           equate = "none", k = FALSE,

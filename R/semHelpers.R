@@ -8,12 +8,11 @@
 #' @param lvar input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn
 #' @param lvxname input character to (arbitrarily) name LV X in lavaan syntax
 #' @param lvyname input character to (arbitrarily) name LV Y in lavaan syntax
-#' @param partner input character to indicate parameters for first or second dyad member
+#' @param lvname input character for name of a given lv
 #' @param type input character to indicate whether parameters "free" or "equated" in estimation
 #' @family helpers
 #' @export
 
-#' @rdname semHelpers
 lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
   if(param == "act"){
     if(type == "free"){

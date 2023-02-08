@@ -5,7 +5,7 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting the I-NULL model for indistinguishable dyads}
 \usage{
-scriptINULL(dvn, lvxname = "X", lvyname = NULL)
+scriptINULL(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE)
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
@@ -13,22 +13,26 @@ scriptINULL(dvn, lvxname = "X", lvyname = NULL)
 \item{lvxname}{input character to (arbitrarily) name X LV in lavaan syntax}
 
 \item{lvyname}{(optional) input character to (arbitrarily) name Y LV in lavaan syntax}
+
+\item{writescript}{input logical (default FALSE) for whether lavaan script should
+be concatenated and written to current working directory (in subdirectory "scripts")}
 }
 \value{
 character object of lavaan script that can be passed immediately to
 lavaan functions
 }
 \description{
-This function takes the outputted object from dyadVarNames()
+This function takes the outputted object from scrapeVarCross()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
 for the I-NULL model described in Olsen & Kenny (2006)
 }
 \examples{
-dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
+dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_",
+x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
 qual.inull.script <- scriptINULL(dvn, lvxname = "Qual")
 }
 \seealso{
-\code{\link{dyadVarNames}} which this function relies on
+\code{\link{scrapeVarCross}} which this function relies on
 
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},

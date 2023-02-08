@@ -26,9 +26,6 @@ modeled ("configural", "loading", "intercept", "residual", or "indist"). Default
 
 \item{writescript}{input logical (default FALSE) for whether lavaan script should
 be concatenated and written to current working directory (in subdirectory "scripts")}
-
-\item{lvnum}{optional input character to indicate which LV is modeled ("one" or "two").
-Only necessary if dvn contains both X and Y information and user wants CFA for Y}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -54,7 +51,8 @@ non-invariant measurement parameters, following a the rejection of an omnibus
 #invariance constraint set (see Lee, Preacher, & Little, 2011).
 }
 \examples{
-dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+x_delim2="_", distinguish_1="1", distinguish_2="2")
 sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
 sat.loading.script <- scriptCFA(dvn, lvname = "Sat",  model = "loading")
 sat.intercept.script <- scriptCFA(dvn, lvname = "Sat",  model = "intercept")
@@ -64,6 +62,8 @@ sat.means.script <- scriptCFA(dvn, lvname = "Sat",  model = "lmean")
 sat.indist.script <- scriptCFA(dvn, lvname = "Sat",  model = "indist")
 }
 \seealso{
+\code{\link{scrapeVarCross}} which this function relies on
+
 Other script-writing functions: 
 \code{\link{scriptAPIM}()},
 \code{\link{scriptBiDy}()},

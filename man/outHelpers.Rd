@@ -13,17 +13,13 @@ makeFigure(fit, type)
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
 
-\item{type}{input character to indicate whether parameters "free" or "equated" in estimation}
+\item{fit}{name of fitted lavaan model}
 
-\item{param}{input character for what kind of parameter is being scripted ("act", "apim_part", "mim_part", "cf")}
+\item{model}{type of fitted dyadic model (i.e., "apim", "bidyc", "bidys","cfa", "cfm", "mim")}
 
-\item{lvar}{input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn}
+\item{tabletype}{kind of parameter estimates requested (i.e. from "measurement" or "structural" model)}
 
-\item{lvxname}{input character to (arbitrarily) name LV X in lavaan syntax}
-
-\item{lvyname}{input character to (arbitrarily) name LV Y in lavaan syntax}
-
-\item{partner}{input character to indicate parameters for first or second dyad member}
+\item{type}{input character for sempaths to indicate whether parameters "free" or "equated" in estimation}
 }
 \description{
 Helpers for creating output files

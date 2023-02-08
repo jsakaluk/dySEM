@@ -1,7 +1,7 @@
 #' A Function That Writes, Saves, and Exports Syntax for
 #' Fitting Latent Common Fate Models
 #'
-#' This function takes the outputted object from dyadVarNames()
+#' This function takes the outputted object from scrapeVarCross()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
 #' for specifying Common Fate Models (CFMs). Users can
 #' also invoke configural, loading, and/or intercept invariant
@@ -19,20 +19,24 @@
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
 #' with containing X or Y variables, they are alerted to respecify the dvn object.
-#' @seealso \code{\link{dyadVarNames}} which this function relies on
+#' @seealso \code{\link{scrapeVarCross}} which this function relies on
 #' @family script-writing functions
 #' @export
 #' @examples
-#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_", x_delim2=".", distinguish_1="1", distinguish_2="2",
+#' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_",
+#' x_delim2=".", distinguish_1="1", distinguish_2="2",
 #' y_order="sip", y_stem="sexsat", y_delim2=".")
-#' cfm.script.config  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat", model = "configural", scaleset = "FF")
-#' cfm.script.load  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat", model = "loading", scaleset = "FF")
-#' cfm.script.int  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat", model = "intercept", scaleset = "FF")
-#' cfm.script.ind  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat", model = "indist", scaleset = "FF")
+#' cfm.script.config  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat",
+#' model = "configural", scaleset = "FF")
+#' cfm.script.load  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat",
+#' model = "loading", scaleset = "FF")
+#' cfm.script.int  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat",
+#' model = "intercept", scaleset = "FF")
+#' cfm.script.ind  <-  scriptCFM(dvn, lvxname = "Quality", lvyname = "SexSat",
+#' model = "indist", scaleset = "FF")
 
 scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
                      writescript = FALSE){
-  dirs("scripts")
   if(length(dvn)==9){
     if(model == "configural"){
       #Loadings
@@ -145,6 +149,7 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
                                     alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(configural.script,"\n", file = sprintf("./scripts/%s_%s_cfm_configural.txt",lvyname,lvxname))
       }
       return(configural.script)
@@ -260,6 +265,7 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
                                   alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
      if(isTRUE(writescript)){
+       dirs("scripts")
        cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
      }
 
@@ -376,6 +382,7 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
                                alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
       }
       return(intercept.script)
@@ -491,6 +498,7 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
                                  alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
       }
       return(residual.script)
@@ -606,6 +614,7 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
                                 alpha_x1, alpha_x2,alpha_x, alpha_y1, alpha_y2,alpha_y)
 
       if(isTRUE(writescript)){
+        dirs("scripts")
         cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_indist.txt",lvyname,lvxname))
       }
       return(indist.script)

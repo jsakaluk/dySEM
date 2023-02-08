@@ -4,16 +4,12 @@
 #' @title Helpers for creating output files
 #'
 #' @param dvn input dvn list from scrapeVarCross
-#' @param param input character for what kind of parameter is being scripted ("act", "apim_part", "mim_part", "cf")
-#' @param lvar input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn
-#' @param lvxname input character to (arbitrarily) name LV X in lavaan syntax
-#' @param lvyname input character to (arbitrarily) name LV Y in lavaan syntax
-#' @param partner input character to indicate parameters for first or second dyad member
-#' @param type input character to indicate whether parameters "free" or "equated" in estimation
+#' @param fit name of fitted lavaan model
+#' @param model type of fitted dyadic model (i.e., "apim", "bidyc", "bidys","cfa", "cfm", "mim")
+#' @param tabletype kind of parameter estimates requested (i.e. from "measurement" or "structural" model)
+#' @param type input character for sempaths to indicate whether parameters "free" or "equated" in estimation
 #' @family helpers
 #' @export
-
-#' @rdname outHelpers
 
 makeTable <- function(dvn, fit, model, tabletype){
   if(length(dvn) == 6 & model == "cfa" & tabletype == "measurement"){
@@ -61,7 +57,10 @@ makeTable <- function(dvn, fit, model, tabletype){
   else if(length(dvn) == 9 & model == "apim" & tabletype == "structural"){
     tab = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
       dplyr::filter(.data$op == "~"|.data$op == ":="|.data$op == "~~") %>%
-      dplyr::filter(!lhs %in% dvn[["p1xvarnames"]]&!lhs %in% dvn[["p2xvarnames"]]&!lhs %in% dvn[["p1yvarnames"]]&!lhs %in% dvn[["p2yvarnames"]]) %>%
+      dplyr::filter(!.data$lhs %in% dvn[["p1xvarnames"]]&
+                      !.data$lhs %in% dvn[["p2xvarnames"]]&
+                      !.data$lhs %in% dvn[["p1yvarnames"]]&
+                      !.data$lhs %in% dvn[["p2yvarnames"]]) %>%
       dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, "Slope"=.data$est, "SE"=.data$se,
                     'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Slope"=.data$std.all)
     tab = tab %>%
@@ -88,7 +87,10 @@ makeTable <- function(dvn, fit, model, tabletype){
   else if(length(dvn) == 9 & model == "mim" & tabletype == "structural"){
     tab = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
       dplyr::filter(.data$op == "~"|.data$op == ":="|.data$op == "~~") %>%
-      dplyr::filter(!lhs %in% dvn[["p1xvarnames"]]&!lhs %in% dvn[["p2xvarnames"]]&!lhs %in% dvn[["p1yvarnames"]]&!lhs %in% dvn[["p2yvarnames"]]) %>%
+      dplyr::filter(!.data$lhs %in% dvn[["p1xvarnames"]]&
+                      !.data$lhs %in% dvn[["p2xvarnames"]]&
+                      !.data$lhs %in% dvn[["p1yvarnames"]]&
+                      !.data$lhs %in% dvn[["p2yvarnames"]]) %>%
       dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, "Slope"=.data$est, "SE"=.data$se,
                     'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Slope"=.data$std.all)
     tab = tab %>%
@@ -115,7 +117,10 @@ makeTable <- function(dvn, fit, model, tabletype){
   else if(length(dvn) == 9 & model == "cfm" & tabletype == "structural"){
     tab = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
       dplyr::filter(.data$op == "~"|.data$op == ":="|.data$op == "~~") %>%
-      dplyr::filter(!lhs %in% dvn[["p1xvarnames"]]&!lhs %in% dvn[["p2xvarnames"]]&!lhs %in% dvn[["p1yvarnames"]]&!lhs %in% dvn[["p2yvarnames"]]) %>%
+      dplyr::filter(!.data$lhs %in% dvn[["p1xvarnames"]]&
+                      !.data$lhs %in% dvn[["p2xvarnames"]]&
+                      !.data$lhs %in% dvn[["p1yvarnames"]]&
+                      !.data$lhs %in% dvn[["p2yvarnames"]]) %>%
       dplyr::select(.data$lhs, .data$op,.data$rhs, .data$est, "SE"=.data$se,
                     'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Est"=.data$std.all)
     tab = tab %>%
@@ -142,7 +147,10 @@ makeTable <- function(dvn, fit, model, tabletype){
   else if(length(dvn) == 9 & model == "bidys" & tabletype == "structural"){
     tab = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
       dplyr::filter(.data$op == "~"|.data$op == ":="|.data$op == "~~") %>%
-      dplyr::filter(!lhs %in% dvn[["p1xvarnames"]]&!lhs %in% dvn[["p2xvarnames"]]&!lhs %in% dvn[["p1yvarnames"]]&!lhs %in% dvn[["p2yvarnames"]]) %>%
+      dplyr::filter(!.data$lhs %in% dvn[["p1xvarnames"]]&
+                      !.data$lhs %in% dvn[["p2xvarnames"]]&
+                      !.data$lhs %in% dvn[["p1yvarnames"]]&
+                      !.data$lhs %in% dvn[["p2yvarnames"]]) %>%
       dplyr::filter(!is.na(.data$z)) %>%
       dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, .data$est, "SE"=.data$se,
                     'p-value'=.data$pvalue, "95%CI LL" = .data$ci.lower, "95%CI UL" = .data$ci.upper, "Std. Est"=.data$std.all)

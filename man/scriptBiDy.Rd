@@ -44,15 +44,21 @@ for specifying dyadic configural, loading, and intercept invariant
 BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-setting
 }
 \examples{
-dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",  x_delim2=".", distinguish_1="1", distinguish_2="2")
-sexsat.bidyc.config.script <- scriptBiDy(dvn, lvxname = "SexSat", model = "configural", type = "C")
-sexsat.bidyc.loadsource.script <- scriptBiDy(dvn, lvxname = "SexSat", model = "loading_source", type = "C")
-sexsat.bidyc.loadreleq.script <- scriptBiDy(dvn, lvxname = "SexSat", model = "loading_releq", type = "C")
+dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",
+x_delim2=".", distinguish_1="1", distinguish_2="2")
+sexsat.bidyc.config.script <- scriptBiDy(dvn, lvxname = "SexSat",
+model = "configural", type = "C")
+sexsat.bidyc.loadsource.script <- scriptBiDy(dvn, lvxname = "SexSat",
+model = "loading_source", type = "C")
+sexsat.bidyc.loadreleq.script <- scriptBiDy(dvn, lvxname = "SexSat",
+model = "loading_releq", type = "C")
 
-dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 
-comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat", lvyname = "Com", model = "configural", type = "S")
+comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat",
+lvyname = "Com", model = "configural", type = "S")
 }
 \seealso{
 Other script-writing functions: 
