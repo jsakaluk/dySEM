@@ -1,2 +1,4 @@
-destination: docs
-url: https://jsakaluk.github.io/dySEM
+url: https://jsakaluk.github.io/dySEM/
+template:
+  bootstrap: 5
+
