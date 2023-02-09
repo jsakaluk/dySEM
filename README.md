@@ -59,8 +59,8 @@ high-priority items include:
     functions
 3.  Multi-group dyadic model scripting (e.g., comparing models from
     samples of heterosexual vs. LGBTQ+ dyads)
-4.  Simulation functions to aid in sample size planning
-5.  Unit test creation
+4.  Simulation functions to aid in sample size planning (in progress)
+5.  Unit test creation (in progress)
 
 ## Collaboration
 
@@ -110,7 +110,7 @@ each member of the dyad. For example:
 DRES
 #> # A tibble: 121 × 18
 #>    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_…¹ PRQC_…² PRQC_…³
-#>       <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>   <dbl>   <dbl>   <dbl>
+#>       <int>    <int>    <int>    <int>    <int>    <int>   <int>   <int>   <int>
 #>  1        7        7        7        7        7        7       7       5       5
 #>  2        6        6        6        7        7        6       5       5       5
 #>  3        7        7        7        7        7        7       7       6       5
@@ -121,9 +121,9 @@ DRES
 #>  8        6        7        7        7        7        6       5       6       6
 #>  9        7        7        7        7        7        6       6       6       6
 #> 10        6        6        6        7        7        7       4       4       4
-#> # … with 111 more rows, 9 more variables: PRQC_1.2 <dbl>, PRQC_2.2 <dbl>,
-#> #   PRQC_3.2 <dbl>, PRQC_4.2 <dbl>, PRQC_5.2 <dbl>, PRQC_6.2 <dbl>,
-#> #   PRQC_7.2 <dbl>, PRQC_8.2 <dbl>, PRQC_9.2 <dbl>, and abbreviated variable
+#> # … with 111 more rows, 9 more variables: PRQC_1.2 <int>, PRQC_2.2 <int>,
+#> #   PRQC_3.2 <int>, PRQC_4.2 <int>, PRQC_5.2 <int>, PRQC_6.2 <int>,
+#> #   PRQC_7.2 <int>, PRQC_8.2 <int>, PRQC_9.2 <int>, and abbreviated variable
 #> #   names ¹​PRQC_7.1, ²​PRQC_8.1, ³​PRQC_9.1
 ```
 

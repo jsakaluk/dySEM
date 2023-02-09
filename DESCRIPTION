@@ -1,6 +1,6 @@
 Package: dySEM
 Title: Dyadic Structural Equation Modeling
-Version: 0.0.2.0
+Version: 0.0.2.1
 Authors@R: c(
     person("John", "Sakaluk", , "jksakaluk@gmail.com", role = c("cre", "cph"),
            comment = c(ORCID = "0000-0002-2515-9822")),
@@ -31,8 +31,10 @@ Imports:
     tibble
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 LazyData: true
 Depends: 
     R (>= 2.10)
+Config/testthat/edition: 3

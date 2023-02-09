@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dySEM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.1</span>
       </span>
     </div>
 
@@ -129,8 +129,8 @@
 <li>Longitudinal dyadic model scripting functions (e.g., curve of factors, common fate growth)</li>
 <li>Latent dyadic response surface analysis scripting and visualization functions</li>
 <li>Multi-group dyadic model scripting (e.g., comparing models from samples of heterosexual vs. LGBTQ+ dyads)</li>
-<li>Simulation functions to aid in sample size planning</li>
-<li>Unit test creation</li>
+<li>Simulation functions to aid in sample size planning (in progress)</li>
+<li>Unit test creation (in progress)</li>
 </ol>
 </div>
 <div class="section level2">
@@ -174,7 +174,7 @@
 <code class="sourceCode R"><span><span class="va">DRES</span></span>
 <span><span class="co">#&gt; # A tibble: 121 × 18</span></span>
 <span><span class="co">#&gt;    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_…¹ PRQC_…² PRQC_…³</span></span>
-<span><span class="co">#&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;</span></span>
 <span><span class="co">#&gt;  1        7        7        7        7        7        7       7       5       5</span></span>
 <span><span class="co">#&gt;  2        6        6        6        7        7        6       5       5       5</span></span>
 <span><span class="co">#&gt;  3        7        7        7        7        7        7       7       6       5</span></span>
@@ -185,9 +185,9 @@
 <span><span class="co">#&gt;  8        6        7        7        7        7        6       5       6       6</span></span>
 <span><span class="co">#&gt;  9        7        7        7        7        7        6       6       6       6</span></span>
 <span><span class="co">#&gt; 10        6        6        6        7        7        7       4       4       4</span></span>
-<span><span class="co">#&gt; # … with 111 more rows, 9 more variables: PRQC_1.2 &lt;dbl&gt;, PRQC_2.2 &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   PRQC_3.2 &lt;dbl&gt;, PRQC_4.2 &lt;dbl&gt;, PRQC_5.2 &lt;dbl&gt;, PRQC_6.2 &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   PRQC_7.2 &lt;dbl&gt;, PRQC_8.2 &lt;dbl&gt;, PRQC_9.2 &lt;dbl&gt;, and abbreviated variable</span></span>
+<span><span class="co">#&gt; # … with 111 more rows, 9 more variables: PRQC_1.2 &lt;int&gt;, PRQC_2.2 &lt;int&gt;,</span></span>
+<span><span class="co">#&gt; #   PRQC_3.2 &lt;int&gt;, PRQC_4.2 &lt;int&gt;, PRQC_5.2 &lt;int&gt;, PRQC_6.2 &lt;int&gt;,</span></span>
+<span><span class="co">#&gt; #   PRQC_7.2 &lt;int&gt;, PRQC_8.2 &lt;int&gt;, PRQC_9.2 &lt;int&gt;, and abbreviated variable</span></span>
 <span><span class="co">#&gt; #   names ¹​PRQC_7.1, ²​PRQC_8.1, ³​PRQC_9.1</span></span></code></pre></div>
 </div>
 <div class="section level3">

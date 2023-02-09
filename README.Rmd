@@ -50,8 +50,8 @@ Functionality targeted for future development of `dySEM` is tracked [here](https
 1. Longitudinal dyadic model scripting functions (e.g., curve of factors, common fate growth)
 1. Latent dyadic response surface analysis scripting and visualization functions
 1. Multi-group dyadic model scripting (e.g., comparing models from samples of heterosexual vs. LGBTQ+ dyads) 
-1. Simulation functions to aid in sample size planning
-1. Unit test creation
+1. Simulation functions to aid in sample size planning (in progress)
+1. Unit test creation (in progress)
 
 ## Collaboration
 
