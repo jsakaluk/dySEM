@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dySEM <img src="man/figures/logo.png" align="right" />
+# dySEM <a href="https://jsakaluk.github.io/dySEM/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 
