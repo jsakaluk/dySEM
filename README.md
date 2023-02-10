@@ -10,6 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https:/
 [![CRAN
 status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/package=dySEM)
 [![R-CMD-check](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml)
+[![codecov](https://codecov.io/gh/jsakaluk/dySEM/branch/master/graph/badge.svg?token=FFPNR3GOOB)](https://codecov.io/gh/jsakaluk/dySEM)
 <!-- badges: end -->
 
 ## Summary
