@@ -193,12 +193,10 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       if(equate=="actor"|equate=="partner"|equate=="all_effects"|k == TRUE){
-        cat(crayon::yellow("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant"))
-        #message("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant")
+        warning("Caution: comparisons of actor/partner effects, and/or computation of k may be invalid when loadings are not invariant")
       }
       else if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
-        cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
-        #message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
+        warning("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
       }
       return(configural.script)
     }
@@ -349,8 +347,7 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
-        cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
-        #message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
+        warning("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
       }
       return(loading.script)
     }
@@ -796,7 +793,7 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       if(equate=="x_means"|equate=="y_means"|equate=="all_means"){
-        cat(crayon::yellow("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant"))
+        warning("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
         #message("Caution: comparisons of means may be invalid when loadings and intercepts are not invariant")
       }
       return(lvariance.script)
@@ -952,6 +949,6 @@ scriptAPIM = function(dvn, scaleset = "FF",
     }
   }
   else if(length(dvn)==6){
-    cat(crayon::red("You must supply a dvn object containing information for both X and Y"))
+    stop("You must supply a dvn object containing information for both X and Y")
   }
 }

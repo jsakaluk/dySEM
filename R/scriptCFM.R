@@ -621,6 +621,6 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
     }
   }
   else if(length(dvn)==6){
-    cat(crayon::red("You must supply a dvn object containing information for both X and Y"))
+    stop("You must supply a dvn object containing information for both X and Y")
   }
 }
