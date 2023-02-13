@@ -96,10 +96,10 @@ cfvars <- function(lvname, type){
 #' @rdname semHelpers
 cfmeans <- function(lvname, type, lvar = "X"){
   if(type == "fixed"){
-    lmean <- sprintf("%s ~ 0*1",lvname, lvname)
+    lmean <- sprintf("%s ~ 0*1",lvname)
     return(lmean)
   }else if(type == "free"){
-    lmean <- sprintf("%s ~ NA*1",lvname, lvname)
+    lmean <- sprintf("%s ~ NA*1",lvname)
     return(lmean)
   }
 }
