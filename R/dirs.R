@@ -6,7 +6,6 @@
 #'
 #' @param type input character defining name of subdirectory corresponding to
 #' type of outputted documents
-#' @export
 
 dirs <- function(type){
   if(!dir.exists(file.path(sprintf("./%s", type)))){

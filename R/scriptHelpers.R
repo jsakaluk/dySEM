@@ -9,7 +9,6 @@
 #' @param partner input character to indicate parameters for first or second dyad member
 #' @param type input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation
 #' @family helpers
-#' @export
 
 loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
 

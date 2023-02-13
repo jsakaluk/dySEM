@@ -7,7 +7,6 @@
 #' @param fit input object from fitted lavaan model
 #' @family helpers
 
-#' @export
 #'
 
 xlamda1 <- function(dvn, fit){

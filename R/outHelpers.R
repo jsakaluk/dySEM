@@ -9,7 +9,6 @@
 #' @param tabletype kind of parameter estimates requested (i.e. from "measurement" or "structural" model)
 #' @param type input character for sempaths to indicate whether parameters "free" or "equated" in estimation
 #' @family helpers
-#' @export
 
 makeTable <- function(dvn, fit, model, tabletype){
   if(length(dvn) == 6 & model == "cfa" & tabletype == "measurement"){
