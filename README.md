@@ -23,7 +23,7 @@ Kilshaw](https://psyarxiv.com/9vcnz/) (in press). We are targeting the
 first stable release for \~end of March 2021, and hope to submit the
 package to CRAN sometime in the summer.
 
-The `dySEM` logo was designed by Wolfgang Deranleau (for logo design
+The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
 
 ## Current Functionality

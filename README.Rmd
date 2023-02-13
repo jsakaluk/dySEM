@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 The `dySEM` helps automate the process of scripting, fitting, and reporting on latent models of dyadic data via [`lavaan`](http://lavaan.ugent.be). The package was developed and used in the course of the research described in [Sakaluk, Fisher, & Kilshaw](https://psyarxiv.com/9vcnz/) (in press). We are targeting the first stable release for ~end of March 2021, and hope to submit the package to CRAN sometime in the summer. 
 
-The `dySEM` logo was designed by Wolfgang Deranleau (for logo design inquiries, email: agangofwolves@gmail.com).
+The `dySEM` logo was designed by Lowell Deranleau (for logo design inquiries, email: agangofwolves@gmail.com).
 
 ## Current Functionality 
 
