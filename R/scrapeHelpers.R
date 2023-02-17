@@ -12,6 +12,7 @@
 #' @param delim3 optional input character of second delimiting character
 #' @param wave input character for the particular wave of a longitudinal design
 #' @family helpers
+#' @noRd
 
 sipExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
   stem_delim <-stringr::str_c(stem, delim1)

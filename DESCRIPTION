@@ -1,6 +1,6 @@
 Package: dySEM
 Title: Dyadic Structural Equation Modeling
-Version: 0.0.2.5
+Version: 0.0.2.6
 Authors@R: c(
     person("John", "Sakaluk", , "jksakaluk@gmail.com", role = c("cre", "cph"),
            comment = c(ORCID = "0000-0002-2515-9822")),

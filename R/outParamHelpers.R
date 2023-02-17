@@ -6,8 +6,8 @@
 #' @param dvn input dvn list from scrapeVarCross
 #' @param fit input object from fitted lavaan model
 #' @family helpers
+#' @noRd
 
-#'
 
 xlamda1 <- function(dvn, fit){
   #Extract loadings

@@ -11,6 +11,7 @@
 #' @param lvname input character for name of a given lv
 #' @param type input character to indicate whether parameters "free" or "equated" in estimation
 #' @family helpers
+#' @noRd
 
 lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
   if(param == "act"){

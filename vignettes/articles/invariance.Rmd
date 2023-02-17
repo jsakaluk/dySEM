@@ -1,0 +1,379 @@
+---
+title: "Invariance Testing with Potentially Indistinguishable Dyads: Practices and Rationale for a More Logical and Inclusive Testing Sequence"
+author: "John K. Sakaluk"
+date: "`r format(Sys.time(), '%d/%m/%y')`"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+*The following resource was made in advance of the 2023 SPSP Close Relationships Preconference, and is part of a working paper. Please cite the following if you are using these materials:* 
+
+- Sakaluk, J. K. (preprint). Invariance testing with potentially indistinguishable dyads: Practices and rationale for a more logical and inclusive testing sequence. https://jsakaluk.github.io/dySEM/ 
+
+## tl;dr: 
+
+The **normative invariance-testing ritual**, including for dyadic measurement models ([Sakaluk et al, 2021](https://onlinelibrary.wiley.com/doi/abs/10.1111/pere.12341)), involves first fitting a *configurally invariant* model (i.e., all measurement model parameters free to vary between partners). A *loading-invariant* model (i.e., loadings constrained to equivalence between partners) is then fit and compared against the configurally invariant model; an *intercept-invariant* model (loadings and intercepts constrained to equivalence between partners) is then fit and compared against the loading-invariant model, and so on. The final model is determined as the most constrained model that does not appreciably ruin model fit (e.g., producing a significant nested-model comparison, producing a decrease in some other absolute/relative model fit index beyond a particular threshold, etc.,).
+
+This ritual can be consider flawed and/or problematic for at least three reasons: 
+
+1. The ritual begins with the specification of--and testing against--the *least* parsimonious dyadic measurement model, as opposed to the *most* parsimonious.
+1. The ritual involves the inverting of traditional null-hypothesis significance testing logic (under most circumstances, such that noninvariance is considered undesirable) 
+1. The ritual tacitly promotes a mindset where "distinguishablity is the default", at the expense of indistinguishable dyad types (e.g., same-sex and/or same-gender couples) that have been historically excluded from relationship science
+
+## A Lengthier Explanation
+
+*TBD*
+
+## A More Logical and Inclusive Testing Sequence
+
+### Measurement-Level vs. Structural-Level Indistinguishability 
+
+In structural equation modeling with latent variables, a distinction is typically made between the *measurement model* and the *structural model*. The measurement model includes all parameter types that govern the indicator variables (e.g., questionnaire items) and their statistical relationships to the latent variable(s) being modeled. These include:
+
+- item *intercepts* (contained in the $\tau$ matrix)
+- item *loadings*, and (contained in the $\lambda$ matrix)
+- item *residual variances* (contained in the $\theta$ matrix)
+
+Indeed, these parameters are at work in the general-linear-model-like equation for reproducing item responses based on a specified measurement model. Just as in a bivariate regression, a person's (i) score on an outcome variable (Y) can be produced from an intercept (i.e., expected score on Y when X = 0), slope (i.e., the expected change in Y for every one-unit increase in X), their score on predictor variable X, and leftover residual variance (i.e, the difference between their observed and predicted score on Y)...: 
+
+$Y_i = b_0 + b_1X_i + \epsilon_i$
+
+...so too does the reflective latent variable model suggest that a person's (i) response to a given item (e.g., sat.g.1.1) can be produced from the item intercept (i.e., expected score on sat.g.1.1 when their standing on the latent variable is 0), the item loading (i.e., the expected change in sat.g.1.1 for every one-unit increase in the latent variable), their score the latent variable, and leftover residual variance (i.e, variance in sat.g.1.1 unaccounted for by the latent variable)...
+
+$sat.g.1.1_i = \tau_1 + \lambda_{11}\zeta_i + \theta_{11}$
+
+The only other major conceptual distinction from your generic GLM is that this equation plays out for each and every item in the measurement model, 
+
+$sat.g.1.2_i = \tau_2 + \lambda_{21}\zeta_i + \theta_{22}$
+
+$sat.g.1.3_i = \tau_3 + \lambda_{31}\zeta_i + \theta_{33}$
+
+$sat.g.1.4_i = \tau_4 + \lambda_{41}\zeta_i + \theta_{44}$
+
+... etc.
+
+The structural model, meanwhile, includes all parameter types that govern statistical properties of the latent variables themselves, and their relationships to one another. These include:
+
+- *latent variances* (contained in the $\Psi$ matrix)
+- *latent means* (contained in the $A$ matrix)
+- *latent covariances*/*latent correlations* (also contained in the $\Psi$ matrix), and 
+- *latent slopes* (contained in the $B$ matrix)
+
+When using the term "indistinguishable" in the context of structural equation modeling with latent variables, we therefore need to be very careful and precise in conveying to what the term "indistinguishable" is meant to apply. Most uses of the term "indistinguishable" in the literature (e.g., with an APIM specified in MLM, or when using SEM without latent variables) indicate that researchers have constrained parameters in the structural model to equivalence between partners (and adopted an analytic strategy that does not appraise what is going on at the measurement model level). With invariance testing, however, we are strictly concerned with what's going on at the measurement model level. 
+
+I therefore propose we use the term **measurement indistinguishability** when we are referring to dyadic models with indistinguishable measurement model parameters, **structural indistinguishability** when we are referring to dyadic models with indistinguishable structural model parameters, and **measurement and structural indistinguishability** when we are referring to dyadic models with both indistinguishable measurement and structural model parameters. Yet another way to be specific is to reserve the term **"invariance"** testing for questions of indistinguishability within the measurement model, while using **"equivalence"** testing for questions of indistinguishability within the structural model
+
+### Meet Your Dyadic Measurement Invariance Models
+
+```{r modelgen, include=FALSE, message = FALSE}
+library(dySEM)
+library(lavaan)
+library(semPlot)
+
+dat <- commitmentQ
+
+#### indist ####
+resid.script <- '
+Sat.1 =~ NA*sat.g.1_1 + l1*sat.g.1_1 + l2*sat.g.1_2 + l3*sat.g.1_3 + l4*sat.g.1_4 + l5*sat.g.1_5
+Sat.2 =~ NA*sat.g.2_1 + l1*sat.g.2_1 + l2*sat.g.2_2 + l3*sat.g.2_3 + l4*sat.g.2_4 + l5*sat.g.2_5
+
+Sat.1 ~~ 1*Sat.1
+Sat.2 ~~ psi22*Sat.2
+
+Sat.1 ~ 0*1
+Sat.2 ~ a2*1
+
+sat.g.1_1 ~ t1*1
+sat.g.1_2 ~ t2*1
+sat.g.1_3 ~ t3*1
+sat.g.1_4 ~ t4*1
+sat.g.1_5 ~ t5*1
+
+sat.g.2_1 ~ t1*1
+sat.g.2_2 ~ t2*1
+sat.g.2_3 ~ t3*1
+sat.g.2_4 ~ t4*1
+sat.g.2_5 ~ t5*1
+
+sat.g.1_1 ~~ th1*sat.g.1_1
+sat.g.1_2 ~~ th2*sat.g.1_2
+sat.g.1_3 ~~ th3*sat.g.1_3
+sat.g.1_4 ~~ th4*sat.g.1_4
+sat.g.1_5 ~~ th5*sat.g.1_5
+
+sat.g.2_1 ~~ th1*sat.g.2_1
+sat.g.2_2 ~~ th2*sat.g.2_2
+sat.g.2_3 ~~ th3*sat.g.2_3
+sat.g.2_4 ~~ th4*sat.g.2_4
+sat.g.2_5 ~~ th5*sat.g.2_5
+
+sat.g.1_1 ~~ sat.g.2_1
+sat.g.1_2 ~~ sat.g.2_2
+sat.g.1_3 ~~ sat.g.2_3
+sat.g.1_4 ~~ sat.g.2_4
+sat.g.1_5 ~~ sat.g.2_5
+
+'
+resid.mod <- lavaan::cfa(resid.script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+#### intercept ####
+
+intercept.script <- '
+Sat.1 =~ NA*sat.g.1_1 + l1*sat.g.1_1 + l2*sat.g.1_2 + l3*sat.g.1_3 + l4*sat.g.1_4 + l5*sat.g.1_5
+Sat.2 =~ NA*sat.g.2_1 + l1*sat.g.2_1 + l2*sat.g.2_2 + l3*sat.g.2_3 + l4*sat.g.2_4 + l5*sat.g.2_5
+
+Sat.1 ~~ 1*Sat.1
+Sat.2 ~~ psi22*NA*Sat.2
+
+Sat.1 ~ 0*1
+Sat.2 ~ a2*NA*1
+
+sat.g.1_1 ~ t1*1
+sat.g.1_2 ~ t2*1
+sat.g.1_3 ~ t3*1
+sat.g.1_4 ~ t4*1
+sat.g.1_5 ~ t5*1
+
+sat.g.2_1 ~ t1*1
+sat.g.2_2 ~ t2*1
+sat.g.2_3 ~ t3*1
+sat.g.2_4 ~ t4*1
+sat.g.2_5 ~ t5*1
+
+sat.g.1_1 ~~ sat.g.1_1
+sat.g.1_2 ~~ sat.g.1_2
+sat.g.1_3 ~~ sat.g.1_3
+sat.g.1_4 ~~ sat.g.1_4
+sat.g.1_5 ~~ sat.g.1_5
+
+sat.g.2_1 ~~ sat.g.2_1
+sat.g.2_2 ~~ sat.g.2_2
+sat.g.2_3 ~~ sat.g.2_3
+sat.g.2_4 ~~ sat.g.2_4
+sat.g.2_5 ~~ sat.g.2_5
+
+sat.g.1_1 ~~ sat.g.2_1
+sat.g.1_2 ~~ sat.g.2_2
+sat.g.1_3 ~~ sat.g.2_3
+sat.g.1_4 ~~ sat.g.2_4
+sat.g.1_5 ~~ sat.g.2_5
+
+'
+intercept.mod <- lavaan::cfa(intercept.script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+#### loading ####
+
+loading.script <- '
+Sat.1 =~ NA*sat.g.1_1 + l1*sat.g.1_1 + l2*sat.g.1_2 + l3*sat.g.1_3 + l4*sat.g.1_4 + l5*sat.g.1_5
+Sat.2 =~ NA*sat.g.2_1 + l1*sat.g.2_1 + l2*sat.g.2_2 + l3*sat.g.2_3 + l4*sat.g.2_4 + l5*sat.g.2_5
+
+Sat.1 ~~ 1*Sat.1
+Sat.2 ~~ psi22*NA*Sat.2
+
+Sat.1 ~ 0*1
+Sat.2 ~ 0*1
+
+sat.g.1_1 ~ 1
+sat.g.1_2 ~ 1
+sat.g.1_3 ~ 1
+sat.g.1_4 ~ 1
+sat.g.1_5 ~ 1
+
+sat.g.2_1 ~ 1
+sat.g.2_2 ~ 1
+sat.g.2_3 ~ 1
+sat.g.2_4 ~ 1
+sat.g.2_5 ~ 1
+
+sat.g.1_1 ~~ sat.g.1_1
+sat.g.1_2 ~~ sat.g.1_2
+sat.g.1_3 ~~ sat.g.1_3
+sat.g.1_4 ~~ sat.g.1_4
+sat.g.1_5 ~~ sat.g.1_5
+
+sat.g.2_1 ~~ sat.g.2_1
+sat.g.2_2 ~~ sat.g.2_2
+sat.g.2_3 ~~ sat.g.2_3
+sat.g.2_4 ~~ sat.g.2_4
+sat.g.2_5 ~~ sat.g.2_5
+
+sat.g.1_1 ~~ sat.g.2_1
+sat.g.1_2 ~~ sat.g.2_2
+sat.g.1_3 ~~ sat.g.2_3
+sat.g.1_4 ~~ sat.g.2_4
+sat.g.1_5 ~~ sat.g.2_5
+
+'
+loading.mod <- lavaan::cfa(loading.script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+#### configural ####
+
+config.script <- '
+Sat.1 =~ NA*sat.g.1_1 + sat.g.1_1 + sat.g.1_2 + sat.g.1_3 + sat.g.1_4 + sat.g.1_5
+Sat.2 =~ NA*sat.g.2_1 + sat.g.2_1 + sat.g.2_2 + sat.g.2_3 + sat.g.2_4 + sat.g.2_5
+
+Sat.1 ~~ 1*Sat.1
+Sat.2 ~~ 1*Sat.2
+
+Sat.1 ~ 0*1
+Sat.2 ~ 0*1
+
+sat.g.1_1 ~ 1
+sat.g.1_2 ~ 1
+sat.g.1_3 ~ 1
+sat.g.1_4 ~ 1
+sat.g.1_5 ~ 1
+
+sat.g.2_1 ~ 1
+sat.g.2_2 ~ 1
+sat.g.2_3 ~ 1
+sat.g.2_4 ~ 1
+sat.g.2_5 ~ 1
+
+sat.g.1_1 ~~ sat.g.1_1
+sat.g.1_2 ~~ sat.g.1_2
+sat.g.1_3 ~~ sat.g.1_3
+sat.g.1_4 ~~ sat.g.1_4
+sat.g.1_5 ~~ sat.g.1_5
+
+sat.g.2_1 ~~ sat.g.2_1
+sat.g.2_2 ~~ sat.g.2_2
+sat.g.2_3 ~~ sat.g.2_3
+sat.g.2_4 ~~ sat.g.2_4
+sat.g.2_5 ~~ sat.g.2_5
+
+sat.g.1_1 ~~ sat.g.2_1
+sat.g.1_2 ~~ sat.g.2_2
+sat.g.1_3 ~~ sat.g.2_3
+sat.g.1_4 ~~ sat.g.2_4
+sat.g.1_5 ~~ sat.g.2_5
+
+'
+config.mod <- lavaan::cfa(config.script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+```
+
+#### A Disclaimer and Words of Caution ####
+
+**Note**: the following models use a "fixed-factor" scale-setting approach, whereby the latent variance is fixed to 1 for at least one dyad member (both must be fixed in the configural model), and the latent mean is fixed to 0 for at least one dyad member (both must be fixed in the configural and loading models). 
+
+Scale-setting method choice won't impact model fit and therefore won't affect model comparisons among invariance models, but the choice does impact parameter estimation and significance testing. Prior methodological research suggests that the "marker variable" method (fixing a factor loading to 1 for each latent variable; the default in most software) can lead you astray in determining which item(s) are specifically responsible for noninvariance, so I **strongly** recommend you adopt fixed-factor as your default scale-setting approach, especially for invariance testing. 
+
+#### The New Proposed Sequence ####
+
+Instead of the normative invariance-testing ritual, I propose flipping the sequencing of dyadic invariance testing, such that researchers begin by specifying a measurement-level indistinguishable (i.e., residual-invariant) dyadic measurement model as the initial baseline model, with loadings, intercepts, and residual variances equated between partners:
+
+```{r resid_fig, eval = TRUE, echo = FALSE}
+semPaths(resid.mod)
+```
+
+Researchers would then compare the residual-invariant model against the incrementally less-parsimonious intercept-invariant model (with freely estimated residual variances):
+
+```{r intercept_fig, eval = TRUE, echo = FALSE}
+semPaths(intercept.mod)
+```
+
+If the residual-invariant model was rejected in favour of the intercept-invariant model, the intercept-invariant model would become the new baseline model. Researchers would then compare it against the incrementally less-parsimonious loading-invariant model (with freely estimated residual variances and intercepts):
+
+```{r loading_fig, eval = TRUE, echo = FALSE}
+semPaths(loading.mod)
+```
+
+If the intercept-invariant model was rejected in favour of the loading-invariant model, the loading-invariant model would become the new baseline model. Researchers would then compare it against the incrementally least-parsimonious configurally invariant model (with freely estimated residual variances, intercepts, and loadings):
+
+```{r config_fig, eval = TRUE, echo = FALSE}
+semPaths(config.mod)
+```
+
+If the loading-invariant model was rejected in favour of the configurally invariant model, the configurally invariant model would be the best-supported measurement model. Otherwise, the best supported model would be the baseline model which was
+
+## Example Data and Scraping Variable Names
+
+```{r setup}
+library(dySEM)
+library(lavaan)
+library(semPlot)
+
+dat <- commitmentQ
+names(dat)
+```
+
+The example dataset we are using contains items assessing relationship satisfaction and commitment (five items each, for both partners): we will just focus on the satisfaction items. As with any use of dySEM, we begin by scraping the variables which we are attempting to model. We first need to identify the repetitious "naming pattern" that is applied to the satisfaction items (see (here)[https://jsakaluk.github.io/dySEM/articles/varnames.html] if you need a refresher on these). We see the items correspond to a "Stem" (sat.g), "Partner" ("1" or "2"), "Item number" (1-5) or "spi" ordering, in which "." is used to separate stem from partner, and "_" is used to separate partner from item number. We assign this to an object (arbitrarily) called "dvn" (as I think of this list as capturing information about (d)yad (v)ariable (n)ames):
+
+```{r scrape}
+dvn <- scrapeVarCross(dat = commitmentQ, 
+                      x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", 
+                      distinguish_1="1", distinguish_2="2")
+dvn
+```
+
+We can visually confirm that the list contains:
+- $p1xvarnames: the five variable names for Partner 1's satisfaction item responses
+- $p2xvarnames: the five variable names for Partner 2's satisfaction item responses
+- $xindper: the number of items for Latent X (in this case, Satisfaction) for each partner
+- $dist1: the distinguishing character for the first partner
+- $dist2: the distinguishing character for the second partner
+- $indnum: the total number of items to be modeled
+
+These pieces of information are all that is needed for dySEM to automate scripting dyadic CFA models with a variety of specification options. 
+
+## Example Analysis
+
+dySEM makes the rest of the process of testing dyadic invariance straightforward. We first need to use dySEM scripter functions to generate the correct code for lavaan to fit our (1) residual-invariant, (2) intercept-invariant, (3) loading-invarint, and (4) configurally invariance dyadic CFA models. Each model requires one use of scriptCFA(), which needs to be provided the dvn list we just created with scrapeVarCross(), an aribtrary name for the latent variable being modeled, the type of invariance to impose in the the "model" argument. Critically, instead of starting with configural dyadic invariance (and proceeding to more parsimonious/restrictive models), I recommend starting with the most parsimonious/restrictive model (full measurement-level indistinguishability), and then testing whether more complicated models are empirically waranted. 
+
+```{r scripting}
+sat.residual.script <- scriptCFA(dvn, lvname = "Sat",  model = "residual")
+sat.intercept.script <- scriptCFA(dvn, lvname = "Sat",  model = "intercept")
+sat.loading.script <- scriptCFA(dvn, lvname = "Sat",  model = "loading")
+sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
+```
+
+If you return the output of scriptCFA(), it doesn't look particularly nice: 
+
+```{r printscript, eval = TRUE, echo = FALSE, results = 'hold'}
+sat.residual.script
+```
+
+Rest assured, `lavaan` can make sense of this applesauce; all the required text is there, and with a light touch of the concatenate function (which will parse the line-breaks in the text of the script), you can see a friendly human-readable version of what scriptCFA() generated:
+
+```{r cat}
+cat(sat.residual.script)
+```
+
+We can now immediately pass all of these models to `lavaan` for fitting:
+
+```{r lavaan}
+sat.residual.fit <- lavaan::cfa(sat.residual.script, 
+                                 data = commitmentQ, 
+                                 std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+sat.intercept.fit <- lavaan::cfa(sat.intercept.script, 
+                                 data = commitmentQ, 
+                                 std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+sat.loading.fit <- lavaan::cfa(sat.loading.script, 
+                                 data = commitmentQ, 
+                                 std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+sat.config.fit <- lavaan::cfa(sat.config.script, 
+                                 data = commitmentQ, 
+                                 std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+```
+
+And we can expeditiously compare all the models (sequentially, from most parsimonious to least) at once:
+
+```{r anova}
+
+out <- anova(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
+out[order(-out$Df),]
+```
+
+
+## Additional Considerations
+
+

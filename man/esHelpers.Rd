@@ -31,12 +31,4 @@ grouplvsd(fit, source)
 \description{
 Helper-functions for noninvariance effect size functions
 }
-\seealso{
-Other helpers: 
-\code{\link{outHelpers}},
-\code{\link{outParamHelpers}},
-\code{\link{scrapeHelpers}},
-\code{\link{scriptHelpers}},
-\code{\link{semHelpers}}
-}
 \concept{helpers}

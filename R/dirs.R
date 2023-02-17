@@ -5,7 +5,8 @@
 #' figures, and tables
 #'
 #' @param type input character defining name of subdirectory corresponding to
-#' type of outputted documents
+#' #' type of outputted documents
+#' @noRd
 
 dirs <- function(type){
   if(!dir.exists(file.path(sprintf("./%s", type)))){
