@@ -16,6 +16,9 @@
     <loc>https://jsakaluk.github.io/dySEM/articles/index.html</loc>
   </url>
   <url>
+    <loc>https://jsakaluk.github.io/dySEM/articles/invariance.html</loc>
+  </url>
+  <url>
     <loc>https://jsakaluk.github.io/dySEM/articles/varnames.html</loc>
   </url>
   <url>
@@ -37,9 +40,6 @@
     <loc>https://jsakaluk.github.io/dySEM/reference/commitmentQ.html</loc>
   </url>
   <url>
-    <loc>https://jsakaluk.github.io/dySEM/reference/dirs.html</loc>
-  </url>
-  <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/esHelpers.html</loc>
   </url>
   <url>
@@ -55,19 +55,10 @@
     <loc>https://jsakaluk.github.io/dySEM/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://jsakaluk.github.io/dySEM/reference/outHelpers.html</loc>
-  </url>
-  <url>
-    <loc>https://jsakaluk.github.io/dySEM/reference/outParamHelpers.html</loc>
-  </url>
-  <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/outputModel.html</loc>
   </url>
   <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://jsakaluk.github.io/dySEM/reference/scrapeHelpers.html</loc>
   </url>
   <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html</loc>
@@ -85,9 +76,6 @@
     <loc>https://jsakaluk.github.io/dySEM/reference/scriptCFM.html</loc>
   </url>
   <url>
-    <loc>https://jsakaluk.github.io/dySEM/reference/scriptHelpers.html</loc>
-  </url>
-  <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/scriptINULL.html</loc>
   </url>
   <url>
@@ -98,8 +86,5 @@
   </url>
   <url>
     <loc>https://jsakaluk.github.io/dySEM/reference/scriptObsAPIM.html</loc>
-  </url>
-  <url>
-    <loc>https://jsakaluk.github.io/dySEM/reference/semHelpers.html</loc>
   </url>
 </urlset>
