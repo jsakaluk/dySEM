@@ -1,5 +1,5 @@
 ---
-title: "Invariance Testing with Potentially Indistinguishable Dyads: Practices and Rationale for a More Logical and Inclusive Testing Sequence"
+title: "Invariance Testing with Potentially Indistinguishable Dyads: Rationale and Practices for a More Logical and Inclusive Testing Sequence"
 author: "John K. Sakaluk"
 date: "`r format(Sys.time(), '%d/%m/%y')`"
 ---
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 
 *The following resource was made in advance of the 2023 SPSP Close Relationships Preconference, and is part of a working paper. Please cite the following if you are using these materials:* 
 
-- Sakaluk, J. K. (preprint). Invariance testing with potentially indistinguishable dyads: Practices and rationale for a more logical and inclusive testing sequence. https://jsakaluk.github.io/dySEM/ 
+- Sakaluk, J. K. (preprint). Invariance testing with potentially indistinguishable dyads: Practices and rationale for a more logical and inclusive testing sequence. https://jsakaluk.github.io/dySEM/articles/invariance.html 
 
 ## tl;dr: 
 
@@ -313,6 +313,7 @@ dvn
 ```
 
 We can visually confirm that the list contains:
+
 - $p1xvarnames: the five variable names for Partner 1's satisfaction item responses
 - $p2xvarnames: the five variable names for Partner 2's satisfaction item responses
 - $xindper: the number of items for Latent X (in this case, Satisfaction) for each partner
@@ -376,4 +377,9 @@ out[order(-out$Df),]
 
 ## Additional Considerations
 
+### Traditional (Dyadic) Invariance Testing Evaluates Non-Invariance, Not Invariance
+
+### Identifying and Specifying A "Partial" Invariance Model
+
+### Calculating and Considering the Magnitude of Difference in Measurement Model Parameter Estimates
 

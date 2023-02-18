@@ -1,0 +1,30 @@
+---
+title: "The Latent Actor-Partner Interdependence Model: Rationale, Empirical Trade-offs, and Analytic Resources"
+author: "Eric Tu and John K. Sakaluk"
+date: "`r format(Sys.time(), '%d/%m/%y')`"
+---
+
+*The following resource was made in advance of the 2023 SPSP Close Relationships Preconference, and is part of a working paper. Please cite the following if you are using these materials:* 
+
+- Tu, E., & Sakaluk, J. K. (preprint). The Latent Actor-Partner Interdependence Model: Rationale, Empirical Trade-offs, and Analytic Resources. https://jsakaluk.github.io/dySEM/articles/apim.html 
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(dySEM)
+```
+
+## tl;dr:
+
+## The Premise 
+
+## The Observed APIM in SEM
+
+## The Latent APIM in SEM
+
+## Fitting The Latent APIM with dySEM 
