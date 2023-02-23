@@ -13,18 +13,225 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+library(dplyr)
 ```
 
-```{r setup}
-library(dySEM)
-```
 
 ## tl;dr:
 
-## The Premise 
+Latent Actor-Partner Interdependence Models (APIMs) are a way to specify the common APIM model while commandeering the benefits of latent variables. Namely:
 
-## The Observed APIM in SEM
+- accounting for measurement error in the assessments of X and Y for both partners, and;
+- having a statistical framework (SEM) that allows you to interrogate other auxiliary assumptions that underly your model and any comparisons within it that you wish to make
 
-## The Latent APIM in SEM
+The specifics of the benefits (i.e., to what degree they help/hinder, and under what methodological circumtances) of using a Latent APIM vs. other approaches are not well known, and are the current target of study for Eric Tu's comps paper. While this research is ongoing, this vignette should serve as a reasonable starting tutorial for those wishing to experiment with applying latent APIMs. 
+
+## The Observed APIM vs. Latent APIM in SEM
+
+As the informal poll in the RRIG facebook group illustrates, SEM is clearly not the go-to analytic framework for dyadic data analysis (and we hope to encourage more usage of SEM). Furthermore, even when people describe using SEM for dyadic data analysis, they usually do not mean that they specify their models with latent variables (i.e., in a way that would derive most of the available benefits of the SEM framework). 
+
+```{r modelgen, include=FALSE, message = FALSE}
+library(dySEM)
+library(lavaan)
+library(semPlot)
+
+dat <- commitmentQ
+
+dat <- dat %>% 
+  mutate(X_A = (sat.g.1_1 + sat.g.1_2 + sat.g.1_3 + sat.g.1_4 + sat.g.1_5)/5,
+         X_B = (sat.g.2_1 + sat.g.2_2 + sat.g.2_3 + sat.g.2_4 + sat.g.2_5)/5,
+         Y_A = (com.1_1 + com.1_2 + com.1_3 + com.1_3 + com.1_4 + com.1_5)/5,
+         Y_B = (com.2_1 + com.2_2 + com.2_3 + com.2_3 + com.2_4 + com.2_5)/5)
+
+obs.script <- scriptObsAPIM(X1 = "X_A", X2 = "X_B",
+              Y1 = "Y_A", Y2 = "Y_B")
+
+obs.fit <- cfa(obs.script, 
+               data = dat, 
+               std.lv = FALSE, 
+               auto.fix.first= FALSE, 
+               meanstructure = TRUE)
+
+dvn <- scrapeVarCross(dat = dat, #data set to scrape from
+                        #var name patterns for X indicators
+                        x_order = "spi", x_stem = "sat.g",  x_delim1 = ".", x_delim2="_",
+                        #var name patterns for Y indicators
+                        y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_",
+                        #character used to distinguish between names for P1 and P2
+                        distinguish_1="1", distinguish_2="2")
+
+apim.script.config <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
+                                  lvxname = "Sat", #arbitrary name for LV X
+                                  lvyname = "Com", #arbitrary name for LV Y
+                                  model = "configural", #what measurement constraints (if any) to impose
+                                  equate = "none", #what effects do you want to constrain if any)? 
+                                  k = TRUE,#want k-parameter? (optional, but nice)
+                                  writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
+
+apim.fit.config <- cfa(apim.script.config, 
+                               data = dat,
+                               std.lv = FALSE, 
+                               auto.fix.first= FALSE, 
+                               meanstructure = TRUE)
+```
+
+Specifically, most SEM-users of dyadic data analysis would--for a model like the APIM--first create average or sum scores for their given measures of interest (e.g., *X* and *Y*), and then use these composite scores in structural equation modeling software to specify a model that looks something like this: 
+
+```{r obs_fit, eval = TRUE, echo = FALSE}
+semPaths(obs.fit)
+```
+
+Although it is *technically* true this is a structural equation model, it's a fairly basic one that is essentially a multivariate path analysis model. This can be fine, for certain purposes, but it is not a structural equation model that has been specified with full measurement models of each of the latent variables under evaluation. We therefore call this model an "**observed APIM**" as it is modeled with fully observed (i.e., non-latent) composite variables. 
+
+A **latent APIM**, with a fully specified measurement model of each measure being analyzed, would look something like this: 
+
+```{r latent_fit, eval = TRUE, echo = FALSE}
+semPaths(apim.fit.config)
+```
 
 ## Fitting The Latent APIM with dySEM 
+
+### Example Data and Scraping Variable Names
+
+```{r setup}
+library(dySEM)
+library(lavaan)
+library(semPlot)
+
+dat <- commitmentQ
+names(dat)
+```
+
+The example dataset we are using contains items assessing relationship satisfaction and commitment (five items each, for both partners). As with any use of dySEM, we begin by scraping the variables which we are attempting to model. We first need to identify the repetitious "naming pattern" that is applied to the satisfaction items (see (here)[https://jsakaluk.github.io/dySEM/articles/varnames.html] if you need a refresher on these). We see the items correspond to a "Stem" (e.g., sat.g), "Partner" ("1" or "2"), "Item number" (1-5) or "spi" ordering, in which "." is used to separate stem from partner, and "_" is used to separate partner from item number. We assign this to an object (arbitrarily) called "dvn" (as I think of this list as capturing information about (d)yad (v)ariable (n)ames):
+
+```{r scrape}
+dvn <- scrapeVarCross(dat = commitmentQ, #data set to scrape from
+                        #var name patterns for X indicators
+                        x_order = "spi", x_stem = "sat.g",  x_delim1 = ".", x_delim2="_",
+                        #var name patterns for Y indicators
+                        y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_",
+                        #character used to distinguish between names for P1 and P2
+                        distinguish_1="1", distinguish_2="2")
+dvn
+```
+
+We can visually confirm that the list contains:
+
+- $p1xvarnames: the five variable names for Partner 1's satisfaction item responses
+- $p2xvarnames: the five variable names for Partner 2's satisfaction item responses
+- $xindper: the number of items for Latent X (in this case, Satisfaction) for each partner
+- $dist1: the distinguishing character for the first partner
+- $dist2: the distinguishing character for the second partner
+- $p1yvarnames: the five variable names for Partner 1's commitment item responses
+- $p2yvarnames: the five variable names for Partner 2's commitment item responses
+- $yindper: the number of items for Latent Y (in this case, Commitment) for each partner
+- $indnum: the total number of items in the SEM model to be scripted
+
+These pieces of information are all that is needed for dySEM to automate scripting latent APIMs (as well as other latent dyadic models like the CFM and MIM) with a variety of specification options. 
+
+### Example Analysis
+
+dySEM makes the rest of the process of fitting latent APIMs straightforward. We first need to use dySEM scripter functions to generate the correct code for lavaan to fit our latent APIM.
+
+#### Model Scripting
+
+```{r scripting}
+
+apim.script.config <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
+                                  lvxname = "Sat", #arbitrary name for LV X
+                                  lvyname = "Com", #arbitrary name for LV Y
+                                  model = "configural", #what measurement constraints (if any) to impose
+                                  equate = "none", #what effects do you want to constrain if any)? 
+                                  k = TRUE,#want k-parameter? (optional, but nice)
+                                  writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
+
+```
+
+If you return the output of scriptAPIM(), it doesn't look particularly nice: 
+
+```{r printscript, eval = TRUE, echo = FALSE, results = 'hold'}
+apim.script.config
+```
+
+Rest assured, `lavaan` can make sense of this applesauce; all the required text is there, and with a light touch of the concatenate function (which will parse the line-breaks in the text of the script), you can see a friendly human-readable version of what scriptAPIM() generated:
+
+```{r apim.script.config}
+cat(apim.script.config)
+```
+
+We can now immediately pass all of these models to `lavaan` for fitting.
+
+#### Model Fitting
+
+```{r lavaan}
+apim.fit.config <- cfa(apim.script.config, 
+                               data = commitmentQ,
+                               std.lv = FALSE, 
+                               auto.fix.first= FALSE, 
+                               meanstructure = TRUE)
+```
+
+
+### Inspecting Output
+
+And we evaluate focal lavaan output
+
+```{r summary}
+
+summary(apim.fit.config, 
+        standardized = TRUE,
+        fit.measures = TRUE, 
+        rsquare = TRUE)
+```
+
+```{r sempath}
+
+semPaths(apim.fit.config, "std")
+
+```
+
+### Example of More Specialized Models (and Cautions)
+
+scriptAPIM() also enables users to impose constraints of "**structural indistinguishability**" (i.e., estimating one actor and/or partner effect for both partners). However, the statistical conclusion validity of comparing models with these kinds of constraints to models in which actor and/or partner effects are freely estimated (as in the previous version) depends, in part, on having ensured dyadic measurement invariance, particulalry for the loadings (other comparisons require other forms of invariance to be met). 
+
+scriptAPIM() will allow you to script models imposing structural constraints (via the `equate =` argument), regardless of what level of measurement invariance is imposed (if any) (via the `model = ` argument). However, the function will provide a warning that this equating can only be validly tested when loadings are invariant.  
+
+```{r scripting_warn}
+
+apim.script.config.eq.all <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
+                                  lvxname = "Sat", #arbitrary name for LV X
+                                  lvyname = "Com", #arbitrary name for LV Y
+                                  model = "configural", #what measurement constraints (if any) to impose
+                                  equate = "all_effects", #what effects do you want to constrain if any)? 
+                                  k = TRUE,#want k-parameter? (optional, but nice)
+                                  writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
+
+```
+
+One can therefore impose the corresponding level of invariance via the `model = ` argument (at minimum `model = loading` is required, but any models that are even more constrained, e.g., `model = residual` would also be acceptable)-- the warning will go away--before proceeding with model fitting and inspecting.
+
+```{r scripting_loading}
+
+apim.script.loads.eq.all <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
+                                  lvxname = "Sat", #arbitrary name for LV X
+                                  lvyname = "Com", #arbitrary name for LV Y
+                                  model = "loading", #what measurement constraints (if any) to impose
+                                  equate = "all_effects", #what effects do you want to constrain if any)? 
+                                  k = TRUE,#want k-parameter? (optional, but nice)
+                                  writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
+
+apim.fit.loads.eq.all <- cfa(apim.script.loads.eq.all, 
+                               data = commitmentQ,
+                               std.lv = FALSE, 
+                               auto.fix.first= FALSE, 
+                               meanstructure = TRUE)
+
+summary(apim.fit.loads.eq.all, 
+        standardized = TRUE,
+        fit.measures = TRUE, 
+        rsquare = TRUE)
+
+```
+
+Users should note that structural constraints will have downstream impacts on the computation of paramater *k* if it is requested (`k = TRUE`). That is, two *k*'s will be returned if either actor and/or partner effects are uniquely estimated, but only one *k* will be returned if both actor and partner effects are constrained to equivalency (as in the example above). 

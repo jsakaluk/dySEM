@@ -325,6 +325,8 @@ These pieces of information are all that is needed for dySEM to automate scripti
 
 ## Example Analysis
 
+### Model Scripting
+
 dySEM makes the rest of the process of testing dyadic invariance straightforward. We first need to use dySEM scripter functions to generate the correct code for lavaan to fit our (1) residual-invariant, (2) intercept-invariant, (3) loading-invarint, and (4) configurally invariance dyadic CFA models. Each model requires one use of scriptCFA(), which needs to be provided the dvn list we just created with scrapeVarCross(), an aribtrary name for the latent variable being modeled, the type of invariance to impose in the the "model" argument. Critically, instead of starting with configural dyadic invariance (and proceeding to more parsimonious/restrictive models), I recommend starting with the most parsimonious/restrictive model (full measurement-level indistinguishability), and then testing whether more complicated models are empirically waranted. 
 
 ```{r scripting}
@@ -346,25 +348,29 @@ Rest assured, `lavaan` can make sense of this applesauce; all the required text 
 cat(sat.residual.script)
 ```
 
-We can now immediately pass all of these models to `lavaan` for fitting:
+We can now immediately pass all of these models to `lavaan` for fitting.
+
+### Model Fitting
 
 ```{r lavaan}
-sat.residual.fit <- lavaan::cfa(sat.residual.script, 
+sat.residual.fit <- cfa(sat.residual.script, 
                                  data = commitmentQ, 
                                  std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 
-sat.intercept.fit <- lavaan::cfa(sat.intercept.script, 
+sat.intercept.fit <- cfa(sat.intercept.script, 
                                  data = commitmentQ, 
                                  std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 
-sat.loading.fit <- lavaan::cfa(sat.loading.script, 
+sat.loading.fit <- cfa(sat.loading.script, 
                                  data = commitmentQ, 
                                  std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 
-sat.config.fit <- lavaan::cfa(sat.config.script, 
+sat.config.fit <- cfa(sat.config.script, 
                                  data = commitmentQ, 
                                  std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 ```
+
+### Inspecting Output
 
 And we can expeditiously compare all the models (sequentially, from most parsimonious to least) at once:
 
