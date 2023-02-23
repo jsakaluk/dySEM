@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">John K.
 Sakaluk</h4>
             
-            <h4 data-toc-skip class="date">18/02/23</h4>
+            <h4 data-toc-skip class="date">23/02/23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/HEAD/vignettes/articles/invariance.Rmd" class="external-link"><code>vignettes/articles/invariance.Rmd</code></a></small>
       <div class="d-none name"><code>invariance.Rmd</code></div>
@@ -348,6 +348,9 @@ options.</p>
 <div class="section level2">
 <h2 id="example-analysis">Example Analysis<a class="anchor" aria-label="anchor" href="#example-analysis"></a>
 </h2>
+<div class="section level3">
+<h3 id="model-scripting">Model Scripting<a class="anchor" aria-label="anchor" href="#model-scripting"></a>
+</h3>
 <p>dySEM makes the rest of the process of testing dyadic invariance
 straightforward. We first need to use dySEM scripter functions to
 generate the correct code for lavaan to fit our (1) residual-invariant,
@@ -422,23 +425,31 @@ scriptCFA() generated:</p>
 <span><span class="co">#&gt; Sat1 ~ 0*1</span></span>
 <span><span class="co">#&gt; Sat2 ~ NA*1</span></span></code></pre></div>
 <p>We can now immediately pass all of these models to
-<code>lavaan</code> for fitting:</p>
+<code>lavaan</code> for fitting.</p>
+</div>
+<div class="section level3">
+<h3 id="model-fitting">Model Fitting<a class="anchor" aria-label="anchor" href="#model-fitting"></a>
+</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sat.residual.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.residual.script</span>, </span>
+<code class="sourceCode R"><span><span class="va">sat.residual.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.residual.script</span>, </span>
 <span>                                 data <span class="op">=</span> <span class="va">commitmentQ</span>, </span>
 <span>                                 std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sat.intercept.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.intercept.script</span>, </span>
+<span><span class="va">sat.intercept.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.intercept.script</span>, </span>
 <span>                                 data <span class="op">=</span> <span class="va">commitmentQ</span>, </span>
 <span>                                 std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sat.loading.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.loading.script</span>, </span>
+<span><span class="va">sat.loading.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.loading.script</span>, </span>
 <span>                                 data <span class="op">=</span> <span class="va">commitmentQ</span>, </span>
 <span>                                 std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sat.config.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.config.script</span>, </span>
+<span><span class="va">sat.config.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.config.script</span>, </span>
 <span>                                 data <span class="op">=</span> <span class="va">commitmentQ</span>, </span>
 <span>                                 std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="inspecting-output">Inspecting Output<a class="anchor" aria-label="anchor" href="#inspecting-output"></a>
+</h3>
 <p>And we can expeditiously compare all the models (sequentially, from
 most parsimonious to least) at once:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -460,6 +471,7 @@ most parsimonious to least) at once:</p>
 <span><span class="co">#&gt; sat.config.fit                 </span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="additional-considerations">Additional Considerations<a class="anchor" aria-label="anchor" href="#additional-considerations"></a>
