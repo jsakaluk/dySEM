@@ -41,7 +41,7 @@
     
     <a class="navbar-brand me-2" href="index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,6 +130,7 @@
 <li>Multi-group dyadic model scripting (e.g., comparing models from samples of heterosexual vs. LGBTQ+ dyads)</li>
 <li>Simulation functions to aid in sample size planning (in progress)</li>
 <li>Unit test creation (in progress)</li>
+<li>Uploading to CRAN</li>
 </ol>
 </div>
 <div class="section level2">
@@ -172,22 +173,22 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">DRES</span></span>
 <span><span class="co">#&gt; # A tibble: 121 × 18</span></span>
-<span><span class="co">#&gt;    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_…¹ PRQC_…² PRQC_…³</span></span>
-<span><span class="co">#&gt;       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;</span></span>
-<span><span class="co">#&gt;  1        7        7        7        7        7        7       7       5       5</span></span>
-<span><span class="co">#&gt;  2        6        6        6        7        7        6       5       5       5</span></span>
-<span><span class="co">#&gt;  3        7        7        7        7        7        7       7       6       5</span></span>
-<span><span class="co">#&gt;  4        6        6        6        7        7        6       5       6       6</span></span>
-<span><span class="co">#&gt;  5        7        7        7        7        7        6       7       6       6</span></span>
-<span><span class="co">#&gt;  6        6        6        6        6        6        3       6       5       5</span></span>
-<span><span class="co">#&gt;  7        7        6        7        6        6        6       5       6       6</span></span>
-<span><span class="co">#&gt;  8        6        7        7        7        7        6       5       6       6</span></span>
-<span><span class="co">#&gt;  9        7        7        7        7        7        6       6       6       6</span></span>
-<span><span class="co">#&gt; 10        6        6        6        7        7        7       4       4       4</span></span>
-<span><span class="co">#&gt; # … with 111 more rows, 9 more variables: PRQC_1.2 &lt;int&gt;, PRQC_2.2 &lt;int&gt;,</span></span>
+<span><span class="co">#&gt;    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_7.1 PRQC_8.1</span></span>
+<span><span class="co">#&gt;       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;</span></span>
+<span><span class="co">#&gt;  1        7        7        7        7        7        7        7        5</span></span>
+<span><span class="co">#&gt;  2        6        6        6        7        7        6        5        5</span></span>
+<span><span class="co">#&gt;  3        7        7        7        7        7        7        7        6</span></span>
+<span><span class="co">#&gt;  4        6        6        6        7        7        6        5        6</span></span>
+<span><span class="co">#&gt;  5        7        7        7        7        7        6        7        6</span></span>
+<span><span class="co">#&gt;  6        6        6        6        6        6        3        6        5</span></span>
+<span><span class="co">#&gt;  7        7        6        7        6        6        6        5        6</span></span>
+<span><span class="co">#&gt;  8        6        7        7        7        7        6        5        6</span></span>
+<span><span class="co">#&gt;  9        7        7        7        7        7        6        6        6</span></span>
+<span><span class="co">#&gt; 10        6        6        6        7        7        7        4        4</span></span>
+<span><span class="co">#&gt; # ℹ 111 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 10 more variables: PRQC_9.1 &lt;int&gt;, PRQC_1.2 &lt;int&gt;, PRQC_2.2 &lt;int&gt;,</span></span>
 <span><span class="co">#&gt; #   PRQC_3.2 &lt;int&gt;, PRQC_4.2 &lt;int&gt;, PRQC_5.2 &lt;int&gt;, PRQC_6.2 &lt;int&gt;,</span></span>
-<span><span class="co">#&gt; #   PRQC_7.2 &lt;int&gt;, PRQC_8.2 &lt;int&gt;, PRQC_9.2 &lt;int&gt;, and abbreviated variable</span></span>
-<span><span class="co">#&gt; #   names ¹​PRQC_7.1, ²​PRQC_8.1, ³​PRQC_9.1</span></span></code></pre></div>
+<span><span class="co">#&gt; #   PRQC_7.2 &lt;int&gt;, PRQC_8.2 &lt;int&gt;, PRQC_9.2 &lt;int&gt;</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="id_2-scrape-variables-from-your-data-frame">2. <strong>Scrape</strong> variables from your data frame<a class="anchor" aria-label="anchor" href="#id_2-scrape-variables-from-your-data-frame"></a>
