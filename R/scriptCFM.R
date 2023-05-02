@@ -266,7 +266,7 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
 
      if(isTRUE(writescript)){
        dirs("scripts")
-       cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_apim_loading.txt",lvyname,lvxname))
+       cat(loading.script,"\n", file = sprintf("./scripts/%s_%s_cfm_loading.txt",lvyname,lvxname))
      }
 
      return(loading.script)
@@ -383,7 +383,7 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
 
       if(isTRUE(writescript)){
         dirs("scripts")
-        cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+        cat(intercept.script,"\n", file = sprintf("./scripts/%s_%s_cfm_intercept.txt",lvyname,lvxname))
       }
       return(intercept.script)
     }
@@ -499,7 +499,7 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
 
       if(isTRUE(writescript)){
         dirs("scripts")
-        cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_apim_intercept.txt",lvyname,lvxname))
+        cat(residual.script,"\n", file = sprintf("./scripts/%s_%s_cfm_intercept.txt",lvyname,lvxname))
       }
       return(residual.script)
     }
@@ -615,7 +615,7 @@ scriptCFM = function(dvn, lvxname, lvyname, model = "indist", scaleset = "FF",
 
       if(isTRUE(writescript)){
         dirs("scripts")
-        cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_apim_indist.txt",lvyname,lvxname))
+        cat(indist.script,"\n", file = sprintf("./scripts/%s_%s_cfm_indist.txt",lvyname,lvxname))
       }
       return(indist.script)
     }

@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -176,25 +176,25 @@ x 28 ((9 PRQC items + 5 GMSEX items) x 2 (# of dyad members)):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">DRES</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 121 × 28</span></span></span>
-<span><span class="co">#&gt;    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_…¹ PRQC_…² PRQC_…³</span></span>
-<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        7        7        7        7        7        7       7       5       5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        6        6        6        7        7        6       5       5       5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        7        7        7        7        7        7       7       6       5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        6        6        6        7        7        6       5       6       6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        7        7        7        7        7        6       7       6       6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        6        6        6        6        6        3       6       5       5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        7        6        7        6        6        6       5       6       6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        6        7        7        7        7        6       5       6       6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        7        7        7        7        7        6       6       6       6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        6        6        6        7        7        7       4       4       4</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 111 more rows, 19 more variables: PRQC_1.2 &lt;int&gt;, PRQC_2.2 &lt;int&gt;,</span></span></span>
+<span><span class="co">#&gt;    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_7.1 PRQC_8.1</span></span>
+<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        7        7        7        7        7        7        7        5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        6        6        6        7        7        6        5        5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        7        7        7        7        7        7        7        6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        6        6        6        7        7        6        5        6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        7        7        7        7        7        6        7        6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        6        6        6        6        6        3        6        5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        7        6        7        6        6        6        5        6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        6        7        7        7        7        6        5        6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        7        7        7        7        7        6        6        6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        6        6        6        7        7        7        4        4</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 111 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 20 more variables: PRQC_9.1 &lt;int&gt;, PRQC_1.2 &lt;int&gt;, PRQC_2.2 &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   PRQC_3.2 &lt;int&gt;, PRQC_4.2 &lt;int&gt;, PRQC_5.2 &lt;int&gt;, PRQC_6.2 &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   PRQC_7.2 &lt;int&gt;, PRQC_8.2 &lt;int&gt;, PRQC_9.2 &lt;int&gt;, sexsat1.1 &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   sexsat2.1 &lt;int&gt;, sexsat3.1 &lt;int&gt;, sexsat4.1 &lt;int&gt;, sexsat5.1 &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   sexsat1.2 &lt;int&gt;, sexsat2.2 &lt;int&gt;, sexsat3.2 &lt;int&gt;, sexsat4.2 &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   sexsat5.2 &lt;int&gt;, and abbreviated variable names ¹​PRQC_7.1, ²​PRQC_8.1,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   ³​PRQC_9.1</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;">#   sexsat5.2 &lt;int&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="scrape">2. Scrape<a class="anchor" aria-label="anchor" href="#scrape"></a>
