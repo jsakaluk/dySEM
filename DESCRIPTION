@@ -1,11 +1,12 @@
 Package: dySEM
 Title: Dyadic Structural Equation Modeling
-Version: 0.0.2.9
+Version: 0.0.2.10
 Authors@R: c(
     person("John", "Sakaluk", , "jksakaluk@gmail.com", role = c("cre", "cph"),
            comment = c(ORCID = "0000-0002-2515-9822")),
-    person("Robyn", "Kilshaw", , "robyn.bates@gmail.com", role = "aut"),
-    person("Alexandra", "Fisher", , "anfisher@uvic.ca", role = "aut")
+    person("Omar", "Comanto", , "ocamanto@uwo.ca", role = "ctb"),       
+    person("Robyn", "Kilshaw", , "robyn.bates@gmail.com", role = "ctb"),
+    person("Alexandra", "Fisher", , "anfisher@uvic.ca", role = "ctb")
   )
 Description: Scripting of structural equation models via `lavaan` for
     Dyadic Data Analysis, and helper functions for supplemental
