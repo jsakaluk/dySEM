@@ -1,5 +1,5 @@
 #' A Function That Writes, Saves, and Exports Syntax for
-#' Fitting Latent Actor-Partner Interdependence Models (APIM)
+#' Fitting Latent Actor-Partner Interdependence Models (APIMs)
 #'
 #' This function takes the outputted object from scrapeVarCross()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
