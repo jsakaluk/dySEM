@@ -1,5 +1,5 @@
 #' A Function That Writes, Saves, and Exports Syntax for
-#' Fitting Latent Dyadic Measurement and Invariance Models
+#' Fitting Latent Dyadic Confirmatory Factor Analysis (CFA) Models
 #'
 #' This function takes the outputted object from dyadVarNames()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
