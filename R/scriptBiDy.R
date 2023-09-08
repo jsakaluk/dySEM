@@ -1,5 +1,5 @@
 #' A Function That Writes, Saves, and Exports Syntax for
-#' Fitting Bifactor Dyadic (Bidy) Models
+#' Fitting Bifactor Dyadic (Bidy) models
 #'
 #' This function takes the outputted object from scrapeVarCross()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
