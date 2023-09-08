@@ -1,5 +1,5 @@
 #' A Function That Writes, Saves, and Exports Syntax for
-#' Fitting Latent Common Fate Models (CFM)
+#' Fitting Latent Common Fate Models (CFMs)
 #'
 #' This function takes the outputted object from scrapeVarCross()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
