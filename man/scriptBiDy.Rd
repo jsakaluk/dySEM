@@ -3,7 +3,7 @@
 \name{scriptBiDy}
 \alias{scriptBiDy}
 \title{A Function That Writes, Saves, and Exports Syntax for
-Fitting BiDY  Models}
+Fitting Bifactor Dyadic (BiDy) models}
 \usage{
 scriptBiDy(
   dvn,

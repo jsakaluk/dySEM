@@ -3,7 +3,7 @@
 \name{scriptCFM}
 \alias{scriptCFM}
 \title{A Function That Writes, Saves, and Exports Syntax for
-Fitting Latent Common Fate Models}
+Fitting Latent Common Fate Models (CFMs)}
 \usage{
 scriptCFM(
   dvn,
