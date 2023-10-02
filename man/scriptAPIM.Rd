@@ -3,7 +3,7 @@
 \name{scriptAPIM}
 \alias{scriptAPIM}
 \title{A Function That Writes, Saves, and Exports Syntax for
-Fitting Latent Actor-Partner Interdependence Models}
+Fitting Latent Actor-Partner Interdependence Models (APIMs)}
 \usage{
 scriptAPIM(
   dvn,

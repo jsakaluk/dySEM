@@ -11,8 +11,10 @@ Authors@R: c(
 Description: Scripting of structural equation models via `lavaan` for
     Dyadic Data Analysis, and helper functions for supplemental
     calculations, tabling, and model visualization.  Current models
-    supported include: Dyadic CFA, APIM (observed and latent), CFM
-    (observed and latent), MIM (latent), and the BiDy Model (latent).
+    supported include: Dyadic Confirmatory Factor Analysis, the Actor–Partner 
+    Interdependence Model (observed and latent), the Common Fate Model
+    (observed and latent), Mutual Influence Model (latent), and the Bifactor
+    Dyadic Model (latent).
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
