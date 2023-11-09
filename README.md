@@ -11,6 +11,7 @@ experimental](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https:/
 status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/package=dySEM)
 [![R-CMD-check](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/jsakaluk/dySEM/branch/master/graph/badge.svg?token=FFPNR3GOOB)](https://codecov.io/gh/jsakaluk/dySEM)
+[![CodeFactor](https://www.codefactor.io/repository/github/jsakaluk/dysem/badge/master)](https://www.codefactor.io/repository/github/jsakaluk/dysem/overview/master)
 <!-- badges: end -->
 
 ## Summary
@@ -20,7 +21,7 @@ reporting on latent models of dyadic data via
 [`lavaan`](http://lavaan.ugent.be). The package was developed and used
 in the course of the research described in [Sakaluk, Fisher, &
 Kilshaw](https://psyarxiv.com/9vcnz/) (in press). We are targeting the
-first stable release for \~end of March 2021, and hope to submit the
+first stable release for ~end of March 2021, and hope to submit the
 package to CRAN sometime in the summer.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
