@@ -8,8 +8,17 @@
 #' @param fit outputted dyadic cfa lavaan object
 #' @param source character for whether parameter of interest should be extracted for group "1", "2", or from the "nogroup" model
 #' @family helpers
+#' @return a numeric vector containing the estimated values of the parameter of interest (e.g., loadings, intercepts, etc.) for the desired group.
 #'
 #' @export
+#' 
+#' @examples
+#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", 
+#' x_delim2="_", distinguish_1="1", distinguish_2="2")
+#' sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
+#' sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE, 
+#' auto.fix.first= FALSE, meanstructure = TRUE)
+#' grouploads(sat.config.mod, dvn, "2")
 
 grouploads <- function(fit, dvn, source){
   if(source == "1"){
