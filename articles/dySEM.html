@@ -142,7 +142,7 @@ visualization(s)</li>
 <strong><em>Outputters</em></strong>, and
 <strong><em>Getters</em></strong>–are listed and described in the <a href="https://jsakaluk.github.io/dySEM/reference/index.html">Reference</a></p>
 <p>We now demonstrate a typical <code>dySEM</code> workflow, using the
-built-in <a href="https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R" class="external-link"><code>DRES</code></a>
+built-in <a href="https://github.com/jsakaluk/dySEM/blob/0ceb8440ac71ce00777853cff4a7d177cf2a6db5/R/DRES-data.R" class="external-link"><code>DRES</code></a>
 data (Raposso, Impett, &amp; Muise, 2020), in order to perform dyadic
 confirmatory factor analysis (CFA). More elaborate and specific
 vignettes are forthcoming to provide didactic materials for conducting
@@ -151,9 +151,9 @@ other sorts of dyadic data analyses via <code>dySEM</code>.</p>
 <div class="section level2">
 <h2 id="import-and-wrangle-data">1. Import and Wrangle Data<a class="anchor" aria-label="anchor" href="#import-and-wrangle-data"></a>
 </h2>
-<p>We will use a subset of <a href="https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R" class="external-link"><code>DRES</code></a>,
+<p>We will use a subset of <a href="https://github.com/jsakaluk/dySEM/blob/0ceb8440ac71ce00777853cff4a7d177cf2a6db5/R/DRES-data.R" class="external-link"><code>DRES</code></a>,
 consisting of 121 dyadic couples’ ratings of relationship quality on 9
-of the <a href="https://journals.sagepub.com/doi/abs/10.1177/0146167200265007" class="external-link">PRQC</a>
+of the <a href="https://psycnet.apa.org/record/2000-13970-007" class="external-link">PRQC</a>
 indicators (1 = <em>not at all</em>, 7 = <em>extremely</em>; all
 indicators positively keyed). Structural equation modeling (SEM)
 programs like <code>lavaan</code> require dyadic data to be in <em>dyad
@@ -165,12 +165,11 @@ from various data structures to a <em>dyad structure</em>, but for now,
 we recommend <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link"><code>tidyr::pivot_wider</code></a>
 or the tools provided by <a href="http://davidakenny.net/RDDD.htm" class="external-link">Ledermann &amp; Kenny
 (2014)</a></p>
-<p>Like many real-world analytic contexts, <a href="https://github.com/jsakaluk/dySEM/blob/master/R/DRES-data%20copy.R" class="external-link"><code>DRES</code></a>
+<p>Like many real-world analytic contexts, <a href="https://github.com/jsakaluk/dySEM/blob/0ceb8440ac71ce00777853cff4a7d177cf2a6db5/R/DRES-data.R" class="external-link"><code>DRES</code></a>
 contains a number of other variables that we aren’t interested in
 modeling at this time (specifically, 5 indicators of sexual satisfaction
-from the <a href="https://www.tandfonline.com/doi/abs/10.1080/00224490509552264" class="external-link">GMSEX</a>
-for each dyad member). This wil not be a problem for
-<code>dySEM</code>.</p>
+from the <a href="https://www.jstor.org/stable/3813147" class="external-link">GMSEX</a> for
+each dyad member). This wil not be a problem for <code>dySEM</code>.</p>
 <p>Our data set therefore results in a tibble that is 121 (# of couples)
 x 28 ((9 PRQC items + 5 GMSEX items) x 2 (# of dyad members)):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -321,7 +320,7 @@ family in Reference on pkgdown site: family of functions in
 <code>dySEM</code> simplify the process of accurately and reproducibly
 scripting dyadic SEMs to a singleton line of R code.</p>
 <p>Each <em>Scripter</em> function is a wrapper for a series of
-<em>Helper</em> functions (see <a href="https://github.com/jsakaluk/dySEM/blob/master/R/cfa_funs.R" class="external-link"><code>cfa_funs</code></a>
+<em>Helper</em> functions (see <a href="https://github.com/jsakaluk/dySEM/blob/0ceb8440ac71ce00777853cff4a7d177cf2a6db5/R/scriptHelpers.R" class="external-link"><code>scriptHelpers.R</code></a>
 if you are interested) that snatch the information about the indicators
 they need from a saved <code>dvn</code> object and combine it with other
 text to write the <code>lavaan</code> syntax for a particular part of
@@ -458,7 +457,7 @@ fitted <code>lavaan</code> model <a href="https://lavaan.ugent.be/tutorial/inspe
 <p><code>dySEM</code> also contains functionality to help you quickly,
 correctly, and reproducibly generate output from your fitted model(s),
 in the forms of path diagrams and/or tables of statistical values. Path
-diagram creation is supported via the <a href="https://cran.r-project.org/web/packages/semPlot/index.html" class="external-link"><code>semPlot</code></a>
+diagram creation is supported via the <a href="https://CRAN.R-project.org/package=semPlot" class="external-link"><code>semPlot</code></a>
 package’s <code>semPaths</code> function, whereas table creation is
 currently supported by the <a href="https://strengejacke.github.io/sjPlot/" class="external-link"><code>sjPlot</code></a>
 package’s <code>tab_df</code> function, though users should be aware
