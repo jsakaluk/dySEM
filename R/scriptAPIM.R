@@ -78,19 +78,19 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       #Latent Covariances
-      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
-      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
 
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 
@@ -232,19 +232,19 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       #Latent Covariances
-      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
-      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
 
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 
@@ -383,19 +383,19 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       #Latent Covariances
-      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
-      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
-
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
+      
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 
@@ -531,19 +531,19 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       #Latent Covariances
-      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
-      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
-
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
+      
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 
@@ -678,19 +678,19 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       #Latent Covariances
-      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
-      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
 
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 
@@ -833,19 +833,19 @@ scriptAPIM = function(dvn, scaleset = "FF",
       }
 
       #Latent Covariances
-      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[[4]],lvxname, dvn[[5]])
-      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[[4]],lvyname, dvn[[5]])
-
+      psi_x1x2 = sprintf("%s%s ~~ %s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      psi_y1y2 = sprintf("%s%s ~~ %s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
+      
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 

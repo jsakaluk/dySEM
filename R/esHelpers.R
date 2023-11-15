@@ -23,11 +23,11 @@
 grouploads <- function(fit, dvn, source){
   if(source == "1"){
     loads <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[[1]]) %>%
+      dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[["p1xvarnames"]]) %>%
       dplyr::select(.data$est)
   }else if(source == "2"){
     loads <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[[2]]) %>%
+      dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[["p2xvarnames"]]) %>%
       dplyr::select(.data$est)
   }
   return(loads)
@@ -37,11 +37,11 @@ grouploads <- function(fit, dvn, source){
 groupints <- function(fit, dvn,source){
   if(source == "1"){
     ints <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[[1]]) %>%
+      dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[["p1xvarnames"]]) %>%
       dplyr::select(.data$est)
   }else if(source == "2"){
     ints <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[[2]]) %>%
+      dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[["p2xvarnames"]]) %>%
       dplyr::select(.data$est)
   }
   return(ints)
@@ -51,11 +51,11 @@ groupints <- function(fit, dvn,source){
 groupindsds <- function(dat, dvn, source){
 
   if(source == 1){
-    sds <- dat %>% dplyr::select(paste({{dvn}}[[1]])) %>%
+    sds <- dat %>% dplyr::select(paste({{dvn}}[["p1xvarnames"]])) %>%
       dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
       as.numeric()
   }else if(source == 2){
-    sds <- dat %>% dplyr::select(paste({{dvn}}[[2]])) %>%
+    sds <- dat %>% dplyr::select(paste({{dvn}}[["p2xvarnames"]])) %>%
       dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
       as.numeric()
   }

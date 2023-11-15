@@ -12,7 +12,7 @@
 xlamda1 <- function(dvn, fit){
   #Extract loadings
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-    dplyr::filter(.data$op == "=~" & .data$rhs %in% dvn[[1]]) %>%
+    dplyr::filter(.data$op == "=~" & .data$rhs %in% dvn[["p1xvarnames"]]) %>%
     dplyr::select(Std.Loading=.data$std.all)
   return(load)
 }
@@ -21,7 +21,7 @@ xlamda1 <- function(dvn, fit){
 xlamda2 <- function(dvn, fit){
   #Extract loadings
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-    dplyr::filter(.data$op == "=~" & .data$rhs %in% dvn[[2]]) %>%
+    dplyr::filter(.data$op == "=~" & .data$rhs %in% dvn[["p2xvarnames"]]) %>%
     dplyr::select(Std.Loading=.data$std.all)
   return(load)
 }
@@ -30,7 +30,7 @@ xlamda2 <- function(dvn, fit){
 xtheta1 <- function(dvn, fit){
   #Extract resicual variances
   error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-    dplyr::filter(.data$op == "~~" & .data$lhs %in% dvn[[1]] & .data$rhs %in% dvn[[1]]) %>%
+    dplyr::filter(.data$op == "~~" & .data$lhs %in% dvn[["p1xvarnames"]] & .data$rhs %in% dvn[["p1xvarnames"]]) %>%
     dplyr::select(Std.Error=.data$std.all)
   return(error)
 }
@@ -39,7 +39,7 @@ xtheta1 <- function(dvn, fit){
 xtheta2 <- function(dvn, fit){
   #Extract residual variances
   error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-    dplyr::filter(.data$op == "~~" & .data$lhs %in% dvn[[2]] & .data$rhs %in% dvn[[2]]) %>%
+    dplyr::filter(.data$op == "~~" & .data$lhs %in% dvn[["p2xvarnames"]] & .data$rhs %in% dvn[["p2xvarnames"]]) %>%
     dplyr::select(Std.Error=.data$std.all)
   return(error)
 }
@@ -48,7 +48,7 @@ xtheta2 <- function(dvn, fit){
 xtheta12 <- function(dvn, fit){
   #Extract loadings
   corerror = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
-    dplyr::filter(.data$op == "~~" & .data$lhs %in% dvn[[1]] & .data$rhs %in% dvn[[2]]) %>%
+    dplyr::filter(.data$op == "~~" & .data$lhs %in% dvn[["p1xvarnames"]] & .data$rhs %in% dvn[["p2xvarnames"]]) %>%
     dplyr::select(Std.Error=.data$std.all)
   return(corerror)
 }
@@ -84,7 +84,7 @@ xintercepts <- function(dvn, fit){
     dplyr::select(.data$est)
 
   intercept.param <- dplyr::rename(intercept.param, intercept = .data$est)
-  x.int.num <- dvn[[3]]*2#number of x intercepts (*2 for dyads)
+  x.int.num <- dvn[["xindper"]]*2#number of x intercepts (*2 for dyads)
   intercept.param <- intercept.param[1:x.int.num,]
 
   return(intercept.param)
@@ -98,7 +98,7 @@ xbidyIntercepts <- function(dvn, fit){
     dplyr::select(.data$est)
 
   intercept.param <- dplyr::rename(intercept.param, intercept = .data$est)
-  x.int.num <- dvn[[3]]*2#number of x intercepts (*2 for dyads)
+  x.int.num <- dvn[["xindper"]]*2#number of x intercepts (*2 for dyads)
   intercept.param <- intercept.param[1:x.int.num,]
 
   half <- x.int.num/2

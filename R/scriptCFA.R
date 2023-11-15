@@ -64,12 +64,12 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
       psi_x2 = lvars(dvn, lvar = "X", lvname, partner = "2", type = "free")
     }
 
-    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
+    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
 
     #Correlated residuals
     resids = list()
-    for (i in 1:dvn[[3]]) {
-      resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
     }
     resids = paste(resids, collapse = "\n")
 
@@ -124,12 +124,12 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
       psi_x2 = lvars(dvn, lvar = "X", lvname, partner = "2", type = "free")
     }
 
-    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
+    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
 
     #Correlated residuals
     resids = list()
-    for (i in 1:dvn[[3]]) {
-      resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
     }
     resids = paste(resids, collapse = "\n")
 
@@ -184,12 +184,12 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
       psi_x2 = lvars(dvn, lvar = "X", lvname, partner = "2", type = "free")
     }
 
-    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
+    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
 
     #Correlated residuals
     resids = list()
-    for (i in 1:dvn[[3]]) {
-      resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
     }
     resids = paste(resids, collapse = "\n")
 
@@ -243,12 +243,12 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
       psi_x2 = lvars(dvn, lvar = "X", lvname, partner = "2", type = "free")
     }
 
-    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
+    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
 
     #Correlated residuals
     resids = list()
-    for (i in 1:dvn[[3]]) {
-      resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
     }
     resids = paste(resids, collapse = "\n")
 
@@ -302,12 +302,12 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
       psi_x2 = lvars(dvn, lvar = "X", lvname, partner = "2", type = "equated")
     }
 
-    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
+    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
 
     #Correlated residuals
     resids = list()
-    for (i in 1:dvn[[3]]) {
-      resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
     }
     resids = paste(resids, collapse = "\n")
 
@@ -362,12 +362,12 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
       psi_x2 = lvars(dvn, lvar = "X", lvname, partner = "2", type = "free")
     }
 
-    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
+    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
 
     #Correlated residuals
     resids = list()
-    for (i in 1:dvn[[3]]) {
-      resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
     }
     resids = paste(resids, collapse = "\n")
 
@@ -420,12 +420,12 @@ scriptCFA = function(dvn, lvname = "X", scaleset = "FF", model = "indist",
       psi_x2 = lvars(dvn, lvar = "X", lvname, partner = "2", type = "equated")
     }
 
-    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[[4]],lvname, dvn[[5]])
+    psi_x1x2 = sprintf("%s%s ~~ %s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
 
     #Correlated residuals
     resids = list()
-    for (i in 1:dvn[[3]]) {
-      resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+    for (i in 1:dvn[["xindper"]]) {
+      resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
     }
     resids = paste(resids, collapse = "\n")
 
