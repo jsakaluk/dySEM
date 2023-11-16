@@ -21,6 +21,59 @@ test_that("scriptCFA produces correct output for model = configural and scaleset
   )
 })
 
+test_that("scriptCFA produces correct number of parameter estimates for model = configural and scaleset= FF", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+  #knowns for model w/ intercepts/latent means:
+  #var_num <- 10
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ model = configural and scaleset = FF
+  script <- scriptCFA(dvn, lvname = "Sat", model = "configural", scaleset = "FF")
+
+  #Fit model
+  mod <- lavaan::cfa(script, data = commitmentQ)
+
+  #manually calculated free parameters (see LINK)
+  #my_param <- 36
+
+  lav_param <- as.double(lavaan::fitmeasures(mod, "npar"))
+
+  expect_equal(lav_param,
+               36
+  )
+})
+
+test_that("scriptCFA produces correct df for model = configural and scaleset= FF", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+  #knowns for model w/ intercepts/latent means:
+  #var_num <- 10
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ model = configural and scaleset = FF
+  script <- scriptCFA(dvn, lvname = "Sat", model = "configural", scaleset = "FF")
+
+  #Fit model
+  mod <- lavaan::cfa(script, data = commitmentQ)
+
+  #manually calculated free parameters (see LINK)
+  #my_param <- 36
+
+  #calculated df (should be 29)
+  #my_df <- knowns-my_param
+
+  lav_df <- as.double(lavaan::fitmeasures(mod, "df"))
+
+  expect_equal(lav_df,
+               29
+  )
+})
+
 #### loading ####
 test_that("scriptCFA produces correct output for model = loading and scaleset= FF", {
 
