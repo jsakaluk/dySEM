@@ -12,6 +12,7 @@ status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/
 [![R-CMD-check](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/jsakaluk/dySEM/branch/master/graph/badge.svg?token=FFPNR3GOOB)](https://codecov.io/gh/jsakaluk/dySEM)
 [![CodeFactor](https://www.codefactor.io/repository/github/jsakaluk/dysem/badge/master)](https://www.codefactor.io/repository/github/jsakaluk/dysem/overview/master)
+<!--![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/dySEM)-->
 <!-- badges: end -->
 
 ## Summary
