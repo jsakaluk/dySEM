@@ -32,8 +32,8 @@ getDyReliability <- function(dvn, fit){
   rel.tib <- tibble::as_tibble(rels)
 
   #Name omegas based on distinguishing characters in dvn
-  name1 <- sprintf("omega.%s", dvn[[4]])
-  name2 <- sprintf("omega.%s", dvn[[5]])
+  name1 <- sprintf("omega.%s", dvn[["dist1"]])
+  name2 <- sprintf("omega.%s", dvn[["dist2"]])
   names(rel.tib) <- c(name1, name2)
 
   return(rel.tib)

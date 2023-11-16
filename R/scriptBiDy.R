@@ -59,8 +59,8 @@ scriptBiDy = function(dvn, lvxname, lvyname,
 
       #Correlated residuals
       resids = list()
-      for (i in 1:dvn[[3]]) {
-        resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids = paste(resids, collapse = "\n")
 
@@ -109,8 +109,8 @@ scriptBiDy = function(dvn, lvxname, lvyname,
 
       #Correlated residuals
       resids = list()
-      for (i in 1:dvn[[3]]) {
-        resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids = paste(resids, collapse = "\n")
 
@@ -159,8 +159,8 @@ scriptBiDy = function(dvn, lvxname, lvyname,
 
       #Correlated residuals
       resids = list()
-      for (i in 1:dvn[[3]]) {
-        resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids = paste(resids, collapse = "\n")
 
@@ -209,8 +209,8 @@ scriptBiDy = function(dvn, lvxname, lvyname,
 
       #Correlated residuals
       resids = list()
-      for (i in 1:dvn[[3]]) {
-        resids[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids = paste(resids, collapse = "\n")
 
@@ -292,14 +292,14 @@ scriptBiDy = function(dvn, lvxname, lvyname,
 
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 
@@ -395,14 +395,14 @@ scriptBiDy = function(dvn, lvxname, lvyname,
 
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 
@@ -497,14 +497,14 @@ scriptBiDy = function(dvn, lvxname, lvyname,
 
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 
@@ -600,14 +600,14 @@ scriptBiDy = function(dvn, lvxname, lvyname,
 
       #Correlated residuals
       resids.x = list()
-      for (i in 1:dvn[[3]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[[1]][i], dvn[[2]][i])
+      for (i in 1:dvn[["xindper"]]) {
+        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
       }
       resids.x = paste(resids.x, collapse = "\n")
 
       resids.y = list()
-      for (i in 1:dvn[[8]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[[6]][i], dvn[[7]][i])
+      for (i in 1:dvn[["yindper"]]) {
+        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
       }
       resids.y = paste(resids.y, collapse = "\n")
 
