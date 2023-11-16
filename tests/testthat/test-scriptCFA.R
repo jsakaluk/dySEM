@@ -74,6 +74,66 @@ test_that("scriptCFA produces correct df for model = configural and scaleset= FF
   )
 })
 
+test_that("scriptCFA produces same df for model = configural when scaleset= FF, and scaleset = MV", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+
+  #Script model w/ model = configural and scaleset = FF
+  script_ff <- scriptCFA(dvn, lvname = "Sat", model = "configural", scaleset = "FF")
+
+  #Fit model w FF
+  mod_ff <- lavaan::cfa(script_ff, data = commitmentQ)
+
+  #get its df
+  df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
+
+  #Script model w/ model = configural and scaleset = FF
+  script_mv <- scriptCFA(dvn, lvname = "Sat", model = "configural", scaleset = "MV")
+
+  #Fit model w FF
+  mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
+
+  #get its df
+  df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
+
+  #scale setting should have no impact on df
+  expect_equal(df_ff,
+               df_mv
+  )
+})
+
+test_that("scriptCFA produces same chisq for model = configural when scaleset= FF, and scaleset = MV", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+
+  #Script model w/ model = configural and scaleset = FF
+  script_ff <- scriptCFA(dvn, lvname = "Sat", model = "configural", scaleset = "FF")
+
+  #Fit model w FF
+  mod_ff <- lavaan::cfa(script_ff, data = commitmentQ)
+
+  #get its df
+  chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+
+  #Script model w/ model = configural and scaleset = FF
+  script_mv <- scriptCFA(dvn, lvname = "Sat", model = "configural", scaleset = "MV")
+
+  #Fit model w FF
+  mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
+
+  #get its df
+  chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
+
+  #scale setting should have no impact on df
+  expect_equal(chisq_ff,
+               chisq_mv
+  )
+})
+
 #### loading ####
 test_that("scriptCFA produces correct output for model = loading and scaleset= FF", {
 
