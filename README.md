@@ -6,11 +6,11 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+experimental](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/package=dySEM)
 [![R-CMD-check](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/jsakaluk/dySEM/branch/master/graph/badge.svg?token=FFPNR3GOOB)](https://codecov.io/gh/jsakaluk/dySEM)
+[![codecov](https://codecov.io/gh/jsakaluk/dySEM/branch/master/graph/badge.svg?token=FFPNR3GOOB)](https://app.codecov.io/gh/jsakaluk/dySEM)
 [![CodeFactor](https://www.codefactor.io/repository/github/jsakaluk/dysem/badge/master)](https://www.codefactor.io/repository/github/jsakaluk/dysem/overview/master)
 <!--![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/dySEM)-->
 <!-- badges: end -->
@@ -19,11 +19,9 @@ status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/
 
 The `dySEM` helps automate the process of scripting, fitting, and
 reporting on latent models of dyadic data via
-[`lavaan`](http://lavaan.ugent.be). The package was developed and used
+[`lavaan`](https://lavaan.ugent.be). The package was developed and used
 in the course of the research described in [Sakaluk, Fisher, &
-Kilshaw](https://psyarxiv.com/9vcnz/) (in press). We are targeting the
-first stable release for ~end of March 2021, and hope to submit the
-package to CRAN sometime in the summer.
+Kilshaw](https://doi.org/10.1111/pere.12341) (2021).
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
