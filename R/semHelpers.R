@@ -11,8 +11,8 @@
 #' @param lvname input character for name of a given lv
 #' @param type input character to indicate whether parameters "free" or "equated" in estimation
 #' @family helpers
-#' @noRd
 
+#' @noRd
 lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
   if(param == "act"){
     if(type == "free"){
@@ -68,6 +68,7 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
 }
 
 #' @rdname semHelpers
+#' @noRd
 cfloads <- function(dvn, lvxname, lvyname, type = "equated"){
   if(type == "equated"){
     eta.cx <-  sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
@@ -83,6 +84,7 @@ cfloads <- function(dvn, lvxname, lvyname, type = "equated"){
 }
 
 #' @rdname semHelpers
+#' @noRd
 cfvars <- function(lvname, type){
   if(type == "fixed"){
     lvar <- sprintf("%s ~~ 1*%s",lvname, lvname)
@@ -94,6 +96,7 @@ cfvars <- function(lvname, type){
 }
 
 #' @rdname semHelpers
+#' @noRd
 cfmeans <- function(lvname, type, lvar = "X"){
   if(type == "fixed"){
     lmean <- sprintf("%s ~ 0*1",lvname)

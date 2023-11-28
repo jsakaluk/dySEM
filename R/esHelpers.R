@@ -10,16 +10,7 @@
 #' @family helpers
 #' @return a numeric vector containing the estimated values of the parameter of interest (e.g., loadings, intercepts, etc.) for the desired group.
 #'
-#' @export
-#' 
-#' @examples
-#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", 
-#' x_delim2="_", distinguish_1="1", distinguish_2="2")
-#' sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
-#' sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE, 
-#' auto.fix.first= FALSE, meanstructure = TRUE)
-#' grouploads(sat.config.mod, dvn, "2")
-
+#' @noRd
 grouploads <- function(fit, dvn, source){
   if(source == "1"){
     loads <- lavaan::parameterEstimates(fit) %>%
@@ -34,6 +25,8 @@ grouploads <- function(fit, dvn, source){
 }
 
 #' @rdname esHelpers
+#' @noRd
+
 groupints <- function(fit, dvn,source){
   if(source == "1"){
     ints <- lavaan::parameterEstimates(fit) %>%
@@ -48,6 +41,8 @@ groupints <- function(fit, dvn,source){
 }
 
 #' @rdname esHelpers
+#' @noRd
+
 groupindsds <- function(dat, dvn, source){
 
   if(source == 1){
@@ -64,6 +59,7 @@ groupindsds <- function(dat, dvn, source){
 }
 
 #' @rdname esHelpers
+#' @noRd
 grouplvmean <- function(fit, source){
   if(source == "1"){
     lvmean <- lavaan::parameterEstimates(fit) %>%
@@ -80,6 +76,7 @@ grouplvmean <- function(fit, source){
 }
 
 #' @rdname esHelpers
+#' @noRd
 grouplvsd <- function(fit, source){
   if(source == "1"){
     lvsd <- lavaan::parameterEstimates(fit) %>%

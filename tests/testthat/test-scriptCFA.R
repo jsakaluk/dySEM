@@ -157,6 +157,118 @@ test_that("scriptCFA produces correct output for model = loading and scaleset= M
   )
 })
 
+test_that("scriptCFA produces correct number of parameter estimates for model = loading and scaleset= FF", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+  #knowns for model w/ intercepts/latent means:
+  #var_num <- 10
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ model = configural and scaleset = FF
+  script <- scriptCFA(dvn, lvname = "Sat", model = "loading", scaleset = "FF")
+
+  #Fit model
+  mod <- lavaan::cfa(script, data = commitmentQ)
+
+  #manually calculated free parameters (see LINK)
+  #my_param <- 32
+
+  lav_param <- as.double(lavaan::fitmeasures(mod, "npar"))
+
+  expect_equal(lav_param,
+               32
+  )
+})
+
+test_that("scriptCFA produces correct df for model = loading and scaleset= FF", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+  #knowns for model w/ intercepts/latent means:
+  #var_num <- 10
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ model = configural and scaleset = FF
+  script <- scriptCFA(dvn, lvname = "Sat", model = "loading", scaleset = "FF")
+
+  #Fit model
+  mod <- lavaan::cfa(script, data = commitmentQ)
+
+  #manually calculated free parameters (see LINK)
+  #my_param <- 32
+
+  #calculated df (should be 33)
+  #my_df <- knowns-my_param
+
+  lav_df <- as.double(lavaan::fitmeasures(mod, "df"))
+
+  expect_equal(lav_df,
+               33
+  )
+})
+
+test_that("scriptCFA produces same df for model = loading when scaleset= FF, and scaleset = MV", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+
+  #Script model w/ model = configural and scaleset = FF
+  script_ff <- scriptCFA(dvn, lvname = "Sat", model = "loading", scaleset = "FF")
+
+  #Fit model w FF
+  mod_ff <- lavaan::cfa(script_ff, data = commitmentQ)
+
+  #get its df
+  df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
+
+  #Script model w/ model = configural and scaleset = FF
+  script_mv <- scriptCFA(dvn, lvname = "Sat", model = "loading", scaleset = "MV")
+
+  #Fit model w FF
+  mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
+
+  #get its df
+  df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
+
+  #scale setting should have no impact on df
+  expect_equal(df_ff,
+               df_mv
+  )
+})
+
+test_that("scriptCFA produces same chisq for model = loading when scaleset= FF, and scaleset = MV", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+
+  #Script model w/ model = configural and scaleset = FF
+  script_ff <- scriptCFA(dvn, lvname = "Sat", model = "loading", scaleset = "FF")
+
+  #Fit model w FF
+  mod_ff <- lavaan::cfa(script_ff, data = commitmentQ)
+
+  #get its df
+  chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+
+  #Script model w/ model = configural and scaleset = FF
+  script_mv <- scriptCFA(dvn, lvname = "Sat", model = "loading", scaleset = "MV")
+
+  #Fit model w FF
+  mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
+
+  #get its df
+  chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
+
+  #scale setting should have no impact on df
+  expect_equal(chisq_ff,
+               chisq_mv
+  )
+})
 #### intercept ####
 test_that("scriptCFA produces correct output for model = intercept and scaleset= FF", {
 
@@ -180,6 +292,118 @@ test_that("scriptCFA produces correct output for model = intercept and scaleset=
   )
 })
 
+test_that("scriptCFA produces correct number of parameter estimates for model = intercept and scaleset= FF", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+  #knowns for model w/ intercepts/latent means:
+  #var_num <- 10
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ model = configural and scaleset = FF
+  script <- scriptCFA(dvn, lvname = "Sat", model = "intercept", scaleset = "FF")
+
+  #Fit model
+  mod <- lavaan::cfa(script, data = commitmentQ)
+
+  #manually calculated free parameters (see LINK)
+  #my_param <- 28
+
+  lav_param <- as.double(lavaan::fitmeasures(mod, "npar"))
+
+  expect_equal(lav_param,
+               28
+  )
+})
+
+test_that("scriptCFA produces correct df for model = intercept and scaleset= FF", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+  #knowns for model w/ intercepts/latent means:
+  #var_num <- 10
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ model = configural and scaleset = FF
+  script <- scriptCFA(dvn, lvname = "Sat", model = "intercept", scaleset = "FF")
+
+  #Fit model
+  mod <- lavaan::cfa(script, data = commitmentQ)
+
+  #manually calculated free parameters (see LINK)
+  #my_param <- 28
+
+  #calculated df (should be 37)
+  #my_df <- knowns-my_param
+
+  lav_df <- as.double(lavaan::fitmeasures(mod, "df"))
+
+  expect_equal(lav_df,
+               37
+  )
+})
+
+test_that("scriptCFA produces same df for model = intercept when scaleset= FF, and scaleset = MV", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+
+  #Script model w/ model = configural and scaleset = FF
+  script_ff <- scriptCFA(dvn, lvname = "Sat", model = "intercept", scaleset = "FF")
+
+  #Fit model w FF
+  mod_ff <- lavaan::cfa(script_ff, data = commitmentQ)
+
+  #get its df
+  df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
+
+  #Script model w/ model = configural and scaleset = FF
+  script_mv <- scriptCFA(dvn, lvname = "Sat", model = "intercept", scaleset = "MV")
+
+  #Fit model w FF
+  mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
+
+  #get its df
+  df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
+
+  #scale setting should have no impact on df
+  expect_equal(df_ff,
+               df_mv
+  )
+})
+
+test_that("scriptCFA produces same chisq for model = intercept when scaleset= FF, and scaleset = MV", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+                        x_delim2="_", distinguish_1="1", distinguish_2="2")
+
+
+  #Script model w/ model = configural and scaleset = FF
+  script_ff <- scriptCFA(dvn, lvname = "Sat", model = "intercept", scaleset = "FF")
+
+  #Fit model w FF
+  mod_ff <- lavaan::cfa(script_ff, data = commitmentQ)
+
+  #get its df
+  chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+
+  #Script model w/ model = configural and scaleset = FF
+  script_mv <- scriptCFA(dvn, lvname = "Sat", model = "intercept", scaleset = "MV")
+
+  #Fit model w FF
+  mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
+
+  #get its df
+  chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
+
+  #scale setting should have no impact on df
+  expect_equal(chisq_ff,
+               chisq_mv
+  )
+})
 #### residual ####
 test_that("scriptCFA produces correct output for model = residual and scaleset= FF", {
 

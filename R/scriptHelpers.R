@@ -9,8 +9,8 @@
 #' @param partner input character to indicate parameters for first or second dyad member
 #' @param type input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation
 #' @family helpers
-#' @noRd
 
+#' @noRd
 loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
 
   if(partner == "1" & type == "fixed" & lvar == "X"){
@@ -202,6 +202,7 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
 }
 
 #' @rdname scriptHelpers
+#' @noRd
 intercepts <- function(dvn, lvar = "X", partner="1", type = "free"){
   if(partner == "1" & type == "fixed" & lvar == "X"){
     xints = list()
@@ -331,6 +332,7 @@ intercepts <- function(dvn, lvar = "X", partner="1", type = "free"){
 }
 
 #' @rdname scriptHelpers
+#' @noRd
 resids <- function(dvn, lvar = "X", partner="1", type = "free"){
   if(partner == "1" & type == "free" & lvar == "X"){
     res = list()
@@ -392,6 +394,7 @@ resids <- function(dvn, lvar = "X", partner="1", type = "free"){
 }
 
 #' @rdname scriptHelpers
+#' @noRd
 lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
   if(partner == "1" & type == "fixed"){
     lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
@@ -429,6 +432,7 @@ lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
 }
 
 #' @rdname scriptHelpers
+#' @noRd
 lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
   if(partner == "1" & type == "fixed"){
     alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[["dist1"]])

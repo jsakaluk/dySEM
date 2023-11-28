@@ -6,9 +6,8 @@
 #' @param dvn input dvn list from scrapeVarCross
 #' @param fit input object from fitted lavaan model
 #' @family helpers
+
 #' @noRd
-
-
 xlamda1 <- function(dvn, fit){
   #Extract loadings
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -18,6 +17,7 @@ xlamda1 <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+#' @noRd
 xlamda2 <- function(dvn, fit){
   #Extract loadings
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -27,6 +27,7 @@ xlamda2 <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+#' @noRd
 xtheta1 <- function(dvn, fit){
   #Extract resicual variances
   error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -36,6 +37,7 @@ xtheta1 <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+#' @noRd
 xtheta2 <- function(dvn, fit){
   #Extract residual variances
   error = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -45,6 +47,7 @@ xtheta2 <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+#' @noRd
 xtheta12 <- function(dvn, fit){
   #Extract loadings
   corerror = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -54,6 +57,7 @@ xtheta12 <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+#' @noRd
 loadings <- function(dvn, fit){
   #Extract loadings, SEs, Z, p,
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -66,6 +70,7 @@ loadings <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+#' @noRd
 bidyLoadings <- function(dvn, fit){
   #Extract loadings, SEs, Z, p,
   load = lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -77,6 +82,7 @@ bidyLoadings <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+#' @noRd
 xintercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -91,6 +97,7 @@ xintercepts <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+#' @noRd
 xbidyIntercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -108,7 +115,9 @@ xbidyIntercepts <- function(dvn, fit){
   intercept.param <- c(inthalf1, missing, inthalf2)
   return(intercept.param)
 }
+
 #' @rdname outParamHelpers
+#' @noRd
 xyintercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%
@@ -121,6 +130,7 @@ xyintercepts <- function(dvn, fit){
 }
 
 #' @rdname outParamHelpers
+#' @noRd
 xybidyIntercepts <- function(dvn, fit){
   #Extract intercepts
   intercept.param <- lavaan::parameterEstimates(fit, standardized=TRUE) %>%

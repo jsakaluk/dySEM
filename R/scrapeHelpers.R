@@ -12,8 +12,8 @@
 #' @param delim3 optional input character of second delimiting character
 #' @param wave input character for the particular wave of a longitudinal design
 #' @family helpers
-#' @noRd
 
+#' @noRd
 sipExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
   stem_delim <-stringr::str_c(stem, delim1)
   delim_distinguish <- stringr::str_c(delim2, distinguish)
@@ -24,6 +24,7 @@ sipExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
 }
 
 #' @rdname scrapeHelpers
+#' @noRd
 spiExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
   stem_delim <-stringr::str_c(stem, delim1, distinguish)
   vars <- stringr::str_extract(names(dat), stringr::str_c(stem_delim, delim2, item_num))
@@ -32,6 +33,7 @@ spiExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
 }
 
 #' @rdname scrapeHelpers
+#' @noRd
 spitExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish, delim3, wave){
   stem_delim_distinguish <-stringr::str_c(stem, delim1, distinguish)
 
@@ -41,6 +43,7 @@ spitExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish, delim
 }
 
 #' @rdname scrapeHelpers
+#' @noRd
 siptExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish, delim3, wave){
   stem_delim <-stringr::str_c(stem, delim1)
   delim_distinguish <- stringr::str_c(delim2, distinguish)

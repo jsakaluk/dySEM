@@ -164,6 +164,7 @@ makeTable <- function(dvn, fit, model, tabletype){
 }
 
 #' @rdname outHelpers
+#' @noRd
 
 makeFigure <- function(fit, type){
   if(type == "raw"){

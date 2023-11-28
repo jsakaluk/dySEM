@@ -6,10 +6,13 @@
 #'
 #' @param type input character defining name of subdirectory corresponding to
 #' #' type of outputted documents
+#' @return message confirming which subdirectory was created (if any)
 #' @noRd
 
 dirs <- function(type){
   if(!dir.exists(file.path(sprintf("./%s", type)))){
     dir.create(file.path(sprintf("./%s", type)))
+    dir.message <- paste0("Subdirectory created for ", "'", type, "'")
+    return(dir.message)
   }
 }
