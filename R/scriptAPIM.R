@@ -16,7 +16,7 @@
 #' @param equate input character to specify which type of structural parameters
 #' ("actor" = actor effects, "partner" = partner effects,
 #' "all_effects" = actor and partner effects, x_means, y_means, or all_means)
-#' are constrained to equivalencey between partners. Default is "none". Actor or partner effect constraints
+#' are constrained to equivalency between partners. Default is "none". Actor or partner effect constraints
 #' require at least a loading-invariant model to be specified, otherwise a warning is returned; mean constraints
 #' require an intercept-invariant model to be specified, otherwise a warning is returned.
 #' @param k input logical for whether Kenny & Ledermann's (2010) k parameter should be

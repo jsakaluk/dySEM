@@ -17,13 +17,13 @@ knitr::opts_chunk$set(
 
 ## tl;dr: 
 
-The **normative invariance-testing ritual**, including for dyadic measurement models ([Sakaluk et al, 2021](https://onlinelibrary.wiley.com/doi/abs/10.1111/pere.12341)), involves first fitting a *configurally invariant* model (i.e., all measurement model parameters free to vary between partners). A *loading-invariant* model (i.e., loadings constrained to equivalence between partners) is then fit and compared against the configurally invariant model; an *intercept-invariant* model (loadings and intercepts constrained to equivalence between partners) is then fit and compared against the loading-invariant model, and so on. The final model is determined as the most constrained model that does not appreciably ruin model fit (e.g., producing a significant nested-model comparison, producing a decrease in some other absolute/relative model fit index beyond a particular threshold, etc.,).
+The **normative invariance-testing ritual**, including for dyadic measurement models ([Sakaluk et al., 2021](https://onlinelibrary.wiley.com/doi/abs/10.1111/pere.12341)), involves first fitting a *configurally invariant* model (i.e., all measurement model parameters free to vary between partners). A *loading-invariant* model (i.e., loadings constrained to equivalence between partners) is then fit and compared against the configurally invariant model; an *intercept-invariant* model (loadings and intercepts constrained to equivalence between partners) is then fit and compared against the loading-invariant model, and so on. The final model is determined as the most constrained model that does not appreciably ruin model fit (e.g., producing a significant nested-model comparison, producing a decrease in some other absolute/relative model fit index beyond a particular threshold, etc.).
 
 This ritual can be consider flawed and/or problematic for at least three reasons: 
 
 1. The ritual begins with the specification of--and testing against--the *least* parsimonious dyadic measurement model, as opposed to the *most* parsimonious.
 1. The ritual involves the inverting of traditional null-hypothesis significance testing logic (under most circumstances, such that noninvariance is considered undesirable) 
-1. The ritual tacitly promotes a mindset where "distinguishablity is the default", at the expense of indistinguishable dyad types (e.g., same-sex and/or same-gender couples) that have been historically excluded from relationship science
+1. The ritual tacitly promotes a mindset where "distinguishability is the default", at the expense of indistinguishable dyad types (e.g., same-sex and/or same-gender couples) that have been historically excluded from relationship science
 
 ## A Lengthier Explanation
 
@@ -327,7 +327,7 @@ These pieces of information are all that is needed for dySEM to automate scripti
 
 ### Model Scripting
 
-dySEM makes the rest of the process of testing dyadic invariance straightforward. We first need to use dySEM scripter functions to generate the correct code for lavaan to fit our (1) residual-invariant, (2) intercept-invariant, (3) loading-invarint, and (4) configurally invariance dyadic CFA models. Each model requires one use of scriptCFA(), which needs to be provided the dvn list we just created with scrapeVarCross(), an aribtrary name for the latent variable being modeled, the type of invariance to impose in the the "model" argument. Critically, instead of starting with configural dyadic invariance (and proceeding to more parsimonious/restrictive models), I recommend starting with the most parsimonious/restrictive model (full measurement-level indistinguishability), and then testing whether more complicated models are empirically waranted. 
+dySEM makes the rest of the process of testing dyadic invariance straightforward. We first need to use dySEM scripter functions to generate the correct code for lavaan to fit our (1) residual-invariant, (2) intercept-invariant, (3) loading-invariant, and (4) configurally invariance dyadic CFA models. Each model requires one use of scriptCFA(), which needs to be provided the dvn list we just created with scrapeVarCross(), an arbitrary name for the latent variable being modeled, the type of invariance to impose in the the "model" argument. Critically, instead of starting with configural dyadic invariance (and proceeding to more parsimonious/restrictive models), I recommend starting with the most parsimonious/restrictive model (full measurement-level indistinguishability), and then testing whether more complicated models are empirically warranted. 
 
 ```{r scripting}
 sat.residual.script <- scriptCFA(dvn, lvname = "Sat",  model = "residual")

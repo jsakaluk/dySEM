@@ -132,7 +132,7 @@ DRES
 
 ### 2. **Scrape** variables from your data frame
 
-The `dySEM` scrapers consider appropriately repetitously named
+The `dySEM` scrapers consider appropriately repetitiously named
 indicators as consisting of at least three distinct elements: stem,
 item, and partner. **Delimiter** characters (e.g., “.”, “\_“) are
 commonly–but not always–used to separate some/all of these

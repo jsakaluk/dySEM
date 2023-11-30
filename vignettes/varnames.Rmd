@@ -35,7 +35,7 @@ In this short tutorial, we are going to focus on the patterns of repetition that
 
 Try to remember the last spreadsheet of data you interacted with. Now think of the variables (i.e., columns) within it. The names of those variables could probably be categorized in terms of a few dimensions of styling, namely, the ***clarity*** and repetition of the variable name’s ***stem*** (i.e., the text content of the variable’s name). In terms of clarity, some variable name stems you thought of were probably ambiguous or cryptic (e.g., Q1, Q19_1)--you or someone else wouldn’t immediately be able to understand what kind of data was captured in that variable based on the stem alone.   
 
-### Some Examples of Ambigious Variable Names
+### Some Examples of Ambiguous Variable Names
 
 
 ![ ](https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p1.jpeg){width=70%} 

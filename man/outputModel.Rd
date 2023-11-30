@@ -2,7 +2,7 @@
 % Please edit documentation in R/outputModel.R
 \name{outputModel}
 \alias{outputModel}
-\title{A Function That Exports Tables and/or SEM Digrams based on dySEM models}
+\title{A Function That Exports Tables and/or SEM Diagrams based on dySEM models}
 \usage{
 outputModel(
   dvn,
@@ -18,7 +18,7 @@ outputModel(
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
 
-\item{model}{character input specying type of model to output (e.g., "cfa", "apim", "cfm")}
+\item{model}{character input specifying type of model to output (e.g., "cfa", "apim", "cfm")}
 
 \item{fit}{input object from fitted lavaan model}
 
@@ -37,8 +37,8 @@ options are "measurement" (i.e,, loadings, intercepts,),
 should be written to an output subdirectory in current working directory}
 }
 \value{
-Ignore console (prints unneccessary semPlot::semPaths details). More importantly,
-prints word files for the table(s) and/or figure, outputed to the users working directory
+Ignore console (prints unnecessary semPlot::semPaths details). More importantly,
+prints word files for the table(s) and/or figure, outputted to the users working directory
 }
 \description{
 This function takes the  model from fitted dySEM() scripts and
