@@ -132,7 +132,7 @@ structure data set</em>
 model using <code>lavaan</code>
 </li>
 <li>
-<strong>Output</strong> statisitcal table(s) and or
+<strong>Output</strong> statistical table(s) and or
 visualization(s)</li>
 </ol>
 <p>You might also use optional <code>dySEM</code> calculators after Step
@@ -143,7 +143,7 @@ visualization(s)</li>
 <strong><em>Getters</em></strong>–are listed and described in the <a href="https://jsakaluk.github.io/dySEM/reference/index.html">Reference</a></p>
 <p>We now demonstrate a typical <code>dySEM</code> workflow, using the
 built-in <a href="https://github.com/jsakaluk/dySEM/blob/0ceb8440ac71ce00777853cff4a7d177cf2a6db5/R/DRES-data.R" class="external-link"><code>DRES</code></a>
-data (Raposso, Impett, &amp; Muise, 2020), in order to perform dyadic
+data (Raposo, Impett, &amp; Muise, 2020), in order to perform dyadic
 confirmatory factor analysis (CFA). More elaborate and specific
 vignettes are forthcoming to provide didactic materials for conducting
 other sorts of dyadic data analyses via <code>dySEM</code>.</p>
@@ -169,7 +169,7 @@ or the tools provided by <a href="http://davidakenny.net/RDDD.htm" class="extern
 contains a number of other variables that we aren’t interested in
 modeling at this time (specifically, 5 indicators of sexual satisfaction
 from the <a href="https://pubmed.ncbi.nlm.nih.gov/16123841/" class="external-link">GMSEX</a>
-for each dyad member). This wil not be a problem for
+for each dyad member). This will not be a problem for
 <code>dySEM</code>.</p>
 <p>Our data set therefore results in a tibble that is 121 (# of couples)
 x 28 ((9 PRQC items + 5 GMSEX items) x 2 (# of dyad members)):</p>
@@ -213,7 +213,7 @@ characters</p>
 <div class="section level3">
 <h3 id="anatomy-of-a-repetitious-indicator-name">Anatomy of a Repetitious Indicator Name<a class="anchor" aria-label="anchor" href="#anatomy-of-a-repetitious-indicator-name"></a>
 </h3>
-<p>The <code>dySEM</code> scrapers consider appropriately repetitously
+<p>The <code>dySEM</code> scrapers consider appropriately repetitiously
 named indicators as consisting of at least three distinct elements:
 <strong>s</strong>tem, <strong>i</strong>tem, and
 <strong>p</strong>artner. For longitudinal designs, a fourth
@@ -237,7 +237,7 @@ which member of the dyad (the first or second) a given indicator
 corresponds (e.g., “A” or “B”, “M” or “F”, “1” or “2”).
 <strong><em>Note</em></strong>: this is only about variable selection;
 this has no bearing on whether a given dyadic model is specified to be
-(in)distinguishiable (which is determined by the
+(in)distinguishable (which is determined by the
 <strong>script</strong>).</li>
 </ol>
 <p><code>dySEM</code> scrapers largely function by asking you to specify
@@ -250,7 +250,7 @@ in what order the elements of variable names are ordered. For example: *
 <h3 id="using-dysem-scrapers">Using <code>dySEM</code> Scrapers<a class="anchor" aria-label="anchor" href="#using-dysem-scrapers"></a>
 </h3>
 <p>The <code>scrapeVarCross</code> function is your <code>dySEM</code>
-scraper for cross-sectional dyadic data. It can acomodate scraping
+scraper for cross-sectional dyadic data. It can accommodate scraping
 indicators for models featuring one latent variable (e.g., as in our
 dyadic CFA), as well as bivariate latent variable models, such as the
 Actor-Partner Interdependence Model (APIM). We cover scraping and
@@ -259,7 +259,7 @@ scripting of these bivariate models in other vignettes.</p>
 our PRQC indicators, which have the following properties:</p>
 <ul>
 <li>a reoccuring <strong>S</strong>tem of “PRQC”</li>
-<li>distinguishing <strong>P</strong>artner charcters of “1” and
+<li>distinguishing <strong>P</strong>artner characters of “1” and
 “2”</li>
 <li>a “sip” (<strong>S</strong>tem, <strong>I</strong>tem,
 <strong>P</strong>artner) order of elements</li>
@@ -338,7 +338,7 @@ you input two names)</li>
 <li>the kind of parameter equality constraints that you wish to be
 imposed (if any), such as those corresponding to particular levels of
 measurement invariance (e.g., “loading”), or even a fully
-“indistiguishable” model (i.e., in which all measurement and structural
+“indistinguishable” model (i.e., in which all measurement and structural
 parameters are constrained to equality between partners)</li>
 </ol>
 <p>If you plan on scripting multiple models, I recommend that you name
@@ -383,7 +383,7 @@ are appreciably different).</li>
 automated scripting may already be apparent, but becomes painfully
 obvious once you leverage <code>dySEM</code> to quickly script a
 sequence of competing models (e.g., from configural invariance CFA –&gt;
-fully indistinguisbale CFA)</p>
+fully indistinguishable CFA)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">qual.load.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, model <span class="op">=</span> <span class="st">"loading"</span><span class="op">)</span></span>
 <span></span>
@@ -410,7 +410,7 @@ is a very good place to get started.</p>
 intended <code>lavaan</code> wrapper (we recommend <code>cfa</code>–be
 sure to disable any options that might fix parameters, as the scripter
 has already taken care of manually specifying which parameters to fix or
-estimate), with your prefered estimator and missing data treatment. For
+estimate), with your preferred estimator and missing data treatment. For
 example:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Fit configural invariance model</span></span>
@@ -465,7 +465,7 @@ package’s <code>tab_df</code> function, though users should be aware
 that <a href="https://github.com/jsakaluk/dySEM/issues/28" class="external-link">we are
 considering</a> a move to the <a href="https://gt.rstudio.com" class="external-link"><code>gt</code></a> package for improved
 tabling capacity.</p>
-<p>The <code>outputModel</code> function is currenty
+<p>The <code>outputModel</code> function is currently
 <code>dySEM</code>’s all-purpose outputting function.</p>
 <p>The useR must specify the <code>dvn</code> of scraped variables used
 to script the model and the type of model being outputted (e.g., “cfa”).

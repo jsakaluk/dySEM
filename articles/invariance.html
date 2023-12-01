@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">John K.
 Sakaluk</h4>
             
-            <h4 data-toc-skip class="date">28/11/23</h4>
+            <h4 data-toc-skip class="date">01/12/23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/HEAD/vignettes/articles/invariance.Rmd" class="external-link"><code>vignettes/articles/invariance.Rmd</code></a></small>
       <div class="d-none name"><code>invariance.Rmd</code></div>
@@ -109,7 +109,7 @@ inclusive testing sequence. <a href="https://jsakaluk.github.io/dySEM/articles/i
 </h2>
 <p>The <strong>normative invariance-testing ritual</strong>, including
 for dyadic measurement models (<a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/pere.12341" class="external-link">Sakaluk
-et al, 2021</a>), involves first fitting a <em>configurally
+et al., 2021</a>), involves first fitting a <em>configurally
 invariant</em> model (i.e., all measurement model parameters free to
 vary between partners). A <em>loading-invariant</em> model (i.e.,
 loadings constrained to equivalence between partners) is then fit and
@@ -120,7 +120,7 @@ loading-invariant model, and so on. The final model is determined as the
 most constrained model that does not appreciably ruin model fit (e.g.,
 producing a significant nested-model comparison, producing a decrease in
 some other absolute/relative model fit index beyond a particular
-threshold, etc.,).</p>
+threshold, etc.).</p>
 <p>This ritual can be consider flawed and/or problematic for at least
 three reasons:</p>
 <ol style="list-style-type: decimal">
@@ -130,7 +130,7 @@ three reasons:</p>
 <li>The ritual involves the inverting of traditional null-hypothesis
 significance testing logic (under most circumstances, such that
 noninvariance is considered undesirable)</li>
-<li>The ritual tacitly promotes a mindset where “distinguishablity is
+<li>The ritual tacitly promotes a mindset where “distinguishability is
 the default”, at the expense of indistinguishable dyad types (e.g.,
 same-sex and/or same-gender couples) that have been historically
 excluded from relationship science</li>
@@ -354,16 +354,16 @@ options.</p>
 <p>dySEM makes the rest of the process of testing dyadic invariance
 straightforward. We first need to use dySEM scripter functions to
 generate the correct code for lavaan to fit our (1) residual-invariant,
-(2) intercept-invariant, (3) loading-invarint, and (4) configurally
+(2) intercept-invariant, (3) loading-invariant, and (4) configurally
 invariance dyadic CFA models. Each model requires one use of
 scriptCFA(), which needs to be provided the dvn list we just created
-with scrapeVarCross(), an aribtrary name for the latent variable being
+with scrapeVarCross(), an arbitrary name for the latent variable being
 modeled, the type of invariance to impose in the the “model” argument.
 Critically, instead of starting with configural dyadic invariance (and
 proceeding to more parsimonious/restrictive models), I recommend
 starting with the most parsimonious/restrictive model (full
 measurement-level indistinguishability), and then testing whether more
-complicated models are empirically waranted.</p>
+complicated models are empirically warranted.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sat.residual.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,  model <span class="op">=</span> <span class="st">"residual"</span><span class="op">)</span></span>
 <span><span class="va">sat.intercept.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,  model <span class="op">=</span> <span class="st">"intercept"</span><span class="op">)</span></span>

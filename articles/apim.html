@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Eric Tu and
 John K. Sakaluk</h4>
             
-            <h4 data-toc-skip class="date">28/11/23</h4>
+            <h4 data-toc-skip class="date">01/12/23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/HEAD/vignettes/articles/apim.Rmd" class="external-link"><code>vignettes/articles/apim.Rmd</code></a></small>
       <div class="d-none name"><code>apim.Rmd</code></div>
@@ -114,11 +114,11 @@ variables. Namely:</p>
 <li>accounting for measurement error in the assessments of X and Y for
 both partners, and;</li>
 <li>having a statistical framework (SEM) that allows you to interrogate
-other auxiliary assumptions that underly your model and any comparisons
+other auxiliary assumptions that underlie your model and any comparisons
 within it that you wish to make</li>
 </ul>
 <p>The specifics of the benefits (i.e., to what degree they help/hinder,
-and under what methodological circumtances) of using a Latent APIM
+and under what methodological circumstances) of using a Latent APIM
 vs. other approaches are not well known, and are the current target of
 study for Eric Tu’s comps paper. While this research is ongoing, this
 vignette should serve as a reasonable starting tutorial for those
@@ -593,7 +593,7 @@ actor and/or partner effect for both partners). However, the statistical
 conclusion validity of comparing models with these kinds of constraints
 to models in which actor and/or partner effects are freely estimated (as
 in the previous version) depends, in part, on having ensured dyadic
-measurement invariance, particulalry for the loadings (other comparisons
+measurement invariance, particularly for the loadings (other comparisons
 require other forms of invariance to be met).</p>
 <p>scriptAPIM() will allow you to script models imposing structural
 constraints (via the <code>equate =</code> argument), regardless of what
@@ -841,7 +841,7 @@ fitting and inspecting.</p>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all</span></span>
 <span><span class="co">#&gt;     k                 0.614    0.274    2.245    0.025    0.566    0.566</span></span></code></pre></div>
 <p>Users should note that structural constraints will have downstream
-impacts on the computation of paramater <em>k</em> if it is requested
+impacts on the computation of parameter <em>k</em> if it is requested
 (<code>k = TRUE</code>). That is, two <em>k</em>’s will be returned if
 either actor and/or partner effects are uniquely estimated, but only one
 <em>k</em> will be returned if both actor and partner effects are
