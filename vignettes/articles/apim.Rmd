@@ -23,9 +23,9 @@ library(dplyr)
 Latent Actor-Partner Interdependence Models (APIMs) are a way to specify the common APIM model while commandeering the benefits of latent variables. Namely:
 
 - accounting for measurement error in the assessments of X and Y for both partners, and;
-- having a statistical framework (SEM) that allows you to interrogate other auxiliary assumptions that underly your model and any comparisons within it that you wish to make
+- having a statistical framework (SEM) that allows you to interrogate other auxiliary assumptions that underlie your model and any comparisons within it that you wish to make
 
-The specifics of the benefits (i.e., to what degree they help/hinder, and under what methodological circumtances) of using a Latent APIM vs. other approaches are not well known, and are the current target of study for Eric Tu's comps paper. While this research is ongoing, this vignette should serve as a reasonable starting tutorial for those wishing to experiment with applying latent APIMs. 
+The specifics of the benefits (i.e., to what degree they help/hinder, and under what methodological circumstances) of using a Latent APIM vs. other approaches are not well known, and are the current target of study for Eric Tu's comps paper. While this research is ongoing, this vignette should serve as a reasonable starting tutorial for those wishing to experiment with applying latent APIMs. 
 
 ## The Observed APIM vs. Latent APIM in SEM
 
@@ -193,7 +193,7 @@ semPaths(apim.fit.config, "std")
 
 ### Example of More Specialized Models (and Cautions)
 
-scriptAPIM() also enables users to impose constraints of "**structural indistinguishability**" (i.e., estimating one actor and/or partner effect for both partners). However, the statistical conclusion validity of comparing models with these kinds of constraints to models in which actor and/or partner effects are freely estimated (as in the previous version) depends, in part, on having ensured dyadic measurement invariance, particulalry for the loadings (other comparisons require other forms of invariance to be met). 
+scriptAPIM() also enables users to impose constraints of "**structural indistinguishability**" (i.e., estimating one actor and/or partner effect for both partners). However, the statistical conclusion validity of comparing models with these kinds of constraints to models in which actor and/or partner effects are freely estimated (as in the previous version) depends, in part, on having ensured dyadic measurement invariance, particularly for the loadings (other comparisons require other forms of invariance to be met). 
 
 scriptAPIM() will allow you to script models imposing structural constraints (via the `equate =` argument), regardless of what level of measurement invariance is imposed (if any) (via the `model = ` argument). However, the function will provide a warning that this equating can only be validly tested when loadings are invariant.  
 
@@ -234,4 +234,4 @@ summary(apim.fit.loads.eq.all,
 
 ```
 
-Users should note that structural constraints will have downstream impacts on the computation of paramater *k* if it is requested (`k = TRUE`). That is, two *k*'s will be returned if either actor and/or partner effects are uniquely estimated, but only one *k* will be returned if both actor and partner effects are constrained to equivalency (as in the example above). 
+Users should note that structural constraints will have downstream impacts on the computation of parameter *k* if it is requested (`k = TRUE`). That is, two *k*'s will be returned if either actor and/or partner effects are uniquely estimated, but only one *k* will be returned if both actor and partner effects are constrained to equivalency (as in the example above). 

@@ -35,7 +35,7 @@ data(commitmentM)
 \description{
 A data set containing 5 ratings of satisfaction and 5 ratings of commitment for each
 member of a mixed-sex romantic dyad. Measured using the Investment Model Scale subscales
-(Rubult, Martz, & Agnew, 1998). Data are from Sakaluk, Fisher, and Kilshaw's (in press) study
+(Rusbult, Martz, & Agnew, 1998). Data are from Sakaluk, Fisher, and Kilshaw's (in press) study
 of dyadic invariance. Variable names have been re-coded to follow a stem-item-partner ("sip")
 order, with a delimiter ("_") between the item number and partner distinguishing character.
 }

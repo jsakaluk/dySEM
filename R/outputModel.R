@@ -1,10 +1,10 @@
-#' A Function That Exports Tables and/or SEM Digrams based on dySEM models
+#' A Function That Exports Tables and/or SEM Diagrams based on dySEM models
 #'
 #' This function takes the  model from fitted dySEM() scripts and
 #' exports table(s) and/or a path diagram figure of expected output.
 #'
 #' @param dvn input dvn list from scrapeVarCross
-#' @param model character input specying type of model to output (e.g., "cfa", "apim", "cfm")
+#' @param model character input specifying type of model to output (e.g., "cfa", "apim", "cfm")
 #' @param fit input object from fitted lavaan model
 #' @param table logical input of whether table output is desired. Default is TRUE
 #' @param tabletype character input of what type of table(s) is(are) desired.
@@ -15,8 +15,8 @@
 #' @param figtype character input of what type of figure is desired
 #' @param writeout logical (default is FALSE) for whether outputted table and/or figure
 #' should be written to an output subdirectory in current working directory
-#' @return Ignore console (prints unneccessary semPlot::semPaths details). More importantly,
-#' prints word files for the table(s) and/or figure, outputed to the users working directory
+#' @return Ignore console (prints unnecessary semPlot::semPaths details). More importantly,
+#' prints word files for the table(s) and/or figure, outputted to the users working directory
 #' @export
 #' @examples
 #' dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",

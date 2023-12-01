@@ -5,8 +5,8 @@
 #' and indexes which indicators correspond to which partner, for which LV.
 #' It is used primarily to guide the syntax-writing of the other dySEM functions.
 #' @param dat input data frame of indicators of a particular LV
-#' @param x_order input character for order of (S)tem, (P)artner number, and (Item) number
-#' when creating variable names. Defaults to "spi" (qualtrics-friendly)
+#' @param x_order input character for order of (S)tem, (P)artner number, and (I)tem number
+#' when creating variable names. Defaults to "spi" (Qualtrics-friendly)
 #' @param x_stem input character stem of indicator variables for LV X
 #' @param x_delim1 optional character to separate stem from partner number (spi) or item number (sip)
 #' @param x_delim2 optional character to separate stem/partner number (spi) or stem/item number (sip) from
@@ -15,8 +15,8 @@
 #' Will be updated to allow particular range of values, to make more sub-scale friendly.
 #' @param distinguish_1 input character used as the identifier for the first partner
 #' @param distinguish_2 input character used as the identifier for the first partner
-#' @param y_order optional character for order of (S)tem, (P)artner number, and (Item) number
-#' when creating variable names. Defaults to "spi" (qualtrics-friendly). This and other Y-arguments
+#' @param y_order optional character for order of (S)tem, (P)artner number, and (I)tem number
+#' when creating variable names. Defaults to "spi" (Qualtrics-friendly). This and other Y-arguments
 #' only necessary if there is a latent Y variable to model
 #' @param y_stem optional input character stem of indicator variables for LV X
 #' @param y_delim1 optional character to separate stem from partner number (spi) or item number (sip)

@@ -35,7 +35,7 @@ data(commitmentQ)
 \description{
 A data set containing 5 ratings of satisfaction and 5 ratings of commitment for each
 member of a same-sex romantic dyad. Measured using the Investment Model Scale subscales
-(Rubult, Martz, & Agnew, 1998). Data are from analyses under review (Sakaluk, Fisher, and Kilshaw).
+(Rusbult, Martz, & Agnew, 1998). Data are from analyses under review (Sakaluk, Fisher, and Kilshaw).
 Variable names follow a stem-partner-item ("spi") order, with a delimiter (".") between
 the stem and distinguishing partner character, and another delimiter ("_") between the
 distinguishing partner character and item number.
