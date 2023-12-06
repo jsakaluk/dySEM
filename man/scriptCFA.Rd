@@ -9,7 +9,9 @@ scriptCFA(
   dvn,
   lvname = "X",
   scaleset = "FF",
-  model = "indist",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = c("variances", "means"),
+  model = lifecycle::deprecated(),
   writescript = FALSE
 )
 }
@@ -21,8 +23,18 @@ scriptCFA(
 \item{scaleset}{input character to specify how to set the scale of the latent variable(s). Default is
 "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)}
 
-\item{model}{input character used to specify which level of invariance is
-modeled ("configural", "loading", "intercept", "residual", or "indist"). Defaults to "configural".}
+\item{constr_dy_meas}{input character vector detailing which measurement model parameters to constrain across dyad members.
+Default is c("loadings", "intercepts", "residuals")(in combination with defaults for constr_dy_struct, an indistinguishable dyadic CFA),
+but user can specify any combination of "loadings", "intercepts", and "residuals",
+#or "none" to specify an otherwise unconstrained dyadic configural invariance model}
+
+\item{constr_dy_struct}{input character vector detailing which structural model parameters to constrain across dyad members.
+Default is c("variances", "means")(in combination with defaults for constr_dy_meas, an indistinguishable dyadic CFA),
+but user can specify any combination of "variances" and "means", or "none".}
+
+\item{model}{Depreceated input character used to specify which level of invariance is
+modeled ("configural", "loading", "intercept", "residual", or "indist"). Users should rely upon constr_dy_meas and
+constr_dy_struct instead, for making constraints to the measurement and/or structural portions of the model.}
 
 \item{writescript}{input logical (default FALSE) for whether lavaan script should
 be concatenated and written to current working directory (in subdirectory "scripts")}
@@ -53,13 +65,12 @@ non-invariant measurement parameters, following a the rejection of an omnibus
 \examples{
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2")
-sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
-sat.loading.script <- scriptCFA(dvn, lvname = "Sat",  model = "loading")
-sat.intercept.script <- scriptCFA(dvn, lvname = "Sat",  model = "intercept")
-sat.residual.script <- scriptCFA(dvn, lvname = "Sat",  model = "residual")
-sat.variance.script <- scriptCFA(dvn, lvname = "Sat",  model = "lvariance")
-sat.means.script <- scriptCFA(dvn, lvname = "Sat",  model = "lmean")
-sat.indist.script <- scriptCFA(dvn, lvname = "Sat",  model = "indist")
+
+sat.indist.script <- scriptCFA(dvn, lvname = "Sat")
+sat.resids.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+sat.ints.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none")
+sat.loads.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
+sat.config.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = "none", constr_dy_struct = "none")
 }
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on

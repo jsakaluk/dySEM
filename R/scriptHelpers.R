@@ -409,6 +409,13 @@ lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
       lvar <- sprintf("%s%s ~~ psiy*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
     }
     return(lvar)
+  }else if(partner == "1" & type == "equated_ff"){
+    if(lvar == "X"){
+      lvar <- sprintf("%s%s ~~ 1*%s%s + psix*%s%s", lvname, dvn[["dist1"]],lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
+    }else if(lvar == "Y"){
+      lvar <- sprintf("%s%s ~~ 1*%s%s + psiy*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])
+    }
+    return(lvar)
   }else if (partner == "2" & type == "fixed"){
     lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
     return(lvar)
@@ -420,6 +427,13 @@ lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
       lvar <- sprintf("%s%s ~~ psix*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
     }else if(lvar == "Y"){
       lvar <- sprintf("%s%s ~~ psiy*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
+    }
+    return(lvar)
+  }else if(partner == "2" & type == "equated_ff"){
+    if(lvar == "X"){
+      lvar <- sprintf("%s%s ~~ 1*%s%s + psix*%s%s", lvname, dvn[["dist2"]],lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
+    }else if(lvar == "Y"){
+      lvar <- sprintf("%s%s ~~ 1*%s%s + psiy*%s%s",lvname, dvn[["dist2"]],lvname, dvn[["dist2"]],lvname, dvn[["dist2"]])
     }
     return(lvar)
   }else if(partner == "g" & type == "fixed"){
@@ -447,6 +461,13 @@ lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
       alpha <- sprintf("%s%s ~ alphay*1",lvname, dvn[["dist1"]])
     }
     return(alpha)
+  }else if(partner == "1" & type == "equated_ff"){
+    if(lvar == "X"){
+      alpha <- sprintf("%s%s ~ 0*1 + alphax*1",lvname, dvn[["dist1"]])
+    }else if(lvar == "Y"){
+      alpha <- sprintf("%s%s ~ 0*1 + alphay*1",lvname, dvn[["dist1"]])
+    }
+    return(alpha)
   }else if (partner == "2" & type == "fixed"){
     alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[["dist2"]])
     return(alpha)
@@ -458,6 +479,13 @@ lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
       alpha <- sprintf("%s%s ~ alphax*1",lvname, dvn[["dist2"]])
     }else if(lvar == "Y"){
       alpha <- sprintf("%s%s ~ alphay*1",lvname, dvn[["dist2"]])
+    }
+    return(alpha)
+  }else if(partner == "2" & type == "equated_ff"){
+    if(lvar == "X"){
+      alpha <- sprintf("%s%s ~ 0*1 + alphax*1",lvname, dvn[["dist2"]])
+    }else if(lvar == "Y"){
+      alpha <- sprintf("%s%s ~ 0*1 + alphay*1",lvname, dvn[["dist2"]])
     }
     return(alpha)
   }else if(partner == "g" & type == "free"){
