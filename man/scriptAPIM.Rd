@@ -10,8 +10,13 @@ scriptAPIM(
   scaleset = "FF",
   lvxname,
   lvyname,
-  model = "indist",
-  equate = "none",
+  constr_dy_x_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_x_struct = c("variances", "means"),
+  constr_dy_y_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_y_struct = c("variances", "means"),
+  constr_dy_xy_struct = c("actors", "partners"),
+  model = lifecycle::deprecated(),
+  equate = lifecycle::deprecated(),
   k = FALSE,
   writescript = FALSE
 )
@@ -26,15 +31,34 @@ scriptAPIM(
 
 \item{lvyname}{input character to (arbitrarily) name LV Y in lavaan syntax}
 
-\item{model}{input character used to specify which level of invariance is
-modeled. Defaults to "configural"}
+\item{constr_dy_x_meas}{input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
+Default is c("loadings", "intercepts", "residuals"),
+but user can specify any combination of "loadings", "intercepts", and "residuals",
+#or "none" to specify an otherwise unconstrained dyadic configural invariance model}
 
-\item{equate}{input character to specify which type of structural parameters
-("actor" = actor effects, "partner" = partner effects,
-"all_effects" = actor and partner effects, x_means, y_means, or all_means)
-are constrained to equivalency between partners. Default is "none". Actor or partner effect constraints
-require at least a loading-invariant model to be specified, otherwise a warning is returned; mean constraints
-require an intercept-invariant model to be specified, otherwise a warning is returned.}
+\item{constr_dy_x_struct}{input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+Default is c("variances", "means"),
+but user can specify any combination of "variances" and "means", or "none".}
+
+\item{constr_dy_y_meas}{input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
+Default is c("loadings", "intercepts", "residuals"),
+but user can specify any combination of "loadings", "intercepts", and "residuals",
+#or "none" to specify an otherwise unconstrained dyadic configural invariance model}
+
+\item{constr_dy_y_struct}{input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+Default is c("variances", "means"),
+but user can specify any combination of "variances" and "means", or "none".}
+
+\item{constr_dy_xy_struct}{input character vector detailing which structural model parameters to constrain for modeling the predictive association(s) between
+partners' latent x and y. Default is c("actors", "partners"), but users can also specify "all", "actors_zero", "partners_zero", or "none".}
+
+\item{model}{Deprecated input character used to specify which level of invariance is
+modeled. Users should rely upon constr_dy_x_meas/constr_dy_y_meas and
+constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the measurement and/or structural portions of the model for latent x and y.}
+
+\item{equate}{Deprecated input character to specify which type of structural parameters
+are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
+constraints to the structural portion of the model for associative relationship between latent x and y.}
 
 \item{k}{input logical for whether Kenny & Ledermann's (2010) k parameter should be
 calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
@@ -60,11 +84,7 @@ measurement models, and particular types of structural comparisons.
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
-apim.script.config <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com",
-model = "configural", k = TRUE)
-apim.script.load <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "loading")
-apim.script.int  <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "intercept")
-apim.script.ind <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", model = "indist")
+apim.script.indist <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", k = TRUE)
 }
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on

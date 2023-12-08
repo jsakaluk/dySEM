@@ -20,14 +20,18 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
       beta_y2x2 = sprintf("%s%s ~ a2*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist2"]])
       betas <- paste(beta_y1x1, beta_y2x2, sep = "\n")
 
-      return(betas)
     }else if(type == "equated"){
       beta_y1x1 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist1"]])
       beta_y2x2 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist2"]])
       betas <- paste(beta_y1x1, beta_y2x2, sep = "\n")
 
-      return(betas)
+    }else if(type == "zero"){
+      beta_y1x1 = sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist1"]])
+      beta_y2x2 = sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist2"]])
+      betas <- paste(beta_y1x1, beta_y2x2, sep = "\n")
     }
+    return(betas)
+
   }
   else if(param == "apim_part"){
     if(type == "free"){
@@ -35,14 +39,19 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
       beta_y2x1 = sprintf("%s%s ~ p2*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist1"]])
 
       betas <- paste(beta_y1x2, beta_y2x1, sep = "\n")
-      return(betas)
     }else if(type == "equated"){
       beta_y1x2 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
       beta_y2x1 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist1"]])
 
       betas <- paste(beta_y1x2, beta_y2x1, sep = "\n")
-      return(betas)
+    }else if(type == "zero"){
+      beta_y1x2 = sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      beta_y2x1 = sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist1"]])
+
+      betas <- paste(beta_y1x2, beta_y2x1, sep = "\n")
     }
+    return(betas)
+
   }
   else if(param == "mim_part"){
     if(type == "free"){
