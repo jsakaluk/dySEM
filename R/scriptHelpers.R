@@ -395,6 +395,25 @@ resids <- function(dvn, lvar = "X", partner="1", type = "free"){
 
 #' @rdname scriptHelpers
 #' @noRd
+coresids <- function(dvn, lvar = "X", type = "free"){
+  if(lvar == "X" & type == "free"){
+    coresids <- list()
+    for (i in 1:dvn[["xindper"]]) {
+      coresids[[i]] <- sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
+    }
+    coresids <- paste(coresids, collapse = "\n")
+  }else if(lvar == "Y" & type == "free"){
+    coresids <- list()
+    for (i in 1:dvn[["yindper"]]) {
+      coresids[[i]] <- sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
+    }
+    coresids <- paste(coresids, collapse = "\n")
+  }
+  return(coresids)
+}
+
+#' @rdname scriptHelpers
+#' @noRd
 lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
   if(partner == "1" & type == "fixed"){
     lvar <- sprintf("%s%s ~~ 1*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist1"]])

@@ -44,11 +44,11 @@
 #' x_delim2="_", distinguish_1="1", distinguish_2="2")
 #'
 #' sat.indist.script <- scriptCFA(dvn, lvname = "Sat")
+#' sat.lvars.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = "loadings", constr_dy_struct = "variances")
 #' sat.resids.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
 #' sat.ints.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none")
 #' sat.loads.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
 #' sat.config.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = "none", constr_dy_struct = "none")
-
 
 scriptCFA <- function(dvn, lvname = "X", scaleset = "FF",
                       constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -124,11 +124,7 @@ scriptCFA <- function(dvn, lvname = "X", scaleset = "FF",
   }
 
   #Correlated residuals
-  xcoresids <- list()
-  for (i in 1:dvn[["xindper"]]) {
-    xcoresids[[i]] <- sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
-  }
-  xcoresids <- paste(xcoresids, collapse = "\n")
+  xcoresids <- coresids(dvn, lvar = "X", "free")
 
   #latent variances
   if(any(constr_dy_struct == "variances")){
