@@ -466,6 +466,18 @@ lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
 
 #' @rdname scriptHelpers
 #' @noRd
+lcovars <- function(dvn, lvname, type = "free"){
+  if(type == "free"){
+    lcovar <- sprintf("%s%s ~~ %s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
+  }else if(type == "zero"){
+    lcovar <- sprintf("%s%s ~~ 0*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
+  }
+  return(lcovar)
+}
+
+
+#' @rdname scriptHelpers
+#' @noRd
 lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
   if(partner == "1" & type == "fixed"){
     alpha <- sprintf("%s%s ~ 0*1",lvname, dvn[["dist1"]])

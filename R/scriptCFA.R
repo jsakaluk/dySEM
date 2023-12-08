@@ -151,9 +151,9 @@ scriptCFA <- function(dvn, lvname = "X", scaleset = "FF",
 
   #latent covariance
   if(any(constr_dy_struct == "orthogonal")){
-    xcovar <- sprintf("%s%s ~~ 0*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
+    xcovar <- lcovars(dvn, lvname, type = "zero")
   }else{
-    xcovar <- sprintf("%s%s ~~ %s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
+    xcovar <- lcovars(dvn, lvname, type = "free")
   }
 
   #latent means
