@@ -156,7 +156,7 @@ typically require only three arguments to be specified:
     imposed (if any)
 
 ``` r
-qual.config.script <- scriptCFA(dvn, lvname = "Quality", model = "configural")
+qual.indist.script <- scriptCFA(dvn, lvname = "Quality")
 ```
 
 This function returns a character object with `lavaan` compliant syntax
@@ -170,14 +170,14 @@ to your preferred `lavaan` wrapper, with your estimator and missing data
 treatment of choice. For example:
 
 ``` r
-qual.config.fit <- lavaan::cfa(qual.config.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+qual.indist.fit <- lavaan::cfa(qual.indist.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 ```
 
 At this point, the full arsenal of `lavaan` model-inspecting tools are
 at your disposal. For example:
 
 ``` r
-summary(qual.config.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+summary(qual.indist.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 ```
 
 ### 5. **Output** statistical visualizations and/or tables
@@ -187,7 +187,7 @@ reproducibly generate output from your fitted model(s), in the forms of
 path diagrams and/or tables of statistical values.
 
 ``` r
-outputModel(dvn, model = "cfa", fit = qual.config.fit, 
+outputModel(dvn, model = "cfa", fit = qual.indist.fit, 
             table = TRUE, tabletype = "measurement", 
             figure = TRUE, figtype = "unstandardized")
 ```

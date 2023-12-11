@@ -115,7 +115,7 @@ dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_del
 1. the kind of parameter equality constraints that you wish to be imposed (if any)
 
 ```{r configscript}
-qual.config.script <- scriptCFA(dvn, lvname = "Quality", model = "configural")
+qual.indist.script <- scriptCFA(dvn, lvname = "Quality")
 ```
 
 This function returns a character object with `lavaan` compliant syntax for your chosen model, as well as exporting a reproducible .txt of the scripted model to a /scripts folder in your working directory.
@@ -125,13 +125,13 @@ This function returns a character object with `lavaan` compliant syntax for your
 You can immediately pass any script(s) returned from a `dySEM` scripter to your preferred `lavaan` wrapper, with your estimator and missing data treatment of choice. For example:
 
 ```{r modelfit, warning= FALSE}
-qual.config.fit <- lavaan::cfa(qual.config.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+qual.indist.fit <- lavaan::cfa(qual.indist.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 ```
 
 At this point, the full arsenal of `lavaan` model-inspecting tools are at your disposal. For example: 
 
 ```{r summary, eval = FALSE}
-summary(qual.config.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+summary(qual.indist.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 ```
 
 ### 5. **Output** statistical visualizations and/or tables 
@@ -139,7 +139,7 @@ summary(qual.config.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRU
 `dySEM` also contains functionality to help you quickly, correctly, and reproducibly generate output from your fitted model(s), in the forms of path diagrams and/or tables of statistical values. 
 
 ```{r outputModel, eval = FALSE}
-outputModel(dvn, model = "cfa", fit = qual.config.fit, 
+outputModel(dvn, model = "cfa", fit = qual.indist.fit, 
             table = TRUE, tabletype = "measurement", 
             figure = TRUE, figtype = "unstandardized")
 ```

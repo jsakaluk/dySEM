@@ -47,17 +47,23 @@ exports table(s) and/or a path diagram figure of expected output.
 \examples{
 dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2")
-sat.config.script <-  scriptCFA(dvnx, lvname = "Sat", model = "configural")
+
+sat.config.script <- scriptCFA(dvnx, lvname = "Sat", constr_dy_meas = "none",
+constr_dy_struct = "none")
+
 sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
 auto.fix.first= FALSE, meanstructure = TRUE)
 outputModel(dvnx, model = "cfa", fit = sat.config.mod, table = TRUE,
 tabletype = "measurement", figure = "TRUE", figtype = "standardized")
-dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
-x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2",
+dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
-apim.script.config <-  scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", model = "configural")
-apim.config.fit <- lavaan::cfa(apim.script.config, data = commitmentQ, std.lv = FALSE,
+
+apim.indist.script <-  scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
+
+apim.indist.mod <- lavaan::cfa(apim.indist.script, data = commitmentQ, std.lv = FALSE,
 auto.fix.first= FALSE, meanstructure = TRUE)
-outputModel(dvnxy, model = "apim", fit = apim.config.fit, table = TRUE,
+
+outputModel(dvnxy, model = "apim", fit = apim.indist.mod, table = TRUE,
 tabletype = "measurement", figure = "TRUE", figtype = "standardized")
 }

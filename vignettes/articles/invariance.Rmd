@@ -66,6 +66,13 @@ The structural model, meanwhile, includes all parameter types that govern statis
 
 When using the term "indistinguishable" in the context of structural equation modeling with latent variables, we therefore need to be very careful and precise in conveying to what the term "indistinguishable" is meant to apply. Most uses of the term "indistinguishable" in the literature (e.g., with an APIM specified in MLM, or when using SEM without latent variables) indicate that researchers have constrained parameters in the structural model to equivalence between partners (and adopted an analytic strategy that does not appraise what is going on at the measurement model level). With invariance testing, however, we are strictly concerned with what's going on at the measurement model level. 
 
+```{r reminder, include = FALSE}
+
+#TODO: update language to parallel compass terminology
+
+```
+
+
 I therefore propose we use the term **measurement indistinguishability** when we are referring to dyadic models with indistinguishable measurement model parameters, **structural indistinguishability** when we are referring to dyadic models with indistinguishable structural model parameters, and **measurement and structural indistinguishability** when we are referring to dyadic models with both indistinguishable measurement and structural model parameters. Yet another way to be specific is to reserve the term **"invariance"** testing for questions of indistinguishability within the measurement model, while using **"equivalence"** testing for questions of indistinguishability within the structural model
 
 ### Meet Your Dyadic Measurement Invariance Models
@@ -77,46 +84,57 @@ library(semPlot)
 
 dat <- commitmentQ
 
-#### indist ####
+#### residual invariance (note some structural parameters freely estimated, so not truly "indistinguishable") ####
 resid.script <- '
-Sat.1 =~ NA*sat.g.1_1 + l1*sat.g.1_1 + l2*sat.g.1_2 + l3*sat.g.1_3 + l4*sat.g.1_4 + l5*sat.g.1_5
-Sat.2 =~ NA*sat.g.2_1 + l1*sat.g.2_1 + l2*sat.g.2_2 + l3*sat.g.2_3 + l4*sat.g.2_4 + l5*sat.g.2_5
+#Measurement Model
 
-Sat.1 ~~ 1*Sat.1
-Sat.2 ~~ psi22*Sat.2
+#Loadings
+Sat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5
+Sat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5
 
-Sat.1 ~ 0*1
-Sat.2 ~ a2*1
+#Intercepts
+sat.g.1_1 ~ tx1*1
+sat.g.1_2 ~ tx2*1
+sat.g.1_3 ~ tx3*1
+sat.g.1_4 ~ tx4*1
+sat.g.1_5 ~ tx5*1
 
-sat.g.1_1 ~ t1*1
-sat.g.1_2 ~ t2*1
-sat.g.1_3 ~ t3*1
-sat.g.1_4 ~ t4*1
-sat.g.1_5 ~ t5*1
+sat.g.2_1 ~ tx1*1
+sat.g.2_2 ~ tx2*1
+sat.g.2_3 ~ tx3*1
+sat.g.2_4 ~ tx4*1
+sat.g.2_5 ~ tx5*1
 
-sat.g.2_1 ~ t1*1
-sat.g.2_2 ~ t2*1
-sat.g.2_3 ~ t3*1
-sat.g.2_4 ~ t4*1
-sat.g.2_5 ~ t5*1
+#Residual Variances
+sat.g.1_1 ~~ thx1*sat.g.1_1
+sat.g.1_2 ~~ thx2*sat.g.1_2
+sat.g.1_3 ~~ thx3*sat.g.1_3
+sat.g.1_4 ~~ thx4*sat.g.1_4
+sat.g.1_5 ~~ thx5*sat.g.1_5
 
-sat.g.1_1 ~~ th1*sat.g.1_1
-sat.g.1_2 ~~ th2*sat.g.1_2
-sat.g.1_3 ~~ th3*sat.g.1_3
-sat.g.1_4 ~~ th4*sat.g.1_4
-sat.g.1_5 ~~ th5*sat.g.1_5
+sat.g.2_1 ~~ thx1*sat.g.2_1
+sat.g.2_2 ~~ thx2*sat.g.2_2
+sat.g.2_3 ~~ thx3*sat.g.2_3
+sat.g.2_4 ~~ thx4*sat.g.2_4
+sat.g.2_5 ~~ thx5*sat.g.2_5
 
-sat.g.2_1 ~~ th1*sat.g.2_1
-sat.g.2_2 ~~ th2*sat.g.2_2
-sat.g.2_3 ~~ th3*sat.g.2_3
-sat.g.2_4 ~~ th4*sat.g.2_4
-sat.g.2_5 ~~ th5*sat.g.2_5
-
+#Residual Covariances
 sat.g.1_1 ~~ sat.g.2_1
 sat.g.1_2 ~~ sat.g.2_2
 sat.g.1_3 ~~ sat.g.2_3
 sat.g.1_4 ~~ sat.g.2_4
 sat.g.1_5 ~~ sat.g.2_5
+
+#Structural Model
+
+#Latent (Co)Variances
+Sat1 ~~ 1*Sat1
+Sat2 ~~ NA*Sat2
+Sat1 ~~ Sat2
+
+#Latent Means
+Sat1 ~ 0*1
+Sat2 ~ NA*1
 
 '
 resid.mod <- lavaan::cfa(resid.script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
@@ -124,27 +142,26 @@ resid.mod <- lavaan::cfa(resid.script, data = commitmentQ, std.lv = FALSE, auto.
 #### intercept ####
 
 intercept.script <- '
-Sat.1 =~ NA*sat.g.1_1 + l1*sat.g.1_1 + l2*sat.g.1_2 + l3*sat.g.1_3 + l4*sat.g.1_4 + l5*sat.g.1_5
-Sat.2 =~ NA*sat.g.2_1 + l1*sat.g.2_1 + l2*sat.g.2_2 + l3*sat.g.2_3 + l4*sat.g.2_4 + l5*sat.g.2_5
+#Measurement Model
 
-Sat.1 ~~ 1*Sat.1
-Sat.2 ~~ psi22*NA*Sat.2
+#Loadings
+Sat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5
+Sat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5
 
-Sat.1 ~ 0*1
-Sat.2 ~ a2*NA*1
+#Intercepts
+sat.g.1_1 ~ tx1*1
+sat.g.1_2 ~ tx2*1
+sat.g.1_3 ~ tx3*1
+sat.g.1_4 ~ tx4*1
+sat.g.1_5 ~ tx5*1
 
-sat.g.1_1 ~ t1*1
-sat.g.1_2 ~ t2*1
-sat.g.1_3 ~ t3*1
-sat.g.1_4 ~ t4*1
-sat.g.1_5 ~ t5*1
+sat.g.2_1 ~ tx1*1
+sat.g.2_2 ~ tx2*1
+sat.g.2_3 ~ tx3*1
+sat.g.2_4 ~ tx4*1
+sat.g.2_5 ~ tx5*1
 
-sat.g.2_1 ~ t1*1
-sat.g.2_2 ~ t2*1
-sat.g.2_3 ~ t3*1
-sat.g.2_4 ~ t4*1
-sat.g.2_5 ~ t5*1
-
+#Residual Variances
 sat.g.1_1 ~~ sat.g.1_1
 sat.g.1_2 ~~ sat.g.1_2
 sat.g.1_3 ~~ sat.g.1_3
@@ -157,11 +174,23 @@ sat.g.2_3 ~~ sat.g.2_3
 sat.g.2_4 ~~ sat.g.2_4
 sat.g.2_5 ~~ sat.g.2_5
 
+#Residual Covariances
 sat.g.1_1 ~~ sat.g.2_1
 sat.g.1_2 ~~ sat.g.2_2
 sat.g.1_3 ~~ sat.g.2_3
 sat.g.1_4 ~~ sat.g.2_4
 sat.g.1_5 ~~ sat.g.2_5
+
+#Structural Model
+
+#Latent (Co)Variances
+Sat1 ~~ 1*Sat1
+Sat2 ~~ NA*Sat2
+Sat1 ~~ Sat2
+
+#Latent Means
+Sat1 ~ 0*1
+Sat2 ~ NA*1
 
 '
 intercept.mod <- lavaan::cfa(intercept.script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
@@ -169,15 +198,13 @@ intercept.mod <- lavaan::cfa(intercept.script, data = commitmentQ, std.lv = FALS
 #### loading ####
 
 loading.script <- '
-Sat.1 =~ NA*sat.g.1_1 + l1*sat.g.1_1 + l2*sat.g.1_2 + l3*sat.g.1_3 + l4*sat.g.1_4 + l5*sat.g.1_5
-Sat.2 =~ NA*sat.g.2_1 + l1*sat.g.2_1 + l2*sat.g.2_2 + l3*sat.g.2_3 + l4*sat.g.2_4 + l5*sat.g.2_5
+#Measurement Model
 
-Sat.1 ~~ 1*Sat.1
-Sat.2 ~~ psi22*NA*Sat.2
+#Loadings
+Sat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5
+Sat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5
 
-Sat.1 ~ 0*1
-Sat.2 ~ 0*1
-
+#Intercepts
 sat.g.1_1 ~ 1
 sat.g.1_2 ~ 1
 sat.g.1_3 ~ 1
@@ -190,6 +217,7 @@ sat.g.2_3 ~ 1
 sat.g.2_4 ~ 1
 sat.g.2_5 ~ 1
 
+#Residual Variances
 sat.g.1_1 ~~ sat.g.1_1
 sat.g.1_2 ~~ sat.g.1_2
 sat.g.1_3 ~~ sat.g.1_3
@@ -202,11 +230,23 @@ sat.g.2_3 ~~ sat.g.2_3
 sat.g.2_4 ~~ sat.g.2_4
 sat.g.2_5 ~~ sat.g.2_5
 
+#Residual Covariances
 sat.g.1_1 ~~ sat.g.2_1
 sat.g.1_2 ~~ sat.g.2_2
 sat.g.1_3 ~~ sat.g.2_3
 sat.g.1_4 ~~ sat.g.2_4
 sat.g.1_5 ~~ sat.g.2_5
+
+#Structural Model
+
+#Latent (Co)Variances
+Sat1 ~~ 1*Sat1
+Sat2 ~~ NA*Sat2
+Sat1 ~~ Sat2
+
+#Latent Means
+Sat1 ~ 0*1
+Sat2 ~ 0*1
 
 '
 loading.mod <- lavaan::cfa(loading.script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
@@ -214,15 +254,13 @@ loading.mod <- lavaan::cfa(loading.script, data = commitmentQ, std.lv = FALSE, a
 #### configural ####
 
 config.script <- '
-Sat.1 =~ NA*sat.g.1_1 + sat.g.1_1 + sat.g.1_2 + sat.g.1_3 + sat.g.1_4 + sat.g.1_5
-Sat.2 =~ NA*sat.g.2_1 + sat.g.2_1 + sat.g.2_2 + sat.g.2_3 + sat.g.2_4 + sat.g.2_5
+#Measurement Model
 
-Sat.1 ~~ 1*Sat.1
-Sat.2 ~~ 1*Sat.2
+#Loadings
+Sat1=~NA*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5
+Sat2=~NA*sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5
 
-Sat.1 ~ 0*1
-Sat.2 ~ 0*1
-
+#Intercepts
 sat.g.1_1 ~ 1
 sat.g.1_2 ~ 1
 sat.g.1_3 ~ 1
@@ -235,6 +273,7 @@ sat.g.2_3 ~ 1
 sat.g.2_4 ~ 1
 sat.g.2_5 ~ 1
 
+#Residual Variances
 sat.g.1_1 ~~ sat.g.1_1
 sat.g.1_2 ~~ sat.g.1_2
 sat.g.1_3 ~~ sat.g.1_3
@@ -247,11 +286,23 @@ sat.g.2_3 ~~ sat.g.2_3
 sat.g.2_4 ~~ sat.g.2_4
 sat.g.2_5 ~~ sat.g.2_5
 
+#Residual Covariances
 sat.g.1_1 ~~ sat.g.2_1
 sat.g.1_2 ~~ sat.g.2_2
 sat.g.1_3 ~~ sat.g.2_3
 sat.g.1_4 ~~ sat.g.2_4
 sat.g.1_5 ~~ sat.g.2_5
+
+#Structural Model
+
+#Latent (Co)Variances
+Sat1 ~~ 1*Sat1
+Sat2 ~~ 1*Sat2
+Sat1 ~~ Sat2
+
+#Latent Means
+Sat1 ~ 0*1
+Sat2 ~ 0*1
 
 '
 config.mod <- lavaan::cfa(config.script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
@@ -330,10 +381,10 @@ These pieces of information are all that is needed for dySEM to automate scripti
 dySEM makes the rest of the process of testing dyadic invariance straightforward. We first need to use dySEM scripter functions to generate the correct code for lavaan to fit our (1) residual-invariant, (2) intercept-invariant, (3) loading-invariant, and (4) configurally invariance dyadic CFA models. Each model requires one use of scriptCFA(), which needs to be provided the dvn list we just created with scrapeVarCross(), an arbitrary name for the latent variable being modeled, the type of invariance to impose in the the "model" argument. Critically, instead of starting with configural dyadic invariance (and proceeding to more parsimonious/restrictive models), I recommend starting with the most parsimonious/restrictive model (full measurement-level indistinguishability), and then testing whether more complicated models are empirically warranted. 
 
 ```{r scripting}
-sat.residual.script <- scriptCFA(dvn, lvname = "Sat",  model = "residual")
-sat.intercept.script <- scriptCFA(dvn, lvname = "Sat",  model = "intercept")
-sat.loading.script <- scriptCFA(dvn, lvname = "Sat",  model = "loading")
-sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
+sat.residual.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+sat.intercept.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none")
+sat.loading.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
+sat.config.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = "none", constr_dy_struct = "none")
 ```
 
 If you return the output of scriptCFA(), it doesn't look particularly nice: 

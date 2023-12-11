@@ -33,7 +33,7 @@
 #' @param equate Deprecated input character to specify which type of structural parameters
 #' are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
 #' constraints to the structural portion of the model for associative relationship between latent x and y.
-#' @param k input logical for whether Kenny & Ledermann's (2010) k parameter should be
+#' @param est_k input logical for whether Kenny & Ledermann's (2010) k parameter should be
 #' calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
 #' a loading-invariant model to be specified, otherwise a warning is returned.
 #' @param writescript input logical (default FALSE) for whether lavaan script should
@@ -49,7 +49,7 @@
 #' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 #' x_delim2="_", distinguish_1="1", distinguish_2="2",
 #' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
-#' apim.script.indist <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", k = TRUE)
+#' apim.script.indist <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
 
 scriptAPIM <- function(dvn, scaleset = "FF",
                        lvxname, lvyname,
@@ -58,7 +58,7 @@ scriptAPIM <- function(dvn, scaleset = "FF",
                        constr_dy_y_meas = c("loadings", "intercepts", "residuals"),
                        constr_dy_y_struct = c("variances", "means"),
                        constr_dy_xy_struct = c("actors", "partners"),
-                       model = lifecycle::deprecated(), equate = lifecycle::deprecated(), k = FALSE,
+                       model = lifecycle::deprecated(), equate = lifecycle::deprecated(), est_k = FALSE,
                        writescript = FALSE){
 
 
@@ -219,7 +219,7 @@ scriptAPIM <- function(dvn, scaleset = "FF",
       xvar1 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "equated")
       xvar2 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "equated")
     }
-  }else if(!any(constr_dy_struct == "variances") & any(constr_dy_x_meas == "loadings") & scaleset == "FF"){
+  }else if(!any(constr_dy_x_struct == "variances") & any(constr_dy_x_meas == "loadings") & scaleset == "FF"){
     xvar1 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
     xvar2 = lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
   }else{
@@ -241,7 +241,7 @@ scriptAPIM <- function(dvn, scaleset = "FF",
       yvar1 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "equated")
       yvar2 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "equated")
     }
-  }else if(!any(constr_dy_struct == "variances") & any(constr_dy_y_meas == "loadings") & scaleset == "FF"){
+  }else if(!any(constr_dy_y_struct == "variances") & any(constr_dy_y_meas == "loadings") & scaleset == "FF"){
     yvar1 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "fixed")
     yvar2 = lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
   }else{
@@ -331,22 +331,24 @@ scriptAPIM <- function(dvn, scaleset = "FF",
   }
 
   #k parameter
-  if(k == TRUE & any(constr_dy_xy_struct == "all")){
+  if(est_k == TRUE & any(constr_dy_xy_struct == "all")){
     k <- paste("k := p/a")
-  }else if(k == TRUE & any(constr_dy_xy_struct == "actors" & constr_dy_xy_struct == "partners")){
+  }else if(est_k == TRUE & any(constr_dy_xy_struct == "actors") & any(constr_dy_xy_struct == "partners")){
     k <- paste("k := p/a")
-  }else if(k == TRUE & any(constr_dy_xy_struct == "actors")){
+  }else if(est_k == TRUE & any(constr_dy_xy_struct == "actors")){
     k <- paste("k1 := p1/a\nk2 := p2/a")
-  }else if(k == TRUE & any(constr_dy_xy_struct == "partners")){
+  }else if(est_k == TRUE & any(constr_dy_xy_struct == "partners")){
     k <- paste("k1 := p/a1\nk2 := p/a2")
-  }else if(k == TRUE & any(constr_dy_xy_struct == "partners_zero")){
+  }else if(est_k == TRUE & any(constr_dy_xy_struct == "none")){
+    k <- paste("k1 := p1/a1\nk2 := p2/a2")
+  }else if(est_k == TRUE & any(constr_dy_xy_struct == "partners_zero")){
     stop("You cannot estimate k when constraining actor or partner effects to zero")
-  }else if(k == TRUE & any(constr_dy_xy_struct == "actors_zero")){
+  }else if(est_k == TRUE & any(constr_dy_xy_struct == "actors_zero")){
     stop("You cannot estimate k when constraining actor or partner effects to zero")
   }
 
   #create script
-  if(k == FALSE){
+  if(est_k == FALSE){
     script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n\n%s\n%s\n\n#Latent Actor Effects\n%s\n\n#Latent Partner Effects\n%s",
                       xloads1, xloads2,
                       yloads1, yloads2,
@@ -361,7 +363,7 @@ scriptAPIM <- function(dvn, scaleset = "FF",
                       ymean1, ymean2,
                       actors, partners)
 
-  }else if(k == TRUE){
+  }else if(est_k == TRUE){
     script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n\n%s\n%s\n\n#Latent Actor Effects\n%s\n\n#Latent Partner Effects\n%s\n\n#k Parameter\n%s",
                       xloads1, xloads2,
                       yloads1, yloads2,

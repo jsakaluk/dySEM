@@ -26,6 +26,7 @@ Imports:
     dplyr,
     gt,
     lavaan,
+    lifecycle,
     magrittr,
     rlang,
     semPlot,

@@ -64,9 +64,12 @@ dvn <- scrapeVarCross(dat = dat, #data set to scrape from
 apim.script.config <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
                                   lvxname = "Sat", #arbitrary name for LV X
                                   lvyname = "Com", #arbitrary name for LV Y
-                                  model = "configural", #what measurement constraints (if any) to impose
-                                  equate = "none", #what effects do you want to constrain if any)? 
-                                  k = TRUE,#want k-parameter? (optional, but nice)
+                                  constr_dy_x_meas = "none", #configurally invariant latent x
+                                  constr_dy_y_meas = "none",#configurally invariant latent y
+                                  constr_dy_x_struct =  "none", #no structural constraints for latent x
+                                  constr_dy_y_struct = "none", #no structural constraints for latent y
+                                  constr_dy_xy_struct = "none", #no constrained actor and/or partner effects
+                                  est_k = TRUE,#want k-parameter? (optional, but nice)
                                   writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
 
 apim.fit.config <- cfa(apim.script.config, 
@@ -141,9 +144,12 @@ dySEM makes the rest of the process of fitting latent APIMs straightforward. We 
 apim.script.config <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
                                   lvxname = "Sat", #arbitrary name for LV X
                                   lvyname = "Com", #arbitrary name for LV Y
-                                  model = "configural", #what measurement constraints (if any) to impose
-                                  equate = "none", #what effects do you want to constrain if any)? 
-                                  k = TRUE,#want k-parameter? (optional, but nice)
+                                  constr_dy_x_meas = "none", #configurally invariant latent x
+                                  constr_dy_y_meas = "none",#configurally invariant latent y
+                                  constr_dy_x_struct =  "none", #no structural constraints for latent x
+                                  constr_dy_y_struct = "none", #no structural constraints for latent y
+                                  constr_dy_xy_struct = "none", #no constrained actor and/or partner effects
+                                  est_k = TRUE,#want k-parameter? (optional, but nice)
                                   writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
 
 ```
@@ -193,35 +199,41 @@ semPaths(apim.fit.config, "std")
 
 ### Example of More Specialized Models (and Cautions)
 
-scriptAPIM() also enables users to impose constraints of "**structural indistinguishability**" (i.e., estimating one actor and/or partner effect for both partners). However, the statistical conclusion validity of comparing models with these kinds of constraints to models in which actor and/or partner effects are freely estimated (as in the previous version) depends, in part, on having ensured dyadic measurement invariance, particularly for the loadings (other comparisons require other forms of invariance to be met). 
+scriptAPIM() also enables users to impose constraints of "**structural indistinguishability**" (e.g., estimating one actor and/or partner effect for both partners). However, the statistical conclusion validity of comparing models with these kinds of constraints to models in which actor and/or partner effects are freely estimated (as in the previous version) depends, in part, on having ensured dyadic measurement invariance, particularly for the loadings (other comparisons require other forms of invariance to be met). 
 
-scriptAPIM() will allow you to script models imposing structural constraints (via the `equate =` argument), regardless of what level of measurement invariance is imposed (if any) (via the `model = ` argument). However, the function will provide a warning that this equating can only be validly tested when loadings are invariant.  
+scriptAPIM() will allow you to script models imposing structural constraints (via the `equate =` argument), regardless of what level of measurement invariance is imposed (if any) (via the `constr_dy_xy_struct = ` argument). 
 
 ```{r scripting_warn}
 
-apim.script.config.eq.all <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
+apim.script.config.actpart <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
                                   lvxname = "Sat", #arbitrary name for LV X
                                   lvyname = "Com", #arbitrary name for LV Y
-                                  model = "configural", #what measurement constraints (if any) to impose
-                                  equate = "all_effects", #what effects do you want to constrain if any)? 
-                                  k = TRUE,#want k-parameter? (optional, but nice)
+                                  constr_dy_x_meas = "none", #configurally invariant latent x
+                                  constr_dy_y_meas = "none",#configurally invariant latent y
+                                  constr_dy_x_struct =  "none", #no structural constraints for latent x
+                                  constr_dy_y_struct = "none", #no structural constraints for latent y
+                                  constr_dy_xy_struct = c("actors", "partners"), # constrained actor and/or partner effects
+                                  est_k = TRUE,#want k-parameter? (optional, but nice)
                                   writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
 
 ```
 
-One can therefore impose the corresponding level of invariance via the `model = ` argument (at minimum `model = loading` is required, but any models that are even more constrained, e.g., `model = residual` would also be acceptable)-- the warning will go away--before proceeding with model fitting and inspecting.
+One can therefore impose the corresponding level of invariance via the `constr_dy_x_meas = ` and `constr_dy_y_meas = ` arguments (at minimum `"loadings"` is required, but any models that are even more constrained, e.g., `c("loadings", "intercepts",  "residuals")` would also be acceptable).
 
 ```{r scripting_loading}
 
-apim.script.loads.eq.all <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
+apim.script.loads.actpart <-  scriptAPIM(dvn, #the list we just created from scrapeVarCross
                                   lvxname = "Sat", #arbitrary name for LV X
                                   lvyname = "Com", #arbitrary name for LV Y
-                                  model = "loading", #what measurement constraints (if any) to impose
-                                  equate = "all_effects", #what effects do you want to constrain if any)? 
-                                  k = TRUE,#want k-parameter? (optional, but nice)
+                                  constr_dy_x_meas = "loadings", #configurally invariant latent x
+                                  constr_dy_y_meas = "loadings",#configurally invariant latent y
+                                  constr_dy_x_struct =  "none", #no structural constraints for latent x
+                                  constr_dy_y_struct = "none", #no structural constraints for latent y
+                                  constr_dy_xy_struct = c("actors", "partners"), # constrained actor and/or partner effects
+                                  est_k = TRUE,#want k-parameter? (optional, but nice)
                                   writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
 
-apim.fit.loads.eq.all <- cfa(apim.script.loads.eq.all, 
+apim.fit.loads.eq.all <- cfa(apim.script.loads.actpart, 
                                data = commitmentQ,
                                std.lv = FALSE, 
                                auto.fix.first= FALSE, 

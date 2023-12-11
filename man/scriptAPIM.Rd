@@ -17,7 +17,7 @@ scriptAPIM(
   constr_dy_xy_struct = c("actors", "partners"),
   model = lifecycle::deprecated(),
   equate = lifecycle::deprecated(),
-  k = FALSE,
+  est_k = FALSE,
   writescript = FALSE
 )
 }
@@ -60,7 +60,7 @@ constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the mea
 are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
 constraints to the structural portion of the model for associative relationship between latent x and y.}
 
-\item{k}{input logical for whether Kenny & Ledermann's (2010) k parameter should be
+\item{est_k}{input logical for whether Kenny & Ledermann's (2010) k parameter should be
 calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
 a loading-invariant model to be specified, otherwise a warning is returned.}
 
@@ -84,7 +84,7 @@ measurement models, and particular types of structural comparisons.
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
-apim.script.indist <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", k = TRUE)
+apim.script.indist <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
 }
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on

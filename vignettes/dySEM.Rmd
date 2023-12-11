@@ -130,10 +130,12 @@ Each *Scripter* function is a wrapper for a series of *Helper* functions (see [`
 1. a mostly arbitrary name for the latent variable(s) you are modeling (bivariate model scripting functions like `scriptAPIM` have you input two names)
 1. the kind of parameter equality constraints that you wish to be imposed (if any), such as those corresponding to particular levels of measurement invariance (e.g., "loading"), or even a fully "indistinguishable" model (i.e., in which all measurement and structural parameters are constrained to equality between partners)
 
-If you plan on scripting multiple models, I recommend that you name the output of `Scripters` to include information about the  latent variable's name (from 2.) and model (from 3.). For example, if we were to use `scriptCFA` to generate scripts for a configurally invariant CFA of the PRQC items we scraped, we could specify
+If you plan on scripting multiple models, I recommend that you name the output of `Scripters` to include information about the  latent variable's name (from 2.) and model (from 3.). For example, if we were to use `scriptCFA` to generate scripts for an indistinguishable CFA (i.e., both imposing dyadic invariance and equality of latent variances and means between partners [the default options for the constr_dy_meas and constr_dy_struct arguments]) of the PRQC items we scraped, we could specify
 
 ```{r configscript}
-qual.config.script <- scriptCFA(dvn, lvname = "Quality", model = "configural")
+
+qual.indist.script <- scriptCFA(dvn, lvname = "Quality")
+
 ```
 
 `scriptCFA` returns to your environment an (ugly, to the human-eyes) character object consisting of the `lavaan` syntax corresponding to the model that matches the *Scripter* function (i.e., in this case a CFA) and input for the `model` argument (i.e., configurally invariant). 
@@ -149,13 +151,15 @@ We think this syntax-exporting-.txt feature serves three important purposes:
 The modeling efficiency and accuracy gained via `dySEM`'s automated scripting may already be apparent, but becomes painfully obvious once you leverage `dySEM` to quickly script a sequence of competing models (e.g., from configural invariance CFA --> fully indistinguishable CFA)
 
 ```{r scriptsequence}
-qual.load.script <- scriptCFA(dvn, lvname = "Quality", model = "loading")
 
-qual.int.script <- scriptCFA(dvn, lvname = "Quality", model = "intercept")
+qual.res.script <- scriptCFA(dvn, lvname = "Quality", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = c("none"))
 
-qual.res.script <- scriptCFA(dvn, lvname = "Quality", model = "residual")
+qual.int.script <- scriptCFA(dvn, lvname = "Quality", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = c("none"))
 
-qual.ind.script <- scriptCFA(dvn, lvname = "Quality", model = "indist")
+qual.load.script <- scriptCFA(dvn, lvname = "Quality", constr_dy_meas = c("loadings"), constr_dy_struct = c("none"))
+
+qual.config.script <- scriptCFA(dvn, lvname = "Quality", constr_dy_meas = c("none"), constr_dy_struct = c("none"))
+
 ```
 
 The scripting of longitudinal dyadic SEM models is not yet supported by `dySEM`, but we hope to develop this functionality over the Spring/Summer 2021. 
@@ -164,23 +168,25 @@ The scripting of longitudinal dyadic SEM models is not yet supported by `dySEM`,
 
 By design, we have attempted to avoid functionality pertaining to model-fitting and inspection in `dySEM`: `lavaan` does that perfectly well itself. We therefore strongly recommend that you cultivate a command of `lavaan`'s basic functionality before delving too far with `dySEM`--the package [tutorial website](https://lavaan.ugent.be/tutorial/index.html) is a very good place to get started.  
 
-You can immediately pass any script(s) returned from a `dySEM` scripter (e.g., `scriptCFA`) to your intended `lavaan` wrapper (we recommend `cfa`--be sure to disable any options that might fix parameters, as the scripter has already taken care of manually specifying which parameters to fix or estimate), with your preferred estimator and missing data treatment. For example:
+You can immediately pass any script(s) returned from a `dySEM` scripter (e.g., `scriptCFA`) to your intended `lavaan` wrapper (we recommend `cfa`--be sure to disable any options that might fix parameters, as the scripter has already taken care of manually specifying which parameters to fix or estimate), with your preferred estimator and missing data treatment. For example, with dyadic invariance testing, we recommend starting with the most parsimonious model (an indistinguishable model), and gradually relaxing constraints on differnet groups of parameters:
 
 ```{r modelfit, warning= FALSE}
-#Fit configural invariance model
-qual.config.fit <- lavaan::cfa(qual.config.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 
-#Fit loading invariance model
-qual.load.fit <- lavaan::cfa(qual.load.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
-
-#Fit intercept invariance model
-qual.int.fit <- lavaan::cfa(qual.int.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+#Fit fully indistinguishable model
+qual.ind.fit <- lavaan::cfa(qual.indist.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 
 #Fit residual invariance model
 qual.res.fit <- lavaan::cfa(qual.res.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 
-#Fit fully indistinguishable model
-qual.ind.fit <- lavaan::cfa(qual.ind.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+#Fit intercept invariance model
+qual.int.fit <- lavaan::cfa(qual.int.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+#Fit loading invariance model
+qual.load.fit <- lavaan::cfa(qual.load.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
+#Fit configural invariance model
+qual.config.fit <- lavaan::cfa(qual.config.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+
 ```
 
 At this point, the full arsenal of `lavaan` model-inspecting tools are at your disposal. Two that you will almost certainly want to make use of are `summary` and `anova`. 

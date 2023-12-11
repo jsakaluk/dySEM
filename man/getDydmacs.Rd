@@ -28,10 +28,13 @@ Calculates dmacs difference in expected indicator scores for between dyad member
 \examples{
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2")
-sat.config.script <-  scriptCFA(dvn, lvname = "Sat", model = "configural")
+sat.config.script <- scriptCFA(dvn, lvname = "Sat",
+constr_dy_meas = "none",
+constr_dy_struct = "none")
+
 sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
 auto.fix.first= FALSE, meanstructure = TRUE)
-sat.dmacs <- getDydmacs(commitmentQ, dvn, sat.config.mod)
+getDydmacs(commitmentQ, dvn, sat.config.mod)
 
 }
 \seealso{

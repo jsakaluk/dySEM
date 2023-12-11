@@ -21,9 +21,12 @@ A function that performs a score test for relaxing each invariance equality cons
 dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
 x_delim2="_", distinguish_1="f", distinguish_2="m")
 
-sat.residual.script <- scriptCFA(dvn, lvname = "Sat",  model = "residual")
-sat.residual.mod <- lavaan::cfa(sat.residual.script, data = commitmentM, std.lv = FALSE,
+sat.resids.script <- scriptCFA(dvn, lvname = "Sat",
+constr_dy_meas = c("loadings", "intercepts", "residuals"),
+constr_dy_struct = "none")
+
+sat.resids.mod <- lavaan::cfa(sat.resids.script, data = commitmentM, std.lv = FALSE,
 auto.fix.first= FALSE, meanstructure = TRUE)
 
-getConstraintTests(sat.residual.mod)
+getConstraintTests(sat.resids.mod)
 }
