@@ -1,4 +1,4 @@
-# dySEM (development version)
+# dySEM 0.0.3
 
 # dySEM 0.0.0.9000
 
