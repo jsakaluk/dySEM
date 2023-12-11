@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,27 +87,30 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentM</span>, x_order <span class="op">=</span> <span class="st">"sip"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>,</span></span>
 <span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"f"</span>, distinguish_2<span class="op">=</span><span class="st">"m"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">sat.residual.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,  model <span class="op">=</span> <span class="st">"residual"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sat.residual.mod</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.residual.script</span>, data <span class="op">=</span> <span class="va">commitmentM</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span><span class="va">sat.resids.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sat.resids.mod</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.resids.script</span>, data <span class="op">=</span> <span class="va">commitmentM</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">getConstraintTests</span><span class="op">(</span><span class="va">sat.residual.mod</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">getConstraintTests</span><span class="op">(</span><span class="va">sat.resids.mod</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  param1 constraint               param2   chi2 df pvalue  sig</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      Satf =~ sat.g1_f         ==     Satm =~ sat.g1_m  1.131  1  0.288 &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      Satf =~ sat.g2_f         ==     Satm =~ sat.g2_m  0.633  1  0.426 &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3      Satf =~ sat.g3_f         ==     Satm =~ sat.g3_m  0.060  1  0.806 &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4      Satf =~ sat.g4_f         ==     Satm =~ sat.g4_m  1.839  1  0.175 &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5      Satf =~ sat.g5_f         ==     Satm =~ sat.g5_m  3.603  1  0.058 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  sat.g1_f ~~ sat.g1_f         == sat.g1_m ~~ sat.g1_m 22.977  1  0.000  ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  sat.g2_f ~~ sat.g2_f         == sat.g2_m ~~ sat.g2_m  0.263  1  0.608 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  sat.g3_f ~~ sat.g3_f         == sat.g3_m ~~ sat.g3_m  0.317  1  0.573 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  sat.g4_f ~~ sat.g4_f         == sat.g4_m ~~ sat.g4_m  2.422  1  0.120 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 sat.g5_f ~~ sat.g5_f         == sat.g5_m ~~ sat.g5_m 17.185  1  0.000  ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11         sat.g1_f ~1          ==         sat.g1_m ~1   0.057  1  0.812 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12         sat.g2_f ~1          ==         sat.g2_m ~1   1.316  1  0.251 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13         sat.g3_f ~1          ==         sat.g3_m ~1   0.048  1  0.827 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14         sat.g4_f ~1          ==         sat.g4_m ~1   0.103  1  0.748 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15         sat.g5_f ~1          ==         sat.g5_m ~1   2.090  1  0.148 &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          sat.g1_f ~1          ==         sat.g1_m ~1   0.057  1  0.812 &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          sat.g2_f ~1          ==         sat.g2_m ~1   1.316  1  0.251 &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          sat.g3_f ~1          ==         sat.g3_m ~1   0.048  1  0.827 &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          sat.g4_f ~1          ==         sat.g4_m ~1   0.103  1  0.748 &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         sat.g5_f ~1          ==         sat.g5_m ~1   2.090  1  0.148 &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 sat.g1_f ~~ sat.g1_f         == sat.g1_m ~~ sat.g1_m 22.977  1  0.000  ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 sat.g2_f ~~ sat.g2_f         == sat.g2_m ~~ sat.g2_m  0.263  1  0.608 &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 sat.g3_f ~~ sat.g3_f         == sat.g3_m ~~ sat.g3_m  0.317  1  0.573 &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 sat.g4_f ~~ sat.g4_f         == sat.g4_m ~~ sat.g4_m  2.422  1  0.120 &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 sat.g5_f ~~ sat.g5_f         == sat.g5_m ~~ sat.g5_m 17.185  1  0.000  ***</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -115,7 +118,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by John Sakaluk, Omar Comanto.</p>
+  <p></p><p>Developed by John Sakaluk, Omar Camanto.</p>
 </div>
 
 <div class="pkgdown-footer-right">

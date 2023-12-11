@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -344,11 +344,14 @@ parameters are constrained to equality between partners)</li>
 <p>If you plan on scripting multiple models, I recommend that you name
 the output of <code>Scripters</code> to include information about the
 latent variable’s name (from 2.) and model (from 3.). For example, if we
-were to use <code>scriptCFA</code> to generate scripts for a
-configurally invariant CFA of the PRQC items we scraped, we could
-specify</p>
+were to use <code>scriptCFA</code> to generate scripts for an
+indistinguishable CFA (i.e., both imposing dyadic invariance and
+equality of latent variances and means between partners [the default
+options for the constr_dy_meas and constr_dy_struct arguments]) of the
+PRQC items we scraped, we could specify</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">qual.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, model <span class="op">=</span> <span class="st">"configural"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="va">qual.indist.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span><span class="op">)</span></span></code></pre></div>
 <p><code>scriptCFA</code> returns to your environment an (ugly, to the
 human-eyes) character object consisting of the <code>lavaan</code>
 syntax corresponding to the model that matches the <em>Scripter</em>
@@ -385,13 +388,14 @@ obvious once you leverage <code>dySEM</code> to quickly script a
 sequence of competing models (e.g., from configural invariance CFA –&gt;
 fully indistinguishable CFA)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">qual.load.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, model <span class="op">=</span> <span class="st">"loading"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="va">qual.res.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">qual.int.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, model <span class="op">=</span> <span class="st">"intercept"</span><span class="op">)</span></span>
+<span><span class="va">qual.int.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">qual.res.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, model <span class="op">=</span> <span class="st">"residual"</span><span class="op">)</span></span>
+<span><span class="va">qual.load.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">qual.ind.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, model <span class="op">=</span> <span class="st">"indist"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">qual.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The scripting of longitudinal dyadic SEM models is not yet supported
 by <code>dySEM</code>, but we hope to develop this functionality over
 the Spring/Summer 2021.</p>
@@ -411,22 +415,25 @@ intended <code>lavaan</code> wrapper (we recommend <code>cfa</code>–be
 sure to disable any options that might fix parameters, as the scripter
 has already taken care of manually specifying which parameters to fix or
 estimate), with your preferred estimator and missing data treatment. For
-example:</p>
+example, with dyadic invariance testing, we recommend starting with the
+most parsimonious model (an indistinguishable model), and gradually
+relaxing constraints on differnet groups of parameters:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Fit configural invariance model</span></span>
-<span><span class="va">qual.config.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.config.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#Fit loading invariance model</span></span>
-<span><span class="va">qual.load.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.load.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#Fit intercept invariance model</span></span>
-<span><span class="va">qual.int.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.int.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="co">#Fit fully indistinguishable model</span></span>
+<span><span class="va">qual.ind.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.indist.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#Fit residual invariance model</span></span>
 <span><span class="va">qual.res.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.res.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#Fit fully indistinguishable model</span></span>
-<span><span class="va">qual.ind.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.ind.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#Fit intercept invariance model</span></span>
+<span><span class="va">qual.int.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.int.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Fit loading invariance model</span></span>
+<span><span class="va">qual.load.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.load.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Fit configural invariance model</span></span>
+<span><span class="va">qual.config.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.config.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>At this point, the full arsenal of <code>lavaan</code>
 model-inspecting tools are at your disposal. Two that you will almost
 certainly want to make use of are <code>summary</code> and
@@ -492,7 +499,7 @@ to facilitate statistical reporting for scientific articles:</p>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by John Sakaluk, Omar Comanto.</p>
+<p>Developed by John Sakaluk, Omar Camanto.</p>
 </div>
 
 <div class="pkgdown-footer-right">

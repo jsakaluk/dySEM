@@ -12,7 +12,7 @@ exports table(s) and/or a path diagram figure of expected output."><meta propert
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,18 +127,24 @@ prints word files for the table(s) and/or figure, outputted to the users working
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dvnx</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
 <span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sat.config.script</span> <span class="op">&lt;-</span>  <span class="fu"><a href="scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnx</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, model <span class="op">=</span> <span class="st">"configural"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sat.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnx</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.config.mod</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.config.script</span>, data <span class="op">=</span> <span class="va">commitmentQ</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">outputModel</span><span class="op">(</span><span class="va">dvnx</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">sat.config.mod</span>, table <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>tabletype <span class="op">=</span> <span class="st">"measurement"</span>, figure <span class="op">=</span> <span class="st">"TRUE"</span>, figtype <span class="op">=</span> <span class="st">"standardized"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dvnxy</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>,</span></span>
-<span class="r-in"><span>x_delim1 <span class="op">=</span> <span class="st">"."</span>, x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span>,</span></span>
+<span class="r-in"><span><span class="va">dvnxy</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
+<span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span>,</span></span>
 <span class="r-in"><span>y_order<span class="op">=</span><span class="st">"spi"</span>, y_stem<span class="op">=</span><span class="st">"com"</span>, y_delim1 <span class="op">=</span> <span class="st">"."</span>, y_delim2<span class="op">=</span><span class="st">"_"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">apim.script.config</span> <span class="op">&lt;-</span>  <span class="fu"><a href="scriptAPIM.html">scriptAPIM</a></span><span class="op">(</span><span class="va">dvnxy</span>, lvxname <span class="op">=</span> <span class="st">"Sat"</span>, lvyname <span class="op">=</span> <span class="st">"Com"</span>, model <span class="op">=</span> <span class="st">"configural"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">apim.config.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">apim.script.config</span>, data <span class="op">=</span> <span class="va">commitmentQ</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">apim.indist.script</span> <span class="op">&lt;-</span>  <span class="fu"><a href="scriptAPIM.html">scriptAPIM</a></span><span class="op">(</span><span class="va">dvnxy</span>, lvxname <span class="op">=</span> <span class="st">"Sat"</span>, lvyname <span class="op">=</span> <span class="st">"Com"</span>, est_k <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">apim.indist.mod</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">apim.indist.script</span>, data <span class="op">=</span> <span class="va">commitmentQ</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">outputModel</span><span class="op">(</span><span class="va">dvnxy</span>, model <span class="op">=</span> <span class="st">"apim"</span>, fit <span class="op">=</span> <span class="va">apim.config.fit</span>, table <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">outputModel</span><span class="op">(</span><span class="va">dvnxy</span>, model <span class="op">=</span> <span class="st">"apim"</span>, fit <span class="op">=</span> <span class="va">apim.indist.mod</span>, table <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>tabletype <span class="op">=</span> <span class="st">"measurement"</span>, figure <span class="op">=</span> <span class="st">"TRUE"</span>, figtype <span class="op">=</span> <span class="st">"standardized"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
@@ -147,7 +153,7 @@ prints word files for the table(s) and/or figure, outputted to the users working
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by John Sakaluk, Omar Comanto.</p>
+  <p></p><p>Developed by John Sakaluk, Omar Camanto.</p>
 </div>
 
 <div class="pkgdown-footer-right">

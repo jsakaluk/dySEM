@@ -18,7 +18,7 @@ measurement models for either a specified X or Y factor."><meta property="og:ima
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,9 @@ measurement models for either a specified X or Y factor.</p>
 <span>  <span class="va">dvn</span>,</span>
 <span>  lvname <span class="op">=</span> <span class="st">"X"</span>,</span>
 <span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span>
-<span>  model <span class="op">=</span> <span class="st">"indist"</span>,</span>
+<span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
+<span>  constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>,</span>
+<span>  model <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  writescript <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -98,9 +100,23 @@ measurement models for either a specified X or Y factor.</p>
 "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)</p></dd>
 
 
+<dt>constr_dy_meas</dt>
+<dd><p>input character vector detailing which measurement model parameters to constrain across dyad members.
+Default is c("loadings", "intercepts", "residuals")(in combination with defaults for constr_dy_struct, an indistinguishable dyadic CFA),
+but user can specify any combination of "loadings", "intercepts", and "residuals",
+#or "none" to specify an otherwise unconstrained dyadic configural invariance model</p></dd>
+
+
+<dt>constr_dy_struct</dt>
+<dd><p>input character vector detailing which structural model parameters to constrain across dyad members.
+Default is c("variances", "means")(in combination with defaults for constr_dy_meas, an indistinguishable dyadic CFA),
+but user can specify any combination of "variances" and "means", or "none".</p></dd>
+
+
 <dt>model</dt>
-<dd><p>input character used to specify which level of invariance is
-modeled ("configural", "loading", "intercept", "residual", or "indist"). Defaults to "configural".</p></dd>
+<dd><p>Depreceated input character used to specify which level of invariance is
+modeled ("configural", "loading", "intercept", "residual", or "indist"). Users should rely upon constr_dy_meas and
+constr_dy_struct instead, for making constraints to the measurement and/or structural portions of the model.</p></dd>
 
 
 <dt>writescript</dt>
@@ -145,13 +161,28 @@ non-invariant measurement parameters, following a the rejection of an omnibus
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
 <span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sat.config.script</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, model <span class="op">=</span> <span class="st">"configural"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sat.loading.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,  model <span class="op">=</span> <span class="st">"loading"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sat.intercept.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,  model <span class="op">=</span> <span class="st">"intercept"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sat.residual.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,  model <span class="op">=</span> <span class="st">"residual"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sat.variance.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,  model <span class="op">=</span> <span class="st">"lvariance"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sat.means.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,  model <span class="op">=</span> <span class="st">"lmean"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sat.indist.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,  model <span class="op">=</span> <span class="st">"indist"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sat.indist.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sat.lvars.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="st">"loadings"</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"variances"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sat.resids.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sat.ints.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sat.loads.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sat.config.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -159,7 +190,7 @@ non-invariant measurement parameters, following a the rejection of an omnibus
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by John Sakaluk, Omar Comanto.</p>
+  <p></p><p>Developed by John Sakaluk, Omar Camanto.</p>
 </div>
 
 <div class="pkgdown-footer-right">

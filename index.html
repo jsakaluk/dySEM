@@ -45,7 +45,7 @@
     
     <a class="navbar-brand me-2" href="index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -210,7 +210,7 @@
 <li>the kind of parameter equality constraints that you wish to be imposed (if any)</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">qual.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, model <span class="op">=</span> <span class="st">"configural"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">qual.indist.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span><span class="op">)</span></span></code></pre></div>
 <p>This function returns a character object with <code>lavaan</code> compliant syntax for your chosen model, as well as exporting a reproducible .txt of the scripted model to a /scripts folder in your working directory.</p>
 </div>
 <div class="section level3">
@@ -219,17 +219,17 @@
 </h3>
 <p>You can immediately pass any script(s) returned from a <code>dySEM</code> scripter to your preferred <code>lavaan</code> wrapper, with your estimator and missing data treatment of choice. For example:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">qual.config.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.config.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">qual.indist.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.indist.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>At this point, the full arsenal of <code>lavaan</code> model-inspecting tools are at your disposal. For example:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">qual.config.fit</span>, fit.measures <span class="op">=</span> <span class="cn">TRUE</span>, standardized <span class="op">=</span> <span class="cn">TRUE</span>, rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">qual.indist.fit</span>, fit.measures <span class="op">=</span> <span class="cn">TRUE</span>, standardized <span class="op">=</span> <span class="cn">TRUE</span>, rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="id_5-output-statistical-visualizations-andor-tables">5. <strong>Output</strong> statistical visualizations and/or tables<a class="anchor" aria-label="anchor" href="#id_5-output-statistical-visualizations-andor-tables"></a>
 </h3>
 <p><code>dySEM</code> also contains functionality to help you quickly, correctly, and reproducibly generate output from your fitted model(s), in the forms of path diagrams and/or tables of statistical values.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/outputModel.html">outputModel</a></span><span class="op">(</span><span class="va">dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">qual.config.fit</span>, </span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/outputModel.html">outputModel</a></span><span class="op">(</span><span class="va">dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">qual.indist.fit</span>, </span>
 <span>            table <span class="op">=</span> <span class="cn">TRUE</span>, tabletype <span class="op">=</span> <span class="st">"measurement"</span>, </span>
 <span>            figure <span class="op">=</span> <span class="cn">TRUE</span>, figtype <span class="op">=</span> <span class="st">"unstandardized"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -274,7 +274,7 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>John Sakaluk <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-2515-9822" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Omar Comanto <br><small class="roles"> Author </small>  </li>
+<li>Omar Camanto <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -296,7 +296,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by John Sakaluk, Omar Comanto.</p>
+<p>Developed by John Sakaluk, Omar Camanto.</p>
 </div>
 
 <div class="pkgdown-footer-right">
