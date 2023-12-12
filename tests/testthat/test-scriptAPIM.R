@@ -31,6 +31,153 @@ test_that("scriptAPIM produces correct output for constr_dy_x/y_meas = none, con
                )
 })
 
+test_that("scriptAPIM produces correct number of parameter estimatesfor constr_dy_x/y_meas = none, constr_dy_x/y_struct = none, constr_dy_xy_struct = none and scaleset= FF", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ,
+                        x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_",
+                        y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_",
+                        distinguish_1="1", distinguish_2="2")
+
+  #knowns for model :
+  #var_num <- 20
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ scaleset = FF
+  script <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF",
+                       constr_dy_x_meas = c("none"), constr_dy_y_meas = c("none"),
+                       constr_dy_x_struct = c("none"), constr_dy_y_struct = c("none"),
+                       constr_dy_xy_struct = c("none"))
+
+  #Fit model
+  mod <- lavaan::cfa(script, data = commitmentQ)
+
+  #manually calculated free parameters (see LINK)
+  #my_param <- 76
+
+  lav_param <- as.double(lavaan::fitmeasures(mod, "npar"))
+
+  expect_equal(lav_param,
+               76
+  )
+
+})
+
+test_that("scriptAPIM produces correct df for constr_dy_x/y_meas = none, constr_dy_x/y_struct = none, constr_dy_xy_struct = none and scaleset= FF", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ,
+                        x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_",
+                        y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_",
+                        distinguish_1="1", distinguish_2="2")
+
+  #knowns for model :
+  #var_num <- 20
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ scaleset = FF
+  script_ff <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF",
+                       constr_dy_x_meas = c("none"), constr_dy_y_meas = c("none"),
+                       constr_dy_x_struct = c("none"), constr_dy_y_struct = c("none"),
+                       constr_dy_xy_struct = c("none"))
+
+  #Fit model
+  mod_ff <- lavaan::cfa(script, data = commitmentQ)
+
+  #manually calculated free parameters (see LINK)
+  #my_param <- 76
+
+  #calculated df (should be 154)
+  #my_df <- knowns-my_param
+
+  lav_df_ff <- as.double(lavaan::fitmeasures(mod, "df"))
+
+  expect_equal(lav_df_ff,
+               154
+  )
+
+})
+
+test_that("scriptAPIM produces same df for constr_dy_x/y_meas = none, constr_dy_x/y_struct = none, constr_dy_xy_struct = none when scaleset= FF, and scaleset = MV", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ,
+                        x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_",
+                        y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_",
+                        distinguish_1="1", distinguish_2="2")
+
+  #knowns for model :
+  #var_num <- 20
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ scaleset = FF
+  script_ff <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF",
+                          constr_dy_x_meas = c("none"), constr_dy_y_meas = c("none"),
+                          constr_dy_x_struct = c("none"), constr_dy_y_struct = c("none"),
+                          constr_dy_xy_struct = c("none"))
+
+  #Fit model
+  mod_ff <- lavaan::cfa(script_ff, data = commitmentQ)
+
+  #df for FF model
+  lav_df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
+
+  #Script model w/ scaleset = FF
+  script_mv <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "MV",
+                          constr_dy_x_meas = c("none"), constr_dy_y_meas = c("none"),
+                          constr_dy_x_struct = c("none"), constr_dy_y_struct = c("none"),
+                          constr_dy_xy_struct = c("none"))
+
+  #Fit model
+  mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
+
+  #df for FF model
+  lav_df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
+
+  expect_equal(lav_df_ff,
+               lav_df_mv
+  )
+
+})
+
+test_that("scriptAPIM produces same chisq for constr_dy_x/y_meas = none, constr_dy_x/y_struct = none, constr_dy_xy_struct = none when scaleset= FF, and scaleset = MV", {
+
+  dvn <- scrapeVarCross(dat = commitmentQ,
+                        x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_",
+                        y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_",
+                        distinguish_1="1", distinguish_2="2")
+
+  #knowns for model :
+  #var_num <- 20
+  #knowns <- var_num*(var_num+1)/2+var_num
+
+  #Script model w/ scaleset = FF
+  script_ff <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF",
+                          constr_dy_x_meas = c("none"), constr_dy_y_meas = c("none"),
+                          constr_dy_x_struct = c("none"), constr_dy_y_struct = c("none"),
+                          constr_dy_xy_struct = c("none"))
+
+  #Fit model
+  mod_ff <- lavaan::cfa(script_ff, data = commitmentQ)
+
+  #df for FF model
+  lav_chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+
+  #Script model w/ scaleset = FF
+  script_mv <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "MV",
+                          constr_dy_x_meas = c("none"), constr_dy_y_meas = c("none"),
+                          constr_dy_x_struct = c("none"), constr_dy_y_struct = c("none"),
+                          constr_dy_xy_struct = c("none"))
+
+  #Fit model
+  mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
+
+  #df for FF model
+  lav_chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
+
+  expect_equal(lav_chisq_ff,
+               lav_chisq_mv
+  )
+
+})
+
 #### mutual loading ####
 test_that("scriptAPIM produces correct output for constr_dy_x/y_meas = none, constr_dy_x/y_struct = none, constr_dy_xy_struct = none and scaleset= FF", {
 
