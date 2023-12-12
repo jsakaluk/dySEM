@@ -8,7 +8,7 @@ Authors@R: c(
     person("Robyn", "Kilshaw", , "robyn.bates@gmail.com", role = "ctb"),
     person("Alexandra", "Fisher", , "anfisher@uvic.ca", role = "ctb")
   )
-Description: Scripting of structural equation models via `lavaan` for
+Description: Scripting of structural equation models via 'lavaan' for
     Dyadic Data Analysis, and helper functions for supplemental
     calculations, tabling, and model visualization.  Current models
     supported include: Dyadic Confirmatory Factor Analysis, the Actor–Partner 
