@@ -28,6 +28,22 @@ The `dySEM` helps automate the process of scripting, fitting, and reporting on l
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design inquiries, email: agangofwolves@gmail.com).
 
+## Installation
+
+You can install the released version of dynamic from [CRAN](https://cran.r-project.org) with:
+
+```{r, eval = FALSE}
+install.packages("dySEM")
+```
+
+
+You can install the development version from [GitHub](https://github.com/) with:
+
+``` {r, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("jsakaluk/dySEM")
+```
+
 ## Current Functionality 
 
 The package currently provides functionality regarding the following types of latent dyadic data models: 
@@ -63,14 +79,6 @@ Please submit any feature requests via the `dySEM` [issues](https://github.com/j
 
 If you are interested in collaborating on the development of `dySEM`, please contact Dr. Sakaluk.
 
-## Installation
-
-You can install the development version from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("jsakaluk/dySEM")
-```
 ## dySEM Workflow
 
 A `dySEM` workflow typically involves five steps, which are covered in-depth in the [Overview vignette](https://jsakaluk.github.io/dySEM/articles/dySEM.html). Briefly, these steps include:

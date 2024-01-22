@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-*The following resource was made in advance of the 2023 SPSP Close Relationships Preconference, and is part of a working paper. Please cite the following if you are using these materials:* 
+*The following resource was made in advance and following the 2023 SPSP Close Relationships Preconference, and is part of a working paper. Please cite the following if you are using these materials:* 
 
 - Sakaluk, J. K. (preprint). Invariance testing with potentially indistinguishable dyads: Practices and rationale for a more logical and inclusive testing sequence. https://jsakaluk.github.io/dySEM/articles/invariance.html 
 
@@ -64,16 +64,16 @@ The structural model, meanwhile, includes all parameter types that govern statis
 - *latent covariances*/*latent correlations* (also contained in the $\Psi$ matrix), and 
 - *latent slopes* (contained in the $B$ matrix)
 
-When using the term "indistinguishable" in the context of structural equation modeling with latent variables, we therefore need to be very careful and precise in conveying to what the term "indistinguishable" is meant to apply. Most uses of the term "indistinguishable" in the literature (e.g., with an APIM specified in MLM, or when using SEM without latent variables) indicate that researchers have constrained parameters in the structural model to equivalence between partners (and adopted an analytic strategy that does not appraise what is going on at the measurement model level). With invariance testing, however, we are strictly concerned with what's going on at the measurement model level. 
+When using the term "indistinguishable" in the context of structural equation modeling with latent variables, we therefore need to be very careful and precise in conveying to what the term "indistinguishable" is meant to apply. Typically, indistinguishability (or *exchangeability*, or *interchangeability*)(Griffin & Gonzalez, 1995; Olsen & Kenny, 2006) has been used to refer to dyadic models in which dyad members have been modeled as having the same variance(s) and intrapersonal and interpersonal covariance(s)/correlation(s)(Gonzalez & Griffin, 1999; Kenny et al., 2006). Further, though partners having the same mean(s) is not strictly necessary, it is often a presumed feature of indistinguishability, and models require adjustment when means differ between partners (Kenny et al., 2006). 
 
-```{r reminder, include = FALSE}
+With the addition of a measurement model (i.e., including loadings, residual (co)variances, and intercepts) in dyadic SEM, however, more nuance in terminology is likely needed in order to avoid confusion that might otherwise occur by describing a model of “indistinguishable” dyads. We therefore propose the following terminology conventions for describing what exact component(s) of a dyadic SEM are “indistinguishable”: 
 
-#TODO: update language to parallel compass terminology
+- *Dyadic Measurement Invariance* (Indistinguishability of Measurement Model Across Partners)
+- *Dyadic Dispersion Equivalence* (Indistinguishability of Latent Variances and/or Standard Deviations) 
+- *Dyadic Association Equivalence* (Indistinguishability of Latent Covariances, Correlations, and/or Regression Slopes Across Partners)
+- *Dyadic Level Equivalence* (Indistinguishability of Latent Means Across Partners)
 
-```
-
-
-I therefore propose we use the term **measurement indistinguishability** when we are referring to dyadic models with indistinguishable measurement model parameters, **structural indistinguishability** when we are referring to dyadic models with indistinguishable structural model parameters, and **measurement and structural indistinguishability** when we are referring to dyadic models with both indistinguishable measurement and structural model parameters. Yet another way to be specific is to reserve the term **"invariance"** testing for questions of indistinguishability within the measurement model, while using **"equivalence"** testing for questions of indistinguishability within the structural model
+This vocabulary offsets the indistinguishability of the measurement model parameters (i.e., loadings, residual (co)variances, and intercepts) with the term “invariance”, from indistinguishability of structural model parameters (i.e., latent (co)variances, correlations, slopes, and means) with the term “equivalence.” This invariance vs. equivalence could also be carried through to other comparisons across design features, like groups and/or time.  Dyads could further be described as *fully indistinguishable* were all components of indistinguishability established within a given study’s design, and perhaps as *psychometrically indistinguishable* when measurement model parameters are invariant but some structural model parameters vary, while *structurally indistinguishable* when some measurement model parameters vary but structural model parameters are equivalent. 
 
 ### Meet Your Dyadic Measurement Invariance Models
 
@@ -341,7 +341,7 @@ If the intercept-invariant model was rejected in favour of the loading-invariant
 semPaths(config.mod)
 ```
 
-If the loading-invariant model was rejected in favour of the configurally invariant model, the configurally invariant model would be the best-supported measurement model. Otherwise, the best supported model would be the baseline model which was
+If the loading-invariant model was rejected in favour of the configurally invariant model, the configurally invariant model would be the best-supported measurement model. Otherwise, the best supported model would be the baseline model which was the loading invariance model.
 
 ## Example Data and Scraping Variable Names
 
@@ -423,14 +423,23 @@ sat.config.fit <- cfa(sat.config.script,
 
 ### Inspecting Output
 
-And we can expeditiously compare all the models (sequentially, from most parsimonious to least) at once:
+And we can expeditiously compare all the models at once:
 
 ```{r anova}
 
 out <- anova(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
-out[order(-out$Df),]
 ```
 
+Unfortunately, the default behavior of `anova()` is to compare these models in order of least parsimonious to most. In essence, this model testing approach defaults to presuming full distinguishability, and the statistical "onus" is on the researcher to demonstrate that this is not the case. We have therefore created an alternative wrapper function for `anova()`, called `getInvarCompTable()` that reverses the order of the model comparison process, so that indistinguishability in the measurement model is the base null model, and then the researcher tests against this model to determine if subsequently relaxed groups of constraints significantly improves the model. All it requires as input is a list of all four models, in order:
+
+```{r getInvarCompTable}
+
+mods <- list(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
+getInvarCompTable(mods)
+
+```
+
+Beyond being more simpatico with the approach of beginning with the most parsimonious dyadic invariance model--and testing against it to support a more complicated one--we think this approach offers a more intuitive framing of what is happening with chisq and df within each model. That is, relaxing constraints (in each subsequent model) reduces misfit, and therefore chisq decreases; relaxing these constraints, meanwhile, increases model complexity by adding parameters to be estimated, and therefore we lose of "spend" a df for each constraint we relax. In this instance, we can see that we significantly improve the model by relaxing the constraints on the residual variances (i.e., adopting the intercept-invariance model), but relaxing the other constraints between dyads (i.e., intercepts and loadings) does not reduce misfit enough for the amount of parsimony we would need to sacrifice. 
 
 ## Additional Considerations
 
@@ -441,7 +450,12 @@ out[order(-out$Df),]
 Appraising measurement invariance in the fashion that this tutorial has exemplified, can be thought of as akin to a "global" or "omnibus" test
 of measurement invariance; a significantly worse-fitting model indicates that the measurement model is not invariant. However, this approach does not identify which items are responsible for the non-invariance. In other words, we need some sort of item-level "post hoc" test to identify which item(s) are responsible for non-invariance (this is a problem common to other forms of invariance testing, too, like multi-group CFAs).
 
-In `lavaan`, the process for carrying out these item-level noninvariance tests is a bit cumbersome (spoiler: don't worry, dySEM has a one-liner that automates all of this for you!). You would first need to use `lavTestScore`, and submit to it your model which resulted in significantly degraded fit (in this case, the model with invariant loadings + intercepts + residual variances). `lavTestScore` will return a list of each item-level constraint, and the amount of misfit introduced by them, the degree(s) of freedom gained by each constraint, and their *p*-values indicating whether their respective amount is significantly different from zero.  
+In `lavaan`, the process for carrying out these item-level noninvariance tests is a bit cumbersome (spoiler: don't worry, dySEM has a one-liner that automates all of this for you!). You would first need to use `lavTestScore`, and either:
+
+- submit to it your model which resulted in significantly degraded fit (in this case, the model with invariant loadings + intercepts + residual variances), if you adopted the traditional sequence of invariance testing model comparisons (i.e., starting with the least parsimonious first), OR,
+- submit to it the first model that was usurped by a significantly better fitting model (also the invariant loadings + intercepts + residual variances model), if you adopted our proposed sequence of invariance testing model comparisons (i.e., starting with the most parsimonious first)
+
+Either approach will have you use the submit the same model to `lavTestScore`; the two merely differ in framing the considerations by which you select the appropriate model for `lavTestScore`. `lavTestScore` will thenreturn a list of each item-level constraint, and the amount of misfit introduced by them, the degree(s) of freedom gained by each constraint, and their *p*-values indicating whether their respective amount is significantly different from zero.  
 
 ```{r lavTestScores}
 
@@ -449,8 +463,8 @@ lavTestScore(sat.residual.fit)
 
 ```
 
-In this instance, we see only two constraints result in significantly worse fit (the 12th and the 15th); the problem is, these constriants are rather cryptically labeled. If we proceeded with the "from scratch" approach, we'd then need to use the `partable` function to generate
-the list of estimated and constrained parameters, and the parameter label (or "plabel") they have been assigned. In this way, we would have to remember that the 12th and 15th parameter constraints were significant, to notice that are the residual variances for the 2nd and 5th items, respectively.
+In this instance, we see only two constraints result in significantly worse fit (the 12th and the 15th); the problem is, these constraints are rather cryptically labeled. If we proceeded with the "from scratch" approach, we'd then need to use the `partable` function to generate
+the list of estimated and constrained parameters, and the parameter label (or "`plabel`") they have been assigned. In this way, we would have to remember that the 12th and 15th parameter constraints were significant, to notice that are the residual variances for the 2nd and 5th items, respectively.
 
 ```{r partable}
 

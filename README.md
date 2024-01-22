@@ -26,6 +26,23 @@ Kilshaw](https://doi.org/10.1111/pere.12341) (2021).
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
 
+## Installation
+
+You can install the released version of dynamic from
+[CRAN](https://cran.r-project.org) with:
+
+``` r
+install.packages("dySEM")
+```
+
+You can install the development version from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jsakaluk/dySEM")
+```
+
 ## Current Functionality
 
 The package currently provides functionality regarding the following
@@ -73,16 +90,6 @@ Please submit any feature requests via the `dySEM`
 
 If you are interested in collaborating on the development of `dySEM`,
 please contact Dr. Sakaluk.
-
-## Installation
-
-You can install the development version from
-[GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("jsakaluk/dySEM")
-```
 
 ## dySEM Workflow
 

@@ -5,10 +5,10 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Scripting of structural equation models via `lavaan` for
+<meta name="description" content="Scripting of structural equation models via lavaan for
     Dyadic Data Analysis, and helper functions for supplemental
     calculations, tabling, and model visualization.  Current models
-    supported include: Dyadic Confirmatory Factor Analysis, the Actor–Partner 
+    supported include Dyadic Confirmatory Factor Analysis, the Actor–Partner 
     Interdependence Model (observed and latent), the Common Fate Model
     (observed and latent), Mutual Influence Model (latent), and the Bifactor
     Dyadic Model (latent).">
@@ -24,10 +24,10 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Dyadic Structural Equation Modeling">
-<meta property="og:description" content="Scripting of structural equation models via `lavaan` for
+<meta property="og:description" content="Scripting of structural equation models via lavaan for
     Dyadic Data Analysis, and helper functions for supplemental
     calculations, tabling, and model visualization.  Current models
-    supported include: Dyadic Confirmatory Factor Analysis, the Actor–Partner 
+    supported include Dyadic Confirmatory Factor Analysis, the Actor–Partner 
     Interdependence Model (observed and latent), the Common Fate Model
     (observed and latent), Mutual Influence Model (latent), and the Bifactor
     Dyadic Model (latent).">
@@ -45,7 +45,7 @@
     
     <a class="navbar-brand me-2" href="index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,6 +105,17 @@
 <p>The <code>dySEM</code> logo was designed by Lowell Deranleau (for logo design inquiries, email: <a href="mailto:agangofwolves@gmail.com" class="email">agangofwolves@gmail.com</a>).</p>
 </div>
 <div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the released version of dynamic from <a href="https://cran.r-project.org" class="external-link">CRAN</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"dySEM"</span><span class="op">)</span></span></code></pre></div>
+<p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"jsakaluk/dySEM"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="current-functionality">Current Functionality<a class="anchor" aria-label="anchor" href="#current-functionality"></a>
 </h2>
 <p>The package currently provides functionality regarding the following types of latent dyadic data models:</p>
@@ -144,14 +155,6 @@
 <p>If you are interested in collaborating on the development of <code>dySEM</code>, please contact Dr. Sakaluk.</p>
 </div>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"jsakaluk/dySEM"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
 <h2 id="dysem-workflow">dySEM Workflow<a class="anchor" aria-label="anchor" href="#dysem-workflow"></a>
 </h2>
 <p>A <code>dySEM</code> workflow typically involves five steps, which are covered in-depth in the <a href="https://jsakaluk.github.io/dySEM/articles/dySEM.html">Overview vignette</a>. Briefly, these steps include:</p>
@@ -174,7 +177,7 @@
 <a class="anchor" aria-label="anchor" href="#id_1-import-and-wrangle-data"></a>
 </h3>
 <p>Structural equation modeling (SEM) programs like <code>lavaan</code> require dyadic data to be in dyad structure data set, whereby each row contains the data for one dyad, with separate columns for each observation made for each member of the dyad. For example:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">DRES</span></span>
 <span><span class="co">#&gt; # A tibble: 121 × 18</span></span>
 <span><span class="co">#&gt;    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_7.1 PRQC_8.1</span></span>
@@ -198,7 +201,7 @@
 <h3 id="id_2-scrape-variables-from-your-data-frame">2. <strong>Scrape</strong> variables from your data frame<a class="anchor" aria-label="anchor" href="#id_2-scrape-variables-from-your-data-frame"></a>
 </h3>
 <p>The <code>dySEM</code> scrapers consider appropriately repetitiously named indicators as consisting of at least three distinct elements: stem, item, and partner. <strong>Delimiter</strong> characters (e.g., “.”, “_“) are commonly–but not always–used to separate some/all of these elements.<code>dySEM</code> scrapers largely function by asking you to specify in what order the elements of variable names are ordered.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span><span class="va">DRES</span>, x_order <span class="op">=</span> <span class="st">"sip"</span>, x_stem <span class="op">=</span> <span class="st">"PRQC"</span>, x_delim1<span class="op">=</span><span class="st">"_"</span>,x_delim2<span class="op">=</span><span class="st">"."</span>,  distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -209,7 +212,7 @@
 <li>the <code>dvn</code> object (e.g., from <code>scrapeVarCross</code>) to be used to script the model 1.arbitrary name(s) for the latent variable(s) you are modeling</li>
 <li>the kind of parameter equality constraints that you wish to be imposed (if any)</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">qual.indist.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span><span class="op">)</span></span></code></pre></div>
 <p>This function returns a character object with <code>lavaan</code> compliant syntax for your chosen model, as well as exporting a reproducible .txt of the scripted model to a /scripts folder in your working directory.</p>
 </div>
@@ -218,17 +221,17 @@
 <a class="anchor" aria-label="anchor" href="#id_4-fit-and-inspect-your-model-via-lavaan"></a>
 </h3>
 <p>You can immediately pass any script(s) returned from a <code>dySEM</code> scripter to your preferred <code>lavaan</code> wrapper, with your estimator and missing data treatment of choice. For example:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">qual.indist.fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">qual.indist.script</span>, data <span class="op">=</span> <span class="va">DRES</span>, std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>At this point, the full arsenal of <code>lavaan</code> model-inspecting tools are at your disposal. For example:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">qual.indist.fit</span>, fit.measures <span class="op">=</span> <span class="cn">TRUE</span>, standardized <span class="op">=</span> <span class="cn">TRUE</span>, rsquare <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="id_5-output-statistical-visualizations-andor-tables">5. <strong>Output</strong> statistical visualizations and/or tables<a class="anchor" aria-label="anchor" href="#id_5-output-statistical-visualizations-andor-tables"></a>
 </h3>
 <p><code>dySEM</code> also contains functionality to help you quickly, correctly, and reproducibly generate output from your fitted model(s), in the forms of path diagrams and/or tables of statistical values.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/outputModel.html">outputModel</a></span><span class="op">(</span><span class="va">dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">qual.indist.fit</span>, </span>
 <span>            table <span class="op">=</span> <span class="cn">TRUE</span>, tabletype <span class="op">=</span> <span class="st">"measurement"</span>, </span>
 <span>            figure <span class="op">=</span> <span class="cn">TRUE</span>, figtype <span class="op">=</span> <span class="st">"unstandardized"</span><span class="op">)</span></span></code></pre></div>
