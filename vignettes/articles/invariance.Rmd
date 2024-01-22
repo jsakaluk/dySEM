@@ -309,11 +309,11 @@ config.mod <- lavaan::cfa(config.script, data = commitmentQ, std.lv = FALSE, aut
 
 ```
 
-#### A Disclaimer and Words of Caution ####
+#### A Disclaimer About Marker Variables ####
 
 **Note**: the following models use a "fixed-factor" scale-setting approach, whereby the latent variance is fixed to 1 for at least one dyad member (both must be fixed in the configural model), and the latent mean is fixed to 0 for at least one dyad member (both must be fixed in the configural and loading models). 
 
-Scale-setting method choice won't impact model fit and therefore won't affect model comparisons among invariance models, but the choice does impact parameter estimation and significance testing. Prior methodological research suggests that the "marker variable" method (fixing a factor loading to 1 for each latent variable; the default in most software) can lead you astray in determining which item(s) are specifically responsible for noninvariance, so I **strongly** recommend you adopt fixed-factor as your default scale-setting approach, especially for invariance testing. 
+Scale-setting method choice won't impact model fit and therefore won't affect model comparisons among invariance models, but the choice does impact parameter estimation and significance testing. Prior methodological research suggests that the "marker variable" method (fixing a factor loading to 1 for each latent variable; the default in most software) can lead you astray in determining which item(s) are specifically responsible for noninvariance (which I cover in the **Additional Considerations** section), so I **strongly** recommend you adopt fixed-factor as your default scale-setting approach, especially for invariance testing. 
 
 #### The New Proposed Sequence ####
 
@@ -378,7 +378,7 @@ These pieces of information are all that is needed for dySEM to automate scripti
 
 ### Model Scripting
 
-dySEM makes the rest of the process of testing dyadic invariance straightforward. We first need to use dySEM scripter functions to generate the correct code for lavaan to fit our (1) residual-invariant, (2) intercept-invariant, (3) loading-invariant, and (4) configurally invariance dyadic CFA models. Each model requires one use of scriptCFA(), which needs to be provided the dvn list we just created with scrapeVarCross(), an arbitrary name for the latent variable being modeled, the type of invariance to impose in the the "model" argument. Critically, instead of starting with configural dyadic invariance (and proceeding to more parsimonious/restrictive models), I recommend starting with the most parsimonious/restrictive model (full measurement-level indistinguishability), and then testing whether more complicated models are empirically warranted. 
+dySEM makes the rest of the process of testing dyadic invariance straightforward. We first need to use dySEM scripter functions to generate the correct code for `lavaan` to fit our (1) residual-invariant, (2) intercept-invariant, (3) loading-invariant, and (4) configurally invariance dyadic CFA models. Each model requires one use of scriptCFA(), which needs to be provided the dvn list we just created with scrapeVarCross(), an arbitrary name for the latent variable being modeled, the type of invariance to impose in the the "model" argument. Critically, instead of starting with configural dyadic invariance (and proceeding to more parsimonious/restrictive models), I recommend starting with the most parsimonious/restrictive model (full measurement-level indistinguishability), and then testing whether more complicated models are empirically warranted. 
 
 ```{r scripting}
 sat.residual.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
@@ -436,7 +436,116 @@ out[order(-out$Df),]
 
 ### Traditional (Dyadic) Invariance Testing Evaluates Non-Invariance, Not Invariance
 
-### Identifying and Specifying A "Partial" Invariance Model
+### Identifying Items Responsible for Non-invariance and Specifying A "Partial" Invariance Model
+
+Appraising measurement invariance in the fashion that this tutorial has exemplified, can be thought of as akin to a "global" or "omnibus" test
+of measurement invariance; a significantly worse-fitting model indicates that the measurement model is not invariant. However, this approach does not identify which items are responsible for the non-invariance. In other words, we need some sort of item-level "post hoc" test to identify which item(s) are responsible for non-invariance (this is a problem common to other forms of invariance testing, too, like multi-group CFAs).
+
+In `lavaan`, the process for carrying out these item-level noninvariance tests is a bit cumbersome (spoiler: don't worry, dySEM has a one-liner that automates all of this for you!). You would first need to use `lavTestScore`, and submit to it your model which resulted in significantly degraded fit (in this case, the model with invariant loadings + intercepts + residual variances). `lavTestScore` will return a list of each item-level constraint, and the amount of misfit introduced by them, the degree(s) of freedom gained by each constraint, and their *p*-values indicating whether their respective amount is significantly different from zero.  
+
+```{r lavTestScores}
+
+lavTestScore(sat.residual.fit)
+
+```
+
+In this instance, we see only two constraints result in significantly worse fit (the 12th and the 15th); the problem is, these constriants are rather cryptically labeled. If we proceeded with the "from scratch" approach, we'd then need to use the `partable` function to generate
+the list of estimated and constrained parameters, and the parameter label (or "plabel") they have been assigned. In this way, we would have to remember that the 12th and 15th parameter constraints were significant, to notice that are the residual variances for the 2nd and 5th items, respectively.
+
+```{r partable}
+
+partable(sat.residual.fit)
+
+```
+
+We built a wrapper-function, `getConstraintTests`, that automates this process for you. It takes as its argument the model that resulted in significantly degraded fit, and returns a list of the items that were responsible for the non-invariance, with the matching of plabel having taken place "behind the scenes", so that all you are provided is a more immediately readable and intuitive list of constraints: 
+
+```{r getConstrainTests}
+
+getConstraintTests(sat.residual.fit)
+
+```
+
+In this output, we quickly see that none of the individual equality constraints on the loadings (`=~` operator) or intercepts (`~1` operator) significantly degraded model fit, but two of the residual variance constraints (`~~` operator) did (for the 2nd and 5th items).
 
 ### Calculating and Considering the Magnitude of Difference in Measurement Model Parameter Estimates
 
+Finally, when noninvariance is present, it's often informative to quantify the magnitude of it. Although not often reported, 
+there are a variety of effect size measures for noninvariance (see Nye and Drasgow, 2011; Gunn et al., 2020), one of which ($d_{MACS}$) we have adapted for the dyadic invariance case (in Sakaluk et al., 2021). 
+
+$d_{MACS}$ gives you the standardized average difference in a given indicator score between the two members of the dyad, across a normal latent variable distribution for the second partner assuming the differences were uniform (Gunn et al., 2020). Put another way, you can think of $d_{MACS}$ as providing you a standardized sense of how misleading noninvariance in a given item would be, in terms of either creating the illusion of a group difference on an item, or suppressing the presence of a group difference on an item. That is, it is "Cohen's *d*"-like in its computation, but recognize that given the very context of measurement modeling (e.g., vs. a *t*-test), users should not expect the same interpretative thresholds as Cohen's *d* to hold (Nye et al., 2019).
+
+To calculate $d_{MACS}$ for your items, you must first determine a viable "partially invariant" model (Nye & Drasgow, 2011; Gunn et al, 2020): that is, a model that is invariant on all parameters except for those that were identified as significantly noninvariant in the previous step using `getConstraintTests()`. In this case, we would need to specify a model that is invariant on all parameters except for the residual variances for the 2nd and 5th items. 
+
+```{r partial invariance model}
+
+sat.partial.script <-'
+#Measurement Model
+
+#Loadings
+Sat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5
+Sat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5
+
+#Intercepts
+sat.g.1_1 ~ tx1*1
+sat.g.1_2 ~ tx2*1
+sat.g.1_3 ~ tx3*1
+sat.g.1_4 ~ tx4*1
+sat.g.1_5 ~ tx5*1
+
+sat.g.2_1 ~ tx1*1
+sat.g.2_2 ~ tx2*1
+sat.g.2_3 ~ tx3*1
+sat.g.2_4 ~ tx4*1
+sat.g.2_5 ~ tx5*1
+
+#Residual Variances (free to noninvariant residuals)
+sat.g.1_1 ~~ thx1*sat.g.1_1
+sat.g.1_2 ~~ sat.g.1_2
+sat.g.1_3 ~~ thx3*sat.g.1_3
+sat.g.1_4 ~~ thx4*sat.g.1_4
+sat.g.1_5 ~~ sat.g.1_5
+
+sat.g.2_1 ~~ thx1*sat.g.2_1
+sat.g.2_2 ~~ sat.g.2_2
+sat.g.2_3 ~~ thx3*sat.g.2_3
+sat.g.2_4 ~~ thx4*sat.g.2_4
+sat.g.2_5 ~~ sat.g.2_5
+
+#Residual Covariances
+sat.g.1_1 ~~ sat.g.2_1
+sat.g.1_2 ~~ sat.g.2_2
+sat.g.1_3 ~~ sat.g.2_3
+sat.g.1_4 ~~ sat.g.2_4
+sat.g.1_5 ~~ sat.g.2_5
+
+#Structural Model
+
+#Latent (Co)Variances
+Sat1 ~~ 1*Sat1
+Sat2 ~~ NA*Sat2
+Sat1 ~~ Sat2
+
+#Latent Means
+Sat1 ~ 0*1
+Sat2 ~ NA*1
+
+'
+
+#Fit partial model
+sat.partial.fit <- cfa(sat.partial.script, 
+                                 data = commitmentQ, 
+                                 std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+```
+
+We can then pass our data frame, dvn, and partially invariant model to the `getDydmacs` function, which will return a list of the $d_{MACS}$ values for each item.
+
+```{r dmacs}
+
+getDydmacs(dat, dvn, sat.partial.fit)
+
+```
+
+In this case, our $d_{MACS}$ values are all 0; this is because the $d_{MACS}$ measure is only sensitive to noninvariance in loadings and intercepts (which are the primary measurement models of interest in most invariance testing), and so the residual noninvariance in the 2nd and 5th items does not contribute to the $d_{MACS}$ values.
+
+Note, however, how much noninvariance "matters" in a given case will vary across contexts. Nye et al. (2019), for example, note that in a measurement model of a small number of indicators, one large noninvariant item, or consistent small levels of noninvariance across items, can be quite misleading. In a larger battery of items, meanwhile, one or two substantially noninvariant items may have their distorting influences 'washed out' by the other invariant items. 

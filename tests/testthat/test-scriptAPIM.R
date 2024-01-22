@@ -80,7 +80,7 @@ test_that("scriptAPIM produces correct df for constr_dy_x/y_meas = none, constr_
                        constr_dy_xy_struct = c("none"))
 
   #Fit model
-  mod_ff <- lavaan::cfa(script, data = commitmentQ)
+  mod_ff <- lavaan::cfa(script_ff, data = commitmentQ)
 
   #manually calculated free parameters (see LINK)
   #my_param <- 76
@@ -88,7 +88,7 @@ test_that("scriptAPIM produces correct df for constr_dy_x/y_meas = none, constr_
   #calculated df (should be 154)
   #my_df <- knowns-my_param
 
-  lav_df_ff <- as.double(lavaan::fitmeasures(mod, "df"))
+  lav_df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
 
   expect_equal(lav_df_ff,
                154
