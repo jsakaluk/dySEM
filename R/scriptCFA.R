@@ -19,9 +19,9 @@
 #' #invariance constraint set (see Lee, Preacher, & Little, 2011).
 #'
 #' @param dvn input dvn list from scrapeVarCross
-#' @param lvname input character to (arbitrarily) name LV in lavaan syntax
 #' @param scaleset input character to specify how to set the scale of the latent variable(s). Default is
 #' "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)
+#' @param lvname input character to (arbitrarily) name LV in lavaan syntax
 #' @param constr_dy_meas input character vector detailing which measurement model parameters to constrain across dyad members.
 #' Default is c("loadings", "intercepts", "residuals")(in combination with defaults for constr_dy_struct, an indistinguishable dyadic CFA),
 #' but user can specify any combination of "loadings", "intercepts", and "residuals",
@@ -65,7 +65,7 @@
 #' constr_dy_meas = "none",
 #' constr_dy_struct = "none")
 
-scriptCFA <- function(dvn, lvname = "X", scaleset = "FF",
+scriptCFA <- function(dvn, scaleset = "FF", lvname = "X",
                       constr_dy_meas = c("loadings", "intercepts", "residuals"),
                       constr_dy_struct = c("variances", "means"),
                       model = lifecycle::deprecated(),
