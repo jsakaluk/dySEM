@@ -62,7 +62,7 @@ scriptCFM = function(dvn, scaleset = "FF",
     lifecycle::deprecate_stop(
       when = "1.0.0",
       what = I('The argument "scriptCFM(model)"'),
-      with = I('"scriptCFM(constr_dy_x_meas) and/or scriptAPIM(constr_dy_y_meas)"')
+      with = I('"scriptCFM(constr_dy_x_meas) and/or scriptCFM(constr_dy_y_meas)"')
     )
   }
 
@@ -82,8 +82,8 @@ scriptCFM = function(dvn, scaleset = "FF",
   if(!any(constr_dy_y_struct %in% c("variances", "means", "none"))){
     stop("constr_dy_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
   }
-  if(!any(constr_dy_xy_struct %in% c("actors", "partners","all", "actors_zero", "partners_zero", "none"))){
-    stop("constr_dy_xy_struct must be a character vector containing any combination of 'actors', 'partners', 'all', 'actors_zero', 'partners_zero' or 'none'")
+  if(!any(constr_dy_xy_struct %in% c("p1_zero", "p2_zero", "cov_zero", "dyadic_zero", "none"))){
+    stop("constr_dy_xy_struct must be a character vector containing any combination of 'p1_zero', 'p2_zero', 'cov_zero', 'dyadic_zero', or 'none'")
   }
   if(!scaleset %in% c("FF", "MV")){
     stop("scaleset must be either 'FF' (fixed-factor) or 'MV' (marker variable)")
