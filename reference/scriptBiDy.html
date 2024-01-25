@@ -18,7 +18,7 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,11 +76,16 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scriptBiDy</span><span class="op">(</span></span>
 <span>  <span class="va">dvn</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"CFA"</span>,</span>
 <span>  <span class="va">lvxname</span>,</span>
 <span>  <span class="va">lvyname</span>,</span>
-<span>  type <span class="op">=</span> <span class="st">"C"</span>,</span>
-<span>  model <span class="op">=</span> <span class="st">"configural"</span>,</span>
-<span>  equate <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  constr_dy_x_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
+<span>  constr_dy_x_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>,</span>
+<span>  constr_dy_y_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
+<span>  constr_dy_y_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>,</span>
+<span>  constr_dy_xy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"actors"</span>, <span class="st">"partners"</span><span class="op">)</span>,</span>
+<span>  model <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  equate <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  writescript <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -91,6 +96,10 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
 <dd><p>input dvn list from scrapeVarCross</p></dd>
 
 
+<dt>type</dt>
+<dd><p>input character to specify whether to script a BiDy-CFA ("CFA", default) or BiDy-SEM ("SEM") model</p></dd>
+
+
 <dt>lvxname</dt>
 <dd><p>input character to (arbitrarily) name LV X in lavaan syntax</p></dd>
 
@@ -99,18 +108,49 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
 <dd><p>input character to (arbitrarily) name LV Y in lavaan syntax</p></dd>
 
 
-<dt>type</dt>
-<dd><p>input character used to specify what kind of BiDy model to specify ("C" for BiDy-C, or "S" for BiDy-S)</p></dd>
+<dt>constr_dy_x_meas</dt>
+<dd><p>input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
+Default is c("loadings", "intercepts", "residuals"),
+but user can specify any combination of "loadings", "intercepts", and "residuals",
+#or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
+boutique patterns of bifactor loading constraints with "loadings_source" or "loadings_mutual".</p></dd>
+
+
+<dt>constr_dy_x_struct</dt>
+<dd><p>input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+Default is c("variances", "means"),
+but user can specify any combination of "variances" and "means", or "none".</p></dd>
+
+
+<dt>constr_dy_y_meas</dt>
+<dd><p>input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
+Default is c("loadings", "intercepts", "residuals"),
+but user can specify any combination of "loadings", "intercepts", and "residuals",
+#or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
+boutique patterns of bifactor loading constraints with "loadings_source" or "loadings_mutual".</p></dd>
+
+
+<dt>constr_dy_y_struct</dt>
+<dd><p>input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+Default is c("variances", "means"),
+but user can specify any combination of "variances" and "means", or "none".</p></dd>
+
+
+<dt>constr_dy_xy_struct</dt>
+<dd><p>input character vector detailing which structural model parameters to constrain for modeling the predictive association(s) between
+partners' latent x and y. Default is c("actors", "partners"), but users can also specify "all", "actors_zero", "partners_zero", or "none".</p></dd>
 
 
 <dt>model</dt>
-<dd><p>input character used to specify which level of invariance is
-modeled (for BiDys, options thus far are "loading", "loading_source", and "loading_releq"). Defaults to "configural".</p></dd>
+<dd><p>Deprecated input character used to specify which level of invariance is
+modeled. Users should rely upon constr_dy_x_meas/constr_dy_y_meas and
+constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the measurement and/or structural portions of the model for latent x and y.</p></dd>
 
 
 <dt>equate</dt>
-<dd><p>input character to specify which type of structural parameters
-("actor" = actor effects)</p></dd>
+<dd><p>Deprecated input character to specify which type of structural parameters
+are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
+constraints to the structural portion of the model for associative relationship between latent x and y.</p></dd>
 
 
 <dt>writescript</dt>
@@ -140,19 +180,14 @@ lavaan functions</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span><span class="va">DRES</span>, x_order <span class="op">=</span> <span class="st">"sip"</span>, x_stem <span class="op">=</span> <span class="st">"sexsat"</span>,</span></span>
 <span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"."</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sexsat.bidyc.config.script</span> <span class="op">&lt;-</span> <span class="fu">scriptBiDy</span><span class="op">(</span><span class="va">dvn</span>, lvxname <span class="op">=</span> <span class="st">"SexSat"</span>,</span></span>
-<span class="r-in"><span>model <span class="op">=</span> <span class="st">"configural"</span>, type <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sexsat.bidyc.loadsource.script</span> <span class="op">&lt;-</span> <span class="fu">scriptBiDy</span><span class="op">(</span><span class="va">dvn</span>, lvxname <span class="op">=</span> <span class="st">"SexSat"</span>,</span></span>
-<span class="r-in"><span>model <span class="op">=</span> <span class="st">"loading_source"</span>, type <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sexsat.bidyc.loadreleq.script</span> <span class="op">&lt;-</span> <span class="fu">scriptBiDy</span><span class="op">(</span><span class="va">dvn</span>, lvxname <span class="op">=</span> <span class="st">"SexSat"</span>,</span></span>
-<span class="r-in"><span>model <span class="op">=</span> <span class="st">"loading_releq"</span>, type <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sexsat.bidyc.script</span> <span class="op">&lt;-</span> <span class="fu">scriptBiDy</span><span class="op">(</span><span class="va">dvn</span>, lvxname <span class="op">=</span> <span class="st">"SexSat"</span>, type <span class="op">=</span> <span class="st">"CFA"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
 <span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span>,</span></span>
 <span class="r-in"><span>y_order<span class="op">=</span><span class="st">"spi"</span>, y_stem<span class="op">=</span><span class="st">"com"</span>, y_delim1 <span class="op">=</span> <span class="st">"."</span>, y_delim2<span class="op">=</span><span class="st">"_"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">comsat.bidys.config.script</span> <span class="op">&lt;-</span> <span class="fu">scriptBiDy</span><span class="op">(</span><span class="va">dvn</span>, lvxname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
-<span class="r-in"><span>lvyname <span class="op">=</span> <span class="st">"Com"</span>, model <span class="op">=</span> <span class="st">"configural"</span>, type <span class="op">=</span> <span class="st">"S"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>lvyname <span class="op">=</span> <span class="st">"Com"</span>, type <span class="op">=</span> <span class="st">"SEM"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

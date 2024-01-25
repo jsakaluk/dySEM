@@ -18,7 +18,7 @@ measurement models for either a specified X or Y factor."><meta property="og:ima
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,8 +76,8 @@ measurement models for either a specified X or Y factor.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scriptCFA</span><span class="op">(</span></span>
 <span>  <span class="va">dvn</span>,</span>
-<span>  lvname <span class="op">=</span> <span class="st">"X"</span>,</span>
 <span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span>
+<span>  lvname <span class="op">=</span> <span class="st">"X"</span>,</span>
 <span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
 <span>  constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>,</span>
 <span>  model <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -91,13 +91,13 @@ measurement models for either a specified X or Y factor.</p>
 <dd><p>input dvn list from scrapeVarCross</p></dd>
 
 
-<dt>lvname</dt>
-<dd><p>input character to (arbitrarily) name LV in lavaan syntax</p></dd>
-
-
 <dt>scaleset</dt>
 <dd><p>input character to specify how to set the scale of the latent variable(s). Default is
 "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)</p></dd>
+
+
+<dt>lvname</dt>
+<dd><p>input character to (arbitrarily) name LV in lavaan syntax</p></dd>
 
 
 <dt>constr_dy_meas</dt>

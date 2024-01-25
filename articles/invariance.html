@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">John K.
 Sakaluk</h4>
             
-            <h4 data-toc-skip class="date">12/12/23</h4>
+            <h4 data-toc-skip class="date">25/01/24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/HEAD/vignettes/articles/invariance.Rmd" class="external-link"><code>vignettes/articles/invariance.Rmd</code></a></small>
       <div class="d-none name"><code>invariance.Rmd</code></div>
@@ -95,9 +95,9 @@ Sakaluk</h4>
 
     
     
-<p><em>The following resource was made in advance of the 2023 SPSP Close
-Relationships Preconference, and is part of a working paper. Please cite
-the following if you are using these materials:</em></p>
+<p><em>The following resource was made in advance and following the 2023
+SPSP Close Relationships Preconference, and is part of a working paper.
+Please cite the following if you are using these materials:</em></p>
 <ul>
 <li>Sakaluk, J. K. (preprint). Invariance testing with potentially
 indistinguishable dyads: Practices and rationale for a more logical and
@@ -206,32 +206,58 @@ and</li>
 <p>When using the term “indistinguishable” in the context of structural
 equation modeling with latent variables, we therefore need to be very
 careful and precise in conveying to what the term “indistinguishable” is
-meant to apply. Most uses of the term “indistinguishable” in the
-literature (e.g., with an APIM specified in MLM, or when using SEM
-without latent variables) indicate that researchers have constrained
-parameters in the structural model to equivalence between partners (and
-adopted an analytic strategy that does not appraise what is going on at
-the measurement model level). With invariance testing, however, we are
-strictly concerned with what’s going on at the measurement model
-level.</p>
-<p>I therefore propose we use the term <strong>measurement
-indistinguishability</strong> when we are referring to dyadic models
-with indistinguishable measurement model parameters, <strong>structural
-indistinguishability</strong> when we are referring to dyadic models
-with indistinguishable structural model parameters, and
-<strong>measurement and structural indistinguishability</strong> when we
-are referring to dyadic models with both indistinguishable measurement
-and structural model parameters. Yet another way to be specific is to
-reserve the term <strong>“invariance”</strong> testing for questions of
-indistinguishability within the measurement model, while using
-<strong>“equivalence”</strong> testing for questions of
-indistinguishability within the structural model</p>
+meant to apply. Typically, indistinguishability (or
+<em>exchangeability</em>, or <em>interchangeability</em>)(Griffin &amp;
+Gonzalez, 1995; Olsen &amp; Kenny, 2006) has been used to refer to
+dyadic models in which dyad members have been modeled as having the same
+variance(s) and intrapersonal and interpersonal
+covariance(s)/correlation(s)(Gonzalez &amp; Griffin, 1999; Kenny et al.,
+2006). Further, though partners having the same mean(s) is not strictly
+necessary, it is often a presumed feature of indistinguishability, and
+models require adjustment when means differ between partners (Kenny et
+al., 2006).</p>
+<p>With the addition of a measurement model (i.e., including loadings,
+residual (co)variances, and intercepts) in dyadic SEM, however, more
+nuance in terminology is likely needed in order to avoid confusion that
+might otherwise occur by describing a model of “indistinguishable”
+dyads. We therefore propose the following terminology conventions for
+describing what exact component(s) of a dyadic SEM are
+“indistinguishable”:</p>
+<ul>
+<li>
+<em>Dyadic Measurement Invariance</em> (Indistinguishability of
+Measurement Model Across Partners)</li>
+<li>
+<em>Dyadic Dispersion Equivalence</em> (Indistinguishability of
+Latent Variances and/or Standard Deviations)</li>
+<li>
+<em>Dyadic Association Equivalence</em> (Indistinguishability of
+Latent Covariances, Correlations, and/or Regression Slopes Across
+Partners)</li>
+<li>
+<em>Dyadic Level Equivalence</em> (Indistinguishability of Latent
+Means Across Partners)</li>
+</ul>
+<p>This vocabulary offsets the indistinguishability of the measurement
+model parameters (i.e., loadings, residual (co)variances, and
+intercepts) with the term “invariance”, from indistinguishability of
+structural model parameters (i.e., latent (co)variances, correlations,
+slopes, and means) with the term “equivalence.” This invariance
+vs. equivalence could also be carried through to other comparisons
+across design features, like groups and/or time. Dyads could further be
+described as <em>fully indistinguishable</em> were all components of
+indistinguishability established within a given study’s design, and
+perhaps as <em>psychometrically indistinguishable</em> when measurement
+model parameters are invariant but some structural model parameters
+vary, while <em>structurally indistinguishable</em> when some
+measurement model parameters vary but structural model parameters are
+equivalent.</p>
 </div>
 <div class="section level3">
 <h3 id="meet-your-dyadic-measurement-invariance-models">Meet Your Dyadic Measurement Invariance Models<a class="anchor" aria-label="anchor" href="#meet-your-dyadic-measurement-invariance-models"></a>
 </h3>
 <div class="section level4">
-<h4 id="a-disclaimer-and-words-of-caution">A Disclaimer and Words of Caution<a class="anchor" aria-label="anchor" href="#a-disclaimer-and-words-of-caution"></a>
+<h4 id="a-disclaimer-about-marker-variables">A Disclaimer About Marker Variables<a class="anchor" aria-label="anchor" href="#a-disclaimer-about-marker-variables"></a>
 </h4>
 <p><strong>Note</strong>: the following models use a “fixed-factor”
 scale-setting approach, whereby the latent variance is fixed to 1 for at
@@ -244,7 +270,8 @@ does impact parameter estimation and significance testing. Prior
 methodological research suggests that the “marker variable” method
 (fixing a factor loading to 1 for each latent variable; the default in
 most software) can lead you astray in determining which item(s) are
-specifically responsible for noninvariance, so I
+specifically responsible for noninvariance (which I cover in the
+<strong>Additional Considerations</strong> section), so I
 <strong>strongly</strong> recommend you adopt fixed-factor as your
 default scale-setting approach, especially for invariance testing.</p>
 </div>
@@ -277,7 +304,8 @@ freely estimated residual variances, intercepts, and loadings):</p>
 <p>If the loading-invariant model was rejected in favour of the
 configurally invariant model, the configurally invariant model would be
 the best-supported measurement model. Otherwise, the best supported
-model would be the baseline model which was</p>
+model would be the baseline model which was the loading invariance
+model.</p>
 </div>
 </div>
 </div>
@@ -353,15 +381,15 @@ options.</p>
 </h3>
 <p>dySEM makes the rest of the process of testing dyadic invariance
 straightforward. We first need to use dySEM scripter functions to
-generate the correct code for lavaan to fit our (1) residual-invariant,
-(2) intercept-invariant, (3) loading-invariant, and (4) configurally
-invariance dyadic CFA models. Each model requires one use of
-scriptCFA(), which needs to be provided the dvn list we just created
-with scrapeVarCross(), an arbitrary name for the latent variable being
-modeled, the type of invariance to impose in the the “model” argument.
-Critically, instead of starting with configural dyadic invariance (and
-proceeding to more parsimonious/restrictive models), I recommend
-starting with the most parsimonious/restrictive model (full
+generate the correct code for <code>lavaan</code> to fit our (1)
+residual-invariant, (2) intercept-invariant, (3) loading-invariant, and
+(4) configurally invariance dyadic CFA models. Each model requires one
+use of scriptCFA(), which needs to be provided the dvn list we just
+created with scrapeVarCross(), an arbitrary name for the latent variable
+being modeled, the type of invariance to impose in the the “model”
+argument. Critically, instead of starting with configural dyadic
+invariance (and proceeding to more parsimonious/restrictive models), I
+recommend starting with the most parsimonious/restrictive model (full
 measurement-level indistinguishability), and then testing whether more
 complicated models are empirically warranted.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -454,27 +482,50 @@ scriptCFA() generated:</p>
 <div class="section level3">
 <h3 id="inspecting-output">Inspecting Output<a class="anchor" aria-label="anchor" href="#inspecting-output"></a>
 </h3>
-<p>And we can expeditiously compare all the models (sequentially, from
-most parsimonious to least) at once:</p>
+<p>And we can expeditiously compare all the models at once:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">sat.residual.fit</span>, <span class="va">sat.intercept.fit</span>, <span class="va">sat.loading.fit</span>, <span class="va">sat.config.fit</span><span class="op">)</span></span>
-<span><span class="va">out</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">out</span><span class="op">$</span><span class="va">Df</span><span class="op">)</span>,<span class="op">]</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Chi-Squared Difference Test</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                   Df    AIC    BIC  Chisq Chisq diff    RMSEA Df diff</span></span>
-<span><span class="co">#&gt; sat.residual.fit  42 3855.2 3918.3 78.842    18.5209 0.153345       5</span></span>
-<span><span class="co">#&gt; sat.intercept.fit 37 3846.7 3923.5 60.321     1.5112 0.000000       4</span></span>
-<span><span class="co">#&gt; sat.loading.fit   33 3853.1 3941.0 58.810     5.7841 0.062278       4</span></span>
-<span><span class="co">#&gt; sat.config.fit    29 3855.4 3954.2 53.026                            </span></span>
-<span><span class="co">#&gt;                   Pr(&gt;Chisq)   </span></span>
-<span><span class="co">#&gt; sat.residual.fit     0.00236 **</span></span>
-<span><span class="co">#&gt; sat.intercept.fit    0.82466   </span></span>
-<span><span class="co">#&gt; sat.loading.fit      0.21586   </span></span>
-<span><span class="co">#&gt; sat.config.fit                 </span></span>
-<span><span class="co">#&gt; ---</span></span>
-<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">sat.residual.fit</span>, <span class="va">sat.intercept.fit</span>, <span class="va">sat.loading.fit</span>, <span class="va">sat.config.fit</span><span class="op">)</span></span></code></pre></div>
+<p>Unfortunately, the default behavior of <code><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova()</a></code> is to
+compare these models in order of least parsimonious to most. In essence,
+this model testing approach defaults to presuming full
+distinguishability, and the statistical “onus” is on the researcher to
+demonstrate that this is not the case. We have therefore created an
+alternative wrapper function for <code><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova()</a></code>, called
+<code><a href="../reference/getInvarCompTable.html">getInvarCompTable()</a></code> that reverses the order of the model
+comparison process, so that indistinguishability in the measurement
+model is the base null model, and then the researcher tests against this
+model to determine if subsequently relaxed groups of constraints
+significantly improves the model. All it requires as input is a list of
+all four models, in order:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sat.residual.fit</span>, <span class="va">sat.intercept.fit</span>, <span class="va">sat.loading.fit</span>, <span class="va">sat.config.fit</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/getInvarCompTable.html">getInvarCompTable</a></span><span class="op">(</span><span class="va">mods</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          mod  chisq df pvalue      aic      bic rmsea   cfi chisq_diff df_diff</span></span>
+<span><span class="co">#&gt; 1   residual 78.842 42  0.000 3855.175 3918.308 0.087 0.970         NA      NA</span></span>
+<span><span class="co">#&gt; 2  intercept 60.321 37  0.009 3846.654 3923.512 0.074 0.981    -18.521      -5</span></span>
+<span><span class="co">#&gt; 3    loading 58.810 33  0.004 3853.143 3940.981 0.082 0.979     -1.511      -4</span></span>
+<span><span class="co">#&gt; 4 configural 53.026 29  0.004 3855.359 3954.176 0.085 0.981     -5.784      -4</span></span>
+<span><span class="co">#&gt;   p_diff aic_diff bic_diff rmsea_diff cfi_diff</span></span>
+<span><span class="co">#&gt; 1     NA       NA       NA         NA       NA</span></span>
+<span><span class="co">#&gt; 2  0.002   -8.521    5.204     -0.013    0.011</span></span>
+<span><span class="co">#&gt; 3  0.825    6.489   17.469      0.008   -0.002</span></span>
+<span><span class="co">#&gt; 4  0.216    2.216   13.196      0.002    0.001</span></span></code></pre></div>
+<p>Beyond being more simpatico with the approach of beginning with the
+most parsimonious dyadic invariance model–and testing against it to
+support a more complicated one–we think this approach offers a more
+intuitive framing of what is happening with chisq and df within each
+model. That is, relaxing constraints (in each subsequent model) reduces
+misfit, and therefore chisq decreases; relaxing these constraints,
+meanwhile, increases model complexity by adding parameters to be
+estimated, and therefore we lose of “spend” a df for each constraint we
+relax. In this instance, we can see that we significantly improve the
+model by relaxing the constraints on the residual variances (i.e.,
+adopting the intercept-invariance model), but relaxing the other
+constraints between dyads (i.e., intercepts and loadings) does not
+reduce misfit enough for the amount of parsimony we would need to
+sacrifice.</p>
 </div>
 </div>
 <div class="section level2">
@@ -486,13 +537,357 @@ Not Invariance<a class="anchor" aria-label="anchor" href="#traditional-dyadic-in
 </h3>
 </div>
 <div class="section level3">
-<h3 id="identifying-and-specifying-a-partial-invariance-model">Identifying and Specifying A “Partial” Invariance Model<a class="anchor" aria-label="anchor" href="#identifying-and-specifying-a-partial-invariance-model"></a>
+<h3 id="identifying-items-responsible-for-non-invariance-and-specifying-a-partial-invariance-model">Identifying Items Responsible for Non-invariance and Specifying A
+“Partial” Invariance Model<a class="anchor" aria-label="anchor" href="#identifying-items-responsible-for-non-invariance-and-specifying-a-partial-invariance-model"></a>
 </h3>
+<p>Appraising measurement invariance in the fashion that this tutorial
+has exemplified, can be thought of as akin to a “global” or “omnibus”
+test of measurement invariance; a significantly worse-fitting model
+indicates that the measurement model is not invariant. However, this
+approach does not identify which items are responsible for the
+non-invariance. In other words, we need some sort of item-level “post
+hoc” test to identify which item(s) are responsible for non-invariance
+(this is a problem common to other forms of invariance testing, too,
+like multi-group CFAs).</p>
+<p>In <code>lavaan</code>, the process for carrying out these item-level
+noninvariance tests is a bit cumbersome (spoiler: don’t worry, dySEM has
+a one-liner that automates all of this for you!). You would first need
+to use <code>lavTestScore</code>, and either:</p>
+<ul>
+<li>submit to it your model which resulted in significantly degraded fit
+(in this case, the model with invariant loadings + intercepts + residual
+variances), if you adopted the traditional sequence of invariance
+testing model comparisons (i.e., starting with the least parsimonious
+first), OR,</li>
+<li>submit to it the first model that was usurped by a significantly
+better fitting model (also the invariant loadings + intercepts +
+residual variances model), if you adopted our proposed sequence of
+invariance testing model comparisons (i.e., starting with the most
+parsimonious first)</li>
+</ul>
+<p>Either approach will have you use the submit the same model to
+<code>lavTestScore</code>; the two merely differ in framing the
+considerations by which you select the appropriate model for
+<code>lavTestScore</code>. <code>lavTestScore</code> will thenreturn a
+list of each item-level constraint, and the amount of misfit introduced
+by them, the degree(s) of freedom gained by each constraint, and their
+<em>p</em>-values indicating whether their respective amount is
+significantly different from zero.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavTestScore.html" class="external-link">lavTestScore</a></span><span class="op">(</span><span class="va">sat.residual.fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; total score test:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    test     X2 df p.value</span></span>
+<span><span class="co">#&gt; 1 score 25.397 15   0.045</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $uni</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; univariate score tests:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      lhs op   rhs    X2 df p.value</span></span>
+<span><span class="co">#&gt; 1   .p1. ==  .p6. 0.541  1   0.462</span></span>
+<span><span class="co">#&gt; 2   .p2. ==  .p7. 0.534  1   0.465</span></span>
+<span><span class="co">#&gt; 3   .p3. ==  .p8. 0.055  1   0.814</span></span>
+<span><span class="co">#&gt; 4   .p4. ==  .p9. 1.438  1   0.231</span></span>
+<span><span class="co">#&gt; 5   .p5. == .p10. 2.201  1   0.138</span></span>
+<span><span class="co">#&gt; 6  .p11. == .p16. 0.188  1   0.664</span></span>
+<span><span class="co">#&gt; 7  .p12. == .p17. 0.023  1   0.878</span></span>
+<span><span class="co">#&gt; 8  .p13. == .p18. 0.606  1   0.436</span></span>
+<span><span class="co">#&gt; 9  .p14. == .p19. 1.010  1   0.315</span></span>
+<span><span class="co">#&gt; 10 .p15. == .p20. 0.043  1   0.835</span></span>
+<span><span class="co">#&gt; 11 .p21. == .p26. 0.031  1   0.860</span></span>
+<span><span class="co">#&gt; 12 .p22. == .p27. 8.797  1   0.003</span></span>
+<span><span class="co">#&gt; 13 .p23. == .p28. 0.910  1   0.340</span></span>
+<span><span class="co">#&gt; 14 .p24. == .p29. 0.614  1   0.433</span></span>
+<span><span class="co">#&gt; 15 .p25. == .p30. 7.848  1   0.005</span></span></code></pre></div>
+<p>In this instance, we see only two constraints result in significantly
+worse fit (the 12th and the 15th); the problem is, these constraints are
+rather cryptically labeled. If we proceeded with the “from scratch”
+approach, we’d then need to use the <code>partable</code> function to
+generate the list of estimated and constrained parameters, and the
+parameter label (or “<code>plabel</code>”) they have been assigned. In
+this way, we would have to remember that the 12th and 15th parameter
+constraints were significant, to notice that are the residual variances
+for the 2nd and 5th items, respectively.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavParTable.html" class="external-link">partable</a></span><span class="op">(</span><span class="va">sat.residual.fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    id       lhs op       rhs user block group free ustart exo label plabel</span></span>
+<span><span class="co">#&gt; 1   1      Sat1 =~ sat.g.1_1    1     1     1    1     NA   0   lx1   .p1.</span></span>
+<span><span class="co">#&gt; 2   2      Sat1 =~ sat.g.1_2    1     1     1    2     NA   0   lx2   .p2.</span></span>
+<span><span class="co">#&gt; 3   3      Sat1 =~ sat.g.1_3    1     1     1    3     NA   0   lx3   .p3.</span></span>
+<span><span class="co">#&gt; 4   4      Sat1 =~ sat.g.1_4    1     1     1    4     NA   0   lx4   .p4.</span></span>
+<span><span class="co">#&gt; 5   5      Sat1 =~ sat.g.1_5    1     1     1    5     NA   0   lx5   .p5.</span></span>
+<span><span class="co">#&gt; 6   6      Sat2 =~ sat.g.2_1    1     1     1    6     NA   0   lx1   .p6.</span></span>
+<span><span class="co">#&gt; 7   7      Sat2 =~ sat.g.2_2    1     1     1    7     NA   0   lx2   .p7.</span></span>
+<span><span class="co">#&gt; 8   8      Sat2 =~ sat.g.2_3    1     1     1    8     NA   0   lx3   .p8.</span></span>
+<span><span class="co">#&gt; 9   9      Sat2 =~ sat.g.2_4    1     1     1    9     NA   0   lx4   .p9.</span></span>
+<span><span class="co">#&gt; 10 10      Sat2 =~ sat.g.2_5    1     1     1   10     NA   0   lx5  .p10.</span></span>
+<span><span class="co">#&gt; 11 11 sat.g.1_1 ~1              1     1     1   11     NA   0   tx1  .p11.</span></span>
+<span><span class="co">#&gt; 12 12 sat.g.1_2 ~1              1     1     1   12     NA   0   tx2  .p12.</span></span>
+<span><span class="co">#&gt; 13 13 sat.g.1_3 ~1              1     1     1   13     NA   0   tx3  .p13.</span></span>
+<span><span class="co">#&gt; 14 14 sat.g.1_4 ~1              1     1     1   14     NA   0   tx4  .p14.</span></span>
+<span><span class="co">#&gt; 15 15 sat.g.1_5 ~1              1     1     1   15     NA   0   tx5  .p15.</span></span>
+<span><span class="co">#&gt; 16 16 sat.g.2_1 ~1              1     1     1   16     NA   0   tx1  .p16.</span></span>
+<span><span class="co">#&gt; 17 17 sat.g.2_2 ~1              1     1     1   17     NA   0   tx2  .p17.</span></span>
+<span><span class="co">#&gt; 18 18 sat.g.2_3 ~1              1     1     1   18     NA   0   tx3  .p18.</span></span>
+<span><span class="co">#&gt; 19 19 sat.g.2_4 ~1              1     1     1   19     NA   0   tx4  .p19.</span></span>
+<span><span class="co">#&gt; 20 20 sat.g.2_5 ~1              1     1     1   20     NA   0   tx5  .p20.</span></span>
+<span><span class="co">#&gt; 21 21 sat.g.1_1 ~~ sat.g.1_1    1     1     1   21     NA   0  thx1  .p21.</span></span>
+<span><span class="co">#&gt; 22 22 sat.g.1_2 ~~ sat.g.1_2    1     1     1   22     NA   0  thx2  .p22.</span></span>
+<span><span class="co">#&gt; 23 23 sat.g.1_3 ~~ sat.g.1_3    1     1     1   23     NA   0  thx3  .p23.</span></span>
+<span><span class="co">#&gt; 24 24 sat.g.1_4 ~~ sat.g.1_4    1     1     1   24     NA   0  thx4  .p24.</span></span>
+<span><span class="co">#&gt; 25 25 sat.g.1_5 ~~ sat.g.1_5    1     1     1   25     NA   0  thx5  .p25.</span></span>
+<span><span class="co">#&gt; 26 26 sat.g.2_1 ~~ sat.g.2_1    1     1     1   26     NA   0  thx1  .p26.</span></span>
+<span><span class="co">#&gt; 27 27 sat.g.2_2 ~~ sat.g.2_2    1     1     1   27     NA   0  thx2  .p27.</span></span>
+<span><span class="co">#&gt; 28 28 sat.g.2_3 ~~ sat.g.2_3    1     1     1   28     NA   0  thx3  .p28.</span></span>
+<span><span class="co">#&gt; 29 29 sat.g.2_4 ~~ sat.g.2_4    1     1     1   29     NA   0  thx4  .p29.</span></span>
+<span><span class="co">#&gt; 30 30 sat.g.2_5 ~~ sat.g.2_5    1     1     1   30     NA   0  thx5  .p30.</span></span>
+<span><span class="co">#&gt; 31 31 sat.g.1_1 ~~ sat.g.2_1    1     1     1   31     NA   0        .p31.</span></span>
+<span><span class="co">#&gt; 32 32 sat.g.1_2 ~~ sat.g.2_2    1     1     1   32     NA   0        .p32.</span></span>
+<span><span class="co">#&gt; 33 33 sat.g.1_3 ~~ sat.g.2_3    1     1     1   33     NA   0        .p33.</span></span>
+<span><span class="co">#&gt; 34 34 sat.g.1_4 ~~ sat.g.2_4    1     1     1   34     NA   0        .p34.</span></span>
+<span><span class="co">#&gt; 35 35 sat.g.1_5 ~~ sat.g.2_5    1     1     1   35     NA   0        .p35.</span></span>
+<span><span class="co">#&gt; 36 36      Sat1 ~~      Sat1    1     1     1    0      1   0        .p36.</span></span>
+<span><span class="co">#&gt; 37 37      Sat2 ~~      Sat2    1     1     1   36     NA   0        .p37.</span></span>
+<span><span class="co">#&gt; 38 38      Sat1 ~~      Sat2    1     1     1   37     NA   0        .p38.</span></span>
+<span><span class="co">#&gt; 39 39      Sat1 ~1              1     1     1    0      0   0        .p39.</span></span>
+<span><span class="co">#&gt; 40 40      Sat2 ~1              1     1     1   38     NA   0        .p40.</span></span>
+<span><span class="co">#&gt; 41 41      .p1. ==      .p6.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 42 42      .p2. ==      .p7.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 43 43      .p3. ==      .p8.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 44 44      .p4. ==      .p9.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 45 45      .p5. ==     .p10.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 46 46     .p11. ==     .p16.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 47 47     .p12. ==     .p17.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 48 48     .p13. ==     .p18.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 49 49     .p14. ==     .p19.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 50 50     .p15. ==     .p20.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 51 51     .p21. ==     .p26.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 52 52     .p22. ==     .p27.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 53 53     .p23. ==     .p28.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 54 54     .p24. ==     .p29.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt; 55 55     .p25. ==     .p30.    2     0     0    0     NA   0             </span></span>
+<span><span class="co">#&gt;    start    est    se</span></span>
+<span><span class="co">#&gt; 1  2.097  2.059 0.147</span></span>
+<span><span class="co">#&gt; 2  1.858  1.957 0.154</span></span>
+<span><span class="co">#&gt; 3  2.068  2.077 0.149</span></span>
+<span><span class="co">#&gt; 4  1.982  1.879 0.149</span></span>
+<span><span class="co">#&gt; 5  1.878  1.985 0.162</span></span>
+<span><span class="co">#&gt; 6  1.000  2.059 0.147</span></span>
+<span><span class="co">#&gt; 7  1.026  1.957 0.154</span></span>
+<span><span class="co">#&gt; 8  1.004  2.077 0.149</span></span>
+<span><span class="co">#&gt; 9  0.890  1.879 0.149</span></span>
+<span><span class="co">#&gt; 10 1.028  1.985 0.162</span></span>
+<span><span class="co">#&gt; 11 6.600  6.576 0.199</span></span>
+<span><span class="co">#&gt; 12 6.548  6.555 0.200</span></span>
+<span><span class="co">#&gt; 13 6.409  6.366 0.202</span></span>
+<span><span class="co">#&gt; 14 6.661  6.723 0.193</span></span>
+<span><span class="co">#&gt; 15 6.426  6.440 0.207</span></span>
+<span><span class="co">#&gt; 16 6.930  6.576 0.199</span></span>
+<span><span class="co">#&gt; 17 6.922  6.555 0.200</span></span>
+<span><span class="co">#&gt; 18 6.704  6.366 0.202</span></span>
+<span><span class="co">#&gt; 19 7.130  6.723 0.193</span></span>
+<span><span class="co">#&gt; 20 6.817  6.440 0.207</span></span>
+<span><span class="co">#&gt; 21 2.503  0.675 0.088</span></span>
+<span><span class="co">#&gt; 22 2.472  1.055 0.120</span></span>
+<span><span class="co">#&gt; 23 2.547  0.707 0.091</span></span>
+<span><span class="co">#&gt; 24 2.442  1.181 0.126</span></span>
+<span><span class="co">#&gt; 25 2.661  1.455 0.155</span></span>
+<span><span class="co">#&gt; 26 2.041  0.675 0.088</span></span>
+<span><span class="co">#&gt; 27 2.097  1.055 0.120</span></span>
+<span><span class="co">#&gt; 28 2.078  0.707 0.091</span></span>
+<span><span class="co">#&gt; 29 1.918  1.181 0.126</span></span>
+<span><span class="co">#&gt; 30 2.353  1.455 0.155</span></span>
+<span><span class="co">#&gt; 31 0.000 -0.212 0.087</span></span>
+<span><span class="co">#&gt; 32 0.000  0.334 0.119</span></span>
+<span><span class="co">#&gt; 33 0.000 -0.193 0.089</span></span>
+<span><span class="co">#&gt; 34 0.000  0.123 0.125</span></span>
+<span><span class="co">#&gt; 35 0.000  0.299 0.154</span></span>
+<span><span class="co">#&gt; 36 1.000  1.000 0.000</span></span>
+<span><span class="co">#&gt; 37 0.050  0.827 0.107</span></span>
+<span><span class="co">#&gt; 38 0.000  0.718 0.059</span></span>
+<span><span class="co">#&gt; 39 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 40 0.000  0.184 0.066</span></span>
+<span><span class="co">#&gt; 41 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 42 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 43 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 44 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 45 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 46 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 47 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 48 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 49 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 50 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 51 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 52 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 53 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 54 0.000  0.000 0.000</span></span>
+<span><span class="co">#&gt; 55 0.000  0.000 0.000</span></span></code></pre></div>
+<p>We built a wrapper-function, <code>getConstraintTests</code>, that
+automates this process for you. It takes as its argument the model that
+resulted in significantly degraded fit, and returns a list of the items
+that were responsible for the non-invariance, with the matching of
+plabel having taken place “behind the scenes”, so that all you are
+provided is a more immediately readable and intuitive list of
+constraints:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/getConstraintTests.html">getConstraintTests</a></span><span class="op">(</span><span class="va">sat.residual.fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                    param1 constraint                 param2  chi2 df pvalue</span></span>
+<span><span class="co">#&gt; 1       Sat1 =~ sat.g.1_1         ==      Sat2 =~ sat.g.2_1 0.541  1  0.462</span></span>
+<span><span class="co">#&gt; 2       Sat1 =~ sat.g.1_2         ==      Sat2 =~ sat.g.2_2 0.534  1  0.465</span></span>
+<span><span class="co">#&gt; 3       Sat1 =~ sat.g.1_3         ==      Sat2 =~ sat.g.2_3 0.055  1  0.814</span></span>
+<span><span class="co">#&gt; 4       Sat1 =~ sat.g.1_4         ==      Sat2 =~ sat.g.2_4 1.438  1  0.231</span></span>
+<span><span class="co">#&gt; 5       Sat1 =~ sat.g.1_5         ==      Sat2 =~ sat.g.2_5 2.201  1  0.138</span></span>
+<span><span class="co">#&gt; 6           sat.g.1_1 ~1          ==          sat.g.2_1 ~1  0.188  1  0.664</span></span>
+<span><span class="co">#&gt; 7           sat.g.1_2 ~1          ==          sat.g.2_2 ~1  0.023  1  0.878</span></span>
+<span><span class="co">#&gt; 8           sat.g.1_3 ~1          ==          sat.g.2_3 ~1  0.606  1  0.436</span></span>
+<span><span class="co">#&gt; 9           sat.g.1_4 ~1          ==          sat.g.2_4 ~1  1.010  1  0.315</span></span>
+<span><span class="co">#&gt; 10          sat.g.1_5 ~1          ==          sat.g.2_5 ~1  0.043  1  0.835</span></span>
+<span><span class="co">#&gt; 11 sat.g.1_1 ~~ sat.g.1_1         == sat.g.2_1 ~~ sat.g.2_1 0.031  1  0.860</span></span>
+<span><span class="co">#&gt; 12 sat.g.1_2 ~~ sat.g.1_2         == sat.g.2_2 ~~ sat.g.2_2 8.797  1  0.003</span></span>
+<span><span class="co">#&gt; 13 sat.g.1_3 ~~ sat.g.1_3         == sat.g.2_3 ~~ sat.g.2_3 0.910  1  0.340</span></span>
+<span><span class="co">#&gt; 14 sat.g.1_4 ~~ sat.g.1_4         == sat.g.2_4 ~~ sat.g.2_4 0.614  1  0.433</span></span>
+<span><span class="co">#&gt; 15 sat.g.1_5 ~~ sat.g.1_5         == sat.g.2_5 ~~ sat.g.2_5 7.848  1  0.005</span></span>
+<span><span class="co">#&gt;     sig</span></span>
+<span><span class="co">#&gt; 1  &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2  &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 3  &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4  &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5  &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6  &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 7  &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 8  &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 9  &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 10 &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 11 &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 12   **</span></span>
+<span><span class="co">#&gt; 13 &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 14 &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 15   **</span></span></code></pre></div>
+<p>In this output, we quickly see that none of the individual equality
+constraints on the loadings (<code>=~</code> operator) or intercepts
+(<code>~1</code> operator) significantly degraded model fit, but two of
+the residual variance constraints (<code>~~</code> operator) did (for
+the 2nd and 5th items).</p>
 </div>
 <div class="section level3">
 <h3 id="calculating-and-considering-the-magnitude-of-difference-in-measurement-model-parameter-estimates">Calculating and Considering the Magnitude of Difference in
 Measurement Model Parameter Estimates<a class="anchor" aria-label="anchor" href="#calculating-and-considering-the-magnitude-of-difference-in-measurement-model-parameter-estimates"></a>
 </h3>
+<p>Finally, when noninvariance is present, it’s often informative to
+quantify the magnitude of it. Although not often reported, there are a
+variety of effect size measures for noninvariance (see Nye and Drasgow,
+2011; Gunn et al., 2020), one of which (<span class="math inline">\(d_{MACS}\)</span>) we have adapted for the dyadic
+invariance case (in Sakaluk et al., 2021).</p>
+<p><span class="math inline">\(d_{MACS}\)</span> gives you the
+standardized average difference in a given indicator score between the
+two members of the dyad, across a normal latent variable distribution
+for the second partner assuming the differences were uniform (Gunn et
+al., 2020). Put another way, you can think of <span class="math inline">\(d_{MACS}\)</span> as providing you a standardized
+sense of how misleading noninvariance in a given item would be, in terms
+of either creating the illusion of a group difference on an item, or
+suppressing the presence of a group difference on an item. That is, it
+is “Cohen’s <em>d</em>”-like in its computation, but recognize that
+given the very context of measurement modeling (e.g., vs. a
+<em>t</em>-test), users should not expect the same interpretative
+thresholds as Cohen’s <em>d</em> to hold (Nye et al., 2019).</p>
+<p>To calculate <span class="math inline">\(d_{MACS}\)</span> for your
+items, you must first determine a viable “partially invariant” model
+(Nye &amp; Drasgow, 2011; Gunn et al, 2020): that is, a model that is
+invariant on all parameters except for those that were identified as
+significantly noninvariant in the previous step using
+<code><a href="../reference/getConstraintTests.html">getConstraintTests()</a></code>. In this case, we would need to
+specify a model that is invariant on all parameters except for the
+residual variances for the 2nd and 5th items.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">sat.partial.script</span> <span class="op">&lt;-</span><span class="st">'</span></span>
+<span><span class="st">#Measurement Model</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Loadings</span></span>
+<span><span class="st">Sat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5</span></span>
+<span><span class="st">Sat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Intercepts</span></span>
+<span><span class="st">sat.g.1_1 ~ tx1*1</span></span>
+<span><span class="st">sat.g.1_2 ~ tx2*1</span></span>
+<span><span class="st">sat.g.1_3 ~ tx3*1</span></span>
+<span><span class="st">sat.g.1_4 ~ tx4*1</span></span>
+<span><span class="st">sat.g.1_5 ~ tx5*1</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">sat.g.2_1 ~ tx1*1</span></span>
+<span><span class="st">sat.g.2_2 ~ tx2*1</span></span>
+<span><span class="st">sat.g.2_3 ~ tx3*1</span></span>
+<span><span class="st">sat.g.2_4 ~ tx4*1</span></span>
+<span><span class="st">sat.g.2_5 ~ tx5*1</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Residual Variances (free to noninvariant residuals)</span></span>
+<span><span class="st">sat.g.1_1 ~~ thx1*sat.g.1_1</span></span>
+<span><span class="st">sat.g.1_2 ~~ sat.g.1_2</span></span>
+<span><span class="st">sat.g.1_3 ~~ thx3*sat.g.1_3</span></span>
+<span><span class="st">sat.g.1_4 ~~ thx4*sat.g.1_4</span></span>
+<span><span class="st">sat.g.1_5 ~~ sat.g.1_5</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">sat.g.2_1 ~~ thx1*sat.g.2_1</span></span>
+<span><span class="st">sat.g.2_2 ~~ sat.g.2_2</span></span>
+<span><span class="st">sat.g.2_3 ~~ thx3*sat.g.2_3</span></span>
+<span><span class="st">sat.g.2_4 ~~ thx4*sat.g.2_4</span></span>
+<span><span class="st">sat.g.2_5 ~~ sat.g.2_5</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Residual Covariances</span></span>
+<span><span class="st">sat.g.1_1 ~~ sat.g.2_1</span></span>
+<span><span class="st">sat.g.1_2 ~~ sat.g.2_2</span></span>
+<span><span class="st">sat.g.1_3 ~~ sat.g.2_3</span></span>
+<span><span class="st">sat.g.1_4 ~~ sat.g.2_4</span></span>
+<span><span class="st">sat.g.1_5 ~~ sat.g.2_5</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Structural Model</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Latent (Co)Variances</span></span>
+<span><span class="st">Sat1 ~~ 1*Sat1</span></span>
+<span><span class="st">Sat2 ~~ NA*Sat2</span></span>
+<span><span class="st">Sat1 ~~ Sat2</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Latent Means</span></span>
+<span><span class="st">Sat1 ~ 0*1</span></span>
+<span><span class="st">Sat2 ~ NA*1</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">'</span></span>
+<span></span>
+<span><span class="co">#Fit partial model</span></span>
+<span><span class="va">sat.partial.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.partial.script</span>, </span>
+<span>                                 data <span class="op">=</span> <span class="va">commitmentQ</span>, </span>
+<span>                                 std.lv <span class="op">=</span> <span class="cn">FALSE</span>, auto.fix.first<span class="op">=</span> <span class="cn">FALSE</span>, meanstructure <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>We can then pass our data frame, dvn, and partially invariant model
+to the <code>getDydmacs</code> function, which will return a list of the
+<span class="math inline">\(d_{MACS}\)</span> values for each item.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/getDydmacs.html">getDydmacs</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">dvn</span>, <span class="va">sat.partial.fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      dMACS</span></span>
+<span><span class="co">#&gt; [1,]     0</span></span>
+<span><span class="co">#&gt; [2,]     0</span></span>
+<span><span class="co">#&gt; [3,]     0</span></span>
+<span><span class="co">#&gt; [4,]     0</span></span>
+<span><span class="co">#&gt; [5,]     0</span></span></code></pre></div>
+<p>In this case, our <span class="math inline">\(d_{MACS}\)</span>
+values are all 0; this is because the <span class="math inline">\(d_{MACS}\)</span> measure is only sensitive to
+noninvariance in loadings and intercepts (which are the primary
+measurement models of interest in most invariance testing), and so the
+residual noninvariance in the 2nd and 5th items does not contribute to
+the <span class="math inline">\(d_{MACS}\)</span> values.</p>
+<p>Note, however, how much noninvariance “matters” in a given case will
+vary across contexts. Nye et al. (2019), for example, note that in a
+measurement model of a small number of indicators, one large
+noninvariant item, or consistent small levels of noninvariance across
+items, can be quite misleading. In a larger battery of items, meanwhile,
+one or two substantially noninvariant items may have their distorting
+influences ‘washed out’ by the other invariant items.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
