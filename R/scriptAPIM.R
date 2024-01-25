@@ -81,7 +81,7 @@ scriptAPIM <- function(dvn, scaleset = "FF",
   }
 
   #check for valid inputs
-  if(length(dvn)==6){
+  if(length(dvn)!=9){
     stop("You must supply a dvn object containing information for both X and Y")
   }
   if(!any(constr_dy_x_meas %in% c("loadings", "intercepts", "residuals", "none"))){

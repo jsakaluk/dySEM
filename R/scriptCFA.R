@@ -76,12 +76,18 @@ scriptCFA <- function(dvn, scaleset = "FF", lvname = "X",
   }
 
   #check for valid inputs
+  if(length(dvn)!=6){
+    stop("You must supply a dvn object containing information for only X [i.e., your target LV]")
+  }
+
   if(!any(constr_dy_meas %in% c("loadings", "intercepts", "residuals", "none"))){
     stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'")
   }
+
   if(!any(constr_dy_struct %in% c("variances", "means", "none"))){
     stop("constr_dy_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
   }
+
   if(!scaleset %in% c("FF", "MV")){
     stop("scaleset must be either 'FF' (fixed-factor) or 'MV' (marker variable)")
   }

@@ -52,7 +52,7 @@
 #'
 #' mim.script.indist <- scriptMIM(dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
 
-scriptMIM = function(dvn, scaleset = "FF",
+scriptMIM <- function(dvn, scaleset = "FF",
                      lvxname, lvyname,
                      constr_dy_x_meas = c("loadings", "intercepts", "residuals"),
                      constr_dy_x_struct = c("variances", "means"),
@@ -82,7 +82,7 @@ scriptMIM = function(dvn, scaleset = "FF",
   }
 
   #check for valid inputs
-  if(length(dvn)==6){
+  if(length(dvn)!=9){
     stop("You must supply a dvn object containing information for both X and Y")
   }
   if(!any(constr_dy_x_meas %in% c("loadings", "intercepts", "residuals", "none"))){

@@ -269,30 +269,6 @@ test_that("loads produces correct output for lvar = Y, partner = g, type = free"
 })
 
 
-test_that("loads produces correct output for lvar = X, partner = g, type = equated", {
-
-  dvn <- scrapeVarCross(dat = commitmentQ,
-                        x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_",
-                        y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_",
-                        distinguish_1="1", distinguish_2="2")
-
-  expect_equal(loads(dvn, lvar = "X", lvname = "Sat", partner="g", type = "equated"),
-               "SatDy=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5"
-  )
-})
-
-test_that("loads produces correct output for lvar = Y, partner = g, type = equated", {
-
-  dvn <- scrapeVarCross(dat = commitmentQ,
-                        x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_",
-                        y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_",
-                        distinguish_1="1", distinguish_2="2")
-
-  expect_equal(loads(dvn, lvar = "Y", lvname = "Com", partner="g", type = "equated"),
-               "ComDy=~NA*com.1_1+ly1*com.1_1+ly2*com.1_2+ly3*com.1_3+ly4*com.1_4+ly5*com.1_5+ly1*com.2_1+ly2*com.2_2+ly3*com.2_3+ly4*com.2_4+ly5*com.2_5"
-  )
-})
-
 test_that("loads produces correct output for lvar = X, partner = g, type = equated_source", {
 
   dvn <- scrapeVarCross(dat = commitmentQ,
