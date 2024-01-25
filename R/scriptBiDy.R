@@ -6,13 +6,33 @@
 #' for specifying dyadic configural, loading, and intercept invariant
 #' BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-setting
 #' @param dvn input dvn list from scrapeVarCross
+#' @param type input character to specify whether to script a BiDy-CFA ("CFA", default) or BiDy-SEM ("SEM") model
 #' @param lvxname input character to (arbitrarily) name LV X in lavaan syntax
 #' @param lvyname input character to (arbitrarily) name LV Y in lavaan syntax
-#' @param type input character used to specify what kind of BiDy model to specify ("C" for BiDy-C, or "S" for BiDy-S)
-#' @param model input character used to specify which level of invariance is
-#' modeled (for BiDys, options thus far are "loading", "loading_source", and "loading_releq"). Defaults to "configural".
-#' @param equate input character to specify which type of structural parameters
-#' ("actor" = actor effects)
+#' @param constr_dy_x_meas input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
+#' Default is c("loadings", "intercepts", "residuals"),
+#' but user can specify any combination of "loadings", "intercepts", and "residuals",
+#' #or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
+#' boutique patterns of bifactor loading constraints with "loadings_source" or "loadings_mutual".
+#' @param constr_dy_x_struct input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+#' Default is c("variances", "means"),
+#' but user can specify any combination of "variances" and "means", or "none".
+#' @param constr_dy_y_meas input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
+#' Default is c("loadings", "intercepts", "residuals"),
+#' but user can specify any combination of "loadings", "intercepts", and "residuals",
+#' #or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
+#' boutique patterns of bifactor loading constraints with "loadings_source" or "loadings_mutual".
+#' @param constr_dy_y_struct input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+#' Default is c("variances", "means"),
+#' but user can specify any combination of "variances" and "means", or "none".
+#' @param constr_dy_xy_struct input character vector detailing which structural model parameters to constrain for modeling the predictive association(s) between
+#' partners' latent x and y. Default is c("actors", "partners"), but users can also specify "all", "actors_zero", "partners_zero", or "none".
+#' @param model Deprecated input character used to specify which level of invariance is
+#' modeled. Users should rely upon constr_dy_x_meas/constr_dy_y_meas and
+#' constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the measurement and/or structural portions of the model for latent x and y.
+#' @param equate Deprecated input character to specify which type of structural parameters
+#' are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
+#' constraints to the structural portion of the model for associative relationship between latent x and y.
 #' @param writescript input logical (default FALSE) for whether lavaan script should
 #' be concatenated and written to current working directory (in subdirectory "scripts")
 #' @importFrom rlang .data
@@ -23,636 +43,407 @@
 #' @examples
 #' dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",
 #' x_delim2=".", distinguish_1="1", distinguish_2="2")
-#' sexsat.bidyc.config.script <- scriptBiDy(dvn, lvxname = "SexSat",
-#' model = "configural", type = "C")
-#' sexsat.bidyc.loadsource.script <- scriptBiDy(dvn, lvxname = "SexSat",
-#' model = "loading_source", type = "C")
-#' sexsat.bidyc.loadreleq.script <- scriptBiDy(dvn, lvxname = "SexSat",
-#' model = "loading_releq", type = "C")
 #'
+#' sexsat.bidyc.script <- scriptBiDy(dvn, lvxname = "SexSat", type = "CFA")
+
 #' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 #' x_delim2="_", distinguish_1="1", distinguish_2="2",
 #' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 #'
 #' comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat",
-#' lvyname = "Com", model = "configural", type = "S")
+#' lvyname = "Com", type = "SEM")
 
 
-scriptBiDy = function(dvn, lvxname, lvyname,
-                      type = "C", model = "configural", equate="none",
+scriptBiDy <- function(dvn, type = "CFA", lvxname, lvyname,
+                      constr_dy_x_meas = c("loadings", "intercepts", "residuals"),
+                      constr_dy_x_struct = c("variances", "means"),
+                      constr_dy_y_meas = c("loadings", "intercepts", "residuals"),
+                      constr_dy_y_struct = c("variances", "means"),
+                      constr_dy_xy_struct = c("actors", "partners"),
+                      model = lifecycle::deprecated(), equate = lifecycle::deprecated(),
                       writescript = FALSE){
-  if(type == "C"){
-    if(model == "configural"){
-      #Loadings
-      eta.gx = loads(dvn, lvar = "X", lvxname, partner = "g", type = "free")
-      eta.x1 = loads(dvn, lvar = "X",lvxname, partner="1", type = "free")
-      eta.x2 = loads(dvn, lvar = "X",lvxname, partner="2", type = "free")
+  if(type == "CFA"){
 
-      #Latent (co)variances
-      psi_gx = lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
-      psi_x1 = lvars(dvn, lvar = "X", lvxname, partner = "1", type = "fixed")
-      psi_x2 = lvars(dvn, lvar = "X", lvxname, partner = "2", type = "fixed")
-
-      psi_gxx1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
-      psi_gxx2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
-      psi_x1x2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      #Correlated residuals
-      resids = list()
-      for (i in 1:dvn[["xindper"]]) {
-        resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
-      }
-      resids = paste(resids, collapse = "\n")
-
-      #Residual variances
-      res1 = resids(dvn, lvar = "X", partner="1", type = "free")
-      res2 = resids(dvn, lvar = "X", partner="2", type = "free")
-
-      #Intercepts
-      xints1 = intercepts(dvn, partner="1", type = "free")
-      xints2 = intercepts(dvn, partner="2", type = "free")
-
-      #Latent Means
-      alpha_gx <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
-      alpha_x1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
-      alpha_x2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
-
-      #Script Creation Syntax
-      configural.script = sprintf("#Loadings\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
-                                  eta.x1, eta.gx, eta.x2,
-                                  psi_gx, psi_x1, psi_x2,
-                                  psi_gxx1, psi_gxx2, psi_x1x2,
-                                  resids, res1, res2,
-                                  xints1, xints2,
-                                  alpha_gx, alpha_x1, alpha_x2)
-
-      if(isTRUE(writescript)){
-        dirs("scripts")
-        cat(configural.script,"\n", file = sprintf("./scripts/%s_bidyc_configural.txt",lvxname))
-      }
-      return(configural.script)
+    #stop if model is provided
+    if(lifecycle::is_present(model)){
+      lifecycle::deprecate_stop(
+        when = "1.0.0",
+        what = I('The argument "scriptBiDy(model)"'),
+        with = I('"scriptBiDy(constr_dy_x_meas) and/or scriptBiDy(constr_dy_y_meas)"')
+      )
     }
-    else if (model == "loading"){
-      #Loadings
-      eta.gx = loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated")
-      eta.x1 = loads(dvn, lvar = "X",lvxname, partner="1", type = "equated")
-      eta.x2 = loads(dvn, lvar = "X",lvxname, partner="2", type = "equated")
 
-      #Latent (co)variances
-      psi_gx = lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
-      psi_x1 = lvars(dvn, lvar = "X", lvxname, partner = "1", type = "free")
-      psi_x2 = lvars(dvn, lvar = "X", lvxname, partner = "2", type = "free")
-
-      psi_gxx1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
-      psi_gxx2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
-      psi_x1x2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      #Correlated residuals
-      resids = list()
-      for (i in 1:dvn[["xindper"]]) {
-        resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
-      }
-      resids = paste(resids, collapse = "\n")
-
-      #Residual variances
-      res1 = resids(dvn, lvar = "X", partner="1", type = "free")
-      res2 = resids(dvn, lvar = "X", partner="2", type = "free")
-
-      #Intercepts
-      xints1 = intercepts(dvn, partner="1", type = "free")
-      xints2 = intercepts(dvn, partner="2", type = "free")
-
-      #Latent Means
-      alpha_gx <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
-      alpha_x1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
-      alpha_x2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
-
-
-      #Script Creation Syntax
-      loading.script = sprintf("#Loadings\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
-                               eta.x1, eta.gx, eta.x2,
-                               psi_gx, psi_x1, psi_x2,
-                               psi_gxx1, psi_gxx2, psi_x1x2,
-                               resids, res1, res2,
-                               xints1, xints2,
-                               alpha_gx, alpha_x1, alpha_x2)
-      if(isTRUE(writescript)){
-        dirs("scripts")
-        cat(loading.script,"\n", file = sprintf("./scripts/%s_bidy_loading.txt",lvxname))
-      }
-      return(loading.script)
+    #stop if equate is provided
+    if(lifecycle::is_present(equate)){
+      lifecycle::deprecate_stop(
+        when = "1.0.0",
+        what = I('The argument "scriptBiDy(equate)"'),
+        with = I('"constr_dy_xy_struct"')
+      )
     }
-    else if (model == "loading_source"){
-      #Loadings
-      eta.gx = loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated_source")
-      eta.x1 = loads(dvn, lvar = "X",lvxname, partner="1", type = "equated_source")
-      eta.x2 = loads(dvn, lvar = "X",lvxname, partner="2", type = "equated_source")
 
-      #Latent (co)variances
-      psi_gx = lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
-      psi_x1 = lvars(dvn, lvar = "X", lvxname, partner = "1", type = "fixed")
-      psi_x2 = lvars(dvn, lvar = "X", lvxname, partner = "2", type = "fixed")
-
-      psi_gxx1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
-      psi_gxx2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
-      psi_x1x2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      #Correlated residuals
-      resids = list()
-      for (i in 1:dvn[["xindper"]]) {
-        resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
-      }
-      resids = paste(resids, collapse = "\n")
-
-      #Residual variances
-      res1 = resids(dvn, lvar = "X", partner="1", type = "free")
-      res2 = resids(dvn, lvar = "X", partner="2", type = "free")
-
-      #Intercepts
-      xints1 = intercepts(dvn, partner="1", type = "free")
-      xints2 = intercepts(dvn, partner="2", type = "free")
-
-      #Latent Means
-      alpha_gx <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
-      alpha_x1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
-      alpha_x2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
-
-
-      #Script Creation Syntax
-      loading.script = sprintf("#Loadings\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
-                               eta.x1, eta.gx, eta.x2,
-                               psi_gx, psi_x1, psi_x2,
-                               psi_gxx1, psi_gxx2, psi_x1x2,
-                               resids, res1, res2,
-                               xints1, xints2,
-                               alpha_gx, alpha_x1, alpha_x2)
-      if(isTRUE(writescript)){
-        dirs("scripts")
-        cat(loading.script,"\n", file = sprintf("./scripts/%s_bidy_loading_src.txt",lvxname))
-      }
-      return(loading.script)
+    #check for valid inputs
+    if(length(dvn)!=6){
+     stop("You must supply a dvn object containing information for only X [i.e., your target LV]")
     }
-    else if (model == "loading_releq"){
-      #Loadings
-      eta.gx = loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated")
-      eta.x1 = loads(dvn, lvar = "X",lvxname, partner="1", type = "free")
-      eta.x2 = loads(dvn, lvar = "X",lvxname, partner="2", type = "free")
 
-      #Latent (co)variances
-      psi_gx = lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
-      psi_x1 = lvars(dvn, lvar = "X", lvxname, partner = "1", type = "fixed")
-      psi_x2 = lvars(dvn, lvar = "X", lvxname, partner = "2", type = "fixed")
-
-      psi_gxx1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
-      psi_gxx2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
-      psi_x1x2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      #Correlated residuals
-      resids = list()
-      for (i in 1:dvn[["xindper"]]) {
-        resids[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
-      }
-      resids = paste(resids, collapse = "\n")
-
-      #Residual variances
-      res1 = resids(dvn, lvar = "X", partner="1", type = "free")
-      res2 = resids(dvn, lvar = "X", partner="2", type = "free")
-
-      #Intercepts
-      xints1 = intercepts(dvn, partner="1", type = "free")
-      xints2 = intercepts(dvn, partner="2", type = "free")
-
-      #Latent Means
-      alpha_gx <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
-      alpha_x1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
-      alpha_x2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
-
-      #Script Creation Syntax
-      loading.script = sprintf("#Loadings\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
-                                  eta.x1, eta.gx, eta.x2,
-                                  psi_gx, psi_x1, psi_x2,
-                                  psi_gxx1, psi_gxx2, psi_x1x2,
-                                  resids, res1, res2,
-                                  xints1, xints2,
-                                  alpha_gx, alpha_x1, alpha_x2)
-
-      if(isTRUE(writescript)){
-        dirs("scripts")
-        cat(loading.script,"\n", file = sprintf("./scripts/%s_bidyc_loading_releq.txt",lvxname))
-      }
-      return(loading.script)
+    if(!any(constr_dy_x_meas %in% c("loadings", "loading_source", "loading_mutual", "intercepts", "residuals", "none"))){
+      stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'loading_source', 'loading_releq', 'intercepts', 'residuals', or 'none'")
     }
+
+    if(!any(constr_dy_x_struct %in% c("variances", "means", "none"))){
+      stop("constr_dy_x_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
+    }
+
+    #loadings for X
+    if(any(constr_dy_x_meas == "loadings")){
+      xloadsg <- loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated")
+      xloads1 <- loads(dvn, lvar = "X",lvxname, partner="1", type = "equated")
+      xloads2 <- loads(dvn, lvar = "X",lvxname, partner="2", type = "equated")
+    }else if(any(constr_dy_x_meas == "loading_source")){
+      xloadsg <- loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated_source")
+      xloads1 <- loads(dvn, lvar = "X",lvxname, partner="1", type = "equated_source")
+      xloads2 <- loads(dvn, lvar = "X",lvxname, partner="2", type = "equated_source")
+    }else if(any(constr_dy_x_meas == "loading_mutual")){
+      xloadsg <- loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated")
+      xloads1 <- loads(dvn, lvar = "X",lvxname, partner="1", type = "free")
+      xloads2 <- loads(dvn, lvar = "X",lvxname, partner="2", type = "free")
+    }else{
+      xloadsg <- loads(dvn, lvar = "X", lvxname, partner = "g", type = "free")
+      xloads1 <- loads(dvn, lvar = "X",lvxname, partner="1", type = "free")
+      xloads2 <- loads(dvn, lvar = "X",lvxname, partner="2", type = "free")
+    }
+
+    #intercepts for X
+    if(any(constr_dy_x_meas == "intercepts")){
+      xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated")
+      xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+    }else{
+      xints1 <- intercepts(dvn, lvar = "X", partner="1", type = "free")
+      xints2 <- intercepts(dvn, lvar = "X", partner="2", type = "free")
+    }
+
+    #residuals for X
+    if(any(constr_dy_x_meas == "residuals")){
+      xres1 <- resids(dvn, lvar = "X", partner="1", type = "equated")
+      xres2 <- resids(dvn, lvar = "X", partner="2", type = "equated")
+    }else{
+      xres1 <- resids(dvn, lvar = "X", partner="1", type = "free")
+      xres2 <- resids(dvn, lvar = "X", partner="2", type = "free")
+    }
+
+    #correlated residuals for X
+    xcoresids <- coresids(dvn, lvar = "X", "free")
+
+    #latent variances for X
+    if(any(constr_dy_x_struct == "variances")){
+      xvarg  <- lvars(dvn, lvar = "X", lvxname, partner = "g", type = "equated_ff")
+      xvar1 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "equated")
+      xvar2 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "equated")
+    }else if(!any(constr_dy_x_struct == "variances") &
+             any(constr_dy_x_meas %in% c("loadings", "loadings_source"))){
+      xvarg  <- lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
+      xvar1 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "free")
+      xvar2 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+    }else if(!any(constr_dy_x_struct == "variances") & any(constr_dy_x_meas == "loadings_mutual")){
+      xvarg  <- lvars(dvn, lvar = "X", lvxname, partner = "g", type = "free")
+      xvar1 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+      xvar2 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "fixed")
+    }else{
+      xvarg  <- lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
+      xvar1 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+      xvar2 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "fixed")
+    }
+
+    #orthogonal between bifactor and specific factors
+    xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
+    xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
+    xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+
+    #latent means for X
+    if(any(constr_dy_x_struct == "means")){
+      xmeang <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "equated_ff")
+      xmean1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "equated")
+      xmean2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "equated")
+    }else if(!any(constr_dy_x_struct == "means") & any(constr_dy_x_meas == "intercepts")){
+      xmeang <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
+      xmean1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "free")
+      xmean2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "free")
+    }else{
+      xmeang <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
+      xmean1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
+      xmean2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
+    }
+
+    #Script Creation Syntax
+    script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
+                      xloads1, xloads2, xloadsg,
+                      xints1, xints2,
+                      xres1, xres2, xcoresids,
+                      xvar1, xvar2, xvarg, xcovargxx1, xcovargxx2, xcovarx1x2,
+                      xmean1, xmean2, xmeang)
+
+    #Write script to file if requested
+    if(isTRUE(writescript)){
+      dirs("scripts")
+      cat(script,"\n", file = sprintf("./scripts/%s_bidyc_meas_%s_struct_%s.txt",lvxname, paste0(constr_dy_x_meas, collapse = "_"), paste0(constr_dy_x_struct, collapse = "_")))
+    }
+
+    return(script)
+
+
   }
-  else if(type == "S"){
-    if(model == "configural"){
-      #Loadings
-      eta.gx = loads(dvn, lvar = "X", lvxname, partner = "g", type = "free")
-      eta.x1 = loads(dvn, lvar = "X",lvxname, partner="1", type = "free")
-      eta.x2 = loads(dvn, lvar = "X",lvxname, partner="2", type = "free")
+  else if(type == "SEM"){
 
-      eta.gy = loads(dvn, lvar = "Y", lvyname, partner = "g", type = "free")
-      eta.y1 = loads(dvn, lvar = "Y",lvyname, partner="1", type = "free")
-      eta.y2 = loads(dvn, lvar = "Y",lvyname, partner="2", type = "free")
-
-      #Latent (co)variances
-      psi_gx = lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
-      psi_x1 = lvars(dvn, lvar = "X", lvxname, partner = "1", type = "fixed")
-      psi_x2 = lvars(dvn, lvar = "X", lvxname, partner = "2", type = "fixed")
-
-      psi_gy = lvars(dvn, lvar = "Y", lvyname, partner = "g", type = "fixed")
-      psi_y1 = lvars(dvn, lvar = "Y", lvyname, partner = "1", type = "fixed")
-      psi_y2 = lvars(dvn, lvar = "Y", lvyname, partner = "2", type = "fixed")
-
-      psi_gxx1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
-      psi_gxx2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
-      psi_x1x2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      psi_gyy1 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist1"]])
-      psi_gyy2 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist2"]])
-      psi_y1y2 = sprintf("%s%s ~~ 0*%s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
-
-      psi_gxy1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvyname, dvn[["dist1"]])
-      psi_gxy2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvyname, dvn[["dist2"]])
-
-      psi_gyx1 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvxname, dvn[["dist1"]])
-      psi_gyx2 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvxname, dvn[["dist2"]])
-
-      psi_x1y2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
-      psi_y1x2 = sprintf("%s%s ~~ 0*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      if(equate == "actor"){
-        psi_x1y1 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist1"]])
-        psi_x2y2 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist2"]],lvyname, dvn[["dist2"]])
-      }else{
-        psi_x1y1 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist1"]])
-        psi_x2y2 <- sprintf("%s%s ~~ a2*%s%s",lvxname, dvn[["dist2"]],lvyname, dvn[["dist2"]])
-      }
-
-      psi_gxgy <- sprintf("%sDy ~~ %sDy",lvxname,lvyname)
-
-      #Correlated residuals
-      resids.x = list()
-      for (i in 1:dvn[["xindper"]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
-      }
-      resids.x = paste(resids.x, collapse = "\n")
-
-      resids.y = list()
-      for (i in 1:dvn[["yindper"]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
-      }
-      resids.y = paste(resids.y, collapse = "\n")
-
-      #Residual variances
-      resx1 = resids(dvn, lvar = "X", partner="1", type = "free")
-      resx2 = resids(dvn, lvar = "X", partner="2", type = "free")
-      resy1 = resids(dvn, lvar = "Y", partner="1", type = "free")
-      resy2 = resids(dvn, lvar = "Y", partner="2", type = "free")
-
-      #Intercepts
-      xints1 = intercepts(dvn, lvar = "X", partner="1", type = "free")
-      xints2 = intercepts(dvn, lvar = "X", partner="2", type = "free")
-      yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "free")
-      yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "free")
-
-      #Latent Means
-      alpha_gx <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
-      alpha_x1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
-      alpha_x2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
-
-      #Latent Means
-      alpha_gy <- lmeans(dvn, lvar = "Y", lvyname, partner="g", type = "fixed")
-      alpha_y1 <- lmeans(dvn, lvar = "Y", lvyname, partner="1", type = "fixed")
-      alpha_y2 <- lmeans(dvn, lvar = "Y", lvyname, partner="2", type = "fixed")
-      #Script Creation Syntax
-      configural.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Actor and Dyadic Effects\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
-                                  eta.x1, eta.gx, eta.x2,
-                                  eta.y1, eta.gy, eta.y2,
-                                  psi_gx, psi_x1, psi_x2,
-                                  psi_gy, psi_y1, psi_y2,
-                                  psi_gxx1, psi_gxx2, psi_x1x2,
-                                  psi_gyy1, psi_gyy2, psi_y1y2,
-                                  psi_gxy1, psi_gxy2, psi_gyx1,
-                                  psi_gyx2, psi_x1y2, psi_y1x2,
-                                  psi_x1y1, psi_x2y2, psi_gxgy,
-                                  resids.x, resids.y,
-                                  resx1, resx2, resy1, resy2,
-                                  xints1, xints2, yints1, yints2,
-                                  alpha_gx, alpha_x1, alpha_x2,
-                                  alpha_gy, alpha_y1, alpha_y2)
-
-      if(isTRUE(writescript)){
-        dirs("scripts")
-        cat(configural.script,"\n", file = sprintf("./scripts/%s%s_bidys_configural.txt",lvxname, lvyname))
-      }
-      return(configural.script)
+    #stop if model is provided
+    if (lifecycle::is_present(model)) {
+      lifecycle::deprecate_stop(
+        when = "1.0.0",
+        what = I('The argument "scriptBiDy(model)"'),
+        with = I('"scriptBiDy(constr_dy_x_meas) and/or scriptBiDy(constr_dy_y_meas)"')
+      )
     }
-    else if(model == "loading"){
-      #Loadings
-      eta.gx = loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated")
-      eta.x1 = loads(dvn, lvar = "X",lvxname, partner="1", type = "equated")
-      eta.x2 = loads(dvn, lvar = "X",lvxname, partner="2", type = "equated")
 
-      eta.gy = loads(dvn, lvar = "Y", lvyname, partner = "g", type = "equated")
-      eta.y1 = loads(dvn, lvar = "Y",lvyname, partner="1", type = "equated")
-      eta.y2 = loads(dvn, lvar = "Y",lvyname, partner="2", type = "equated")
-
-      #Latent (co)variances
-      psi_gx = lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
-      psi_x1 = lvars(dvn, lvar = "X", lvxname, partner = "1", type = "free")
-      psi_x2 = lvars(dvn, lvar = "X", lvxname, partner = "2", type = "free")
-
-      psi_gy = lvars(dvn, lvar = "Y", lvyname, partner = "g", type = "fixed")
-      psi_y1 = lvars(dvn, lvar = "Y", lvyname, partner = "1", type = "free")
-      psi_y2 = lvars(dvn, lvar = "Y", lvyname, partner = "2", type = "free")
-
-      psi_gxx1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
-      psi_gxx2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
-      psi_x1x2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      psi_gyy1 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist1"]])
-      psi_gyy2 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist2"]])
-      psi_y1y2 = sprintf("%s%s ~~ 0*%s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
-
-      psi_gxy1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvyname, dvn[["dist1"]])
-      psi_gxy2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvyname, dvn[["dist2"]])
-
-      psi_gyx1 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvxname, dvn[["dist1"]])
-      psi_gyx2 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvxname, dvn[["dist2"]])
-
-      psi_x1y2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
-      psi_y1x2 = sprintf("%s%s ~~ 0*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      if(equate == "actor"){
-        psi_x1y1 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist1"]])
-        psi_x2y2 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist2"]],lvyname, dvn[["dist2"]])
-      }else{
-        psi_x1y1 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist1"]])
-        psi_x2y2 <- sprintf("%s%s ~~ a2*%s%s",lvxname, dvn[["dist2"]],lvyname, dvn[["dist2"]])
-      }
-
-      psi_gxgy <- sprintf("%sDy ~~ %sDy",lvxname,lvyname)
-
-      #Correlated residuals
-      resids.x = list()
-      for (i in 1:dvn[["xindper"]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
-      }
-      resids.x = paste(resids.x, collapse = "\n")
-
-      resids.y = list()
-      for (i in 1:dvn[["yindper"]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
-      }
-      resids.y = paste(resids.y, collapse = "\n")
-
-      #Residual variances
-      resx1 = resids(dvn, lvar = "X", partner="1", type = "free")
-      resx2 = resids(dvn, lvar = "X", partner="2", type = "free")
-      resy1 = resids(dvn, lvar = "Y", partner="1", type = "free")
-      resy2 = resids(dvn, lvar = "Y", partner="2", type = "free")
-
-      #Intercepts
-      xints1 = intercepts(dvn, lvar = "X", partner="1", type = "free")
-      xints2 = intercepts(dvn, lvar = "X", partner="2", type = "free")
-      yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "free")
-      yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "free")
-
-      #Latent Means
-      alpha_gx <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
-      alpha_x1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
-      alpha_x2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
-
-      #Latent Means
-      alpha_gy <- lmeans(dvn, lvar = "Y", lvyname, partner="g", type = "fixed")
-      alpha_y1 <- lmeans(dvn, lvar = "Y", lvyname, partner="1", type = "fixed")
-      alpha_y2 <- lmeans(dvn, lvar = "Y", lvyname, partner="2", type = "fixed")
-      #Script Creation Syntax
-      loading.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Actor and Dyadic Effects\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
-                                  eta.x1, eta.gx, eta.x2,
-                                  eta.y1, eta.gy, eta.y2,
-                                  psi_gx, psi_x1, psi_x2,
-                                  psi_gy, psi_y1, psi_y2,
-                                  psi_gxx1, psi_gxx2, psi_x1x2,
-                                  psi_gyy1, psi_gyy2, psi_y1y2,
-                                  psi_gxy1, psi_gxy2, psi_gyx1,
-                                  psi_gyx2, psi_x1y2, psi_y1x2,
-                                  psi_x1y1, psi_x2y2, psi_gxgy,
-                                  resids.x, resids.y,
-                                  resx1, resx2, resy1, resy2,
-                                  xints1, xints2, yints1, yints2,
-                                  alpha_gx, alpha_x1, alpha_x2,
-                                  alpha_gy, alpha_y1, alpha_y2)
-      if(isTRUE(writescript)){
-        dirs("scripts")
-        cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading.txt",lvxname, lvyname))
-      }
-      return(loading.script)
+    #stop if equate is provided
+    if (lifecycle::is_present(equate)) {
+      lifecycle::deprecate_stop(
+        when = "1.0.0",
+        what = I('The argument "scriptBiDy(equate)"'),
+        with = I('"constr_dy_xy_struct"')
+      )
     }
-    else if(model == "loading_source"){
-      #Loadings
-      eta.gx = loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated_source")
-      eta.x1 = loads(dvn, lvar = "X",lvxname, partner="1", type = "equated_source")
-      eta.x2 = loads(dvn, lvar = "X",lvxname, partner="2", type = "equated_source")
 
-      eta.gy = loads(dvn, lvar = "Y", lvyname, partner = "g", type = "equated_source")
-      eta.y1 = loads(dvn, lvar = "Y",lvyname, partner="1", type = "equated_source")
-      eta.y2 = loads(dvn, lvar = "Y",lvyname, partner="2", type = "equated_source")
-
-      #Latent (co)variances
-      psi_gx = lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
-      psi_x1 = lvars(dvn, lvar = "X", lvxname, partner = "1", type = "fixed")
-      psi_x2 = lvars(dvn, lvar = "X", lvxname, partner = "2", type = "fixed")
-
-      psi_gy = lvars(dvn, lvar = "Y", lvyname, partner = "g", type = "fixed")
-      psi_y1 = lvars(dvn, lvar = "Y", lvyname, partner = "1", type = "fixed")
-      psi_y2 = lvars(dvn, lvar = "Y", lvyname, partner = "2", type = "fixed")
-
-      psi_gxx1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
-      psi_gxx2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
-      psi_x1x2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      psi_gyy1 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist1"]])
-      psi_gyy2 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist2"]])
-      psi_y1y2 = sprintf("%s%s ~~ 0*%s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
-
-      psi_gxy1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvyname, dvn[["dist1"]])
-      psi_gxy2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvyname, dvn[["dist2"]])
-
-      psi_gyx1 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvxname, dvn[["dist1"]])
-      psi_gyx2 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvxname, dvn[["dist2"]])
-
-      psi_x1y2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
-      psi_y1x2 = sprintf("%s%s ~~ 0*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      if(equate == "actor"){
-        psi_x1y1 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist1"]])
-        psi_x2y2 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist2"]],lvyname, dvn[["dist2"]])
-      }else{
-        psi_x1y1 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist1"]])
-        psi_x2y2 <- sprintf("%s%s ~~ a2*%s%s",lvxname, dvn[["dist2"]],lvyname, dvn[["dist2"]])
-      }
-
-      psi_gxgy <- sprintf("%sDy ~~ %sDy",lvxname,lvyname)
-
-      #Correlated residuals
-      resids.x = list()
-      for (i in 1:dvn[["xindper"]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
-      }
-      resids.x = paste(resids.x, collapse = "\n")
-
-      resids.y = list()
-      for (i in 1:dvn[["yindper"]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
-      }
-      resids.y = paste(resids.y, collapse = "\n")
-
-      #Residual variances
-      resx1 = resids(dvn, lvar = "X", partner="1", type = "free")
-      resx2 = resids(dvn, lvar = "X", partner="2", type = "free")
-      resy1 = resids(dvn, lvar = "Y", partner="1", type = "free")
-      resy2 = resids(dvn, lvar = "Y", partner="2", type = "free")
-
-      #Intercepts
-      xints1 = intercepts(dvn, lvar = "X", partner="1", type = "free")
-      xints2 = intercepts(dvn, lvar = "X", partner="2", type = "free")
-      yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "free")
-      yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "free")
-
-      #Latent Means
-      alpha_gx <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
-      alpha_x1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
-      alpha_x2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
-
-      #Latent Means
-      alpha_gy <- lmeans(dvn, lvar = "Y", lvyname, partner="g", type = "fixed")
-      alpha_y1 <- lmeans(dvn, lvar = "Y", lvyname, partner="1", type = "fixed")
-      alpha_y2 <- lmeans(dvn, lvar = "Y", lvyname, partner="2", type = "fixed")
-      #Script Creation Syntax
-      loading.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Actor and Dyadic Effects\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
-                               eta.x1, eta.gx, eta.x2,
-                               eta.y1, eta.gy, eta.y2,
-                               psi_gx, psi_x1, psi_x2,
-                               psi_gy, psi_y1, psi_y2,
-                               psi_gxx1, psi_gxx2, psi_x1x2,
-                               psi_gyy1, psi_gyy2, psi_y1y2,
-                               psi_gxy1, psi_gxy2, psi_gyx1,
-                               psi_gyx2, psi_x1y2, psi_y1x2,
-                               psi_x1y1, psi_x2y2, psi_gxgy,
-                               resids.x, resids.y,
-                               resx1, resx2, resy1, resy2,
-                               xints1, xints2, yints1, yints2,
-                               alpha_gx, alpha_x1, alpha_x2,
-                               alpha_gy, alpha_y1, alpha_y2)
-
-      if(isTRUE(writescript)){
-        dirs("scripts")
-        cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading_source.txt",lvxname, lvyname))
-      }
-      return(loading.script)
+    #check for valid inputs
+    if(length(dvn)!=9){
+      stop("You must supply a dvn object containing information for both X and Y")
     }
-    else if(model == "loading_releq"){
-      #Loadings
-      eta.gx = loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated")
-      eta.x1 = loads(dvn, lvar = "X",lvxname, partner="1", type = "free")
-      eta.x2 = loads(dvn, lvar = "X",lvxname, partner="2", type = "free")
-
-      eta.gy = loads(dvn, lvar = "Y", lvyname, partner = "g", type = "equated")
-      eta.y1 = loads(dvn, lvar = "Y",lvyname, partner="1", type = "free")
-      eta.y2 = loads(dvn, lvar = "Y",lvyname, partner="2", type = "free")
-
-      #Latent (co)variances
-      psi_gx = lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
-      psi_x1 = lvars(dvn, lvar = "X", lvxname, partner = "1", type = "fixed")
-      psi_x2 = lvars(dvn, lvar = "X", lvxname, partner = "2", type = "fixed")
-
-      psi_gy = lvars(dvn, lvar = "Y", lvyname, partner = "g", type = "fixed")
-      psi_y1 = lvars(dvn, lvar = "Y", lvyname, partner = "1", type = "fixed")
-      psi_y2 = lvars(dvn, lvar = "Y", lvyname, partner = "2", type = "fixed")
-
-      psi_gxx1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
-      psi_gxx2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
-      psi_x1x2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      psi_gyy1 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist1"]])
-      psi_gyy2 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist2"]])
-      psi_y1y2 = sprintf("%s%s ~~ 0*%s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
-
-      psi_gxy1 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvyname, dvn[["dist1"]])
-      psi_gxy2 = sprintf("%sDy ~~ 0*%s%s",lvxname,lvyname, dvn[["dist2"]])
-
-      psi_gyx1 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvxname, dvn[["dist1"]])
-      psi_gyx2 = sprintf("%sDy ~~ 0*%s%s",lvyname,lvxname, dvn[["dist2"]])
-
-      psi_x1y2 = sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
-      psi_y1x2 = sprintf("%s%s ~~ 0*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
-
-      if(equate == "actor"){
-        psi_x1y1 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist1"]])
-        psi_x2y2 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist2"]],lvyname, dvn[["dist2"]])
-      }else{
-        psi_x1y1 <- sprintf("%s%s ~~ a1*%s%s",lvxname, dvn[["dist1"]],lvyname, dvn[["dist1"]])
-        psi_x2y2 <- sprintf("%s%s ~~ a2*%s%s",lvxname, dvn[["dist2"]],lvyname, dvn[["dist2"]])
-      }
-
-      psi_gxgy <- sprintf("%sDy ~~ %sDy",lvxname,lvyname)
-
-      #Correlated residuals
-      resids.x = list()
-      for (i in 1:dvn[["xindper"]]) {
-        resids.x[[i]]=sprintf("%s ~~ %s",dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
-      }
-      resids.x = paste(resids.x, collapse = "\n")
-
-      resids.y = list()
-      for (i in 1:dvn[["yindper"]]) {
-        resids.y[[i]]=sprintf("%s ~~ %s",dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
-      }
-      resids.y = paste(resids.y, collapse = "\n")
-
-      #Residual variances
-      resx1 = resids(dvn, lvar = "X", partner="1", type = "free")
-      resx2 = resids(dvn, lvar = "X", partner="2", type = "free")
-      resy1 = resids(dvn, lvar = "Y", partner="1", type = "free")
-      resy2 = resids(dvn, lvar = "Y", partner="2", type = "free")
-
-      #Intercepts
-      xints1 = intercepts(dvn, lvar = "X", partner="1", type = "free")
-      xints2 = intercepts(dvn, lvar = "X", partner="2", type = "free")
-      yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "free")
-      yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "free")
-
-      #Latent Means
-      alpha_gx <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
-      alpha_x1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
-      alpha_x2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
-
-      #Latent Means
-      alpha_gy <- lmeans(dvn, lvar = "Y", lvyname, partner="g", type = "fixed")
-      alpha_y1 <- lmeans(dvn, lvar = "Y", lvyname, partner="1", type = "fixed")
-      alpha_y2 <- lmeans(dvn, lvar = "Y", lvyname, partner="2", type = "fixed")
-      #Script Creation Syntax
-      loading.script = sprintf("#Loadings\n%s\n%s\n%s\n%s\n%s\n%s\n\n#(Co)Variances\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Actor and Dyadic Effects\n%s\n%s\n%s\n\n#Residuals\n%s\n%s\n%s\n%s\n%s\n%s\n\n#Intercepts\n%s\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n%s\n%s\n%s",
-                                  eta.x1, eta.gx, eta.x2,
-                                  eta.y1, eta.gy, eta.y2,
-                                  psi_gx, psi_x1, psi_x2,
-                                  psi_gy, psi_y1, psi_y2,
-                                  psi_gxx1, psi_gxx2, psi_x1x2,
-                                  psi_gyy1, psi_gyy2, psi_y1y2,
-                                  psi_gxy1, psi_gxy2, psi_gyx1,
-                                  psi_gyx2, psi_x1y2, psi_y1x2,
-                                  psi_x1y1, psi_x2y2, psi_gxgy,
-                                  resids.x, resids.y,
-                                  resx1, resx2, resy1, resy2,
-                                  xints1, xints2, yints1, yints2,
-                                  alpha_gx, alpha_x1, alpha_x2,
-                                  alpha_gy, alpha_y1, alpha_y2)
-      if(isTRUE(writescript)){
-        dirs("scripts")
-        cat(loading.script,"\n", file = sprintf("./scripts/%s%s_bidys_loading_releq.txt",lvxname, lvyname))
-      }
-      return(loading.script)
+    if(!any(constr_dy_x_meas %in% c("loadings", "loading_source", "loading_mutual", "intercepts", "residuals", "none"))){
+      stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'loading_source', 'loading_releq', 'intercepts', 'residuals', or 'none'")
     }
+    if(!any(constr_dy_x_struct %in% c("variances", "means", "none"))){
+      stop("constr_dy_x_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
+    }
+    if(!any(constr_dy_y_meas %in% c("loadings", "loading_source", "loading_mutual", "intercepts", "residuals", "none"))){
+      stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'loading_source', 'loading_releq', 'intercepts', 'residuals', or 'none'")
+    }
+    if(!any(constr_dy_y_struct %in% c("variances", "means", "none"))){
+      stop("constr_dy_y_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
+    }
+    if(!any(constr_dy_xy_struct %in% c("actors", "actors_zero", "dyadic_zero", "none"))){
+      stop("constr_dy_xy_struct must be a character vector containing any combination of 'actors', 'partners', 'all', 'actors_zero', 'partners_zero' or 'none'")
+    }
+
+    #loadings for X
+    if(any(constr_dy_x_meas == "loadings")){
+      xloadsg <- loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated")
+      xloads1 <- loads(dvn, lvar = "X",lvxname, partner="1", type = "equated")
+      xloads2 <- loads(dvn, lvar = "X",lvxname, partner="2", type = "equated")
+    }
+    else if(any(constr_dy_x_meas == "loading_source")){
+      xloadsg <- loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated_source")
+      xloads1 <- loads(dvn, lvar = "X",lvxname, partner="1", type = "equated_source")
+      xloads2 <- loads(dvn, lvar = "X",lvxname, partner="2", type = "equated_source")
+    }else if(any(constr_dy_x_meas == "loading_mutual")){
+      xloadsg <- loads(dvn, lvar = "X", lvxname, partner = "g", type = "equated")
+      xloads1 <- loads(dvn, lvar = "X",lvxname, partner="1", type = "free")
+      xloads2 <- loads(dvn, lvar = "X",lvxname, partner="2", type = "free")
+    }else{
+      xloadsg <- loads(dvn, lvar = "X", lvxname, partner = "g", type = "free")
+      xloads1 <- loads(dvn, lvar = "X",lvxname, partner="1", type = "free")
+      xloads2 <- loads(dvn, lvar = "X",lvxname, partner="2", type = "free")
+    }
+
+    #loadings for Y
+    if(any(constr_dy_y_meas == "loadings")){
+      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "equated")
+      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "equated")
+      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "equated")
+    }
+    else if(any(constr_dy_y_meas == "loading_source")){
+      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "equated_source")
+      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "equated_source")
+      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "equated_source")
+    }else if(any(constr_dy_y_meas == "loading_mutual")){
+      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "equated")
+      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "free")
+      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "free")
+    }else{
+      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "free")
+      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "free")
+      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "free")
+    }
+
+    #intercepts for X
+    if(any(constr_dy_x_meas == "intercepts")){
+      xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated")
+      xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+    }else{
+      xints1 <- intercepts(dvn, lvar = "X", partner="1", type = "free")
+      xints2 <- intercepts(dvn, lvar = "X", partner="2", type = "free")
+    }
+
+    #intercepts for Y
+    if(any(constr_dy_y_meas == "intercepts")){
+      yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated")
+      yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
+    }else{
+      yints1 <- intercepts(dvn, lvar = "Y", partner="1", type = "free")
+      yints2 <- intercepts(dvn, lvar = "Y", partner="2", type = "free")
+    }
+
+    #residuals for X
+    if(any(constr_dy_x_meas == "residuals")){
+      xres1 <- resids(dvn, lvar = "X", partner="1", type = "equated")
+      xres2 <- resids(dvn, lvar = "X", partner="2", type = "equated")
+    }else{
+      xres1 <- resids(dvn, lvar = "X", partner="1", type = "free")
+      xres2 <- resids(dvn, lvar = "X", partner="2", type = "free")
+    }
+
+    #residuals for Y
+    if(any(constr_dy_y_meas == "residuals")){
+      yres1 <- resids(dvn, lvar = "Y", partner="1", type = "equated")
+      yres2 <- resids(dvn, lvar = "Y", partner="2", type = "equated")
+    }else{
+      yres1 <- resids(dvn, lvar = "Y", partner="1", type = "free")
+      yres2 <- resids(dvn, lvar = "Y", partner="2", type = "free")
+    }
+
+    #correlated residuals for X
+    xcoresids <- coresids(dvn, lvar = "X", "free")
+
+    #correlated residuals for X
+    ycoresids <- coresids(dvn, lvar = "Y", "free")
+
+    #latent variances for X
+    if(any(constr_dy_x_struct == "variances")){
+      xvarg  <- lvars(dvn, lvar = "X", lvxname, partner = "g", type = "equated_ff")
+      xvar1 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "equated")
+      xvar2 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "equated")
+    }else if(!any(constr_dy_x_struct == "variances") &
+             any(constr_dy_x_meas %in% c("loadings", "loadings_source"))){
+      xvarg  <- lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
+      xvar1 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "free")
+      xvar2 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "free")
+    }else if(!any(constr_dy_x_struct == "variances") & any(constr_dy_x_meas == "loadings_mutual")){
+      xvarg  <- lvars(dvn, lvar = "X", lvxname, partner = "g", type = "free")
+      xvar1 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+      xvar2 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "fixed")
+    }else{
+      xvarg  <- lvars(dvn, lvar = "X", lvxname, partner = "g", type = "fixed")
+      xvar1 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "1", type = "fixed")
+      xvar2 <- lvars(dvn, lvar = "X", lvname = lvxname, partner = "2", type = "fixed")
+    }
+
+    #latent variances for Y
+    if(any(constr_dy_y_struct == "variances")){
+      yvarg  <- lvars(dvn, lvar = "Y", lvyname, partner = "g", type = "equated_ff")
+      yvar1 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "equated")
+      yvar2 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "equated")
+    }else if(!any(constr_dy_y_struct == "variances") &
+             any(constr_dy_y_meas %in% c("loadings", "loadings_source"))){
+      yvarg  <- lvars(dvn, lvar = "Y", lvyname, partner = "g", type = "fixed")
+      yvar1 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "free")
+      yvar2 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "free")
+    }else if(!any(constr_dy_y_struct == "variances") & any(constr_dy_y_meas == "loadings_mutual")){
+      yvarg  <- lvars(dvn, lvar = "Y", lvyname, partner = "g", type = "free")
+      yvar1 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "fixed")
+      yvar2 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "fixed")
+    }else{
+      yvarg  <- lvars(dvn, lvar = "Y", lvyname, partner = "g", type = "fixed")
+      yvar1 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "1", type = "fixed")
+      yvar2 <- lvars(dvn, lvar = "Y", lvname = lvyname, partner = "2", type = "fixed")
+    }
+
+    #orthogonal between bifactor and specific factors for X
+    xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist1"]])
+    xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s",lvxname,lvxname, dvn[["dist2"]])
+    xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s",lvxname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+
+
+    #orthogonal between bifactor and specific factors for Y
+    ycovargxx1 <- sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist1"]])
+    ycovargxx2 <- sprintf("%sDy ~~ 0*%s%s",lvyname,lvyname, dvn[["dist2"]])
+    ycovarx1x2 <- sprintf("%s%s ~~ 0*%s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
+
+    #latent means for X
+    if(any(constr_dy_x_struct == "means")){
+      xmeang <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "equated_ff")
+      xmean1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "equated")
+      xmean2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "equated")
+    }else if(!any(constr_dy_x_struct == "means") & any(constr_dy_x_meas == "intercepts")){
+      xmeang <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
+      xmean1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "free")
+      xmean2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "free")
+    }else{
+      xmeang <- lmeans(dvn, lvar = "X", lvxname, partner="g", type = "fixed")
+      xmean1 <- lmeans(dvn, lvar = "X", lvxname, partner="1", type = "fixed")
+      xmean2 <- lmeans(dvn, lvar = "X", lvxname, partner="2", type = "fixed")
+    }
+
+    #latent means for Y
+    if(any(constr_dy_y_struct == "means")){
+      ymeang <- lmeans(dvn, lvar = "Y", lvyname, partner="g", type = "equated_ff")
+      ymean1 <- lmeans(dvn, lvar = "Y", lvyname, partner="1", type = "equated")
+      ymean2 <- lmeans(dvn, lvar = "Y", lvyname, partner="2", type = "equated")
+    }else if(!any(constr_dy_y_struct == "means") & any(constr_dy_y_meas == "intercepts")){
+      ymeang <- lmeans(dvn, lvar = "Y", lvyname, partner="g", type = "fixed")
+      ymean1 <- lmeans(dvn, lvar = "Y", lvyname, partner="1", type = "free")
+      ymean2 <- lmeans(dvn, lvar = "Y", lvyname, partner="2", type = "free")
+    }else{
+      ymeang <- lmeans(dvn, lvar = "Y", lvyname, partner="g", type = "fixed")
+      ymean1 <- lmeans(dvn, lvar = "Y", lvyname, partner="1", type = "fixed")
+      ymean2 <- lmeans(dvn, lvar = "Y", lvyname, partner="2", type = "fixed")
+    }
+
+    if(any(constr_dy_xy_struct == "actors")){
+      actor1 <- sprintf("%s%s ~ a1*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist1"]])
+      actor2 <- sprintf("%s%s ~ a1*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist2"]])
+    }else if(any(constr_dy_xy_struct == "actor_zero")){
+      actor1 <- sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist1"]])
+      actor2 <- sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist2"]])
+    }else{
+      actor1 <- sprintf("%s%s ~~ a1*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist1"]])
+      actor2 <- sprintf("%s%s ~~ a2*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist2"]])
+    }
+
+    if(any(constr_dy_xy_struct == "dyadic_zero")){
+      dyadic <- sprintf("%sDy ~ 0*%sDy",lvyname,lvxname)
+    }else{
+      dyadic <- sprintf("%sDy ~ %sDy",lvyname,lvxname)
+    }
+    #Script Creation Syntax
+    script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Actor Effects\n%s\n%s\n\n#Latent Dyadic Effect\n%s\n\n",
+                      xloads1, xloads2, xloadsg,
+                      yloads1, yloads2, yloadsg,
+                      xints1, xints2,
+                      yints1, yints2,
+                      xres1, xres2,  yres1, yres2,
+                      xcoresids, ycoresids,
+                      xvar1, xvar2, xvarg,
+                      yvar1, yvar2, yvarg,
+                      xcovargxx1, xcovargxx2, xcovarx1x2,
+                      ycovargxx1, ycovargxx2, ycovarx1x2,
+                      xmean1, xmean2, xmeang,
+                      ymean1, ymean2, ymeang,
+                      actor1, actor2, dyadic)
+
+    #Write script to file if requested
+    if(isTRUE(writescript)){
+      dirs("scripts")
+      cat(script,"\n", file = sprintf("./scripts/%s_%s_cfm_x_%s_y_%s_xy_%s.txt",
+                                      lvxname, lvyname,
+                                      paste0(paste0(constr_dy_x_meas, collapse = "_"),
+                                             "_",
+                                             paste0(constr_dy_x_struct, collapse = "_"),
+                                             collapse = "_"),
+                                      paste0(paste0(constr_dy_y_meas, collapse = "_"),
+                                             "_",
+                                             paste0(constr_dy_y_struct, collapse = "_"),
+                                             collapse = "_"),
+                                      paste0(constr_dy_xy_struct, collapse = "_")))
+    }
+
+    return(script)
   }
 }

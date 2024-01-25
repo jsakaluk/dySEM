@@ -7,28 +7,58 @@ Fitting Bifactor Dyadic (BiDy) models}
 \usage{
 scriptBiDy(
   dvn,
+  type = "CFA",
   lvxname,
   lvyname,
-  type = "C",
-  model = "configural",
-  equate = "none",
+  constr_dy_x_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_x_struct = c("variances", "means"),
+  constr_dy_y_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_y_struct = c("variances", "means"),
+  constr_dy_xy_struct = c("actors", "partners"),
+  model = lifecycle::deprecated(),
+  equate = lifecycle::deprecated(),
   writescript = FALSE
 )
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
 
+\item{type}{input character to specify whether to script a BiDy-CFA ("CFA", default) or BiDy-SEM ("SEM") model}
+
 \item{lvxname}{input character to (arbitrarily) name LV X in lavaan syntax}
 
 \item{lvyname}{input character to (arbitrarily) name LV Y in lavaan syntax}
 
-\item{type}{input character used to specify what kind of BiDy model to specify ("C" for BiDy-C, or "S" for BiDy-S)}
+\item{constr_dy_x_meas}{input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
+Default is c("loadings", "intercepts", "residuals"),
+but user can specify any combination of "loadings", "intercepts", and "residuals",
+#or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
+boutique patterns of bifactor loading constraints with "loadings_source" or "loadings_mutual".}
 
-\item{model}{input character used to specify which level of invariance is
-modeled (for BiDys, options thus far are "loading", "loading_source", and "loading_releq"). Defaults to "configural".}
+\item{constr_dy_x_struct}{input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+Default is c("variances", "means"),
+but user can specify any combination of "variances" and "means", or "none".}
 
-\item{equate}{input character to specify which type of structural parameters
-("actor" = actor effects)}
+\item{constr_dy_y_meas}{input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
+Default is c("loadings", "intercepts", "residuals"),
+but user can specify any combination of "loadings", "intercepts", and "residuals",
+#or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
+boutique patterns of bifactor loading constraints with "loadings_source" or "loadings_mutual".}
+
+\item{constr_dy_y_struct}{input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+Default is c("variances", "means"),
+but user can specify any combination of "variances" and "means", or "none".}
+
+\item{constr_dy_xy_struct}{input character vector detailing which structural model parameters to constrain for modeling the predictive association(s) between
+partners' latent x and y. Default is c("actors", "partners"), but users can also specify "all", "actors_zero", "partners_zero", or "none".}
+
+\item{model}{Deprecated input character used to specify which level of invariance is
+modeled. Users should rely upon constr_dy_x_meas/constr_dy_y_meas and
+constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the measurement and/or structural portions of the model for latent x and y.}
+
+\item{equate}{Deprecated input character to specify which type of structural parameters
+are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
+constraints to the structural portion of the model for associative relationship between latent x and y.}
 
 \item{writescript}{input logical (default FALSE) for whether lavaan script should
 be concatenated and written to current working directory (in subdirectory "scripts")}
@@ -46,19 +76,14 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
 \examples{
 dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",
 x_delim2=".", distinguish_1="1", distinguish_2="2")
-sexsat.bidyc.config.script <- scriptBiDy(dvn, lvxname = "SexSat",
-model = "configural", type = "C")
-sexsat.bidyc.loadsource.script <- scriptBiDy(dvn, lvxname = "SexSat",
-model = "loading_source", type = "C")
-sexsat.bidyc.loadreleq.script <- scriptBiDy(dvn, lvxname = "SexSat",
-model = "loading_releq", type = "C")
 
+sexsat.bidyc.script <- scriptBiDy(dvn, lvxname = "SexSat", type = "CFA")
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 
 comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat",
-lvyname = "Com", model = "configural", type = "S")
+lvyname = "Com", type = "SEM")
 }
 \seealso{
 Other script-writing functions: 

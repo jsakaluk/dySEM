@@ -153,11 +153,11 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
     eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[["p1xvarnames"]][1])
     eta.x1 = list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]]=sprintf("lx%s*%s",i, dvn[["p1xvarnames"]][i])
+      eta.x1[[i]]=sprintf("lxg%s*%s",i, dvn[["p1xvarnames"]][i])
     }
     eta.x2 = list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x2[[i]]=sprintf("lx%s*%s",i, dvn[["p2xvarnames"]][i])
+      eta.x2[[i]]=sprintf("lxg%s*%s",i, dvn[["p2xvarnames"]][i])
     }
 
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
@@ -166,11 +166,11 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
     eta_x = sprintf("%sDy =~ NA*%s+",lvname, dvn[["p1yvarnames"]][1])
     eta.x1 = list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x1[[i]]=sprintf("ly%s*%s",i, dvn[["p1yvarnames"]][i])
+      eta.x1[[i]]=sprintf("lyg%s*%s",i, dvn[["p1yvarnames"]][i])
     }
     eta.x2 = list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x2[[i]]=sprintf("ly%s*%s",i, dvn[["p2yvarnames"]][i])
+      eta.x2[[i]]=sprintf("lgy%s*%s",i, dvn[["p2yvarnames"]][i])
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
@@ -461,6 +461,13 @@ lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
   }else if(partner == "g" & type == "free"){
     lvar <- sprintf("%sDy ~~ NA*%sDy",lvname,lvname)
     return(lvar)
+  }else if(partner == "g" & type == "equated_ff"){
+    if(lvar == "X"){
+      lvar <- sprintf("%sDy ~~ NA*%sDy + psix*%sDy",lvname, lvname, lvname)
+    }else if(lvar == "Y"){
+      lvar <- sprintf("%sDy ~~ NA*%sDy + psiy*%sDy",lvname, lvname, lvname)
+    }
+    return(lvar)
   }
 }
 
@@ -524,6 +531,13 @@ lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
     return(alpha)
   }else if(partner == "g" & type == "fixed"){
     alpha <- sprintf("%sDy ~ 0*1",lvname)
+    return(alpha)
+  }else if(partner == "g" & type == "equated_ff"){
+    if(lvar == "X"){
+      alpha <- sprintf("%sDy ~ 0*1 + alphax*1",lvname)
+    }else if(lvar == "Y"){
+      alpha <- sprintf("%sDy ~ 0*1 + alphay*1",lvname)
+    }
     return(alpha)
   }
 }
