@@ -7,8 +7,7 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/package=dySEM)
+<!--![![CRAN status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/package=dySEM)-->
 [![R-CMD-check](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/jsakaluk/dySEM/branch/master/graph/badge.svg?token=FFPNR3GOOB)](https://app.codecov.io/gh/jsakaluk/dySEM)
 [![CodeFactor](https://www.codefactor.io/repository/github/jsakaluk/dysem/badge/master)](https://www.codefactor.io/repository/github/jsakaluk/dysem/overview/master)
@@ -21,7 +20,7 @@ The `dySEM` helps automate the process of scripting, fitting, and
 reporting on latent models of dyadic data via
 [`lavaan`](https://lavaan.ugent.be). The package was developed and used
 in the course of the research described in [Sakaluk, Fisher, &
-Kilshaw](https://doi.org/10.1111/pere.12341) (2021).
+Kilshaw](https://psycnet.apa.org/record/2021-23304-001) (2021).
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
