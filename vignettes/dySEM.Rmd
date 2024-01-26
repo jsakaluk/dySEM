@@ -168,7 +168,7 @@ The scripting of longitudinal dyadic SEM models is not yet supported by `dySEM`,
 
 By design, we have attempted to avoid functionality pertaining to model-fitting and inspection in `dySEM`: `lavaan` does that perfectly well itself. We therefore strongly recommend that you cultivate a command of `lavaan`'s basic functionality before delving too far with `dySEM`--the package [tutorial website](https://lavaan.ugent.be/tutorial/index.html) is a very good place to get started.  
 
-You can immediately pass any script(s) returned from a `dySEM` scripter (e.g., `scriptCFA`) to your intended `lavaan` wrapper (we recommend `cfa`--be sure to disable any options that might fix parameters, as the scripter has already taken care of manually specifying which parameters to fix or estimate), with your preferred estimator and missing data treatment. For example, with dyadic invariance testing, we recommend starting with the most parsimonious model (an indistinguishable model), and gradually relaxing constraints on differnet groups of parameters:
+You can immediately pass any script(s) returned from a `dySEM` scripter (e.g., `scriptCFA`) to your intended `lavaan` wrapper (we recommend `cfa`--be sure to disable any options that might fix parameters, as the scripter has already taken care of manually specifying which parameters to fix or estimate), with your preferred estimator and missing data treatment. For example, with dyadic invariance testing, we recommend starting with the most parsimonious model (an indistinguishable model), and gradually relaxing constraints on different groups of parameters:
 
 ```{r modelfit, warning= FALSE}
 
