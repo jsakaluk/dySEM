@@ -22,8 +22,8 @@ The **normative invariance-testing ritual**, including for dyadic measurement mo
 This ritual can be consider flawed and/or problematic for at least three reasons: 
 
 1. The ritual begins with the specification of--and testing against--the *least* parsimonious dyadic measurement model, as opposed to the *most* parsimonious.
-1. The ritual involves the inverting of traditional null-hypothesis significance testing logic (under most circumstances, such that noninvariance is considered undesirable) 
-1. The ritual tacitly promotes a mindset where "distinguishability is the default", at the expense of indistinguishable dyad types (e.g., same-sex and/or same-gender couples) that have been historically excluded from relationship science
+2. The ritual involves the inverting of traditional null-hypothesis significance testing logic (under most circumstances, such that noninvariance is considered undesirable) 
+3. The ritual tacitly promotes a mindset where "distinguishability is the default", at the expense of indistinguishable dyad types (e.g., same-sex and/or same-gender couples) that have been historically excluded from relationship science
 
 ## A Lengthier Explanation
 
@@ -455,7 +455,7 @@ In `lavaan`, the process for carrying out these item-level noninvariance tests i
 - submit to it your model which resulted in significantly degraded fit (in this case, the model with invariant loadings + intercepts + residual variances), if you adopted the traditional sequence of invariance testing model comparisons (i.e., starting with the least parsimonious first), OR,
 - submit to it the first model that was usurped by a significantly better fitting model (also the invariant loadings + intercepts + residual variances model), if you adopted our proposed sequence of invariance testing model comparisons (i.e., starting with the most parsimonious first)
 
-Either approach will have you use the submit the same model to `lavTestScore`; the two merely differ in framing the considerations by which you select the appropriate model for `lavTestScore`. `lavTestScore` will thenreturn a list of each item-level constraint, and the amount of misfit introduced by them, the degree(s) of freedom gained by each constraint, and their *p*-values indicating whether their respective amount is significantly different from zero.  
+Either approach will have you use the submit the same model to `lavTestScore`; the two merely differ in framing the considerations by which you select the appropriate model for `lavTestScore`. `lavTestScore` will then return a list of each item-level constraint, and the amount of misfit introduced by them, the degree(s) of freedom gained by each constraint, and their *p*-values indicating whether their respective amount is significantly different from zero.  
 
 ```{r lavTestScores}
 
