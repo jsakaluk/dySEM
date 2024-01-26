@@ -14,7 +14,7 @@ scriptBiDy(
   constr_dy_x_struct = c("variances", "means"),
   constr_dy_y_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_y_struct = c("variances", "means"),
-  constr_dy_xy_struct = c("actors", "partners"),
+  constr_dy_xy_struct = c("actors"),
   model = lifecycle::deprecated(),
   equate = lifecycle::deprecated(),
   writescript = FALSE
@@ -50,7 +50,7 @@ Default is c("variances", "means"),
 but user can specify any combination of "variances" and "means", or "none".}
 
 \item{constr_dy_xy_struct}{input character vector detailing which structural model parameters to constrain for modeling the predictive association(s) between
-partners' latent x and y. Default is c("actors", "partners"), but users can also specify "all", "actors_zero", "partners_zero", or "none".}
+partners' latent x and y. Default is c("actors"), but users can also specify "dyadic_zero" or "none".}
 
 \item{model}{Deprecated input character used to specify which level of invariance is
 modeled. Users should rely upon constr_dy_x_meas/constr_dy_y_meas and

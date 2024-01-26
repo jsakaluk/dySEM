@@ -49,16 +49,17 @@ types of latent dyadic data models:
 
 1.  **Dyadic Confirmatory Factor Analysis**
 2.  **Latent Actor-Partner Interdependence Models (APIM)**
-3.  **I-SAT Models**
-4.  **I-NULL Models**
-5.  **Latent Common Fate Models (CFM)**
-6.  **Latent Bifactor Dyadic (Bi-Dy) Models**
-7.  **Observed Actor-Partner Interdependence (APIM)**
+3.  **Latent Common Fate Models (CFM)**
+4.  **Latent Bifactor Dyadic (Bi-Dy) Models**
+5.  **Observed Actor-Partner Interdependence (APIM)**
 
 Additional features currently include:
 
 - Automated specification of invariance constraints for any model,
   including full indistinguishability
+- Functions to assist with the specification of **I-SAT Models** and
+  **I-NULL Models** for calibrated model fit indexes with
+  indistinguishable dyad models
 - Functions to assist with reproducible creation of path diagrams and
   tables of statistical output
 - Functions to calculate supplemental statistical information (e.g.,
@@ -77,9 +78,8 @@ high-priority items include:
     functions
 3.  Multi-group dyadic model scripting (e.g., comparing models from
     samples of heterosexual vs. LGBTQ+ dyads)
-4.  Simulation functions to aid in sample size planning (in progress)
-5.  Unit test creation (in progress)
-6.  Uploading to CRAN
+4.  Covariate scripting and optionality
+5.  Improved ease of item selection in scraper functions
 
 ## Collaboration
 

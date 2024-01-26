@@ -50,8 +50,6 @@ The package currently provides functionality regarding the following types of la
 
 1. **Dyadic Confirmatory Factor Analysis** 
 1. **Latent Actor-Partner Interdependence Models (APIM)**
-1. **I-SAT Models**
-1. **I-NULL Models**
 1. **Latent Common Fate Models (CFM)**
 1. **Latent Bifactor Dyadic (Bi-Dy) Models**
 1. **Observed Actor-Partner Interdependence (APIM)**
@@ -59,6 +57,7 @@ The package currently provides functionality regarding the following types of la
 Additional features currently include:
 
 * Automated specification of invariance constraints for any model, including full indistinguishability
+* Functions to assist with the specification of **I-SAT Models** and **I-NULL Models** for calibrated model fit indexes with indistinguishable dyad models
 * Functions to assist with reproducible creation of path diagrams and tables of statistical output
 * Functions to calculate supplemental statistical information (e.g., omega reliability, noninvariance effect sizes, corrected model fit indexes)
 
@@ -69,9 +68,8 @@ Functionality targeted for future development of `dySEM` is tracked [here](https
 1. Longitudinal dyadic model scripting functions (e.g., curve of factors, common fate growth)
 1. Latent dyadic response surface analysis scripting and visualization functions
 1. Multi-group dyadic model scripting (e.g., comparing models from samples of heterosexual vs. LGBTQ+ dyads) 
-1. Simulation functions to aid in sample size planning (in progress)
-1. Unit test creation (in progress)
-1. Uploading to CRAN
+1. Covariate scripting and optionality
+1. Improved ease of item selection in scraper functions
 
 ## Collaboration
 

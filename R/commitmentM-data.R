@@ -2,7 +2,7 @@
 #'
 #'A data set containing 5 ratings of satisfaction and 5 ratings of commitment for each
 #'member of a mixed-sex romantic dyad. Measured using the Investment Model Scale subscales
-#'(Rusbult, Martz, & Agnew, 1998). Data are from Sakaluk, Fisher, and Kilshaw's (in press) study
+#'(Rusbult, Martz, & Agnew, 1998). Data are from Sakaluk, Fisher, and Kilshaw's (2021) study
 #'of dyadic invariance. Variable names have been re-coded to follow a stem-item-partner ("sip")
 #'order, with a delimiter ("_") between the item number and partner distinguishing character.
 #'
@@ -34,7 +34,7 @@
 #'  \item{com5_m}{Commitment items item 5 for male partner}
 #' }
 #'
-#'@references Sakaluk, J. K., Fisher, A. N., & Kilshaw, R. E.(in press). Dyadic measurement invariance and its importance for replicability in romantic relationship research. *Personal Relationships*.
+#'@references Sakaluk, J. K., Fisher, A. N., & Kilshaw, R. E.(2021). Dyadic measurement invariance and its importance for replicability in romantic relationship research. *Personal Relationships*, *28*(1), 190-226.  .
 #'
 #'
 "commitmentM"

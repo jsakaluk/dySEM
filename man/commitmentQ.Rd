@@ -34,13 +34,13 @@ data(commitmentQ)
 }
 \description{
 A data set containing 5 ratings of satisfaction and 5 ratings of commitment for each
-member of a same-sex romantic dyad. Measured using the Investment Model Scale subscales
-(Rusbult, Martz, & Agnew, 1998). Data are from analyses under review (Sakaluk, Fisher, and Kilshaw).
+member of a dyad in which one or more members identify as LGBTQ+. Measured using the Investment Model Scale subscales
+(Rusbult, Martz, & Agnew, 1998). Data are from Sakaluk, Fisher, and Kilshaw (2021).
 Variable names follow a stem-partner-item ("spi") order, with a delimiter (".") between
 the stem and distinguishing partner character, and another delimiter ("_") between the
 distinguishing partner character and item number.
 }
 \references{
-Sakaluk, J. K., Fisher, A. N., & Kilshaw, R. E.(in press). Dyadic measurement invariance and its importance for replicability in romantic relationship research. \emph{Personal Relationships}.
+Sakaluk, J. K., Fisher, A. N., & Kilshaw, R. E.(2021). Dyadic measurement invariance and its importance for replicability in romantic relationship research. \emph{Personal Relationships}, \emph{28}(1), 190-226.  .#'
 }
 \keyword{datasets}
