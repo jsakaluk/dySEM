@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,27 @@
       <small>Source: <a href="https://github.com/jsakaluk/dySEM/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="dysem-100">dySEM 1.0.0<a class="anchor" aria-label="anchor" href="#dysem-100"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0" id="dysem-10">dySEM 1.0<a class="anchor" aria-label="anchor" href="#dysem-10"></a></h2>
+<p>Marks the first release of dySEM on CRAN. From here on out, the NEWS.md file will be updated with each new release.</p>
+<div class="section level3">
+<h3 id="breaking-changes-1-0">BREAKING CHANGES<a class="anchor" aria-label="anchor" href="#breaking-changes-1-0"></a></h3>
+<ul><li>Implemented a new style of arguments for constraints on the measurement model (e.g., constr_dy_x_meas) and structural model (e.g., constr_dy_x_struct) for the scripters, in order to make addition of arguments for other design-based constraints (e.g., groups, waves of assessment) easier in future releases. These arguments replace the previous model and equate arguments in the scripters (which have been deprecated) and default to the most constrained (i.e., indistinguishable) version of the model being scripted.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="major-changes-1-0">Major Changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0"></a></h3>
+<ul><li><p>@omarjcamanto joins the dySEM team as a co-author! Omar has been a major contributor to the dySEM project during the Fall 2023 semester, and we are excited to have him on board moving forward.</p></li>
+<li><p>We now have unit tests! While coverage has taken a hit in our switch to the new arguments for constraints, there is a critical mass of tests in place for scrapeVarCross(), scriptCFA() and scriptAPIM(), and the scriptHelpers underlying them. For scriptCFA() and scriptAPIM(), there are specific tests ensuring the appropriate number of estimated parameters and dfs, and equivalent model fit for the FF and MV scale-setting versions (thanks to <a href="https://github.com/omarjcamanto" class="external-link">@omarjcamanto</a> for his work on these). We will continue to add tests for other functions in future releases, as well as a vignette explaining how we use number of estimated parameters and dfs, and model fit indexes in unit tests for quality assurance in dySEM’s model specification.</p></li>
+<li><p>We have added two new user-facing wrapper functions: getContraintTests() (which should help with more insights into what items are driving dyadic noninvariance), and getInvarCompTable() (which facilitates a more parsimony-favouring and inclusive “build-up” invariance testing sequence, beginning with most constrained model and relaxing constraints in a step-wise fashion).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-changes-1-0">Minor Changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-0"></a></h3>
+<ul><li>We have made a number of updates to our documentation and vignettes, in order to bring these into line with the BREAKING and Major changes of this release.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.3" id="dysem-003">dySEM 0.0.3<a class="anchor" aria-label="anchor" href="#dysem-003"></a></h2>
 </div>
