@@ -10,7 +10,7 @@ getInvarCompTable(mods)
 \item{mods}{a list of neted lavaan dyadic invariance models, in the order of residual, intercept, loading, configural}
 }
 \value{
-a table of model fit statistics for each model, as well as the difference in fit statistics between each model and the previous model
+a data frame of model fit statistics for each model, as well as the difference in fit statistics between each model and the previous model
 }
 \description{
 Compare model fit of nested dyadic invariance models in order from most parsimonious (residual) to least parsimonious (configural)

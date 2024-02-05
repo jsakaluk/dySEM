@@ -5,7 +5,7 @@
 #'
 #' @param dvn input dvn list from scrapeVarCross
 #' @param fit outputted dyadic cfa lavaan object based on the default (i.e., "configural") dyadCFA() function
-#' @return Calculated omega total coefficients for dyad Member 1 and Member 2
+#' @return a tibble/data frame with calculated omega total coefficients for dyad Member 1 and Member 2
 #' @export
 #' @family supplemental model calculators
 #' @examples

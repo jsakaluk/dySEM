@@ -12,7 +12,7 @@ getDyReliability(dvn, fit)
 \item{fit}{outputted dyadic cfa lavaan object based on the default (i.e., "configural") dyadCFA() function}
 }
 \value{
-Calculated omega total coefficients for dyad Member 1 and Member 2
+a tibble/data frame with calculated omega total coefficients for dyad Member 1 and Member 2
 }
 \description{
 This function takes the  model from fitted scriptCFA() scripts and returns omega total coefficients

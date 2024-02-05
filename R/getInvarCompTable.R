@@ -2,7 +2,7 @@
 #'
 #' @param mods a list of neted lavaan dyadic invariance models, in the order of residual, intercept, loading, configural
 #'
-#' @return a table of model fit statistics for each model, as well as the difference in fit statistics between each model and the previous model
+#' @return a data frame of model fit statistics for each model, as well as the difference in fit statistics between each model and the previous model
 #' @export
 #'
 #' @examples
