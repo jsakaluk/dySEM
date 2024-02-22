@@ -12,7 +12,7 @@ outputModel(
   tabletype = NULL,
   figure = TRUE,
   figtype = NULL,
-  writeout = FALSE
+  writeout = NA
 )
 }
 \arguments{
@@ -33,8 +33,9 @@ options are "measurement" (i.e,, loadings, intercepts,),
 
 \item{figtype}{character input of what type of figure is desired}
 
-\item{writeout}{logical (default is FALSE) for whether outputted table and/or figure
-should be written to an output subdirectory in current working directory}
+\item{writeout}{A character string specifying a directory path to where the output file(s) should be written.
+If set to “.”, the output files will be written to the current working directory.
+The default is NA, which will throw an error.}
 }
 \value{
 Ignore console (prints unnecessary semPlot::semPaths details). More importantly,
@@ -54,7 +55,7 @@ constr_dy_struct = "none")
 sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
 auto.fix.first= FALSE, meanstructure = TRUE)
 outputModel(dvnx, model = "cfa", fit = sat.config.mod, table = TRUE,
-tabletype = "measurement", figure = "TRUE", figtype = "standardized")
+tabletype = "measurement", figure = "TRUE", figtype = "standardized", writeout = tempdir())
 dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
@@ -65,5 +66,5 @@ apim.indist.mod <- lavaan::cfa(apim.indist.script, data = commitmentQ, std.lv = 
 auto.fix.first= FALSE, meanstructure = TRUE)
 
 outputModel(dvnxy, model = "apim", fit = apim.indist.mod, table = TRUE,
-tabletype = "measurement", figure = "TRUE", figtype = "standardized")
+tabletype = "measurement", figure = "TRUE", figtype = "standardized", writeout = tempdir())
 }

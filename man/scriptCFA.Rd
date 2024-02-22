@@ -37,7 +37,7 @@ modeled ("configural", "loading", "intercept", "residual", or "indist"). Users s
 constr_dy_struct instead, for making constraints to the measurement and/or structural portions of the model.}
 
 \item{writescript}{input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")}
+be concatenated and written to current working directory}
 }
 \value{
 character object of lavaan script that can be passed immediately to

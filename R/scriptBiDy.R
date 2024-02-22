@@ -34,7 +34,7 @@
 #' are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
 #' constraints to the structural portion of the model for associative relationship between latent x and y.
 #' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' be concatenated and written to current working directory
 #' @importFrom rlang .data
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
@@ -185,8 +185,8 @@ scriptBiDy <- function(dvn, type = "CFA", lvxname, lvyname,
 
     #Write script to file if requested
     if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(script,"\n", file = sprintf("./scripts/%s_bidyc_meas_%s_struct_%s.txt",lvxname, paste0(constr_dy_x_meas, collapse = "_"), paste0(constr_dy_x_struct, collapse = "_")))
+      
+      cat(script,"\n", file = sprintf("./%s_bidyc_meas_%s_struct_%s.txt",lvxname, paste0(constr_dy_x_meas, collapse = "_"), paste0(constr_dy_x_struct, collapse = "_")))
     }
 
     return(script)
@@ -255,22 +255,22 @@ scriptBiDy <- function(dvn, type = "CFA", lvxname, lvyname,
 
     #loadings for Y
     if(any(constr_dy_y_meas == "loadings")){
-      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "equated")
-      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "equated")
-      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "equated")
+      yloadsg <- loads(dvn, lvar = "Y", lvyname, partner = "g", type = "equated")
+      yloads1 <- loads(dvn, lvar = "Y",lvyname, partner="1", type = "equated")
+      yloads2 <- loads(dvn, lvar = "Y",lvyname, partner="2", type = "equated")
     }
     else if(any(constr_dy_y_meas == "loading_source")){
-      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "equated_source")
-      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "equated_source")
-      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "equated_source")
+      yloadsg <- loads(dvn, lvar = "Y", lvyname, partner = "g", type = "equated_source")
+      yloads1 <- loads(dvn, lvar = "Y",lvyname, partner="1", type = "equated_source")
+      yloads2 <- loads(dvn, lvar = "Y",lvyname, partner="2", type = "equated_source")
     }else if(any(constr_dy_y_meas == "loading_mutual")){
-      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "equated")
-      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "free")
-      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "free")
+      yloadsg <- loads(dvn, lvar = "Y", lvyname, partner = "g", type = "equated")
+      yloads1 <- loads(dvn, lvar = "Y",lvyname, partner="1", type = "free")
+      yloads2 <- loads(dvn, lvar = "Y",lvyname, partner="2", type = "free")
     }else{
-      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "free")
-      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "free")
-      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "free")
+      yloadsg <- loads(dvn, lvar = "Y", lvyname, partner = "g", type = "free")
+      yloads1 <- loads(dvn, lvar = "Y",lvyname, partner="1", type = "free")
+      yloads2 <- loads(dvn, lvar = "Y",lvyname, partner="2", type = "free")
     }
 
     #intercepts for X
@@ -430,8 +430,8 @@ scriptBiDy <- function(dvn, type = "CFA", lvxname, lvyname,
 
     #Write script to file if requested
     if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(script,"\n", file = sprintf("./scripts/%s_%s_cfm_x_%s_y_%s_xy_%s.txt",
+      
+      cat(script,"\n", file = sprintf("./%s_%s_cfm_x_%s_y_%s_xy_%s.txt",
                                       lvxname, lvyname,
                                       paste0(paste0(constr_dy_x_meas, collapse = "_"),
                                              "_",

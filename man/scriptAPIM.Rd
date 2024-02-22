@@ -65,7 +65,7 @@ calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and r
 a loading-invariant model to be specified, otherwise a warning is returned.}
 
 \item{writescript}{input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")}
+be concatenated and written to current working directory}
 }
 \value{
 character object of lavaan script that can be passed immediately to

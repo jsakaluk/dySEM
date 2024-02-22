@@ -37,7 +37,7 @@
 #' calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
 #' a loading-invariant model to be specified, otherwise a warning is returned.
 #' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' be concatenated and written to current working directory
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
@@ -384,8 +384,8 @@ scriptMIM <- function(dvn, scaleset = "FF",
 
   #Write script to file if requested
   if(isTRUE(writescript)){
-    dirs("scripts")
-    cat(script,"\n", file = sprintf("./scripts/%s_%s_apim_x_%s_y_%s_xy_%s.txt",
+    
+    cat(script,"\n", file = sprintf("./%s_%s_apim_x_%s_y_%s_xy_%s.txt",
                                     lvxname, lvyname,
                                     paste0(paste0(constr_dy_x_meas, collapse = "_"),
                                            "_",

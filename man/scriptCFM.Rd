@@ -56,7 +56,7 @@ modeled. Users should rely upon constr_dy_x_meas/constr_dy_y_meas and
 constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the measurement and/or structural portions of the model for latent x and y.}
 
 \item{writescript}{input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")}
+be concatenated and written to current working directory}
 }
 \value{
 character object of lavaan script that can be passed immediately to

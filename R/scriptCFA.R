@@ -33,7 +33,7 @@
 #' modeled ("configural", "loading", "intercept", "residual", or "indist"). Users should rely upon constr_dy_meas and
 #' constr_dy_struct instead, for making constraints to the measurement and/or structural portions of the model.
 #' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' be concatenated and written to current working directory
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on
@@ -210,8 +210,8 @@ scriptCFA <- function(dvn, scaleset = "FF", lvname = "X",
 
   #Write script to file if requested
   if(isTRUE(writescript)){
-    dirs("scripts")
-    cat(script,"\n", file = sprintf("./scripts/%s_dcfa_meas_%s_struct_%s.txt",lvname, paste0(constr_dy_meas, collapse = "_"), paste0(constr_dy_struct, collapse = "_")))
+    
+    cat(script,"\n", file = sprintf("./%s_dcfa_meas_%s_struct_%s.txt",lvname, paste0(constr_dy_meas, collapse = "_"), paste0(constr_dy_struct, collapse = "_")))
   }
 
   return(script)

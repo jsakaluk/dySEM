@@ -8,7 +8,7 @@
 #' @param lvxname input character to (arbitrarily) name X LV in lavaan syntax
 #' @param lvyname (optional) input character to (arbitrarily) name Y LV in lavaan syntax
 #' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' be concatenated and written to current working directory
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on
@@ -96,8 +96,8 @@ scriptINULL = function(dvn, lvxname = "X", lvyname = NULL, writescript =FALSE){
                            covars)
 
     if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(INULL.script,"\n", file = sprintf("./scripts/%s_INULL.txt",lvxname))
+      
+      cat(INULL.script,"\n", file = sprintf("./%s_INULL.txt",lvxname))
     }
 
   }else if(length(dvn) == 9){
@@ -107,8 +107,8 @@ scriptINULL = function(dvn, lvxname = "X", lvyname = NULL, writescript =FALSE){
                            covars)
 
     if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(INULL.script,"\n", file = sprintf("./scripts/%s_%s_INULL.txt",lvxname, lvyname))
+      
+      cat(INULL.script,"\n", file = sprintf("./%s_%s_INULL.txt",lvxname, lvyname))
     }
   }
 

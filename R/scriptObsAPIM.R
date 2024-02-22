@@ -9,7 +9,7 @@
 #' @param k input logical for whether Kenny & Ledermann's (2010) k parameter should be
 #' calculated to characterize the dyadic pattern in the APIM. Default to FALSE
 #' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' be concatenated and written to current working directory
 #'
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions.
@@ -99,7 +99,7 @@ scriptObsAPIM <- function(X1 = NULL, Y1 = NULL,
   }
 
   if(isTRUE(writescript)){
-    cat(apimScript,"\n", file = sprintf("./scripts/observed_apim_equate_%s_k_%s.txt",equate, k))
+    cat(apimScript,"\n", file = sprintf("./observed_apim_equate_%s_k_%s.txt",equate, k))
   }
 
   return(apimScript)

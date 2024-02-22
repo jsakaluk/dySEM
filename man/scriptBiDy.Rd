@@ -61,7 +61,7 @@ are constrained to equivalency between partners. Users should rely upon constr_d
 constraints to the structural portion of the model for associative relationship between latent x and y.}
 
 \item{writescript}{input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")}
+be concatenated and written to current working directory}
 }
 \value{
 character object of lavaan script that can be passed immediately to

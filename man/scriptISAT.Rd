@@ -15,7 +15,7 @@ scriptISAT(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE)
 \item{lvyname}{(optional) input character to (arbitrarily) name X LV in lavaan syntax}
 
 \item{writescript}{input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")}
+be concatenated and written to current working directory}
 }
 \value{
 character object of lavaan script that can be passed immediately to

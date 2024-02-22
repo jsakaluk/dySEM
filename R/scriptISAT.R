@@ -8,7 +8,7 @@
 #' @param lvxname input character to (arbitrarily) name X LV in lavaan syntax
 #' @param lvyname (optional) input character to (arbitrarily) name X LV in lavaan syntax
 #' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' be concatenated and written to current working directory
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on
@@ -313,8 +313,8 @@ scriptISAT = function(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE){
                           xfree.cor)
 
     if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(ISAT.script,"\n", file = sprintf("./scripts/%s_ISAT.txt",lvxname))
+      
+      cat(ISAT.script,"\n", file = sprintf("./%s_ISAT.txt",lvxname))
     }
 
   }else if(length(dvn) == 9){
@@ -326,8 +326,8 @@ scriptISAT = function(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE){
                           xfree.cor, yfree.cor)
 
     if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(ISAT.script,"\n", file = sprintf("./scripts/%s_%s_ISAT.txt",lvxname, lvyname))
+      
+      cat(ISAT.script,"\n", file = sprintf("./%s_%s_ISAT.txt",lvxname, lvyname))
       }
 
   }
