@@ -195,7 +195,9 @@ path diagrams and/or tables of statistical values.
 ``` r
 outputModel(dvn, model = "cfa", fit = qual.indist.fit, 
             table = TRUE, tabletype = "measurement", 
-            figure = TRUE, figtype = "unstandardized")
+            figure = TRUE, figtype = "unstandardized",
+            writeTo = tempdir(),
+            fileName = "dCFA_indist")
 ```
 
 ## Code of Conduct

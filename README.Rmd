@@ -147,7 +147,9 @@ summary(qual.indist.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRU
 ```{r outputModel, eval = FALSE}
 outputModel(dvn, model = "cfa", fit = qual.indist.fit, 
             table = TRUE, tabletype = "measurement", 
-            figure = TRUE, figtype = "unstandardized")
+            figure = TRUE, figtype = "unstandardized",
+            writeTo = tempdir(),
+            fileName = "dCFA_indist")
 ```
 
 ## Code of Conduct

@@ -12,7 +12,8 @@ outputModel(
   tabletype = NULL,
   figure = TRUE,
   figtype = NULL,
-  writeout = FALSE
+  writeTo = tempdir(),
+  fileName = NULL
 )
 }
 \arguments{
@@ -33,8 +34,14 @@ options are "measurement" (i.e,, loadings, intercepts,),
 
 \item{figtype}{character input of what type of figure is desired}
 
-\item{writeout}{logical (default is FALSE) for whether outputted table and/or figure
-should be written to an output subdirectory in current working directory}
+\item{writeTo}{A character string specifying a directory path to where the file(s) should be saved.
+If set to “.”, the file(s) will be written to the current working directory.
+The default is a path to a temporary directory created by tempdir().}
+
+\item{fileName}{A character string specifying a desired base name for the output file(s).
+If a \code{fileName} not provided (i.e., "fileName = NULL"), then defaults will be used
+(e.g., "dySEM_table"/"dySEM_table_Measurement"/"dySEM_table_Structural for tables; "dySEM_figure" for figures).
+The specified name will be automatically appended with the appropriate file extension (i.e., .rtf for tables; .png for figures).}
 }
 \value{
 Ignore console (prints unnecessary semPlot::semPaths details). More importantly,
@@ -43,6 +50,10 @@ prints word files for the table(s) and/or figure, outputted to the users working
 \description{
 This function takes the  model from fitted dySEM() scripts and
 exports table(s) and/or a path diagram figure of expected output.
+}
+\details{
+If a file with the same name already exists in the user's chosen directory,
+it will be overwritten.
 }
 \examples{
 dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
@@ -53,8 +64,10 @@ constr_dy_struct = "none")
 
 sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
 auto.fix.first= FALSE, meanstructure = TRUE)
+
 outputModel(dvnx, model = "cfa", fit = sat.config.mod, table = TRUE,
-tabletype = "measurement", figure = "TRUE", figtype = "standardized")
+tabletype = "measurement", figure = "TRUE", figtype = "standardized", 
+writeTo = tempdir(), fileName = "dCFA_configural")
 dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
@@ -65,5 +78,6 @@ apim.indist.mod <- lavaan::cfa(apim.indist.script, data = commitmentQ, std.lv = 
 auto.fix.first= FALSE, meanstructure = TRUE)
 
 outputModel(dvnxy, model = "apim", fit = apim.indist.mod, table = TRUE,
-tabletype = "measurement", figure = "TRUE", figtype = "standardized")
+tabletype = "measurement", figure = "TRUE", figtype = "standardized", 
+writeTo = tempdir(), fileName = "APIM_indist")
 }

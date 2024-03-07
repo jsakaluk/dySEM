@@ -8,6 +8,11 @@
 #' @param model type of fitted dyadic model (i.e., "apim", "bidyc", "bidys","cfa", "cfm", "mim")
 #' @param tabletype kind of parameter estimates requested (i.e. from "measurement" or "structural" model)
 #' @param type input character for sempaths to indicate whether parameters "free" or "equated" in estimation
+#' @param writeTo A character string specifying a directory path to where the file(s) should be saved.
+#' The default is a path to a temporary directory created by tempdir().
+#' @param fileName A character string specifying a desired base name for the output file(s). 
+#' If a `fileName` not provided (i.e., "fileName = NULL"), then defaults will be used 
+#' The specified name will be automatically appended with the appropriate file extension (i.e., .png for figures). 
 #' @family helpers
 #' @noRd
 
@@ -166,27 +171,56 @@ makeTable <- function(dvn, fit, model, tabletype){
 #' @rdname outHelpers
 #' @noRd
 
-makeFigure <- function(fit, type){
-  if(type == "raw"){
-    semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
-                                 curvePivot = F, intercepts = F,
-                                 edge.color = "black", filetype = "png", filename = sprintf("output/figures/%s unstd", stringr::str_remove_all(as.character(fit@call$model), "[.]")
-                                 ), weighted = F,
-                                 edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+makeFigure <- function(fit, type, writeTo, fileName){
+  #user provides fileName
+  if(!is.null(fileName)){
+    
+    if(type == "raw"){
+      semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
+                                   curvePivot = F, intercepts = F,
+                                   edge.color = "black", filetype = "png", filename = sprintf("%s/%s unstd", writeTo, fileName
+                                   ), weighted = F,
+                                   edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+    }
+    else if(type == "std"){
+      semplot <- semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
+                                   curvePivot = F, intercepts = F,
+                                   edge.color = "black", filetype = "png", filename = sprintf("%s/%s std", writeTo, fileName
+                                   ), weighted = F,
+                                   edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+    }
+    else if(type == "lab"){
+      semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
+                                   curvePivot = F, intercepts = T,
+                                   edge.color = "black", filetype = "png", filename = sprintf("%s/%s lab", writeTo, fileName
+                                   ), weighted = F,
+                                   edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+    }
   }
-  else if(type == "std"){
-    semplot <- semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
-                                 curvePivot = F, intercepts = F,
-                                 edge.color = "black", filetype = "png", filename = sprintf("output/figures/%s std", stringr::str_remove_all(as.character(fit@call$model), "[.]")
-                                 ), weighted = F,
-                                 edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+  
+  #default
+  if(is.null(fileName)){
+    
+    if(type == "raw"){
+      semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
+                                   curvePivot = F, intercepts = F,
+                                   edge.color = "black", filetype = "png", filename = sprintf("%s/dySEM_figure unstd", writeTo),
+                                   weighted = F,
+                                   edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+    }
+    else if(type == "std"){
+      semplot <- semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
+                                   curvePivot = F, intercepts = F,
+                                   edge.color = "black", filetype = "png", filename = sprintf("%s/dySEM_figure std", writeTo), weighted = F,
+                                   edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+    }
+    else if(type == "lab"){
+      semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
+                                   curvePivot = F, intercepts = T,
+                                   edge.color = "black", filetype = "png", filename = sprintf("%s/dySEM_figure lab", writeTo), weighted = F,
+                                   edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+    }
   }
-  else if(type == "lab"){
-    semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
-                                 curvePivot = F, intercepts = T,
-                                 edge.color = "black", filetype = "png", filename = sprintf("output/figures/%s lab", stringr::str_remove_all(as.character(fit@call$model), "[.]")
-                                 ), weighted = F,
-                                 edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
-  }
+  
   return(semplot)
 }

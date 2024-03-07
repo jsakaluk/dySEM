@@ -210,7 +210,7 @@ You can learn about what other kinds of detail you can extract from a fitted `la
 
 The `outputModel` function is currently `dySEM`'s all-purpose outputting function. 
 
-The useR must specify the `dvn` of scraped variables used to script the model and the type of model being outputted (e.g., "cfa"). UseRs can specify whether they only want a path diagram or some table(s) to be outputted (e.g., by setting either `figure = FALSE` or `table = FALSE`), but by default both are created and written to an `output` folder in your working directory. UseRs can further specify what kind of path diagram (e.g., using standardized or unstandardized value) or tables (e.g., featuring measurement- or structural-model parameter, or both) are created.
+The useR must specify the `dvn` of scraped variables used to script the model and the type of model being outputted (e.g., "cfa"). UseRs can specify whether they only want a path diagram or some table(s) to be outputted (e.g., by setting either `figure = FALSE` or `table = FALSE`), but by default both are created. UseRs can specify a directory path to where they want their file(s) to be written and saved (e.g., setting `writeTo = "."` to save in the current working directory). UseRs can further specify what kind of path diagram (e.g., using standardized or unstandardized value) or tables (e.g., featuring measurement- or structural-model parameter, or both) are created.
 
 Whatever options the useR specifies, `outputModel` is typically run without assigning its output to an object, as it's mostly to facilitate statistical reporting for scientific articles: 
 
@@ -218,5 +218,6 @@ Whatever options the useR specifies, `outputModel` is typically run without assi
 ```{r dyoutput, eval = FALSE}
 outputModel(dvn, model = "cfa", fit = qual.config.fit, 
             table = TRUE, tabletype = "measurement", 
-            figure = TRUE, figtype = "unstandardized")
+            figure = TRUE, figtype = "unstandardized",
+            writeTo = tempdir(), fileName = "dCFA_config")
 ```
