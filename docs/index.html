@@ -228,11 +228,13 @@
 <div class="section level3">
 <h3 id="id_5-output-statistical-visualizations-andor-tables">5. <strong>Output</strong> statistical visualizations and/or tables<a class="anchor" aria-label="anchor" href="#id_5-output-statistical-visualizations-andor-tables"></a>
 </h3>
-<p><code>dySEM</code> also contains functionality to help you quickly, correctly, and reproducibly generate output from your fitted model(s), in the forms of path diagrams and/or tables of statistical values.</p>
+<p><code>dySEM</code> also contains functionality to help you quickly, correctly, and reproducibly generate output from your fitted model(s), in the forms of path diagrams and/or tables of statistical values. By default these save to a temporary directory, but you can specify a directory of your choice by replacing <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> (e.g., with <code>"."</code>, which will place it in your current working directory).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/outputModel.html">outputModel</a></span><span class="op">(</span><span class="va">dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">qual.indist.fit</span>, </span>
 <span>            table <span class="op">=</span> <span class="cn">TRUE</span>, tabletype <span class="op">=</span> <span class="st">"measurement"</span>, </span>
-<span>            figure <span class="op">=</span> <span class="cn">TRUE</span>, figtype <span class="op">=</span> <span class="st">"unstandardized"</span><span class="op">)</span></span></code></pre></div>
+<span>            figure <span class="op">=</span> <span class="cn">TRUE</span>, figtype <span class="op">=</span> <span class="st">"unstandardized"</span>,</span>
+<span>            writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            fileName <span class="op">=</span> <span class="st">"dCFA_indist"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

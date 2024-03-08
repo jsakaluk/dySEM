@@ -81,7 +81,8 @@ measurement models for either a specified X or Y factor.</p>
 <span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
 <span>  constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>,</span>
 <span>  model <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  writescript <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  fileName <span class="op">=</span> <span class="st">"dCFA_script"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,9 +120,16 @@ modeled ("configural", "loading", "intercept", "residual", or "indist"). Users s
 constr_dy_struct instead, for making constraints to the measurement and/or structural portions of the model.</p></dd>
 
 
-<dt>writescript</dt>
-<dd><p>input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")</p></dd>
+<dt>writeTo</dt>
+<dd><p>A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+If set to “.”, the .txt file will be written to the current working directory.
+The default is a path to a temporary directory created by tempdir().</p></dd>
+
+
+<dt>fileName</dt>
+<dd><p>A character string specifying a desired base name for the .txt output file.
+The default is "dCFA_script". The specified name will be automatically appended with the .txt file extension.
+If a file with the same name already exists in the user's chosen directory, it will be overwritten.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -170,19 +178,27 @@ non-invariant measurement parameters, following a the rejection of an omnibus
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.resids.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
 <span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>fileName <span class="op">=</span> <span class="st">"dCFA_residual"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.ints.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
 <span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>fileName <span class="op">=</span> <span class="st">"dCFA_intercept"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.loads.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
 <span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>fileName <span class="op">=</span> <span class="st">"dCFA_loading"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.config.script</span> <span class="op">&lt;-</span> <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
 <span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>,</span></span>
-<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>fileName <span class="op">=</span> <span class="st">"dCFA_configural"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -190,7 +190,10 @@ summary(qual.indist.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRU
 
 `dySEM` also contains functionality to help you quickly, correctly, and
 reproducibly generate output from your fitted model(s), in the forms of
-path diagrams and/or tables of statistical values.
+path diagrams and/or tables of statistical values. By default these save
+to a temporary directory, but you can specify a directory of your choice
+by replacing `tempdir()` (e.g., with `"."`, which will place it in your
+current working directory).
 
 ``` r
 outputModel(dvn, model = "cfa", fit = qual.indist.fit, 
