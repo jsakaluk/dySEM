@@ -7,8 +7,12 @@
 #' @param dvn input dvn list from scrapeVarCross
 #' @param lvxname input character to (arbitrarily) name X LV in lavaan syntax
 #' @param lvyname (optional) input character to (arbitrarily) name X LV in lavaan syntax
-#' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' @param writeTo A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+#' If set to “.”, the .txt file will be written to the current working directory.
+#' The default is a path to a temporary directory created by tempdir().
+#' @param fileName A character string specifying a desired base name for the .txt output file.
+#' The default is "I-SAT_script". The specified name will be automatically appended with the .txt file extension.
+#' If a file with the same name already exists in the user's chosen directory, it will be overwritten.
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on
@@ -17,8 +21,13 @@
 #' @examples
 #' dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_",
 #' x_delim2=".", x_item_num="\\d+", distinguish_1="1", distinguish_2="2")
-#' qual.isat.script <- scriptISAT(dvn, lvxname = "Qual")
-scriptISAT = function(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE){
+#' 
+#' qual.isat.script <- scriptISAT(dvn, lvxname = "Qual",
+#' writeTo = tempdir(),
+#' fileName = "I-SAT_script")
+scriptISAT = function(dvn, lvxname = "X", lvyname = NULL, 
+                      writeTo = tempdir(),
+                      fileName = "I-SAT_script"){
 
   #Intercepts equated between partners
   xints1 = intercepts(dvn, lvar = "X", partner = "1", type  = "equated")
@@ -303,6 +312,20 @@ scriptISAT = function(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE){
     yfree.cor = paste(yfree.cor, collapse = "\n")
   }
 
+  
+  
+  
+  # checking for valid directory path and fileName
+  if (!is.character(writeTo)){
+    stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
+  }
+  if (!dir.exists(writeTo)){ 
+    stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+  }
+  if (!is.character(fileName)){
+    stop("The `fileName` argument must be a character string.")
+  }
+  
   #Script Creation Syntax
   if(length(dvn) == 6){
     ISAT.script = sprintf("#Constrained Means\n%s\n%s\n\n#Constrained Variances\n%s\n%s\n\n#Constrained Intrapersonal Covariances\n%s\n\n\n%s\n\n#Constrained Interpersonal Covariancesn\n%s\n\n%s\n\n#Estimate Same-Indicator Covariances\n%s",
@@ -312,11 +335,11 @@ scriptISAT = function(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE){
                           xinter1covs, xinter2covs,
                           xfree.cor)
 
-    if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(ISAT.script,"\n", file = sprintf("./scripts/%s_ISAT.txt",lvxname))
-    }
-
+    cat(ISAT.script,"\n", 
+        file = sprintf("%s/%s.txt",
+                       writeTo, 
+                       fileName))
+    
   }else if(length(dvn) == 9){
     ISAT.script = sprintf("#Constrained Means\n%s\n%s\n\n%s\n%s\n\n#Constrained Variances\n%s\n%s\n\n%s\n%s\n\n#Constrained Intrapersonal Covariances\n%s\n\n\n%s\n\n%s\n\n\n%s\n\n#Constrained Interpersonal Covariancesn\n%s\n\n%s\n\n%s\n\n%s\n\n#Estimate Same-Indicator Covariances\n%s\n\n%s",
                           xints1, xints2, yints1, yints2,
@@ -325,11 +348,11 @@ scriptISAT = function(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE){
                           xinter1covs, xinter2covs, yinter1covs, yinter2covs,
                           xfree.cor, yfree.cor)
 
-    if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(ISAT.script,"\n", file = sprintf("./scripts/%s_%s_ISAT.txt",lvxname, lvyname))
-      }
-
+    cat(ISAT.script,"\n", 
+        file = sprintf("%s/%s.txt",
+                       writeTo, 
+                       fileName))
+    
   }
 
   return(ISAT.script)

@@ -70,7 +70,7 @@ apim.script.config <-  scriptAPIM(dvn, #the list we just created from scrapeVarC
                                   constr_dy_y_struct = "none", #no structural constraints for latent y
                                   constr_dy_xy_struct = "none", #no constrained actor and/or partner effects
                                   est_k = TRUE,#want k-parameter? (optional, but nice)
-                                  writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
+                                  writeTo = tempdir(), fileName = "APIM_script_config") #want script saved to directory? (e.g., for OSF?)
 
 apim.fit.config <- cfa(apim.script.config, 
                                data = dat,
@@ -150,7 +150,7 @@ apim.script.config <-  scriptAPIM(dvn, #the list we just created from scrapeVarC
                                   constr_dy_y_struct = "none", #no structural constraints for latent y
                                   constr_dy_xy_struct = "none", #no constrained actor and/or partner effects
                                   est_k = TRUE,#want k-parameter? (optional, but nice)
-                                  writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
+                                  writeTo = tempdir(), fileName = "APIM_script_config") #want script saved to directory? (e.g., for OSF?)
 
 ```
 
@@ -214,7 +214,7 @@ apim.script.config.actpart <-  scriptAPIM(dvn, #the list we just created from sc
                                   constr_dy_y_struct = "none", #no structural constraints for latent y
                                   constr_dy_xy_struct = c("actors", "partners"), # constrained actor and/or partner effects
                                   est_k = TRUE,#want k-parameter? (optional, but nice)
-                                  writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
+                                  writeTo = tempdir(), fileName = "APIM_script_config") #want script saved to directory? (e.g., for OSF?)
 
 ```
 
@@ -231,7 +231,7 @@ apim.script.loads.actpart <-  scriptAPIM(dvn, #the list we just created from scr
                                   constr_dy_y_struct = "none", #no structural constraints for latent y
                                   constr_dy_xy_struct = c("actors", "partners"), # constrained actor and/or partner effects
                                   est_k = TRUE,#want k-parameter? (optional, but nice)
-                                  writescript = FALSE) #want script saved to directory? (e.g., for OSF?)
+                                  writeTo = tempdir(), fileName = "APIM_script_loading") #want script saved to directory? (e.g., for OSF?)
 
 apim.fit.loads.eq.all <- cfa(apim.script.loads.actpart, 
                                data = commitmentQ,

@@ -18,7 +18,8 @@ scriptMIM(
   model = lifecycle::deprecated(),
   equate = lifecycle::deprecated(),
   est_k = FALSE,
-  writescript = FALSE
+  writeTo = tempdir(),
+  fileName = "MIM_script"
 )
 }
 \arguments{
@@ -64,8 +65,13 @@ constraints to the structural portion of the model for associative relationship 
 calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
 a loading-invariant model to be specified, otherwise a warning is returned.}
 
-\item{writescript}{input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")}
+\item{writeTo}{A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+If set to “.”, the .txt file will be written to the current working directory.
+The default is a path to a temporary directory created by tempdir().}
+
+\item{fileName}{A character string specifying a desired base name for the .txt output file.
+The default is "MIM_script". The specified name will be automatically appended with the .txt file extension.
+If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -85,7 +91,9 @@ dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_de
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 
-mim.script.indist <- scriptMIM(dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
+mim.script.indist <- scriptMIM(dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE,
+writeTo = tempdir(),
+fileName = "MIM_indist")
 }
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on

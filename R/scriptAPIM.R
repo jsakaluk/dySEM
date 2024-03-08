@@ -36,8 +36,12 @@
 #' @param est_k input logical for whether Kenny & Ledermann's (2010) k parameter should be
 #' calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
 #' a loading-invariant model to be specified, otherwise a warning is returned.
-#' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' @param writeTo A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+#' If set to “.”, the .txt file will be written to the current working directory.
+#' The default is a path to a temporary directory created by tempdir().
+#' @param fileName A character string specifying a desired base name for the .txt output file.
+#' The default is "latAPIM_script". The specified name will be automatically appended with the .txt file extension.
+#' If a file with the same name already exists in the user's chosen directory, it will be overwritten.
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
@@ -49,7 +53,9 @@
 #' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 #' x_delim2="_", distinguish_1="1", distinguish_2="2",
 #' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
-#' apim.script.indist <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
+#' apim.script.indist <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE,
+#' writeTo = tempdir(),
+#' fileName = "latAPIM_indist")
 
 scriptAPIM <- function(dvn, scaleset = "FF",
                        lvxname, lvyname,
@@ -59,7 +65,8 @@ scriptAPIM <- function(dvn, scaleset = "FF",
                        constr_dy_y_struct = c("variances", "means"),
                        constr_dy_xy_struct = c("actors", "partners"),
                        model = lifecycle::deprecated(), equate = lifecycle::deprecated(), est_k = FALSE,
-                       writescript = FALSE){
+                       writeTo = tempdir(),
+                       fileName = "latAPIM_script"){
 
 
   #stop if model is provided
@@ -381,20 +388,22 @@ scriptAPIM <- function(dvn, scaleset = "FF",
   }
 
   #Write script to file if requested
-  if(isTRUE(writescript)){
-    dirs("scripts")
-    cat(script,"\n", file = sprintf("./scripts/%s_%s_apim_x_%s_y_%s_xy_%s.txt",
-                                    lvxname, lvyname,
-                                    paste0(paste0(constr_dy_x_meas, collapse = "_"),
-                                           "_",
-                                           paste0(constr_dy_x_struct, collapse = "_"),
-                                           collapse = "_"),
-                                    paste0(paste0(constr_dy_y_meas, collapse = "_"),
-                                           "_",
-                                           paste0(constr_dy_y_struct, collapse = "_"),
-                                           collapse = "_"),
-                                    paste0(constr_dy_xy_struct, collapse = "_")))
+  
+  # checking for valid directory path and fileName
+  if (!is.character(writeTo)){
+    stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
   }
-
+  if (!dir.exists(writeTo)){ 
+    stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+  }
+  if (!is.character(fileName)){
+    stop("The `fileName` argument must be a character string.")
+  }
+  
+  cat(script, "\n", 
+      file = sprintf("%s/%s.txt",
+                     writeTo, 
+                     fileName))
+  
     return(script)
   }

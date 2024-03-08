@@ -33,8 +33,12 @@
 #' @param equate Deprecated input character to specify which type of structural parameters
 #' are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
 #' constraints to the structural portion of the model for associative relationship between latent x and y.
-#' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' @param writeTo A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+#' If set to “.”, the .txt file will be written to the current working directory.
+#' The default is a path to a temporary directory created by tempdir().
+#' @param fileName A character string specifying a desired base name for the .txt output file.
+#' The default is "BiDy_script". The specified name will be automatically appended with the .txt file extension.
+#' If a file with the same name already exists in the user's chosen directory, it will be overwritten.
 #' @importFrom rlang .data
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
@@ -44,14 +48,18 @@
 #' dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",
 #' x_delim2=".", distinguish_1="1", distinguish_2="2")
 #'
-#' sexsat.bidyc.script <- scriptBiDy(dvn, lvxname = "SexSat", type = "CFA")
-
+#' sexsat.bidyc.script <- scriptBiDy(dvn, lvxname = "SexSat", type = "CFA",
+#' writeTo = tempdir(),
+#' fileName = "BiDy_C")
+#' 
 #' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 #' x_delim2="_", distinguish_1="1", distinguish_2="2",
 #' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 #'
 #' comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat",
-#' lvyname = "Com", type = "SEM")
+#' lvyname = "Com", type = "SEM",
+#' writeTo = tempdir(),
+#' fileName = "BiDy_S")
 
 
 scriptBiDy <- function(dvn, type = "CFA", lvxname, lvyname,
@@ -61,7 +69,8 @@ scriptBiDy <- function(dvn, type = "CFA", lvxname, lvyname,
                       constr_dy_y_struct = c("variances", "means"),
                       constr_dy_xy_struct = c("actors"),
                       model = lifecycle::deprecated(), equate = lifecycle::deprecated(),
-                      writescript = FALSE){
+                      writeTo = tempdir(),
+                      fileName = "BiDy_script"){
   if(type == "CFA"){
 
     #stop if model is provided
@@ -184,11 +193,23 @@ scriptBiDy <- function(dvn, type = "CFA", lvxname, lvyname,
                       xmean1, xmean2, xmeang)
 
     #Write script to file if requested
-    if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(script,"\n", file = sprintf("./scripts/%s_bidyc_meas_%s_struct_%s.txt",lvxname, paste0(constr_dy_x_meas, collapse = "_"), paste0(constr_dy_x_struct, collapse = "_")))
+    
+    # checking for valid directory path and fileName
+    if (!is.character(writeTo)){
+      stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
     }
-
+    if (!dir.exists(writeTo)){ 
+      stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+    }
+    if (!is.character(fileName)){
+      stop("The `fileName` argument must be a character string.")
+    }
+    
+    cat(script, "\n", 
+        file = sprintf("%s/%s.txt",
+                       writeTo, 
+                       fileName))
+    
     return(script)
 
 
@@ -255,22 +276,22 @@ scriptBiDy <- function(dvn, type = "CFA", lvxname, lvyname,
 
     #loadings for Y
     if(any(constr_dy_y_meas == "loadings")){
-      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "equated")
-      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "equated")
-      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "equated")
+      yloadsg <- loads(dvn, lvar = "Y", lvyname, partner = "g", type = "equated")
+      yloads1 <- loads(dvn, lvar = "Y",lvyname, partner="1", type = "equated")
+      yloads2 <- loads(dvn, lvar = "Y",lvyname, partner="2", type = "equated")
     }
     else if(any(constr_dy_y_meas == "loading_source")){
-      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "equated_source")
-      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "equated_source")
-      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "equated_source")
+      yloadsg <- loads(dvn, lvar = "Y", lvyname, partner = "g", type = "equated_source")
+      yloads1 <- loads(dvn, lvar = "Y",lvyname, partner="1", type = "equated_source")
+      yloads2 <- loads(dvn, lvar = "Y",lvyname, partner="2", type = "equated_source")
     }else if(any(constr_dy_y_meas == "loading_mutual")){
-      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "equated")
-      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "free")
-      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "free")
+      yloadsg <- loads(dvn, lvar = "Y", lvyname, partner = "g", type = "equated")
+      yloads1 <- loads(dvn, lvar = "Y",lvyname, partner="1", type = "free")
+      yloads2 <- loads(dvn, lvar = "Y",lvyname, partner="2", type = "free")
     }else{
-      yloadsg <- loads(dvn, lvar = "Y", lvxname, partner = "g", type = "free")
-      yloads1 <- loads(dvn, lvar = "Y",lvxname, partner="1", type = "free")
-      yloads2 <- loads(dvn, lvar = "Y",lvxname, partner="2", type = "free")
+      yloadsg <- loads(dvn, lvar = "Y", lvyname, partner = "g", type = "free")
+      yloads1 <- loads(dvn, lvar = "Y",lvyname, partner="1", type = "free")
+      yloads2 <- loads(dvn, lvar = "Y",lvyname, partner="2", type = "free")
     }
 
     #intercepts for X
@@ -429,21 +450,23 @@ scriptBiDy <- function(dvn, type = "CFA", lvxname, lvyname,
                       actor1, actor2, dyadic)
 
     #Write script to file if requested
-    if(isTRUE(writescript)){
-      dirs("scripts")
-      cat(script,"\n", file = sprintf("./scripts/%s_%s_cfm_x_%s_y_%s_xy_%s.txt",
-                                      lvxname, lvyname,
-                                      paste0(paste0(constr_dy_x_meas, collapse = "_"),
-                                             "_",
-                                             paste0(constr_dy_x_struct, collapse = "_"),
-                                             collapse = "_"),
-                                      paste0(paste0(constr_dy_y_meas, collapse = "_"),
-                                             "_",
-                                             paste0(constr_dy_y_struct, collapse = "_"),
-                                             collapse = "_"),
-                                      paste0(constr_dy_xy_struct, collapse = "_")))
+    
+    # checking for valid directory path and fileName
+    if (!is.character(writeTo)){
+      stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
     }
-
+    if (!dir.exists(writeTo)){ 
+      stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+    }
+    if (!is.character(fileName)){
+      stop("The `fileName` argument must be a character string.")
+    }
+    
+    cat(script, "\n", 
+        file = sprintf("%s/%s.txt",
+                       writeTo, 
+                       fileName))
+    
     return(script)
   }
 }

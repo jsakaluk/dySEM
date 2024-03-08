@@ -12,7 +12,8 @@ scriptObsAPIM(
   Y2 = NULL,
   equate = "none",
   k = FALSE,
-  writescript = FALSE
+  writeTo = tempdir(),
+  fileName = "obsAPIM_script"
 )
 }
 \arguments{
@@ -29,8 +30,13 @@ scriptObsAPIM(
 \item{k}{input logical for whether Kenny & Ledermann's (2010) k parameter should be
 calculated to characterize the dyadic pattern in the APIM. Default to FALSE}
 
-\item{writescript}{input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")}
+\item{writeTo}{A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+If set to “.”, the .txt file will be written to the current working directory.
+The default is a path to a temporary directory created by tempdir().}
+
+\item{fileName}{A character string specifying a desired base name for the .txt output file.
+The default is "obsAPIM_script". The specified name will be automatically appended with the .txt file extension.
+If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -44,6 +50,8 @@ Fitting Observed Actor-Partner Interdependence Models
 
 obsAPIMScript <- scriptObsAPIM (X1 = "SexSatA", Y1 = "RelSatA",
 X2 = "SexSatB", Y2 = "RelSatB",
-equate = "none")
+equate = "none",
+writeTo = tempdir(), 
+fileName = "obsAPIM_script")
 
 }

@@ -32,8 +32,12 @@
 #' @param model Depreceated input character used to specify which level of invariance is
 #' modeled ("configural", "loading", "intercept", "residual", or "indist"). Users should rely upon constr_dy_meas and
 #' constr_dy_struct instead, for making constraints to the measurement and/or structural portions of the model.
-#' @param writescript input logical (default FALSE) for whether lavaan script should
-#' be concatenated and written to current working directory (in subdirectory "scripts")
+#' @param writeTo A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+#' If set to “.”, the .txt file will be written to the current working directory.
+#' The default is a path to a temporary directory created by tempdir().
+#' @param fileName A character string specifying a desired base name for the .txt output file.
+#' The default is "dCFA_script". The specified name will be automatically appended with the .txt file extension.
+#' If a file with the same name already exists in the user's chosen directory, it will be overwritten.
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on
@@ -51,25 +55,34 @@
 #'
 #' sat.resids.script <- scriptCFA(dvn, lvname = "Sat",
 #' constr_dy_meas = c("loadings", "intercepts", "residuals"),
-#' constr_dy_struct = "none")
+#' constr_dy_struct = "none",
+#' writeTo = tempdir(),
+#' fileName = "dCFA_residual")
 #'
 #' sat.ints.script <- scriptCFA(dvn, lvname = "Sat",
 #' constr_dy_meas = c("loadings", "intercepts"),
-#' constr_dy_struct = "none")
+#' constr_dy_struct = "none",
+#' writeTo = tempdir(),
+#' fileName = "dCFA_intercept")
 #'
 #' sat.loads.script <- scriptCFA(dvn, lvname = "Sat",
 #' constr_dy_meas = c("loadings"),
-#' constr_dy_struct = "none")
+#' constr_dy_struct = "none",
+#' writeTo = tempdir(),
+#' fileName = "dCFA_loading")
 #'
 #' sat.config.script <- scriptCFA(dvn, lvname = "Sat",
 #' constr_dy_meas = "none",
-#' constr_dy_struct = "none")
+#' constr_dy_struct = "none",
+#' writeTo = tempdir(),
+#' fileName = "dCFA_configural")
 
 scriptCFA <- function(dvn, scaleset = "FF", lvname = "X",
                       constr_dy_meas = c("loadings", "intercepts", "residuals"),
                       constr_dy_struct = c("variances", "means"),
                       model = lifecycle::deprecated(),
-                      writescript = FALSE){
+                      writeTo = tempdir(),
+                      fileName = "dCFA_script"){
 
   if (lifecycle::is_present(model)) {
     lifecycle::deprecate_stop("1.0.0", "scriptCFA(model)", "scriptCFA(constr_dy_meas)")
@@ -209,11 +222,23 @@ scriptCFA <- function(dvn, scaleset = "FF", lvname = "X",
                     xmean1, xmean2)
 
   #Write script to file if requested
-  if(isTRUE(writescript)){
-    dirs("scripts")
-    cat(script,"\n", file = sprintf("./scripts/%s_dcfa_meas_%s_struct_%s.txt",lvname, paste0(constr_dy_meas, collapse = "_"), paste0(constr_dy_struct, collapse = "_")))
+  
+  # checking for valid directory path and fileName
+  if (!is.character(writeTo)){
+    stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
   }
-
+  if (!dir.exists(writeTo)){ 
+    stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+  }
+  if (!is.character(fileName)){
+    stop("The `fileName` argument must be a character string.")
+  }
+  
+  cat(script, "\n", 
+      file = sprintf("%s/%s.txt",
+                     writeTo, 
+                     fileName))
+  
   return(script)
 }
 

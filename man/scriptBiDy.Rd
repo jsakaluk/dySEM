@@ -17,7 +17,8 @@ scriptBiDy(
   constr_dy_xy_struct = c("actors"),
   model = lifecycle::deprecated(),
   equate = lifecycle::deprecated(),
-  writescript = FALSE
+  writeTo = tempdir(),
+  fileName = "BiDy_script"
 )
 }
 \arguments{
@@ -60,8 +61,13 @@ constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the mea
 are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
 constraints to the structural portion of the model for associative relationship between latent x and y.}
 
-\item{writescript}{input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")}
+\item{writeTo}{A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+If set to “.”, the .txt file will be written to the current working directory.
+The default is a path to a temporary directory created by tempdir().}
+
+\item{fileName}{A character string specifying a desired base name for the .txt output file.
+The default is "BiDy_script". The specified name will be automatically appended with the .txt file extension.
+If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -77,13 +83,18 @@ BiDy CFA (BiDy-C) or SEM (BiDy-S) Model. Currently only uses fixed-factor scale-
 dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",
 x_delim2=".", distinguish_1="1", distinguish_2="2")
 
-sexsat.bidyc.script <- scriptBiDy(dvn, lvxname = "SexSat", type = "CFA")
+sexsat.bidyc.script <- scriptBiDy(dvn, lvxname = "SexSat", type = "CFA",
+writeTo = tempdir(),
+fileName = "BiDy_C")
+
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 
 comsat.bidys.config.script <- scriptBiDy(dvn, lvxname = "Sat",
-lvyname = "Com", type = "SEM")
+lvyname = "Com", type = "SEM",
+writeTo = tempdir(),
+fileName = "BiDy_S")
 }
 \seealso{
 Other script-writing functions: 

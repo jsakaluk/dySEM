@@ -5,7 +5,13 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting the I-SAT model for indistinguishable dyads}
 \usage{
-scriptISAT(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE)
+scriptISAT(
+  dvn,
+  lvxname = "X",
+  lvyname = NULL,
+  writeTo = tempdir(),
+  fileName = "I-SAT_script"
+)
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
@@ -14,8 +20,13 @@ scriptISAT(dvn, lvxname = "X", lvyname = NULL, writescript = FALSE)
 
 \item{lvyname}{(optional) input character to (arbitrarily) name X LV in lavaan syntax}
 
-\item{writescript}{input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")}
+\item{writeTo}{A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+If set to “.”, the .txt file will be written to the current working directory.
+The default is a path to a temporary directory created by tempdir().}
+
+\item{fileName}{A character string specifying a desired base name for the .txt output file.
+The default is "I-SAT_script". The specified name will be automatically appended with the .txt file extension.
+If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 character object of lavaan script that can be passed immediately to
@@ -29,7 +40,10 @@ for the I-SAT model described in Olsen & Kenny (2006)
 \examples{
 dvn <- scrapeVarCross(dat = DRES, x_order = "sip", x_stem = "PRQC", x_delim1 = "_",
 x_delim2=".", x_item_num="\\\\d+", distinguish_1="1", distinguish_2="2")
-qual.isat.script <- scriptISAT(dvn, lvxname = "Qual")
+
+qual.isat.script <- scriptISAT(dvn, lvxname = "Qual",
+writeTo = tempdir(),
+fileName = "I-SAT_script")
 }
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on
