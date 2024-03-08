@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -6,7 +6,7 @@ articles:
   invariance: invariance.html
   dySEM: dySEM.html
   varnames: varnames.html
-last_built: 2024-02-05T14:33Z
+last_built: 2024-03-08T14:17Z
 urls:
   reference: https://jsakaluk.github.io/dySEM/reference
   article: https://jsakaluk.github.io/dySEM/articles

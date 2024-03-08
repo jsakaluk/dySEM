@@ -88,7 +88,8 @@ measurement models, and particular types of structural comparisons.</p>
 <span>  constr_dy_y_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>,</span>
 <span>  constr_dy_xy_struct <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  model <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  writescript <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  fileName <span class="op">=</span> <span class="st">"CFM_script"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -149,9 +150,16 @@ modeled. Users should rely upon constr_dy_x_meas/constr_dy_y_meas and
 constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the measurement and/or structural portions of the model for latent x and y.</p></dd>
 
 
-<dt>writescript</dt>
-<dd><p>input logical (default FALSE) for whether lavaan script should
-be concatenated and written to current working directory (in subdirectory "scripts")</p></dd>
+<dt>writeTo</dt>
+<dd><p>A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
+If set to “.”, the .txt file will be written to the current working directory.
+The default is a path to a temporary directory created by tempdir().</p></dd>
+
+
+<dt>fileName</dt>
+<dd><p>A character string specifying a desired base name for the .txt output file.
+The default is "CFM_script". The specified name will be automatically appended with the .txt file extension.
+If a file with the same name already exists in the user's chosen directory, it will be overwritten.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -180,7 +188,9 @@ with containing X or Y variables, they are alerted to respecify the dvn object.<
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
 <span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span>,</span></span>
 <span class="r-in"><span>y_order<span class="op">=</span><span class="st">"spi"</span>, y_stem<span class="op">=</span><span class="st">"com"</span>, y_delim1 <span class="op">=</span> <span class="st">"."</span>, y_delim2<span class="op">=</span><span class="st">"_"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cfm.script.indist</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFM</span><span class="op">(</span><span class="va">dvn</span>, lvxname <span class="op">=</span> <span class="st">"Sat"</span>, lvyname <span class="op">=</span> <span class="st">"Com"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cfm.script.indist</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFM</span><span class="op">(</span><span class="va">dvn</span>, lvxname <span class="op">=</span> <span class="st">"Sat"</span>, lvyname <span class="op">=</span> <span class="st">"Com"</span>,</span></span>
+<span class="r-in"><span>writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>fileName <span class="op">=</span> <span class="st">"CFM_indist"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

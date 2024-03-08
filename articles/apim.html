@@ -87,7 +87,7 @@
                         <h4 data-toc-skip class="author">Eric Tu and
 John K. Sakaluk</h4>
             
-            <h4 data-toc-skip class="date">05/02/24</h4>
+            <h4 data-toc-skip class="date">08/03/24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/HEAD/vignettes/articles/apim.Rmd" class="external-link"><code>vignettes/articles/apim.Rmd</code></a></small>
       <div class="d-none name"><code>apim.Rmd</code></div>
@@ -260,7 +260,7 @@ generate the correct code for lavaan to fit our latent APIM.</p>
 <span>                                  constr_dy_y_struct <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#no structural constraints for latent y</span></span>
 <span>                                  constr_dy_xy_struct <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#no constrained actor and/or partner effects</span></span>
 <span>                                  est_k <span class="op">=</span> <span class="cn">TRUE</span>,<span class="co">#want k-parameter? (optional, but nice)</span></span>
-<span>                                  writescript <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">#want script saved to directory? (e.g., for OSF?)</span></span></code></pre></div>
+<span>                                  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"APIM_script_config"</span><span class="op">)</span> <span class="co">#want script saved to directory? (e.g., for OSF?)</span></span></code></pre></div>
 <p>If you return the output of scriptAPIM(), it doesn’t look
 particularly nice:</p>
 <pre><code><span><span class="co">#&gt; [1] "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5\nSat2=~NA*sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\n\nCom1=~NA*com.1_1+com.1_2+com.1_3+com.1_4+com.1_5\nCom2=~NA*com.2_1+com.2_2+com.2_3+com.2_4+com.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\ncom.1_1 ~ 1\ncom.1_2 ~ 1\ncom.1_3 ~ 1\ncom.1_4 ~ 1\ncom.1_5 ~ 1\n\ncom.2_1 ~ 1\ncom.2_2 ~ 1\ncom.2_3 ~ 1\ncom.2_4 ~ 1\ncom.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\ncom.1_1 ~~ com.1_1\ncom.1_2 ~~ com.1_2\ncom.1_3 ~~ com.1_3\ncom.1_4 ~~ com.1_4\ncom.1_5 ~~ com.1_5\n\ncom.2_1 ~~ com.2_1\ncom.2_2 ~~ com.2_2\ncom.2_3 ~~ com.2_3\ncom.2_4 ~~ com.2_4\ncom.2_5 ~~ com.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\ncom.1_1 ~~ com.2_1\ncom.1_2 ~~ com.2_2\ncom.1_3 ~~ com.2_3\ncom.1_4 ~~ com.2_4\ncom.1_5 ~~ com.2_5\n\n#Structural Model\n\n#Latent (Co)Variances\nSat1 ~~ 1*Sat1\nSat2 ~~ 1*Sat2\nSat1 ~~ Sat2\n\nCom1 ~~ 1*Com1\nCom2 ~~ 1*Com2\nCom1 ~~ Com2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\n\nCom1 ~ 0*1\nCom2 ~ 0*1\n\n#Latent Actor Effects\nCom1 ~ a1*Sat1\nCom2 ~ a2*Sat2\n\n#Latent Partner Effects\nCom1 ~ p1*Sat2\nCom2 ~ p2*Sat1\n\n#k Parameter\nk1 := p1/a1\nk2 := p2/a2"</span></span></code></pre>
@@ -628,7 +628,7 @@ level of measurement invariance is imposed (if any) (via the
 <span>                                  constr_dy_y_struct <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#no structural constraints for latent y</span></span>
 <span>                                  constr_dy_xy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"actors"</span>, <span class="st">"partners"</span><span class="op">)</span>, <span class="co"># constrained actor and/or partner effects</span></span>
 <span>                                  est_k <span class="op">=</span> <span class="cn">TRUE</span>,<span class="co">#want k-parameter? (optional, but nice)</span></span>
-<span>                                  writescript <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">#want script saved to directory? (e.g., for OSF?)</span></span></code></pre></div>
+<span>                                  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"APIM_script_config"</span><span class="op">)</span> <span class="co">#want script saved to directory? (e.g., for OSF?)</span></span></code></pre></div>
 <p>One can therefore impose the corresponding level of invariance via
 the <code>constr_dy_x_meas =</code> and <code>constr_dy_y_meas =</code>
 arguments (at minimum <code>"loadings"</code> is required, but any
@@ -646,7 +646,7 @@ acceptable).</p>
 <span>                                  constr_dy_y_struct <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#no structural constraints for latent y</span></span>
 <span>                                  constr_dy_xy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"actors"</span>, <span class="st">"partners"</span><span class="op">)</span>, <span class="co"># constrained actor and/or partner effects</span></span>
 <span>                                  est_k <span class="op">=</span> <span class="cn">TRUE</span>,<span class="co">#want k-parameter? (optional, but nice)</span></span>
-<span>                                  writescript <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">#want script saved to directory? (e.g., for OSF?)</span></span>
+<span>                                  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"APIM_script_loading"</span><span class="op">)</span> <span class="co">#want script saved to directory? (e.g., for OSF?)</span></span>
 <span></span>
 <span><span class="va">apim.fit.loads.eq.all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">apim.script.loads.actpart</span>, </span>
 <span>                               data <span class="op">=</span> <span class="va">commitmentQ</span>,</span>
