@@ -12,7 +12,7 @@ outputModel(
   tabletype = NULL,
   figure = TRUE,
   figtype = NULL,
-  writeTo = tempdir(),
+  writeTo = NULL,
   fileName = NULL
 )
 }
@@ -36,10 +36,10 @@ options are "measurement" (i.e,, loadings, intercepts,),
 
 \item{writeTo}{A character string specifying a directory path to where the file(s) should be saved.
 If set to “.”, the file(s) will be written to the current working directory.
-The default is a path to a temporary directory created by tempdir().}
+The default is NULL, and examples use a temporary directory created by tempdir().}
 
 \item{fileName}{A character string specifying a desired base name for the output file(s).
-If a \code{fileName} not provided (i.e., "fileName = NULL"), then defaults will be used
+If a \code{fileName} not provided (i.e., default fileName = NULL), then defaults will be used
 (e.g., "dySEM_table"/"dySEM_table_Measurement"/"dySEM_table_Structural for tables; "dySEM_figure" for figures).
 The specified name will be automatically appended with the appropriate file extension (i.e., .rtf for tables; .png for figures).}
 }
@@ -66,7 +66,7 @@ sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FA
 auto.fix.first= FALSE, meanstructure = TRUE)
 
 outputModel(dvnx, model = "cfa", fit = sat.config.mod, table = TRUE,
-tabletype = "measurement", figure = "TRUE", figtype = "standardized", 
+tabletype = "measurement", figure = "TRUE", figtype = "standardized",
 writeTo = tempdir(), fileName = "dCFA_configural")
 dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
@@ -78,6 +78,6 @@ apim.indist.mod <- lavaan::cfa(apim.indist.script, data = commitmentQ, std.lv = 
 auto.fix.first= FALSE, meanstructure = TRUE)
 
 outputModel(dvnxy, model = "apim", fit = apim.indist.mod, table = TRUE,
-tabletype = "measurement", figure = "TRUE", figtype = "standardized", 
+tabletype = "measurement", figure = "TRUE", figtype = "standardized",
 writeTo = tempdir(), fileName = "APIM_indist")
 }

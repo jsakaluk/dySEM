@@ -9,10 +9,10 @@
 #' @param tabletype kind of parameter estimates requested (i.e. from "measurement" or "structural" model)
 #' @param type input character for sempaths to indicate whether parameters "free" or "equated" in estimation
 #' @param writeTo A character string specifying a directory path to where the file(s) should be saved.
-#' The default is a path to a temporary directory created by tempdir().
-#' @param fileName A character string specifying a desired base name for the output file(s). 
-#' If a `fileName` not provided (i.e., "fileName = NULL"), then defaults will be used 
-#' The specified name will be automatically appended with the appropriate file extension (i.e., .png for figures). 
+#' The default is NULL, and examples use a temporary directory created by tempdir().
+#' @param fileName A character string specifying a desired base name for the output file(s).
+#' If a `fileName` not provided (i.e., "fileName = NULL"), then defaults will be used
+#' The specified name will be automatically appended with the appropriate file extension (i.e., .png for figures).
 #' @family helpers
 #' @noRd
 
@@ -174,7 +174,7 @@ makeTable <- function(dvn, fit, model, tabletype){
 makeFigure <- function(fit, type, writeTo, fileName){
   #user provides fileName
   if(!is.null(fileName)){
-    
+
     if(type == "raw"){
       semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
                                    curvePivot = F, intercepts = F,
@@ -197,10 +197,10 @@ makeFigure <- function(fit, type, writeTo, fileName){
                                    edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
     }
   }
-  
+
   #default
   if(is.null(fileName)){
-    
+
     if(type == "raw"){
       semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
                                    curvePivot = F, intercepts = F,
@@ -221,6 +221,6 @@ makeFigure <- function(fit, type, writeTo, fileName){
                                    edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
     }
   }
-  
+
   return(semplot)
 }

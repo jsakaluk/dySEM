@@ -67,10 +67,10 @@ a loading-invariant model to be specified, otherwise a warning is returned.}
 
 \item{writeTo}{A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
 If set to “.”, the .txt file will be written to the current working directory.
-The default is a path to a temporary directory created by tempdir().}
+The default is NULL, and examples use a temporary directory created by tempdir().}
 
 \item{fileName}{A character string specifying a desired base name for the .txt output file.
-The default is "MIM_script". The specified name will be automatically appended with the .txt file extension.
+The default is NULL. The specified name will be automatically appended with the .txt file extension.
 If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
 }
 \value{

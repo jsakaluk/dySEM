@@ -17,8 +17,8 @@ scriptBiDy(
   constr_dy_xy_struct = c("actors"),
   model = lifecycle::deprecated(),
   equate = lifecycle::deprecated(),
-  writeTo = tempdir(),
-  fileName = "BiDy_script"
+  writeTo = NULL,
+  fileName = NULL
 )
 }
 \arguments{
@@ -63,10 +63,10 @@ constraints to the structural portion of the model for associative relationship 
 
 \item{writeTo}{A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
 If set to “.”, the .txt file will be written to the current working directory.
-The default is a path to a temporary directory created by tempdir().}
+The default is NULL, and examples use a temporary directory created by tempdir().}
 
 \item{fileName}{A character string specifying a desired base name for the .txt output file.
-The default is "BiDy_script". The specified name will be automatically appended with the .txt file extension.
+The default is NULL. The specified name will be automatically appended with the .txt file extension.
 If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
 }
 \value{

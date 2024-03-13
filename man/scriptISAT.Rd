@@ -5,13 +5,7 @@
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting the I-SAT model for indistinguishable dyads}
 \usage{
-scriptISAT(
-  dvn,
-  lvxname = "X",
-  lvyname = NULL,
-  writeTo = tempdir(),
-  fileName = "I-SAT_script"
-)
+scriptISAT(dvn, lvxname = "X", lvyname = NULL, writeTo = NULL, fileName = NULL)
 }
 \arguments{
 \item{dvn}{input dvn list from scrapeVarCross}
@@ -22,10 +16,10 @@ scriptISAT(
 
 \item{writeTo}{A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
 If set to “.”, the .txt file will be written to the current working directory.
-The default is a path to a temporary directory created by tempdir().}
+The default is NULL, and examples use a temporary directory created by tempdir().}
 
 \item{fileName}{A character string specifying a desired base name for the .txt output file.
-The default is "I-SAT_script". The specified name will be automatically appended with the .txt file extension.
+The default is NULL. The specified name will be automatically appended with the .txt file extension.
 If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
 }
 \value{

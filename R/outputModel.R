@@ -15,11 +15,11 @@
 #' @param figtype character input of what type of figure is desired
 #' @param writeTo A character string specifying a directory path to where the file(s) should be saved.
 #' If set to “.”, the file(s) will be written to the current working directory.
-#' The default is a path to a temporary directory created by tempdir().
-#' @param fileName A character string specifying a desired base name for the output file(s). 
-#' If a `fileName` not provided (i.e., "fileName = NULL"), then defaults will be used 
-#' (e.g., "dySEM_table"/"dySEM_table_Measurement"/"dySEM_table_Structural for tables; "dySEM_figure" for figures). 
-#' The specified name will be automatically appended with the appropriate file extension (i.e., .rtf for tables; .png for figures). 
+#' The default is NULL, and examples use a temporary directory created by tempdir().
+#' @param fileName A character string specifying a desired base name for the output file(s).
+#' If a `fileName` not provided (i.e., default fileName = NULL), then defaults will be used
+#' (e.g., "dySEM_table"/"dySEM_table_Measurement"/"dySEM_table_Structural for tables; "dySEM_figure" for figures).
+#' The specified name will be automatically appended with the appropriate file extension (i.e., .rtf for tables; .png for figures).
 #' @details
 #' If a file with the same name already exists in the user's chosen directory,
 #'  it will be overwritten.
@@ -35,9 +35,9 @@
 #'
 #' sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
 #' auto.fix.first= FALSE, meanstructure = TRUE)
-#' 
+#'
 #' outputModel(dvnx, model = "cfa", fit = sat.config.mod, table = TRUE,
-#' tabletype = "measurement", figure = "TRUE", figtype = "standardized", 
+#' tabletype = "measurement", figure = "TRUE", figtype = "standardized",
 #' writeTo = tempdir(), fileName = "dCFA_configural")
 
 #' dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
@@ -50,39 +50,39 @@
 #' auto.fix.first= FALSE, meanstructure = TRUE)
 #'
 #' outputModel(dvnxy, model = "apim", fit = apim.indist.mod, table = TRUE,
-#' tabletype = "measurement", figure = "TRUE", figtype = "standardized", 
+#' tabletype = "measurement", figure = "TRUE", figtype = "standardized",
 #' writeTo = tempdir(), fileName = "APIM_indist")
 
 outputModel  <-  function(dvn, model = NULL, fit,
                     table = TRUE, tabletype = NULL,
                     figure = TRUE, figtype = NULL,
-                    writeTo = tempdir(),
+                    writeTo = NULL,
                     fileName = NULL){
-  
+
   # checking for valid directory path
   if (!is.character(writeTo)){
     stop("The `writeTo` argument must be a character string. \n Use writeTo = '.' to save output file(s) in the current working directory.")
   }
-  if (!dir.exists(writeTo)){ 
+  if (!dir.exists(writeTo)){
     stop("The specified directory does not exist. \n Use writeTo = '.' to save output file(s) in the current working directory.")
   }
   if (!is.null(fileName) && !is.character(fileName)){
     stop("The `fileName` argument must be a character string.")}
-  
+
   if(model=="cfa"){
     if(table==TRUE & figure == FALSE){
 
       #Make measurement parameter table
       meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement")
-      
+
       #user provides fileName
       if(!is.null(fileName)){
         gt::gtsave(meas.tab,
-                   filename = sprintf("%s.rtf", 
+                   filename = sprintf("%s.rtf",
                                       fileName),
                    path = writeTo)
       }
-      
+
       #default
       if(is.null(fileName)){
         gt::gtsave(meas.tab,
@@ -93,7 +93,7 @@ outputModel  <-  function(dvn, model = NULL, fit,
     }
     else if(table==FALSE & figure == TRUE){
 
-      
+
       #Make path diagram
       if(figtype == "unstandardized"){
         semplot <- makeFigure(fit, type = "raw", writeTo, fileName)
@@ -104,30 +104,30 @@ outputModel  <-  function(dvn, model = NULL, fit,
       else if(figtype == "labels"){
         semplot <- makeFigure(fit, type = "lab", writeTo, fileName)
       }
-      
+
     }
     else if(table==TRUE & figure == TRUE){
 
       meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement")
 
-     
+
       #user provides fileName
       if(!is.null(fileName)){
         gt::gtsave(meas.tab,
-                   filename = sprintf("%s.rtf", 
+                   filename = sprintf("%s.rtf",
                                       fileName),
                    path = writeTo)
       }
-      
+
       #default
       if(is.null(fileName)){
-        
+
         gt::gtsave(meas.tab,
                    filename = "dySEM_table.rtf",
                    path = writeTo)
       }
-      
-      
+
+
       if(figtype == "unstandardized"){
         semplot <- makeFigure(fit, type = "raw", writeTo, fileName)
       }
@@ -137,7 +137,7 @@ outputModel  <-  function(dvn, model = NULL, fit,
       else if(figtype == "labels"){
         semplot <- makeFigure(fit, type = "lab", writeTo, fileName)
       }
-      
+
     }
   }
   else if(model=="bidyc"){
@@ -149,11 +149,11 @@ outputModel  <-  function(dvn, model = NULL, fit,
       #user provides fileName
       if(!is.null(fileName)){
         gt::gtsave(meas.tab,
-                   filename = sprintf("%s.rtf", 
+                   filename = sprintf("%s.rtf",
                                       fileName),
                    path = writeTo)
       }
-      
+
       #default
       if(is.null(fileName)){
         gt::gtsave(meas.tab,
@@ -173,31 +173,31 @@ outputModel  <-  function(dvn, model = NULL, fit,
       else if(figtype == "labels"){
         semplot <- makeFigure(fit, type = "lab", writeTo, fileName)
       }
-      
-      
+
+
 
     }
     else if(table==TRUE & figure == TRUE){
 
       #Make measurement parameter table
       meas.tab <- makeTable(dvn, fit, model = "bidyc", tabletype = "measurement")
-      
+
       #user provides fileName
       if(!is.null(fileName)){
         gt::gtsave(meas.tab,
-                   filename = sprintf("%s.rtf", 
+                   filename = sprintf("%s.rtf",
                                       fileName),
                    path = writeTo)
       }
-      
+
       #default
       if(is.null(fileName)){
         gt::gtsave(meas.tab,
                    filename = "dySEM_table.rtf",
                    path = writeTo)
       }
-      
-      
+
+
       #Make path diagram
       if(figtype == "unstandardized"){
         semplot <- makeFigure(fit, type = "raw", writeTo, fileName)
@@ -208,7 +208,7 @@ outputModel  <-  function(dvn, model = NULL, fit,
       else if(figtype == "labels"){
         semplot <- makeFigure(fit, type = "lab", writeTo, fileName)
       }
-      
+
     }
   }
   else if(model=="apim"| model == "mim"){
@@ -224,41 +224,41 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s_Measurement.rtf", 
+                     filename = sprintf("%s_Measurement.rtf",
                                         fileName),
                      path = writeTo)
-          
+
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s_Structural.rtf", 
+                     filename = sprintf("%s_Structural.rtf",
                                         fileName),
                      path = writeTo)
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(meas.tab,
                      filename = "dySEM_table_Measurement.rtf",
                      path = writeTo)
           gt::gtsave(struct.tab,
-                     filename = "dySEM_table_Structural.rtf", 
+                     filename = "dySEM_table_Structural.rtf",
                      path = writeTo)
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
         }
       }
-      
+
       else if(tabletype== "measurement"){
         #Make measurement parameter table
         meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement")
-       
+
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(meas.tab,
@@ -266,29 +266,29 @@ outputModel  <-  function(dvn, model = NULL, fit,
                      path = writeTo)
         }
       }
-      
+
       else if(tabletype == "structural"){
         #Extract structural parameters
         struct.tab <- makeTable(dvn, fit, model = "apim", tabletype = "structural")
-        
+
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(struct.tab,
                      filename = "dySEM_table.rtf",
                      path = writeTo)
         }
-        
+
       }
     }
-    
+
     else if(table==FALSE & figure == TRUE){
 
         #Make path diagram
@@ -302,7 +302,7 @@ outputModel  <-  function(dvn, model = NULL, fit,
         semplot <- makeFigure(fit, type = "lab", writeTo, fileName)
       }
     }
-    
+
     else if(table==TRUE & figure == TRUE){
 
       if(tabletype== "both"){
@@ -311,36 +311,36 @@ outputModel  <-  function(dvn, model = NULL, fit,
 
         #Extract structural parameters
         struct.tab <- makeTable(dvn, fit, model = "apim", tabletype = "structural")
-        
+
         #user provides fileName
         if(!is.null(fileName)){
-          
+
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s_Measurement.rtf", 
+                     filename = sprintf("%s_Measurement.rtf",
                                         fileName),
                      path = writeTo)
-          
+
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s_Structural.rtf", 
+                     filename = sprintf("%s_Structural.rtf",
                                         fileName),
                      path = writeTo)
           #"_Measurement"/"_Structural" is appended to prevent the files from overwriting each other.
         }
-        
+
         #default
         if(is.null(fileName)){
-          
+
           gt::gtsave(meas.tab,
                      filename = "dySEM_table_Measurement.rtf",
                      path = writeTo)
-          
+
           gt::gtsave(struct.tab,
                      filename = "dySEM_table_Structural.rtf",
                      path = writeTo)
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
         }
       }
-      
+
       else if(tabletype== "measurement"){
         #Make measurement parameter table
         meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement")
@@ -348,32 +348,32 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(meas.tab,
                      filename = "dySEM_table.rtf",
                      path = writeTo)
-          
+
         }
       }
       else if(tabletype== "structural"){
         #Extract structural parameters
         struct.tab <- makeTable(dvn, fit, model = "apim", tabletype = "structural")
 
-        
+
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(struct.tab,
@@ -387,11 +387,11 @@ outputModel  <-  function(dvn, model = NULL, fit,
       if(figtype == "unstandardized"){
         semplot <- makeFigure(fit, type = "raw", writeTo, fileName)
       }
-      
+
       else if(figtype == "standardized"){
         semplot <- makeFigure(fit, type = "std", writeTo, fileName)
       }
-      
+
       else if(figtype == "labels"){
         semplot <- makeFigure(fit, type = "lab", writeTo, fileName)
       }
@@ -409,20 +409,20 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s_Measurement.rtf", 
+                     filename = sprintf("%s_Measurement.rtf",
                                         fileName),
                      path = writeTo)
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s_Structural.rtf", 
+                     filename = sprintf("%s_Structural.rtf",
                                         fileName),
                      path = writeTo)
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
-          
+
         }
-        
+
         #default
         if(is.null(fileName)){
-          
+
           gt::gtsave(meas.tab,
                      filename = "dySEM_table_Measurement.rtf",
                      path = writeTo)
@@ -430,9 +430,9 @@ outputModel  <-  function(dvn, model = NULL, fit,
                      filename = "dySEM_table_Structural.rtf",
                      path = writeTo)
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
-          
+
         }
-        
+
       }
       else if(tabletype== "measurement"){
         #Make measurement parameter table
@@ -441,18 +441,18 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(meas.tab,
                      filename = "dySEM_table.rtf",
                      path = writeTo)
         }
-        
+
       }
       else if(tabletype == "structural"){
         #Extract structural parameters
@@ -461,19 +461,19 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(struct.tab,
                      filename = "dySEM_table.rtf",
                      path = writeTo)
         }
-        
-        
+
+
       }
     }
     else if(table==FALSE & figure == TRUE){
@@ -487,7 +487,7 @@ outputModel  <-  function(dvn, model = NULL, fit,
       else if(figtype == "labels"){
         semplot <- makeFigure(fit, type = "lab", writeTo, fileName)
       }
-      
+
     }
     else if(table==TRUE & figure == TRUE){
 
@@ -497,25 +497,25 @@ outputModel  <-  function(dvn, model = NULL, fit,
 
         #Extract structural parameters
         struct.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "structural")
-        
+
 
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s_Measurement.rtf", 
+                     filename = sprintf("%s_Measurement.rtf",
                                         fileName),
                      path = writeTo)
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s_Structural.rtf", 
+                     filename = sprintf("%s_Structural.rtf",
                                         fileName),
                      path = writeTo)
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
-          
+
         }
-        
+
         #default
         if(is.null(fileName)){
-          
+
           gt::gtsave(meas.tab,
                      filename = "dySEM_table_Measurement.rtf",
                      path = writeTo)
@@ -523,9 +523,9 @@ outputModel  <-  function(dvn, model = NULL, fit,
                      filename = "dySEM_table_Structural.rtf",
                      path = writeTo)
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
-          
+
         }
-        
+
       }
       else if(tabletype== "measurement"){
         #Make measurement parameter table
@@ -534,18 +534,18 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(meas.tab,
                      filename = "dySEM_table.rtf",
                      path = writeTo)
         }
-        
+
 
       }
       else if(tabletype== "structural"){
@@ -555,19 +555,19 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(struct.tab,
                      filename = "dySEM_table.rtf",
                      path = writeTo)
-          
+
         }
-        
+
       }
 
       #Make path diagram
@@ -593,31 +593,31 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s_Measurement.rtf", 
+                     filename = sprintf("%s_Measurement.rtf",
                                         fileName),
                      path = writeTo)
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s_Structural.rtf", 
+                     filename = sprintf("%s_Structural.rtf",
                                         fileName),
                      path = writeTo)
-          
+
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
         }
-        
+
         #default
         if(is.null(fileName)){
-          
+
           gt::gtsave(meas.tab,
                      filename = "dySEM_table_Measurement.rtf",
                      path = writeTo)
           gt::gtsave(struct.tab,
                      filename = "dySEM_table_Structural.rtf",
                      path = writeTo)
-          
+
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
         }
-        
-        
+
+
       }
       else if(tabletype== "measurement"){
         #Make measurement parameter table
@@ -626,18 +626,18 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(meas.tab,
                      filename = "dySEM_table.rtf",
                      path = writeTo)
         }
-        
+
       }
       else if(tabletype == "structural"){
         #Extract structural parameters
@@ -646,11 +646,11 @@ outputModel  <-  function(dvn, model = NULL, fit,
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(struct.tab,
@@ -660,8 +660,8 @@ outputModel  <-  function(dvn, model = NULL, fit,
       }
     }
     else if(table==FALSE & figure == TRUE){
-      
-      
+
+
       #Make path diagram
       if(figtype == "unstandardized"){
         semplot <- makeFigure(fit, type = "raw", writeTo, fileName)
@@ -672,31 +672,31 @@ outputModel  <-  function(dvn, model = NULL, fit,
       else if(figtype == "labels"){
         semplot <- makeFigure(fit, type = "lab", writeTo, fileName)
       }
-      
+
     }
     else if(table==TRUE & figure == TRUE){
 
       if(tabletype== "both"){
         #Make measurement parameter table
         meas.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "measurement")
-        
+
         #Extract structural parameters
         struct.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "structural")
-        
+
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s_Measurement.rtf", 
+                     filename = sprintf("%s_Measurement.rtf",
                                         fileName),
                      path = writeTo)
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s_Structural.rtf", 
+                     filename = sprintf("%s_Structural.rtf",
                                         fileName),
                      path = writeTo)
-          
+
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(meas.tab,
@@ -705,47 +705,47 @@ outputModel  <-  function(dvn, model = NULL, fit,
           gt::gtsave(struct.tab,
                      filename = "dySEM_table_Structural.rtf",
                      path = writeTo)
-          
+
           #"_Measurement"/"_Structural" is appended to prevent files from overwriting each other.
         }
-        
-        
-        
-        
+
+
+
+
       }
       else if(tabletype== "measurement"){
         #Make measurement parameter table
         meas.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "measurement")
-        
+
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(meas.tab,
                      filename = "dySEM_table.rtf",
                      path = writeTo)
         }
-        
-        
+
+
       }
       else if(tabletype== "structural"){
         #Extract structural parameters
         struct.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "structural")
-        
+
         #user provides fileName
         if(!is.null(fileName)){
           gt::gtsave(struct.tab,
-                     filename = sprintf("%s.rtf", 
+                     filename = sprintf("%s.rtf",
                                         fileName),
                      path = writeTo)
         }
-        
+
         #default
         if(is.null(fileName)){
           gt::gtsave(struct.tab,
@@ -753,7 +753,7 @@ outputModel  <-  function(dvn, model = NULL, fit,
                      path = writeTo)
         }
       }
-      
+
       #Make path diagram
       if(figtype == "unstandardized"){
         semplot <- makeFigure(fit, type = "raw", writeTo, fileName)

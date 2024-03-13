@@ -38,9 +38,9 @@
 #' a loading-invariant model to be specified, otherwise a warning is returned.
 #' @param writeTo A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
 #' If set to “.”, the .txt file will be written to the current working directory.
-#' The default is a path to a temporary directory created by tempdir().
+#' The default is NULL, and examples use a temporary directory created by tempdir().
 #' @param fileName A character string specifying a desired base name for the .txt output file.
-#' The default is "MIM_script". The specified name will be automatically appended with the .txt file extension.
+#' The default is NULL. The specified name will be automatically appended with the .txt file extension.
 #' If a file with the same name already exists in the user's chosen directory, it will be overwritten.
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
@@ -390,23 +390,33 @@ scriptMIM <- function(dvn, scaleset = "FF",
   }
 
   #Write script to file if requested
-  
-  # checking for valid directory path and fileName
-  if (!is.character(writeTo)){
-    stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
+  if(!is.null(writeTo) | !is.null(fileName) ){
+    #if there is a path or file name,
+    #check for valid input,
+    #and if valid, write script
+
+    # checking for valid directory path and fileName
+    if (!is.character(writeTo)){
+      stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
+    }
+    if (!dir.exists(writeTo)){
+      stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+    }
+    if (!is.character(fileName)){
+      stop("The `fileName` argument must be a character string.")
+    }
+
+    #write file
+    cat(script, "\n",
+        file = sprintf("%s/%s.txt",
+                       writeTo,
+                       fileName))
+
+    return(script)
   }
-  if (!dir.exists(writeTo)){ 
-    stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+  else if(is.null(writeTo) & is.null(fileName)){
+    #otherwise just return script
+    return(script)
   }
-  if (!is.character(fileName)){
-    stop("The `fileName` argument must be a character string.")
-  }
-  
-  cat(script, "\n", 
-      file = sprintf("%s/%s.txt",
-                     writeTo, 
-                     fileName))
-  
-  return(script)
 }
 

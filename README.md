@@ -27,7 +27,7 @@ inquiries, email: <agangofwolves@gmail.com>).
 
 ## Installation
 
-You can install the released version of dynamic from
+You can install the released version of dySEM from
 [CRAN](https://cran.r-project.org) with:
 
 ``` r

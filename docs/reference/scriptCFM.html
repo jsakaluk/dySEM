@@ -88,8 +88,8 @@ measurement models, and particular types of structural comparisons.</p>
 <span>  constr_dy_y_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>,</span>
 <span>  constr_dy_xy_struct <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  model <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  fileName <span class="op">=</span> <span class="st">"CFM_script"</span></span>
+<span>  writeTo <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fileName <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -153,12 +153,12 @@ constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the mea
 <dt>writeTo</dt>
 <dd><p>A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
 If set to “.”, the .txt file will be written to the current working directory.
-The default is a path to a temporary directory created by tempdir().</p></dd>
+The default is NULL, and examples use a temporary directory created by tempdir().</p></dd>
 
 
 <dt>fileName</dt>
 <dd><p>A character string specifying a desired base name for the .txt output file.
-The default is "CFM_script". The specified name will be automatically appended with the .txt file extension.
+The default is NULL. The specified name will be automatically appended with the .txt file extension.
 If a file with the same name already exists in the user's chosen directory, it will be overwritten.</p></dd>
 
 </dl></div>

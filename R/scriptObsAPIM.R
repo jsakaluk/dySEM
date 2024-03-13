@@ -10,9 +10,9 @@
 #' calculated to characterize the dyadic pattern in the APIM. Default to FALSE
 #' @param writeTo A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
 #' If set to “.”, the .txt file will be written to the current working directory.
-#' The default is a path to a temporary directory created by tempdir().
+#' The default is NULL, and examples use a temporary directory created by tempdir().
 #' @param fileName A character string specifying a desired base name for the .txt output file.
-#' The default is "obsAPIM_script". The specified name will be automatically appended with the .txt file extension.
+#' The default is NULL. The specified name will be automatically appended with the .txt file extension.
 #' If a file with the same name already exists in the user's chosen directory, it will be overwritten.
 #'
 #' @return character object of lavaan script that can be passed immediately to
@@ -24,7 +24,7 @@
 #' obsAPIMScript <- scriptObsAPIM (X1 = "SexSatA", Y1 = "RelSatA",
 #' X2 = "SexSatB", Y2 = "RelSatB",
 #' equate = "none",
-#' writeTo = tempdir(), 
+#' writeTo = tempdir(),
 #' fileName = "obsAPIM_script")
 #'
 scriptObsAPIM <- function(X1 = NULL, Y1 = NULL,
@@ -44,10 +44,10 @@ scriptObsAPIM <- function(X1 = NULL, Y1 = NULL,
       k2 <- paste("k2 := p2/a2")
       ks <- paste0(k1, "\n", k2)
 
-      apimScript <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s\n\n# k parameter(s)\n%s",
+      script <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s\n\n# k parameter(s)\n%s",
                             reg1, reg2, icc, ricc, ks)
     }else if(!isTRUE(k)){
-      apimScript <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s",
+      script <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s",
                             reg1, reg2, icc, ricc)
     }
 
@@ -63,10 +63,10 @@ scriptObsAPIM <- function(X1 = NULL, Y1 = NULL,
       k2 <- paste("k2 := p2/a")
       ks <- paste0(k1, "\n", k2)
 
-      apimScript <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s\n\n# k parameter(s)\n%s",
+      script <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s\n\n# k parameter(s)\n%s",
                             reg1, reg2, icc, ricc, ks)
     }else if(!isTRUE(k)){
-      apimScript <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s",
+      script <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s",
                             reg1, reg2, icc, ricc)
     }
   }
@@ -81,10 +81,10 @@ scriptObsAPIM <- function(X1 = NULL, Y1 = NULL,
       k2 <- paste("k2 := p/a2")
       ks <- paste0(k1, "\n", k2)
 
-      apimScript <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s\n\n# k parameter(s)\n%s",
+      script <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s\n\n# k parameter(s)\n%s",
                             reg1, reg2, icc, ricc, ks)
     }else if(!isTRUE(k)){
-      apimScript <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s",
+      script <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s",
                             reg1, reg2, icc, ricc)
     }
   }
@@ -97,29 +97,41 @@ scriptObsAPIM <- function(X1 = NULL, Y1 = NULL,
     if(isTRUE(k)){
       k <- paste("k := p/a")
 
-      apimScript <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s\n\n# k parameter(s)\n%s",
+      script <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s\n\n# k parameter(s)\n%s",
                             reg1, reg2, icc, ricc, k)
     }else if(!isTRUE(k)){
-      apimScript <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s",
+      script <- sprintf("#Actor and Partner Effects\n%s\n%s\n\n#ICC and Residual ICC\n%s\n%s",
                             reg1, reg2, icc, ricc)
     }
   }
 
-  # checking for valid directory path and fileName
-  if (!is.character(writeTo)){
-    stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
+  #Write script to file if requested
+  if(!is.null(writeTo) | !is.null(fileName) ){
+    #if there is a path or file name,
+    #check for valid input,
+    #and if valid, write script
+
+    # checking for valid directory path and fileName
+    if (!is.character(writeTo)){
+      stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
+    }
+    if (!dir.exists(writeTo)){
+      stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+    }
+    if (!is.character(fileName)){
+      stop("The `fileName` argument must be a character string.")
+    }
+
+    #write file
+    cat(script, "\n",
+        file = sprintf("%s/%s.txt",
+                       writeTo,
+                       fileName))
+
+    return(script)
   }
-  if (!dir.exists(writeTo)){ 
-    stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+  else if(is.null(writeTo) & is.null(fileName)){
+    #otherwise just return script
+    return(script)
   }
-  if (!is.character(fileName)){
-    stop("The `fileName` argument must be a character string.")
-  }
-  
-  cat(apimScript, "\n", 
-      file = sprintf("%s/%s.txt",
-                     writeTo, 
-                     fileName))
-  
-  return(apimScript)
 }

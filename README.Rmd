@@ -30,7 +30,7 @@ The `dySEM` logo was designed by Lowell Deranleau (for logo design inquiries, em
 
 ## Installation
 
-You can install the released version of dynamic from [CRAN](https://cran.r-project.org) with:
+You can install the released version of dySEM from [CRAN](https://cran.r-project.org) with:
 
 ```{r, eval = FALSE}
 install.packages("dySEM")
