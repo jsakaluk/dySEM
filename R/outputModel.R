@@ -15,7 +15,7 @@
 #' @param figtype character input of what type of figure is desired
 #' @param writeTo A character string specifying a directory path to where the file(s) should be saved.
 #' If set to “.”, the file(s) will be written to the current working directory.
-#' The default is NULL, and examples use a temporary directory created by tempdir().
+#' The default is NULL (which will throw an error), and examples use a temporary directory created by tempdir().
 #' @param fileName A character string specifying a desired base name for the output file(s).
 #' If a `fileName` not provided (i.e., default fileName = NULL), then defaults will be used
 #' (e.g., "dySEM_table"/"dySEM_table_Measurement"/"dySEM_table_Structural for tables; "dySEM_figure" for figures).
@@ -60,6 +60,9 @@ outputModel  <-  function(dvn, model = NULL, fit,
                     fileName = NULL){
 
   # checking for valid directory path
+  if (is.null(writeTo)){
+    stop("Must specify a directory to which the file should be saved. \n Use writeout = '.' to save output file(s) in the current working directory.")
+  }
   if (!is.character(writeTo)){
     stop("The `writeTo` argument must be a character string. \n Use writeTo = '.' to save output file(s) in the current working directory.")
   }

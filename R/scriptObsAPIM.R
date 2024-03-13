@@ -30,8 +30,8 @@
 scriptObsAPIM <- function(X1 = NULL, Y1 = NULL,
                           X2 = NULL, Y2 = NULL,
                           equate = "none", k = FALSE,
-                          writeTo = tempdir(),
-                          fileName = "obsAPIM_script"){
+                          writeTo = NULL,
+                          fileName = NULL){
 
   if(equate == "none"){
     reg1 <- paste0(Y1, " ~ a1*", X1, " + p1*", X2)

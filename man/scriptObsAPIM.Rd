@@ -12,8 +12,8 @@ scriptObsAPIM(
   Y2 = NULL,
   equate = "none",
   k = FALSE,
-  writeTo = tempdir(),
-  fileName = "obsAPIM_script"
+  writeTo = NULL,
+  fileName = NULL
 )
 }
 \arguments{

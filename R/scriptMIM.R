@@ -66,8 +66,8 @@ scriptMIM <- function(dvn, scaleset = "FF",
                      constr_dy_y_struct = c("variances", "means"),
                      constr_dy_xy_struct = c("actors", "partners"),
                      model = lifecycle::deprecated(), equate = lifecycle::deprecated(), est_k = FALSE,
-                     writeTo = tempdir(),
-                     fileName = "MIM_script"){
+                     writeTo = NULL,
+                     fileName = NULL){
 
 
   #stop if model is provided
