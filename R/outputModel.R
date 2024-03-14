@@ -61,7 +61,7 @@ outputModel  <-  function(dvn, model = NULL, fit,
 
   # checking for valid directory path
   if (is.null(writeTo)){
-    stop("Must specify a directory to which the file should be saved. \n Use writeout = '.' to save output file(s) in the current working directory.")
+    stop("Must specify a directory to which the file should be saved. \n Use writeTo = '.' to save output file(s) in the current working directory.")
   }
   if (!is.character(writeTo)){
     stop("The `writeTo` argument must be a character string. \n Use writeTo = '.' to save output file(s) in the current working directory.")
