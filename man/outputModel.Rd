@@ -36,7 +36,7 @@ options are "measurement" (i.e,, loadings, intercepts,),
 
 \item{writeTo}{A character string specifying a directory path to where the file(s) should be saved.
 If set to “.”, the file(s) will be written to the current working directory.
-The default is NULL, and examples use a temporary directory created by tempdir().}
+The default is NULL (which will throw an error), and examples use a temporary directory created by tempdir().}
 
 \item{fileName}{A character string specifying a desired base name for the output file(s).
 If a \code{fileName} not provided (i.e., default fileName = NULL), then defaults will be used

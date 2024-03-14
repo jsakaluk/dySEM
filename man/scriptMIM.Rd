@@ -18,8 +18,8 @@ scriptMIM(
   model = lifecycle::deprecated(),
   equate = lifecycle::deprecated(),
   est_k = FALSE,
-  writeTo = tempdir(),
-  fileName = "MIM_script"
+  writeTo = NULL,
+  fileName = NULL
 )
 }
 \arguments{
