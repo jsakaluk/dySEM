@@ -74,6 +74,7 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
     betas <- paste(beta_yx)
     return(betas)
   }
+
 }
 
 #' @rdname semHelpers

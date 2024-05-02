@@ -59,7 +59,7 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
                       indnum = tot_var)
       return(varlist)
     }else if(num_x1_var != num_x2_var){
-      stop("dvn() cannot detect a similar number of ", x_stem, " items for P1 and P2")
+      stop("scrapeVarCross() cannot detect a similar number of ", x_stem, " items for P1 and P2")
     }
   }else if(!is.null(y_order)){
     if(x_order == "sip"){
