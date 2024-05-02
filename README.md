@@ -213,3 +213,12 @@ outputModel(dvn, model = "cfa", fit = qual.indist.fit,
 Please note that the dySEM project is released with a [Contributor Code
 of Conduct](https://jsakaluk.github.io/dySEM/CODE_OF_CONDUCT.html). By
 contributing to this project, you agree to abide by its terms.
+
+## Acknowledgements
+
+The development of `dySEM` has been generously supported by Internal
+Grants from Western University, including:
+
+- a Research Mobilization, Creation & Innovation Grants for
+  SSHRC-Related Research
+- a Western Knowledge Mobilization Innovation Grants
