@@ -52,6 +52,7 @@ Other script-writing functions:
 \code{\link{scriptBiDy}()},
 \code{\link{scriptCFA}()},
 \code{\link{scriptCFM}()},
+\code{\link{scriptDyEFA}()},
 \code{\link{scriptISAT}()},
 \code{\link{scriptMIM}()}
 }

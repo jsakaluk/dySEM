@@ -1,6 +1,10 @@
-# dySEM 1.0.0
+# dySEM 1.1.0
 
-# dySEM 1.0
+- Added some basic dyadic EFA functionality (simulations forthcoming), including scripters,  a model fitting and comparison sequence wrapper, and some unit tests
+
+
+
+# dySEM 1.0.0
 
 Marks the first release of dySEM on CRAN. From here on out, the NEWS.md file will be updated with each new release.
 

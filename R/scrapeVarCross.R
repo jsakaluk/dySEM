@@ -24,6 +24,12 @@
 #' from final element of variable name
 #' @param y_item_num defaults to scrape all items that match the stem with any digits that follow.
 #' Will be updated to allow particular range of values, to make more sub-scale friendly.
+#' @param covs_order optional character for order of (S)tem, (P)artner number, and (I)tem number for any
+#' covariate(s). Defaults to NULL. This and other covariate arguments only necessary if there are covariates to be scripted in your model(s).
+#' @param covs_stem optional input character stem(s) of indicator variables for covariate(s). Can accept a single stem (e.g., "anx"), or a vector of stems (e.g., c("anx", "dep")).
+#' Defaults to NULL.
+#' @param covs_delim1 optional character to separate stem from partner number (spi) or item number (sip) for covariate(s). Defaults to NULL.
+#' @param covs_delim2 optional character to separate stem/partner number (spi) or stem/item number (sip) from
 #' @return a list, referred in short-hand as a "dvn" (dyad variable names list) containing variable names for p1, p2, # of items per LV,
 #'characters distinguishing partners, and total number of indicators
 #' @family variable-scraping functions
@@ -36,7 +42,8 @@
 #' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 
 scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2=NULL, x_item_num="\\d+", distinguish_1="1", distinguish_2="2",
-                y_order=NULL, y_stem=NULL, y_delim1=NULL, y_delim2=NULL, y_item_num="\\d+"){
+                y_order=NULL, y_stem=NULL, y_delim1=NULL, y_delim2=NULL, y_item_num="\\d+",
+              covs_order = NULL, covs_stem = NULL, covs_delim1 = NULL, covs_delim2 = NULL){
   if(is.null(y_order)){
     if(x_order == "sip"){
       x1vars <- sipExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_1)

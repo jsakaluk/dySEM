@@ -1,7 +1,7 @@
 #' A Function That Writes, Saves, and Exports Syntax for
 #' Fitting Latent Dyadic Confirmatory Factor Analysis (CFA) Models
 #'
-#' This function takes the outputted object from dyadVarNames()
+#' This function takes the outputted object from scrapeVarCross()
 #' and automatically writes, returns, and exports (.txt) lavaan() syntax
 #' for specifying dyadic configural, loading, and intercept invariant
 #' measurement models for either a specified X or Y factor.

@@ -52,11 +52,12 @@ devtools::install_github("jsakaluk/dySEM")
 The package currently provides functionality regarding the following
 types of latent dyadic data models:
 
-1.  **Dyadic Confirmatory Factor Analysis**
-2.  **Latent Actor-Partner Interdependence Models (APIM)**
-3.  **Latent Common Fate Models (CFM)**
-4.  **Latent Bifactor Dyadic (Bi-Dy) Models**
-5.  **Observed Actor-Partner Interdependence (APIM)**
+1.  Dyadic Confirmatory Factor Analysis
+2.  Latent Actor-Partner Interdependence Models (APIM)
+3.  Latent Common Fate Models (CFM)
+4.  Latent Bifactor Dyadic (Bi-Dy) Models
+5.  Observed Actor-Partner Interdependence (APIM)
+6.  **Dyadic Exploratory Factor Analysis** ***(NEW)***
 
 Additional features currently include:
 

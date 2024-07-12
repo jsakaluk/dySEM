@@ -101,6 +101,7 @@ Other script-writing functions:
 \code{\link{scriptAPIM}()},
 \code{\link{scriptCFA}()},
 \code{\link{scriptCFM}()},
+\code{\link{scriptDyEFA}()},
 \code{\link{scriptINULL}()},
 \code{\link{scriptISAT}()},
 \code{\link{scriptMIM}()}

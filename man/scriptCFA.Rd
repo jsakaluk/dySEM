@@ -50,7 +50,7 @@ character object of lavaan script that can be passed immediately to
 lavaan functions
 }
 \description{
-This function takes the outputted object from dyadVarNames()
+This function takes the outputted object from scrapeVarCross()
 and automatically writes, returns, and exports (.txt) lavaan() syntax
 for specifying dyadic configural, loading, and intercept invariant
 measurement models for either a specified X or Y factor.
@@ -109,6 +109,7 @@ Other script-writing functions:
 \code{\link{scriptAPIM}()},
 \code{\link{scriptBiDy}()},
 \code{\link{scriptCFM}()},
+\code{\link{scriptDyEFA}()},
 \code{\link{scriptINULL}()},
 \code{\link{scriptISAT}()},
 \code{\link{scriptMIM}()}
