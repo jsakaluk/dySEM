@@ -13,10 +13,11 @@
 #' @param fileName A character string specifying a desired base name for the output file(s).
 #' If a `fileName` not provided (i.e., "fileName = NULL"), then defaults will be used
 #' The specified name will be automatically appended with the appropriate file extension (i.e., .png for figures).
+#' @param gtTab A logical input indicating whether to generate the table(s) in `gt::gt()` table object format (`TRUE`).
 #' @family helpers
 #' @noRd
 
-makeTable <- function(dvn, fit, model, tabletype){
+makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
   if(length(dvn) == 6 & model == "cfa" & tabletype == "measurement"){
     #Extract intercepts
     xints <- xintercepts(dvn, fit)
@@ -28,7 +29,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
   else if(length(dvn) == 6 & model == "bidyc" & tabletype == "measurement"){
@@ -42,7 +48,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
   else if(length(dvn) == 9 & model == "apim" & tabletype == "measurement"){
@@ -56,7 +67,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
   else if(length(dvn) == 9 & model == "apim" & tabletype == "structural"){
@@ -72,7 +88,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
   else if(length(dvn) == 9 & model == "mim" & tabletype == "measurement"){
@@ -86,7 +107,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
   else if(length(dvn) == 9 & model == "mim" & tabletype == "structural"){
@@ -102,7 +128,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
   else if(length(dvn) == 9 & model == "cfm" & tabletype == "measurement"){
@@ -116,7 +147,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
   else if(length(dvn) == 9 & model == "cfm" & tabletype == "structural"){
@@ -132,7 +168,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
   else if(length(dvn) == 9 & model == "bidys" & tabletype == "measurement"){
@@ -146,7 +187,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
   else if(length(dvn) == 9 & model == "bidys" & tabletype == "structural"){
@@ -163,7 +209,12 @@ makeTable <- function(dvn, fit, model, tabletype){
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
 
-    tab <- gt::gt(tab)
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
     return(tab)
   }
 }

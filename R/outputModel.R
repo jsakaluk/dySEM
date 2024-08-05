@@ -59,6 +59,8 @@ outputModel  <-  function(dvn, model = NULL, fit,
                     writeTo = NULL,
                     fileName = NULL){
 
+  lifecycle::deprecate_warn("1.1.0", "dySEM::outputModel()", details = "Please use `dySEM::outputParamTab` and/or `dySEM::outputParamFig` instead.")
+  
   # checking for valid directory path
   if (is.null(writeTo)){
     stop("Must specify a directory to which the file should be saved. \n Use writeTo = '.' to save output file(s) in the current working directory.")
