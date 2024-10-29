@@ -21,6 +21,9 @@
 
 
 getConstraintTests <- function(constrainFit, filterSig = FALSE){
+  
+  lifecycle::deprecate_warn("1.1.0", "dySEM::getConstraintTests()", details = "Please use `dySEM::outputConstraintTab()` instead.")
+  
   #Extract score test for relaxing each equality constraint
   constrainFit.mi <- lavaan::lavTestScore(constrainFit)
   constrainFit.mi.uni <- constrainFit.mi$uni
