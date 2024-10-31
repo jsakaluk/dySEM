@@ -68,7 +68,7 @@
                         <h4 data-toc-skip class="author">John K.
 Sakaluk</h4>
             
-            <h4 data-toc-skip class="date">20/09/24</h4>
+            <h4 data-toc-skip class="date">31/10/24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/master/vignettes/articles/invariance.Rmd" class="external-link"><code>vignettes/articles/invariance.Rmd</code></a></small>
       <div class="d-none name"><code>invariance.Rmd</code></div>
@@ -491,6 +491,11 @@ all four models, in order:</p>
 <code class="sourceCode R"><span></span>
 <span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sat.residual.fit</span>, <span class="va">sat.intercept.fit</span>, <span class="va">sat.loading.fit</span>, <span class="va">sat.config.fit</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/getInvarCompTable.html">getInvarCompTable</a></span><span class="op">(</span><span class="va">mods</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `getInvarCompTable()` was deprecated in dySEM 1.1.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `dySEM::outputInvarCompTab()` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="co">#&gt;          mod  chisq df pvalue      aic      bic rmsea   cfi chisq_diff df_diff</span></span>
 <span><span class="co">#&gt; 1   residual 78.842 42  0.000 3855.175 3918.308 0.087 0.970         NA      NA</span></span>
 <span><span class="co">#&gt; 2  intercept 60.321 37  0.009 3846.654 3923.512 0.074 0.981    -18.521      -5</span></span>
@@ -726,6 +731,11 @@ constraints:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/getConstraintTests.html">getConstraintTests</a></span><span class="op">(</span><span class="va">sat.residual.fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `getConstraintTests()` was deprecated in dySEM 1.1.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `dySEM::outputConstraintTab()` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="co">#&gt;                    param1 constraint                 param2  chi2 df pvalue</span></span>
 <span><span class="co">#&gt; 1       Sat1 =~ sat.g.1_1         ==      Sat2 =~ sat.g.2_1 0.541  1  0.462</span></span>
 <span><span class="co">#&gt; 2       Sat1 =~ sat.g.1_2         ==      Sat2 =~ sat.g.2_2 0.534  1  0.465</span></span>
