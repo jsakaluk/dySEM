@@ -39,6 +39,9 @@
 #' getInvarCompTable(mods)
 #'
 getInvarCompTable <- function(mods){
+  
+  lifecycle::deprecate_warn("1.1.0", "dySEM::getInvarCompTable()", details = "Please use `dySEM::outputInvarCompTab()` instead.")
+  
   modfit <- t(as.data.frame(lavaan::fitmeasures(mods[[1]])))
 
   for(i in 2:length(mods)){
