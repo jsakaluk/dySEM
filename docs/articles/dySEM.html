@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,16 +136,16 @@ other sorts of dyadic data analyses via <code>dySEM</code>.</p>
 </h2>
 <p>We will use a subset of <a href="https://github.com/jsakaluk/dySEM/blob/0ceb8440ac71ce00777853cff4a7d177cf2a6db5/R/DRES-data.R" class="external-link"><code>DRES</code></a>,
 consisting of 121 dyadic couples’ ratings of relationship quality on 9
-of the <a href="https://psycnet.apa.org/record/2000-13970-007" class="external-link">PRQC</a>
-indicators (1 = <em>not at all</em>, 7 = <em>extremely</em>; all
-indicators positively keyed). Structural equation modeling (SEM)
-programs like <code>lavaan</code> require dyadic data to be in <em>dyad
-structure dataset</em>, whereby each row contains the data for one dyad,
-with separate columns for each observation (in this case, indicator
-variables of latent relationship quality) made for each member of the
-dyad. We may eventually build in data-transformation functions to go
-from various data structures to a <em>dyad structure</em>, but for now,
-we recommend <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link"><code>tidyr::pivot_wider</code></a>
+of the PRQC (Fletcher, Simpson, &amp; Thomas, 2000) indicators (1 =
+<em>not at all</em>, 7 = <em>extremely</em>; all indicators positively
+keyed). Structural equation modeling (SEM) programs like
+<code>lavaan</code> require dyadic data to be in <em>dyad structure
+dataset</em>, whereby each row contains the data for one dyad, with
+separate columns for each observation (in this case, indicator variables
+of latent relationship quality) made for each member of the dyad. We may
+eventually build in data-transformation functions to go from various
+data structures to a <em>dyad structure</em>, but for now, we recommend
+<a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link"><code>tidyr::pivot_wider</code></a>
 or the tools provided by <a href="http://davidakenny.net/RDDD.htm" class="external-link">Ledermann &amp; Kenny
 (2014)</a></p>
 <p>Like many real-world analytic contexts, <a href="https://github.com/jsakaluk/dySEM/blob/0ceb8440ac71ce00777853cff4a7d177cf2a6db5/R/DRES-data.R" class="external-link"><code>DRES</code></a>

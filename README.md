@@ -23,9 +23,9 @@ Downloads](https://cranlogs.r-pkg.org/badges/grand-total/dySEM)](https://cranlog
 
 The `dySEM` helps automate the process of scripting, fitting, and
 reporting on latent models of dyadic data via
-[`lavaan`](https://lavaan.ugent.be). The package was developed and used
-in the course of the research described in [Sakaluk, Fisher, &
-Kilshaw](https://psycnet.apa.org/record/2021-23304-001) (2021).
+[`lavaan`](https://lavaan.ugent.be). The package was initially developed
+and used in the course of the research described in Sakaluk, Fisher, and
+Kilshaw (2021), and has since undergone considerable expansion.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
