@@ -81,13 +81,13 @@ grouplvsd <- function(fit, source){
   if(source == "1"){
     lvsd <- lavaan::parameterEstimates(fit) %>%
       dplyr::filter(.data$op == "~~"& .data$lhs == lavaan::lavNames(fit, type = "lv")[[1]] & .data$rhs == lavaan::lavNames(fit, type = "lv")[[1]]) %>%
-      dplyr::select(.data$est) %>%
+      dplyr::pull(.data$est) %>%
       sqrt() %>%
       as.numeric()
   }else if(source == "2"){
     lvsd <- lavaan::parameterEstimates(fit) %>%
       dplyr::filter(.data$op == "~~"& .data$lhs == lavaan::lavNames(fit, type = "lv")[[2]] & .data$rhs == lavaan::lavNames(fit, type = "lv")[[2]]) %>%
-      dplyr::select(.data$est) %>%
+      dplyr::pull(.data$est) %>%
       sqrt() %>%
       as.numeric()
   }
