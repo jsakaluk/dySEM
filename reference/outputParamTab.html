@@ -106,7 +106,7 @@ The resulting base name will automatically be appended with a <code>.rtf</code> 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list. More specifically, a <code>tibble()</code> if <code>gtTab = FALSE</code> (default), or <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> object if <code>gtTab = TRUE</code>.</p>
+    <p>A <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble()</a></code> if <code>gtTab = FALSE</code> (default), or <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> object if <code>gtTab = TRUE</code>, of specified model parameter estimates and corresponding statistical tests.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -143,7 +143,7 @@ The resulting base name will automatically be appended with a <code>.rtf</code> 
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Sat2            sat.g.2_4    1.61 0.151  10.7 &lt; .001             0.819</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Sat2            sat.g.2_5    1.93 0.159  12.1 &lt; .001             0.887</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: Intercept &lt;dbl&gt;</span></span>
-<span class="r-in"><span> </span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dvnxy</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
 <span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span>,</span></span>
 <span class="r-in"><span>y_order<span class="op">=</span><span class="st">"spi"</span>, y_stem<span class="op">=</span><span class="st">"com"</span>, y_delim1 <span class="op">=</span> <span class="st">"."</span>, y_delim2<span class="op">=</span><span class="st">"_"</span><span class="op">)</span></span></span>
