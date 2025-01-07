@@ -1,3 +1,5 @@
+# dySEM 1.1.1
+
 # dySEM 1.2.0 
 
 * A revamping of the outputting functionality, lead @omarjcamanto
