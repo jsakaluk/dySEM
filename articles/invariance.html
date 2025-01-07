@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -490,22 +490,16 @@ all four models, in order:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sat.residual.fit</span>, <span class="va">sat.intercept.fit</span>, <span class="va">sat.loading.fit</span>, <span class="va">sat.config.fit</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/getInvarCompTable.html">getInvarCompTable</a></span><span class="op">(</span><span class="va">mods</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: `getInvarCompTable()` was deprecated in dySEM 1.1.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `dySEM::outputInvarCompTab()` instead.</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
-<span><span class="co">#&gt;          mod  chisq df pvalue      aic      bic rmsea   cfi chisq_diff df_diff</span></span>
-<span><span class="co">#&gt; 1   residual 78.842 42  0.000 3855.175 3918.308 0.087 0.970         NA      NA</span></span>
-<span><span class="co">#&gt; 2  intercept 60.321 37  0.009 3846.654 3923.512 0.074 0.981    -18.521      -5</span></span>
-<span><span class="co">#&gt; 3    loading 58.810 33  0.004 3853.143 3940.981 0.082 0.979     -1.511      -4</span></span>
-<span><span class="co">#&gt; 4 configural 53.026 29  0.004 3855.359 3954.176 0.085 0.981     -5.784      -4</span></span>
-<span><span class="co">#&gt;   p_diff aic_diff bic_diff rmsea_diff cfi_diff</span></span>
-<span><span class="co">#&gt; 1     NA       NA       NA         NA       NA</span></span>
-<span><span class="co">#&gt; 2  0.002   -8.521    5.204     -0.013    0.011</span></span>
-<span><span class="co">#&gt; 3  0.825    6.489   17.469      0.008   -0.002</span></span>
-<span><span class="co">#&gt; 4  0.216    2.216   13.196      0.002    0.001</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/outputInvarCompTab.html">outputInvarCompTab</a></span><span class="op">(</span><span class="va">mods</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 15</span></span></span>
+<span><span class="co">#&gt;   mod       chisq    df pvalue   aic   bic rmsea   cfi chisq_diff df_diff p_diff</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> residual   78.8    42  0     <span style="text-decoration: underline;">3</span>855. <span style="text-decoration: underline;">3</span>918. 0.087 0.97       <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> intercept  60.3    37  0.009 <span style="text-decoration: underline;">3</span>847. <span style="text-decoration: underline;">3</span>924. 0.074 0.981     -<span style="color: #BB0000;">18.5</span>       -<span style="color: #BB0000;">5</span>  0.002</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> loading    58.8    33  0.004 <span style="text-decoration: underline;">3</span>853. <span style="text-decoration: underline;">3</span>941. 0.082 0.979      -<span style="color: #BB0000;">1.51</span>      -<span style="color: #BB0000;">4</span>  0.825</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> configur…  53.0    29  0.004 <span style="text-decoration: underline;">3</span>855. <span style="text-decoration: underline;">3</span>954. 0.085 0.981      -<span style="color: #BB0000;">5.78</span>      -<span style="color: #BB0000;">4</span>  0.216</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: aic_diff &lt;dbl&gt;, bic_diff &lt;dbl&gt;, rmsea_diff &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   cfi_diff &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>Beyond being more simpatico with the approach of beginning with the
 most parsimonious dyadic invariance model–and testing against it to
 support a more complicated one–we think this approach offers a more
@@ -721,7 +715,7 @@ for the 2nd and 5th items, respectively.</p>
 <span><span class="co">#&gt; 53 0.000  0.000 0.000</span></span>
 <span><span class="co">#&gt; 54 0.000  0.000 0.000</span></span>
 <span><span class="co">#&gt; 55 0.000  0.000 0.000</span></span></code></pre></div>
-<p>We built a wrapper-function, <code>getConstraintTests</code>, that
+<p>We built a wrapper-function, <code>outputConstraintTab</code>, that
 automates this process for you. It takes as its argument the model that
 resulted in significantly degraded fit, and returns a list of the items
 that were responsible for the non-invariance, with the matching of
@@ -730,44 +724,25 @@ provided is a more immediately readable and intuitive list of
 constraints:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/getConstraintTests.html">getConstraintTests</a></span><span class="op">(</span><span class="va">sat.residual.fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: `getConstraintTests()` was deprecated in dySEM 1.1.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `dySEM::outputConstraintTab()` instead.</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
-<span><span class="co">#&gt;                    param1 constraint                 param2  chi2 df pvalue</span></span>
-<span><span class="co">#&gt; 1       Sat1 =~ sat.g.1_1         ==      Sat2 =~ sat.g.2_1 0.541  1  0.462</span></span>
-<span><span class="co">#&gt; 2       Sat1 =~ sat.g.1_2         ==      Sat2 =~ sat.g.2_2 0.534  1  0.465</span></span>
-<span><span class="co">#&gt; 3       Sat1 =~ sat.g.1_3         ==      Sat2 =~ sat.g.2_3 0.055  1  0.814</span></span>
-<span><span class="co">#&gt; 4       Sat1 =~ sat.g.1_4         ==      Sat2 =~ sat.g.2_4 1.438  1  0.231</span></span>
-<span><span class="co">#&gt; 5       Sat1 =~ sat.g.1_5         ==      Sat2 =~ sat.g.2_5 2.201  1  0.138</span></span>
-<span><span class="co">#&gt; 6           sat.g.1_1 ~1          ==          sat.g.2_1 ~1  0.188  1  0.664</span></span>
-<span><span class="co">#&gt; 7           sat.g.1_2 ~1          ==          sat.g.2_2 ~1  0.023  1  0.878</span></span>
-<span><span class="co">#&gt; 8           sat.g.1_3 ~1          ==          sat.g.2_3 ~1  0.606  1  0.436</span></span>
-<span><span class="co">#&gt; 9           sat.g.1_4 ~1          ==          sat.g.2_4 ~1  1.010  1  0.315</span></span>
-<span><span class="co">#&gt; 10          sat.g.1_5 ~1          ==          sat.g.2_5 ~1  0.043  1  0.835</span></span>
-<span><span class="co">#&gt; 11 sat.g.1_1 ~~ sat.g.1_1         == sat.g.2_1 ~~ sat.g.2_1 0.031  1  0.860</span></span>
-<span><span class="co">#&gt; 12 sat.g.1_2 ~~ sat.g.1_2         == sat.g.2_2 ~~ sat.g.2_2 8.797  1  0.003</span></span>
-<span><span class="co">#&gt; 13 sat.g.1_3 ~~ sat.g.1_3         == sat.g.2_3 ~~ sat.g.2_3 0.910  1  0.340</span></span>
-<span><span class="co">#&gt; 14 sat.g.1_4 ~~ sat.g.1_4         == sat.g.2_4 ~~ sat.g.2_4 0.614  1  0.433</span></span>
-<span><span class="co">#&gt; 15 sat.g.1_5 ~~ sat.g.1_5         == sat.g.2_5 ~~ sat.g.2_5 7.848  1  0.005</span></span>
-<span><span class="co">#&gt;     sig</span></span>
-<span><span class="co">#&gt; 1  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 5  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 6  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 7  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 8  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 9  &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 10 &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 11 &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 12   **</span></span>
-<span><span class="co">#&gt; 13 &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 14 &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 15   **</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/outputConstraintTab.html">outputConstraintTab</a></span><span class="op">(</span><span class="va">sat.residual.fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 15 × 7</span></span></span>
+<span><span class="co">#&gt;    param1                   constraint param2            chi2    df pvalue sig  </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> <span style="color: #949494;">"</span>Sat1 =~ sat.g.1_1<span style="color: #949494;">"</span>      ==         <span style="color: #949494;">"</span>Sat2 =~ sat.g.… 0.541     1  0.462 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> <span style="color: #949494;">"</span>Sat1 =~ sat.g.1_2<span style="color: #949494;">"</span>      ==         <span style="color: #949494;">"</span>Sat2 =~ sat.g.… 0.534     1  0.465 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> <span style="color: #949494;">"</span>Sat1 =~ sat.g.1_3<span style="color: #949494;">"</span>      ==         <span style="color: #949494;">"</span>Sat2 =~ sat.g.… 0.055     1  0.814 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> <span style="color: #949494;">"</span>Sat1 =~ sat.g.1_4<span style="color: #949494;">"</span>      ==         <span style="color: #949494;">"</span>Sat2 =~ sat.g.… 1.44      1  0.231 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> <span style="color: #949494;">"</span>Sat1 =~ sat.g.1_5<span style="color: #949494;">"</span>      ==         <span style="color: #949494;">"</span>Sat2 =~ sat.g.… 2.20      1  0.138 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> <span style="color: #949494;">"</span>sat.g.1_1 ~1 <span style="color: #949494;">"</span>          ==         <span style="color: #949494;">"</span>sat.g.2_1 ~1 <span style="color: #949494;">"</span>  0.188     1  0.664 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> <span style="color: #949494;">"</span>sat.g.1_2 ~1 <span style="color: #949494;">"</span>          ==         <span style="color: #949494;">"</span>sat.g.2_2 ~1 <span style="color: #949494;">"</span>  0.023     1  0.878 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> <span style="color: #949494;">"</span>sat.g.1_3 ~1 <span style="color: #949494;">"</span>          ==         <span style="color: #949494;">"</span>sat.g.2_3 ~1 <span style="color: #949494;">"</span>  0.606     1  0.436 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> <span style="color: #949494;">"</span>sat.g.1_4 ~1 <span style="color: #949494;">"</span>          ==         <span style="color: #949494;">"</span>sat.g.2_4 ~1 <span style="color: #949494;">"</span>  1.01      1  0.315 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> <span style="color: #949494;">"</span>sat.g.1_5 ~1 <span style="color: #949494;">"</span>          ==         <span style="color: #949494;">"</span>sat.g.2_5 ~1 <span style="color: #949494;">"</span>  0.043     1  0.835 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> <span style="color: #949494;">"</span>sat.g.1_1 ~~ sat.g.1_1<span style="color: #949494;">"</span> ==         <span style="color: #949494;">"</span>sat.g.2_1 ~~ s… 0.031     1  0.86  <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> <span style="color: #949494;">"</span>sat.g.1_2 ~~ sat.g.1_2<span style="color: #949494;">"</span> ==         <span style="color: #949494;">"</span>sat.g.2_2 ~~ s… 8.80      1  0.003 **   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> <span style="color: #949494;">"</span>sat.g.1_3 ~~ sat.g.1_3<span style="color: #949494;">"</span> ==         <span style="color: #949494;">"</span>sat.g.2_3 ~~ s… 0.91      1  0.34  <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> <span style="color: #949494;">"</span>sat.g.1_4 ~~ sat.g.1_4<span style="color: #949494;">"</span> ==         <span style="color: #949494;">"</span>sat.g.2_4 ~~ s… 0.614     1  0.433 <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> <span style="color: #949494;">"</span>sat.g.1_5 ~~ sat.g.1_5<span style="color: #949494;">"</span> ==         <span style="color: #949494;">"</span>sat.g.2_5 ~~ s… 7.85      1  0.005 **</span></span></code></pre></div>
 <p>In this output, we quickly see that none of the individual equality
 constraints on the loadings (<code>=~</code> operator) or intercepts
 (<code>~1</code> operator) significantly degraded model fit, but two of

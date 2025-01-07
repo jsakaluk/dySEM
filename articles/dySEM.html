@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -449,33 +449,27 @@ fitted <code>lavaan</code> model <a href="https://lavaan.ugent.be/tutorial/inspe
 correctly, and reproducibly generate output from your fitted model(s),
 in the forms of path diagrams and/or tables of statistical values. Path
 diagram creation is supported via the <a href="https://CRAN.R-project.org/package=semPlot" class="external-link"><code>semPlot</code></a>
-package’s <code>semPaths</code> function, whereas table creation is
-currently supported by the <a href="https://strengejacke.github.io/sjPlot/" class="external-link"><code>sjPlot</code></a>
-package’s <code>tab_df</code> function, though users should be aware
-that <a href="https://github.com/jsakaluk/dySEM/issues/28" class="external-link">we are
-considering</a> a move to the <a href="https://gt.rstudio.com" class="external-link"><code>gt</code></a> package for improved
-tabling capacity.</p>
-<p>The <code>outputModel</code> function is currently
-<code>dySEM</code>’s all-purpose outputting function.</p>
-<p>The useR must specify the <code>dvn</code> of scraped variables used
-to script the model and the type of model being outputted (e.g., “cfa”).
-UseRs can specify whether they only want a path diagram or some table(s)
-to be outputted (e.g., by setting either <code>figure = FALSE</code> or
-<code>table = FALSE</code>), but by default both are created. UseRs can
-specify a directory path to where they want their file(s) to be written
-and saved (e.g., setting <code>writeTo = "."</code> to save in the
-current working directory). UseRs can further specify what kind of path
-diagram (e.g., using standardized or unstandardized value) or tables
-(e.g., featuring measurement- or structural-model parameter, or both)
-are created.</p>
-<p>Whatever options the useR specifies, <code>outputModel</code> is
-typically run without assigning its output to an object, as it’s mostly
-to facilitate statistical reporting for scientific articles:</p>
+package’s <code>semPaths</code> function. Tabling, meanwhile, supports
+(optional) returning of <a href="https://CRAN.R-project.org/package=gt" class="external-link"><code>gt</code></a> tables,
+which can be further customized for publication-quality output (however
+functionality defaults to merely returning a data frame).</p>
+<p>For tabling, the useR must specify the <code>dvn</code> of scraped
+variables used to script the model and the type of model being outputted
+(e.g., “cfa”).</p>
+<p>For both tabling and path diagraming, UseRs can specify a directory
+path to where they want their file(s) to be written and saved (e.g.,
+setting <code>writeTo = "."</code> to save in the current working
+directory). UseRs can further specify what kind of path diagram (e.g.,
+using standardized or unstandardized value) or tables (e.g., featuring
+measurement- or structural-model parameter, or both) are created.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/outputModel.html">outputModel</a></span><span class="op">(</span><span class="va">dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">qual.config.fit</span>, </span>
-<span>            table <span class="op">=</span> <span class="cn">TRUE</span>, tabletype <span class="op">=</span> <span class="st">"measurement"</span>, </span>
-<span>            figure <span class="op">=</span> <span class="cn">TRUE</span>, figtype <span class="op">=</span> <span class="st">"unstandardized"</span>,</span>
-<span>            writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"dCFA_config"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/outputParamTab.html">outputParamTab</a></span><span class="op">(</span><span class="va">dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">qual.indist.fit</span>, </span>
+<span>               tabletype <span class="op">=</span> <span class="st">"measurement"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>               fileName <span class="op">=</span> <span class="st">"cfa_indist"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/outputParamFig.html">outputParamFig</a></span><span class="op">(</span>fit <span class="op">=</span> <span class="va">qual.indist.fit</span>, figtype <span class="op">=</span> <span class="st">"standardized"</span>,</span>
+<span>               writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>               fileName <span class="op">=</span> <span class="st">"cfa_indist"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

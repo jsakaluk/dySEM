@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,6 +105,7 @@
 <p>Additional features currently include:</p>
 <ul>
 <li>Automated specification of invariance constraints for any model, including full indistinguishability</li>
+<li>Wrapper-function to provide variable-and-parameter specific tests of noninvariance</li>
 <li>Functions to assist with the specification of <strong>I-SAT Models</strong> and <strong>I-NULL Models</strong> for calibrated model fit indexes with indistinguishable dyad models</li>
 <li>Functions to assist with reproducible creation of path diagrams and tables of statistical output</li>
 <li>Functions to calculate supplemental statistical information (e.g., omega reliability, noninvariance effect sizes, corrected model fit indexes)</li>
@@ -113,13 +114,19 @@
 <div class="section level2">
 <h2 id="future-functionality">Future Functionality<a class="anchor" aria-label="anchor" href="#future-functionality"></a>
 </h2>
-<p>Functionality targeted for future development of <code>dySEM</code> is tracked <a href="https://github.com/jsakaluk/dySEM/projects/1" class="external-link">here</a>. Current high-priority items include:</p>
+<p>Shorter-term development goals include:</p>
 <ol style="list-style-type: decimal">
+<li>Uni-construct “scripter” functions</li>
+<li>Multi-construct friendly functionality (e.g., for dyadic CFA with multiple subscales of a measure)</li>
+<li>Covariate scripting and optionality</li>
+<li>Improved ease of item selection in scraper functions</li>
+</ol>
+<p>Longer-term goals, meanwhile, include:</p>
+<ol style="list-style-type: decimal">
+<li>“Third-variable” models (e.g., mediators and moderators)</li>
 <li>Longitudinal dyadic model scripting functions (e.g., curve of factors, common fate growth)</li>
 <li>Latent dyadic response surface analysis scripting and visualization functions</li>
 <li>Multi-group dyadic model scripting (e.g., comparing models from samples of heterosexual vs. LGBTQ+ dyads)</li>
-<li>Covariate scripting and optionality</li>
-<li>Improved ease of item selection in scraper functions</li>
 </ol>
 </div>
 <div class="section level2">
@@ -206,11 +213,14 @@
 </h3>
 <p><code>dySEM</code> also contains functionality to help you quickly, correctly, and reproducibly generate output from your fitted model(s), in the forms of path diagrams and/or tables of statistical values. By default these save to a temporary directory, but you can specify a directory of your choice by replacing <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> (e.g., with <code>"."</code>, which will place it in your current working directory).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/outputModel.html">outputModel</a></span><span class="op">(</span><span class="va">dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">qual.indist.fit</span>, </span>
-<span>            table <span class="op">=</span> <span class="cn">TRUE</span>, tabletype <span class="op">=</span> <span class="st">"measurement"</span>, </span>
-<span>            figure <span class="op">=</span> <span class="cn">TRUE</span>, figtype <span class="op">=</span> <span class="st">"unstandardized"</span>,</span>
-<span>            writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>            fileName <span class="op">=</span> <span class="st">"dCFA_indist"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="reference/outputParamTab.html">outputParamTab</a></span><span class="op">(</span><span class="va">dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">qual.indist.fit</span>, </span>
+<span>               tabletype <span class="op">=</span> <span class="st">"measurement"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>               fileName <span class="op">=</span> <span class="st">"cfa_indist"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/outputParamFig.html">outputParamFig</a></span><span class="op">(</span>fit <span class="op">=</span> <span class="va">qual.indist.fit</span>, figtype <span class="op">=</span> <span class="st">"standardized"</span>,</span>
+<span>               writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>               fileName <span class="op">=</span> <span class="st">"cfa_indist"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
