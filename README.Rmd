@@ -59,19 +59,27 @@ The package currently provides functionality regarding the following types of la
 Additional features currently include:
 
 * Automated specification of invariance constraints for any model, including full indistinguishability
+* Wrapper-function to provide variable-and-parameter specific tests of noninvariance
 * Functions to assist with the specification of **I-SAT Models** and **I-NULL Models** for calibrated model fit indexes with indistinguishable dyad models
 * Functions to assist with reproducible creation of path diagrams and tables of statistical output
 * Functions to calculate supplemental statistical information (e.g., omega reliability, noninvariance effect sizes, corrected model fit indexes)
 
 ## Future Functionality
   
-Functionality targeted for future development of `dySEM` is tracked [here](https://github.com/jsakaluk/dySEM/projects/1). Current high-priority items include: 
+Shorter-term development goals include: 
 
+1. Uni-construct "scripter" functions
+1. Multi-construct friendly functionality (e.g., for dyadic CFA with multiple subscales of a measure)
+1. Covariate scripting and optionality
+1. Improved ease of item selection in scraper functions
+
+Longer-term goals, meanwhile, include: 
+
+1. "Third-variable" models (e.g., mediators and moderators)
 1. Longitudinal dyadic model scripting functions (e.g., curve of factors, common fate growth)
 1. Latent dyadic response surface analysis scripting and visualization functions
 1. Multi-group dyadic model scripting (e.g., comparing models from samples of heterosexual vs. LGBTQ+ dyads) 
-1. Covariate scripting and optionality
-1. Improved ease of item selection in scraper functions
+
 
 ## Collaboration
 
@@ -148,11 +156,14 @@ summary(qual.indist.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRU
 
 
 ```{r outputModel, eval = FALSE}
-outputModel(dvn, model = "cfa", fit = qual.indist.fit, 
-            table = TRUE, tabletype = "measurement", 
-            figure = TRUE, figtype = "unstandardized",
-            writeTo = tempdir(),
-            fileName = "dCFA_indist")
+
+outputParamTab(dvn, model = "cfa", fit = qual.indist.fit, 
+               tabletype = "measurement", writeTo = tempdir(), 
+               fileName = "cfa_indist")
+
+outputParamFig(fit = qual.indist.fit, figtype = "standardized",
+               writeTo = tempdir(), 
+               fileName = "cfa_indist")
 ```
 
 ## Code of Conduct

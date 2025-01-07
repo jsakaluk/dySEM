@@ -435,8 +435,7 @@ Unfortunately, the default behavior of `anova()` is to compare these models in o
 ```{r getInvarCompTable}
 
 mods <- list(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
-getInvarCompTable(mods)
-
+outputInvarCompTab(mods)
 ```
 
 Beyond being more simpatico with the approach of beginning with the most parsimonious dyadic invariance model--and testing against it to support a more complicated one--we think this approach offers a more intuitive framing of what is happening with chisq and df within each model. That is, relaxing constraints (in each subsequent model) reduces misfit, and therefore chisq decreases; relaxing these constraints, meanwhile, increases model complexity by adding parameters to be estimated, and therefore we lose of "spend" a df for each constraint we relax. In this instance, we can see that we significantly improve the model by relaxing the constraints on the residual variances (i.e., adopting the intercept-invariance model), but relaxing the other constraints between dyads (i.e., intercepts and loadings) does not reduce misfit enough for the amount of parsimony we would need to sacrifice. 
@@ -472,11 +471,11 @@ partable(sat.residual.fit)
 
 ```
 
-We built a wrapper-function, `getConstraintTests`, that automates this process for you. It takes as its argument the model that resulted in significantly degraded fit, and returns a list of the items that were responsible for the non-invariance, with the matching of plabel having taken place "behind the scenes", so that all you are provided is a more immediately readable and intuitive list of constraints: 
+We built a wrapper-function, `outputConstraintTab`, that automates this process for you. It takes as its argument the model that resulted in significantly degraded fit, and returns a list of the items that were responsible for the non-invariance, with the matching of plabel having taken place "behind the scenes", so that all you are provided is a more immediately readable and intuitive list of constraints: 
 
 ```{r getConstrainTests}
 
-getConstraintTests(sat.residual.fit)
+outputConstraintTab(sat.residual.fit)
 
 ```
 

@@ -1,8 +1,16 @@
+# dySEM 1.2.0 
+
+* A revamping of the outputting functionality, lead @omarjcamanto
+
+## Major changes
+
+* Deprecated outputModel(), in favour of two separate functions: outputParamFig() (for path diagram), and outputParamTab() (for table of parameter estimates)
+* Deprecated getInvarCompTable(), in favour of outputInvarCompTable() (for table of invariance comparisons); this now returns a more flexible data frame (with optionality for gt())
+* Created outputContraintTests() (for table of parameter-specific dyadic noninvariance tests with Langrange multipliers); this now returns a more flexible tibble (with optionality for gt())
+
 # dySEM 1.1.0
 
-- Added some basic dyadic EFA functionality (simulations forthcoming), including scripters,  a model fitting and comparison sequence wrapper, and some unit tests
-
-
+* Added some basic dyadic EFA functionality (simulations forthcoming), including scripters,  a model fitting and comparison sequence wrapper, and some unit tests
 
 # dySEM 1.0.0
 
