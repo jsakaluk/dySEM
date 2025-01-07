@@ -32,7 +32,7 @@ The resulting base name will automatically be appended with a \code{.rtf} file e
 \code{fileName} is only relevant if \code{gtTab = TRUE} and \code{writeTo} is specified.}
 }
 \value{
-A list. More specifically, a \code{\link[=tibble]{tibble()}}---if \code{gtTab = FALSE} (default)---or \code{gt::gt()} object---if \code{gtTab = TRUE}---with
+A \code{tibble::tibble()} if \code{gtTab = FALSE} (default), or \code{gt::gt()} object if \code{gtTab = TRUE}, with
 rows of equality constraints (now with readable \code{param} labels) and test statistic, \emph{df}, and \emph{p} for whether constraint worsens model fit.
 }
 \description{

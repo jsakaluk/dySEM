@@ -24,7 +24,7 @@ The resulting base name will automatically be appended with a \code{.rtf} file e
 \code{fileName} is only relevant if \code{gtTab = TRUE} and \code{writeTo} is specified.}
 }
 \value{
-A list. More specifically, a \code{\link[=tibble]{tibble()}}---if \code{gtTab = FALSE} (default)---or \code{gt::gt()} object---if \code{gtTab = TRUE}---of model fit statistics for each model, as well as the difference in fit statistics between each model and the previous model
+A \code{tibble::tibble()} if \code{gtTab = FALSE} (default), or \code{gt::gt()} object if \code{gtTab = TRUE}, of model fit statistics for each model, as well as the difference in fit statistics between each model and the previous model
 }
 \description{
 \code{outputInvarCompTab()} is used to compare the model fit of nested dyadic invariance models

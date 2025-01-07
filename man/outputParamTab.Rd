@@ -43,7 +43,7 @@ The resulting base name will automatically be appended with a \code{.rtf} file e
 \code{fileName} is only relevant if \code{gtTab = TRUE} and \code{writeTo} is specified.}
 }
 \value{
-A list. More specifically, a \code{\link[=tibble]{tibble()}} if \code{gtTab = FALSE} (default), or \code{gt::gt()} object if \code{gtTab = TRUE}.
+A \code{tibble::tibble()} if \code{gtTab = FALSE} (default), or \code{gt::gt()} object if \code{gtTab = TRUE}, of specified model parameter estimates and corresponding statistical tests.
 }
 \description{
 This function takes the model from fitted \code{dySEM} scripts and
@@ -68,7 +68,7 @@ auto.fix.first= FALSE, meanstructure = TRUE)
 
 outputParamTab(dvnx, model = "cfa", sat.config.mod, tabletype = "measurement",
 writeTo = tempdir(), fileName = "dCFA_configural")
- 
+
 dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
