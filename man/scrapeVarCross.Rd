@@ -18,6 +18,9 @@ scrapeVarCross(
   y_delim1 = NULL,
   y_delim2 = NULL,
   y_item_num = "\\\\d+",
+  var_list = NULL,
+  var_list_order = NULL,
+  var_list_item_num = "\\\\d+",
   covs_order = NULL,
   covs_stem = NULL,
   covs_delim1 = NULL,
@@ -57,6 +60,12 @@ from final element of variable name}
 
 \item{y_item_num}{defaults to scrape all items that match the stem with any digits that follow.
 Will be updated to allow particular range of values, to make more sub-scale friendly.}
+
+\item{var_list}{optional named list of indicator variable information, if more than one LV is to be scripted (e.g., a dyadic CFA with multiple sub-scales from the same measure). If supplied, this list \emph{must} contain the following elements: "stem" (a vector of stems), "delim1" (a vector of delimiting characters), and"delim2" (a vector of subsequently delimiting characters). Optionally may include numeric vectors "min_num" and "max_num" if indicators for different LVs share the same stem and must be separated by range of item numbers within a measure.}
+
+\item{var_list_order}{optional character for order of (S)tem, (P)artner number, and (I)tem number for any of the indicator variables of a multi-LV model (i.e., this functionality assumes the same ordering of elements throughout)}
+
+\item{var_list_item_num}{optional character for item number of any of the indicator variables of a multi-LV model}
 
 \item{covs_order}{optional character for order of (S)tem, (P)artner number, and (I)tem number for any
 covariate(s). Defaults to NULL. This and other covariate arguments only necessary if there are covariates to be scripted in your model(s).}
