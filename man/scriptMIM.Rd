@@ -105,6 +105,7 @@ Other script-writing functions:
 \code{\link{scriptCFM}()},
 \code{\link{scriptDyEFA}()},
 \code{\link{scriptINULL}()},
-\code{\link{scriptISAT}()}
+\code{\link{scriptISAT}()},
+\code{\link{scriptUni}()}
 }
 \concept{script-writing functions}

@@ -54,6 +54,7 @@ Other script-writing functions:
 \code{\link{scriptCFM}()},
 \code{\link{scriptDyEFA}()},
 \code{\link{scriptISAT}()},
-\code{\link{scriptMIM}()}
+\code{\link{scriptMIM}()},
+\code{\link{scriptUni}()}
 }
 \concept{script-writing functions}

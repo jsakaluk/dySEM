@@ -95,6 +95,7 @@ Other script-writing functions:
 \code{\link{scriptDyEFA}()},
 \code{\link{scriptINULL}()},
 \code{\link{scriptISAT}()},
-\code{\link{scriptMIM}()}
+\code{\link{scriptMIM}()},
+\code{\link{scriptUni}()}
 }
 \concept{script-writing functions}
