@@ -1,5 +1,15 @@
 # dySEM 1.2.0
 
+## Major changes
+
+* New scriptUni() functionality for univariate dyadic SEM models, lead @omarjcamanto
+* New functionality for dyadic CFA models with multiple factors (e.g., from subscales), lead by @jsakaluk
+
+## Minor changes
+
+* New optionality for ordering in scrapeVarCross (Partner-Stem-Item ["psi"])
+* Improved test coverage (esp. for new functionality)
+
 # dySEM 1.1.1
 
 * A revamping of the outputting functionality, lead @omarjcamanto

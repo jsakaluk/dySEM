@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -340,31 +340,6 @@ human-eyes) character object consisting of the <code>lavaan</code>
 syntax corresponding to the model that matches the <em>Scripter</em>
 function (i.e., in this case a CFA) and input for the <code>model</code>
 argument (i.e., configurally invariant).</p>
-<p>Meanwhile, behind the scenes, <code>scriptCFA</code> has created a
-folder in your working directory called “scripts”, and has stored a .txt
-file containing the (less-ugly, to the human eyes) <code>lavaan</code>
-syntax for your model. The file will be named as a combination of your
-<code>lvname</code> and <code>model</code> arguments.</p>
-<p>We think this syntax-exporting-.txt feature serves three important
-purposes:</p>
-<ol style="list-style-type: decimal">
-<li>It makes it easy to immediately share your analytic code (i.e., just
-drop the .txt file in your OSF project)</li>
-<li>It can be useful as an exemplar from which to learn how certain
-model features of dyadic SEMs are scripted in <code>lavaan</code>. For
-example, our <code>Scripters</code> manually specify (and label) the
-estimation of certain parameters that would already be estimated by
-default, but this way you can learn how differences in model
-specification (e.g., changing to a different level of invariance)
-impacts the <code>lavaan</code> syntax. And…</li>
-<li>Should you require a model that is more customizable (e.g., a
-particular pattern of partial dyadic invariance), the text in the .txt
-file can serve as useful starting point for scripting your model that
-should (hopefully) only require but a few “handmade” changes (e.g.,
-keeping most item intercepts equated via
-<code>model = "intercepts</code>, and manually freeing only those that
-are appreciably different).</li>
-</ol>
 <p>The modeling efficiency and accuracy gained via <code>dySEM</code>’s
 automated scripting may already be apparent, but becomes painfully
 obvious once you leverage <code>dySEM</code> to quickly script a
@@ -380,8 +355,8 @@ fully indistinguishable CFA)</p>
 <span></span>
 <span><span class="va">qual.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The scripting of longitudinal dyadic SEM models is not yet supported
-by <code>dySEM</code>, but we hope to develop this functionality over
-the Spring/Summer 2021.</p>
+by <code>dySEM</code>, but we hope to develop this functionality in the
+next year or two.</p>
 </div>
 <div class="section level2">
 <h2 id="fit-and-inspect">4. Fit and Inspect<a class="anchor" aria-label="anchor" href="#fit-and-inspect"></a>

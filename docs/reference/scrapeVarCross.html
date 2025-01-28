@@ -13,7 +13,7 @@ It is used primarily to guide the syntax-writing of the other dySEM functions.">
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +68,9 @@ It is used primarily to guide the syntax-writing of the other dySEM functions.</
 <span>  y_delim1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  y_delim2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  y_item_num <span class="op">=</span> <span class="st">"\\d+"</span>,</span>
+<span>  var_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  var_list_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  var_list_item_num <span class="op">=</span> <span class="st">"\\d+"</span>,</span>
 <span>  covs_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  covs_stem <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  covs_delim1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -85,7 +88,7 @@ It is used primarily to guide the syntax-writing of the other dySEM functions.</
 
 <dt id="arg-x-order">x_order<a class="anchor" aria-label="anchor" href="#arg-x-order"></a></dt>
 <dd><p>input character for order of (S)tem, (P)artner number, and (I)tem number
-when creating variable names. Defaults to "spi" (Qualtrics-friendly)</p></dd>
+when creating variable names. Defaults to "spi" (Qualtrics-friendly), but can alternatively take "sip" or "psi"</p></dd>
 
 
 <dt id="arg-x-stem">x_stem<a class="anchor" aria-label="anchor" href="#arg-x-stem"></a></dt>
@@ -116,7 +119,7 @@ Will be updated to allow particular range of values, to make more sub-scale frie
 
 <dt id="arg-y-order">y_order<a class="anchor" aria-label="anchor" href="#arg-y-order"></a></dt>
 <dd><p>optional character for order of (S)tem, (P)artner number, and (I)tem number
-when creating variable names. Defaults to "spi" (Qualtrics-friendly). This and other Y-arguments
+when creating variable names. Defaults to "spi" (Qualtrics-friendly), but can alternatively take "sip" or "psi". This and other Y-arguments
 only necessary if there is a latent Y variable to model</p></dd>
 
 
@@ -136,6 +139,18 @@ from final element of variable name</p></dd>
 <dt id="arg-y-item-num">y_item_num<a class="anchor" aria-label="anchor" href="#arg-y-item-num"></a></dt>
 <dd><p>defaults to scrape all items that match the stem with any digits that follow.
 Will be updated to allow particular range of values, to make more sub-scale friendly.</p></dd>
+
+
+<dt id="arg-var-list">var_list<a class="anchor" aria-label="anchor" href="#arg-var-list"></a></dt>
+<dd><p>optional named list of indicator variable information, if more than one LV is to be scripted (e.g., a dyadic CFA with multiple sub-scales from the same measure). If supplied, this list <em>must</em> contain the following elements: "stem" (a vector of stems), "delim1" (a vector of delimiting characters), and"delim2" (a vector of subsequently delimiting characters). Optionally may include numeric vectors "min_num" and "max_num" if indicators for different LVs share the same stem and must be separated by range of item numbers within a measure.</p></dd>
+
+
+<dt id="arg-var-list-order">var_list_order<a class="anchor" aria-label="anchor" href="#arg-var-list-order"></a></dt>
+<dd><p>optional character for order of (S)tem, (P)artner number, and (I)tem number for any of the indicator variables of a multi-LV model (i.e., this functionality assumes the same ordering of elements throughout)</p></dd>
+
+
+<dt id="arg-var-list-item-num">var_list_item_num<a class="anchor" aria-label="anchor" href="#arg-var-list-item-num"></a></dt>
+<dd><p>optional character for item number of any of the indicator variables of a multi-LV model</p></dd>
 
 
 <dt id="arg-covs-order">covs_order<a class="anchor" aria-label="anchor" href="#arg-covs-order"></a></dt>

@@ -57,7 +57,9 @@ types of latent dyadic data models:
 3.  Latent Common Fate Models (CFM)
 4.  Latent Bifactor Dyadic (Bi-Dy) Models
 5.  Observed Actor-Partner Interdependence (APIM)
-6.  **Dyadic Exploratory Factor Analysis** ***(NEW)***
+6.  Dyadic Exploratory Factor Analysis
+7.  Multi-Factor Dyadic Confirmatory Factor Analysis (NEW)
+8.  Univariate Dyadic Model (NEW)
 
 Additional features currently include:
 
@@ -79,10 +81,8 @@ Additional features currently include:
 Shorter-term development goals include:
 
 1.  Uni-construct “scripter” functions
-2.  Multi-construct friendly functionality (e.g., for dyadic CFA with
-    multiple subscales of a measure)
-3.  Covariate scripting and optionality
-4.  Improved ease of item selection in scraper functions
+2.  Covariate scripting and optionality
+3.  Improved ease of item selection in scraper functions
 
 Longer-term goals, meanwhile, include:
 
@@ -169,9 +169,9 @@ dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_del
 typically require only three arguments to be specified:
 
 1.  the `dvn` object (e.g., from `scrapeVarCross`) to be used to script
-    the model 1.arbitrary name(s) for the latent variable(s) you are
-    modeling
-2.  the kind of parameter equality constraints that you wish to be
+    the model
+2.  arbitrary name(s) for the latent variable(s) you are modeling
+3.  the kind of parameter equality constraints that you wish to be
     imposed (if any)
 
 ``` r

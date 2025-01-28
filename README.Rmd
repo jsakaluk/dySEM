@@ -54,7 +54,9 @@ The package currently provides functionality regarding the following types of la
 1. Latent Common Fate Models (CFM)
 1. Latent Bifactor Dyadic (Bi-Dy) Models
 1. Observed Actor-Partner Interdependence (APIM)
-1. **Dyadic Exploratory Factor Analysis** ***(NEW)***
+1. Dyadic Exploratory Factor Analysis
+1. Multi-Factor Dyadic Confirmatory Factor Analysis (NEW)
+1. Univariate Dyadic Model (NEW)
   
 Additional features currently include:
 
@@ -69,7 +71,6 @@ Additional features currently include:
 Shorter-term development goals include: 
 
 1. Uni-construct "scripter" functions
-1. Multi-construct friendly functionality (e.g., for dyadic CFA with multiple subscales of a measure)
 1. Covariate scripting and optionality
 1. Improved ease of item selection in scraper functions
 
@@ -127,7 +128,7 @@ dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_del
 *Scripter* functions like [`scriptCFA`](https://github.com/jsakaluk/dySEM/blob/master/R/scriptCFA.R) typically require only three arguments to be specified: 
 
 1. the `dvn` object (e.g., from `scrapeVarCross`) to be used to script the model
-1.arbitrary name(s) for the latent variable(s) you are modeling 
+1. arbitrary name(s) for the latent variable(s) you are modeling 
 1. the kind of parameter equality constraints that you wish to be imposed (if any)
 
 ```{r configscript}

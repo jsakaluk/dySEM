@@ -140,14 +140,6 @@ qual.indist.script <- scriptCFA(dvn, lvname = "Quality")
 
 `scriptCFA` returns to your environment an (ugly, to the human-eyes) character object consisting of the `lavaan` syntax corresponding to the model that matches the *Scripter* function (i.e., in this case a CFA) and input for the `model` argument (i.e., configurally invariant). 
 
-Meanwhile, behind the scenes, `scriptCFA` has created a folder in your working directory called "scripts", and has stored a .txt file containing the (less-ugly, to the human eyes) `lavaan` syntax for your model. The file will be named as a combination of your `lvname` and `model` arguments. 
-
-We think this syntax-exporting-.txt feature serves three important purposes: 
-
-1. It makes it easy to immediately share your analytic code (i.e., just drop the .txt file in your OSF project)
-1. It can be useful as an exemplar from which to learn how certain model features of dyadic SEMs are scripted in `lavaan`. For example, our `Scripters` manually specify (and label) the estimation of certain parameters that would already be estimated by default, but this way you can learn how  differences in model specification (e.g., changing to a different level of invariance) impacts the `lavaan` syntax. And...
-1. Should you require a model that is more customizable (e.g., a particular pattern of partial dyadic invariance), the text in the .txt file can serve as useful starting point for scripting your model that should (hopefully) only require but a few "handmade" changes (e.g., keeping most item intercepts equated via `model = "intercepts`, and manually freeing only those that are appreciably different).
-
 The modeling efficiency and accuracy gained via `dySEM`'s automated scripting may already be apparent, but becomes painfully obvious once you leverage `dySEM` to quickly script a sequence of competing models (e.g., from configural invariance CFA --> fully indistinguishable CFA)
 
 ```{r scriptsequence}
@@ -162,7 +154,7 @@ qual.config.script <- scriptCFA(dvn, lvname = "Quality", constr_dy_meas = c("non
 
 ```
 
-The scripting of longitudinal dyadic SEM models is not yet supported by `dySEM`, but we hope to develop this functionality over the Spring/Summer 2021. 
+The scripting of longitudinal dyadic SEM models is not yet supported by `dySEM`, but we hope to develop this functionality in the next year or two. 
 
 ## 4. Fit and Inspect
 
