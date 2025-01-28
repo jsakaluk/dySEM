@@ -70,7 +70,7 @@ outputParamTab <- function(dvn,
   #checking for valid directory path
   if (gtTab == TRUE && !is.null(writeTo)){
 
-    if (!is.character(writeTo)){
+    if (!is.null(writeTo) && !is.character(writeTo)){
       stop("The `writeTo` argument must be a character string. \n Use `writeTo = '.'` to save output file(s) in the current working directory.")
     }
     if (!dir.exists(writeTo)){
