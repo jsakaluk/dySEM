@@ -199,6 +199,28 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
   }
+  
+  #g with marker variable scale setting
+  else if(partner == "g" & type == "fixed" & lvar == "X"){
+    eta_x = sprintf("%sDy =~ 1*", lvname)
+    eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+"), "+",paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
+    return(eta.x)
+  }
+  
+  else if(partner == "g" & type == "equated_mv" & lvar == "X"){
+    eta_x = sprintf("%sDy =~ 1*%s+",lvname, dvn[["p1xvarnames"]][1])
+    eta.x1 = list()
+    for (i in 1:dvn[["xindper"]]) {
+      eta.x1[[i]]=sprintf("lxg%s*%s",i, dvn[["p1xvarnames"]][i])
+    }
+    eta.x2 = list()
+    for (i in 1:dvn[["xindper"]]) {
+      eta.x2[[i]]=sprintf("lxg%s*%s",i, dvn[["p2xvarnames"]][i])
+    }
+    eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
+    return(eta.x)
+    
+  }
 }
 
 #' @rdname scriptHelpers
