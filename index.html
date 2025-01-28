@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,9 +98,9 @@
 <li>Latent Common Fate Models (CFM)</li>
 <li>Latent Bifactor Dyadic (Bi-Dy) Models</li>
 <li>Observed Actor-Partner Interdependence (APIM)</li>
-<li>
-<strong>Dyadic Exploratory Factor Analysis</strong> <strong><em>(NEW)</em></strong>
-</li>
+<li>Dyadic Exploratory Factor Analysis</li>
+<li>Multi-Factor Dyadic Confirmatory Factor Analysis (NEW)</li>
+<li>Univariate Dyadic Model (NEW)</li>
 </ol>
 <p>Additional features currently include:</p>
 <ul>
@@ -117,7 +117,6 @@
 <p>Shorter-term development goals include:</p>
 <ol style="list-style-type: decimal">
 <li>Uni-construct “scripter” functions</li>
-<li>Multi-construct friendly functionality (e.g., for dyadic CFA with multiple subscales of a measure)</li>
 <li>Covariate scripting and optionality</li>
 <li>Improved ease of item selection in scraper functions</li>
 </ol>
@@ -190,7 +189,8 @@
 </h3>
 <p><em>Scripter</em> functions like <a href="https://github.com/jsakaluk/dySEM/blob/master/R/scriptCFA.R" class="external-link"><code>scriptCFA</code></a> typically require only three arguments to be specified:</p>
 <ol style="list-style-type: decimal">
-<li>the <code>dvn</code> object (e.g., from <code>scrapeVarCross</code>) to be used to script the model 1.arbitrary name(s) for the latent variable(s) you are modeling</li>
+<li>the <code>dvn</code> object (e.g., from <code>scrapeVarCross</code>) to be used to script the model</li>
+<li>arbitrary name(s) for the latent variable(s) you are modeling</li>
 <li>the kind of parameter equality constraints that you wish to be imposed (if any)</li>
 </ol>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
