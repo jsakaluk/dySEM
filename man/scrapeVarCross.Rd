@@ -31,7 +31,7 @@ scrapeVarCross(
 \item{dat}{input data frame of indicators of a particular LV}
 
 \item{x_order}{input character for order of (S)tem, (P)artner number, and (I)tem number
-when creating variable names. Defaults to "spi" (Qualtrics-friendly)}
+when creating variable names. Defaults to "spi" (Qualtrics-friendly), but can alternatively take "sip" or "psi"}
 
 \item{x_stem}{input character stem of indicator variables for LV X}
 
@@ -48,7 +48,7 @@ Will be updated to allow particular range of values, to make more sub-scale frie
 \item{distinguish_2}{input character used as the identifier for the first partner}
 
 \item{y_order}{optional character for order of (S)tem, (P)artner number, and (I)tem number
-when creating variable names. Defaults to "spi" (Qualtrics-friendly). This and other Y-arguments
+when creating variable names. Defaults to "spi" (Qualtrics-friendly), but can alternatively take "sip" or "psi". This and other Y-arguments
 only necessary if there is a latent Y variable to model}
 
 \item{y_stem}{optional input character stem of indicator variables for LV X}

@@ -6,7 +6,7 @@
 #' It is used primarily to guide the syntax-writing of the other dySEM functions.
 #' @param dat input data frame of indicators of a particular LV
 #' @param x_order input character for order of (S)tem, (P)artner number, and (I)tem number
-#' when creating variable names. Defaults to "spi" (Qualtrics-friendly)
+#' when creating variable names. Defaults to "spi" (Qualtrics-friendly), but can alternatively take "sip" or "psi"
 #' @param x_stem input character stem of indicator variables for LV X
 #' @param x_delim1 optional character to separate stem from partner number (spi) or item number (sip)
 #' @param x_delim2 optional character to separate stem/partner number (spi) or stem/item number (sip) from
@@ -16,7 +16,7 @@
 #' @param distinguish_1 input character used as the identifier for the first partner
 #' @param distinguish_2 input character used as the identifier for the first partner
 #' @param y_order optional character for order of (S)tem, (P)artner number, and (I)tem number
-#' when creating variable names. Defaults to "spi" (Qualtrics-friendly). This and other Y-arguments
+#' when creating variable names. Defaults to "spi" (Qualtrics-friendly), but can alternatively take "sip" or "psi". This and other Y-arguments
 #' only necessary if there is a latent Y variable to model
 #' @param y_stem optional input character stem of indicator variables for LV X
 #' @param y_delim1 optional character to separate stem from partner number (spi) or item number (sip)
@@ -159,6 +159,62 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
         stop("scrapeVarCross() cannot detect a similar number of ", x_stem, " items for P1 and P2")
       }
     }
+    else if(var_list_order == "psi"){
+      x1vars = list()
+
+      for(i in 1:length(var_list$lvnames)){
+        x1VarNames <- psiExtractor(dat = dat, stem = var_list$stem[i],
+                                   delim1= var_list$delim1[i], item_num = var_list_item_num,
+                                   delim2 = var_list$delim2[i], distinguish = distinguish_1)
+
+
+
+        #subset to variables in range, if range is supplied (otherwise merely supply all counted variables matching)
+        if(all(c("min_num", "max_num") %in% names(var_list))){
+          x1VarNames <- x1VarNames[var_list$min_num[i]:var_list$max_num[i]]
+        }
+
+        x1vars[[var_list$lvnames[i]]] <- x1VarNames
+
+
+      }
+
+      x2vars = list()
+
+      for(i in 1:length(var_list$lvnames)){
+        x2VarNames <- psiExtractor(dat = dat, stem = var_list$stem[i],
+                                   delim1= var_list$delim1[i], item_num = var_list_item_num,
+                                   delim2 = var_list$delim2[i], distinguish = distinguish_2)
+
+
+
+        #subset to variables in range, if range is supplied (otherwise merely supply all counted variables matching)
+        if(all(c("min_num", "max_num") %in% names(var_list))){
+          x2VarNames <- x2VarNames[var_list$min_num[i]:var_list$max_num[i]]
+        }
+
+        x2vars[[var_list$lvnames[i]]] <- x2VarNames
+
+      }
+
+      num_x1_var <- sum(lengths(x1vars))# count total number of items in x1
+      num_x2_var <- sum(lengths(x2vars))# count total number of items in x2
+      dist_1 <- distinguish_1
+      dist_2 <- distinguish_2
+      tot_var <- num_x1_var + num_x2_var# count total number of items in x1 and x2
+
+      if(num_x1_var == num_x2_var){#return list unless number of x1 and x2 items dont match
+        varlist <- list(p1xvarnames = x1vars,
+                        p2xvarnames = x2vars,
+                        xindper = num_x1_var,
+                        dist1 =dist_1,
+                        dist2 = dist_2,
+                        indnum = tot_var)
+        return(varlist)
+      }else if(num_x1_var != num_x2_var){
+        stop("scrapeVarCross() cannot detect a similar number of ", x_stem, " items for P1 and P2")
+      }
+    }
   }
   else if(is.null(y_order)){
     if(x_order == "sip"){
@@ -167,6 +223,9 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
     }else if(x_order == "spi"){
       x1vars <- spiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_1)
       x2vars <- spiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_2)
+    }else if(x_order == "psi"){
+      x1vars <- psiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_1)
+      x2vars <- psiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_2)
     }
     num_x1_var <- length(x1vars)
     num_x2_var <- length(x2vars)
@@ -193,6 +252,11 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
     }else if(x_order == "spi"){
       x1vars <- spiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_1)
       x2vars <- spiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_2)
+
+    }else if(x_order == "psi"){
+      x1vars <- psiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_1)
+      x2vars <- psiExtractor(dat, x_stem, x_delim1, x_item_num, x_delim2, distinguish_2)
+
     }
     if(y_order == "sip"){
       y1vars <- sipExtractor(dat, y_stem, y_delim1, y_item_num, y_delim2, distinguish_1)
@@ -201,6 +265,11 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1=NULL, x_delim2
     }else if(y_order == "spi"){
       y1vars <- spiExtractor(dat, y_stem, y_delim1, y_item_num, y_delim2, distinguish_1)
       y2vars <- spiExtractor(dat, y_stem, y_delim1, y_item_num, y_delim2, distinguish_2)
+
+    }else if(y_order == "psi"){
+      y1vars <- psiExtractor(dat, y_stem, y_delim1, y_item_num, y_delim2, distinguish_1)
+      y2vars <- psiExtractor(dat, y_stem, y_delim1, y_item_num, y_delim2, distinguish_2)
+
     }
     num_x1_var <- length(x1vars)
     num_x2_var <- length(x2vars)

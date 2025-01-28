@@ -102,6 +102,7 @@ Other script-writing functions:
 \code{\link{scriptAPIM}()},
 \code{\link{scriptBiDy}()},
 \code{\link{scriptCFA}()},
+\code{\link{scriptCFA2}()},
 \code{\link{scriptCFM}()},
 \code{\link{scriptDyEFA}()},
 \code{\link{scriptINULL}()},

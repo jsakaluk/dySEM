@@ -34,6 +34,15 @@ spiExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
 
 #' @rdname scrapeHelpers
 #' @noRd
+psiExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
+  stem_delim <-stringr::str_c(distinguish, delim1, stem)
+  vars <- stringr::str_extract(names(dat), stringr::str_c(stem_delim, delim2, item_num))
+  vars <- vars[!is.na(vars)]
+  return(vars)
+}
+
+#' @rdname scrapeHelpers
+#' @noRd
 spitExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish, delim3, wave){
   stem_delim_distinguish <-stringr::str_c(stem, delim1, distinguish)
 
