@@ -50,7 +50,7 @@ invariance equality constraint between partners in a given dyadic SEM model.
 dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
 x_delim2="_", distinguish_1="f", distinguish_2="m")
 
-sat.resids.script <- scriptCFA(dvn, lvname = "Sat",
+sat.resids.script <- scriptCor(dvn, lvname = "Sat",
 constr_dy_meas = c("loadings", "intercepts", "residuals"),
 constr_dy_struct = "none")
 

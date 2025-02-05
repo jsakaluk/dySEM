@@ -1,9 +1,9 @@
 #' A Function That Writes, Saves, and Exports Syntax for
 #' Fitting Unidimensional Dyadic Factor Models
-#' 
+#'
 #' This function takes the outputted object from scrapeVarCross()
 #' and automatically writes, returns, and exports (`.txt`) `lavaan` syntax
-#' for specifying dyadic configural, loading, intercept, and residual invariant 
+#' for specifying dyadic configural, loading, intercept, and residual invariant
 #' one-factor models.
 #'
 #' @param dvn Input dvn list from `scrapeVarCross()`.
@@ -14,7 +14,7 @@
 #' @param constr_dy_struct Input character vector detailing which structural model parameters to constrain across dyad members.
 #'  **Note**: Within the context of `scriptUni()`, `constr_dy_struct` is **irrelevant**, as the unidimensional dyadic factor model
 #'  assumes a single latent variable shared by both partners, leaving no structural parameters to constrain across the modeled dyad members.
-#'  For consistency with other scripter functions, `constr_dy_struct` is included as an argument, 
+#'  For consistency with other scripter functions, `constr_dy_struct` is included as an argument,
 #'  but defaults to `"none"`.
 #' @param writeTo A character string specifying a directory path to where a `.txt` file of the resulting `lavaan` script should be written.
 #'  If set to `“.”`, the `.txt` file will be written to the current working directory.
@@ -24,41 +24,41 @@
 #'  If a file with the same name already exists in the user's chosen directory, it will be overwritten.
 #' @return Character object of `lavaan` script that can be passed immediately to
 #'  `lavaan` functions.
-#'  
+#'
 #' @details
 #' * Users do not need to modify `constr_dy_struct` when using `scriptUni()`.
 #' * By default, many `dySEM::` functions (including `scriptUni()`) default to
 #'    a fixed-factor method of scale-setting, whereby the latent variance of
 #'    a given factor is constrained to 1 for both partners in the configurally invariant
 #'    model, and then one of these variances is freely estimated in subsequent
-#'    models of the invariance testing sequence. 
-#'    We have selected this default for two reasons: 
+#'    models of the invariance testing sequence.
+#'    We have selected this default for two reasons:
 #'    (1) the selection of a marker-variable is usually arbitrary,
-#'    yet can have a large influence on the estimation and testing of of structural parameters 
-#'    (see https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732); 
+#'    yet can have a large influence on the estimation and testing of of structural parameters
+#'    (see https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732);
 #'    and (2) the selection of a non-invariant marker-variable
 #'    can have disastrous down-stream consequences for the identification of
 #'    non-invariant measurement parameters, following a the rejection of an omnibus
 #'    invariance constraint set (see Lee, Preacher, & Little, 2011).
-#'  
+#'
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on.
-#' @family script-writing functions
+#' @family uni-construct script-writing functions
 #' @export
 #'
 #' @examples
-#' 
+#'
 #' dvn <- scrapeVarCross(
-#'   commitmentQ, 
-#'   x_order = "spi", 
-#'   x_stem = "sat.g", 
+#'   commitmentQ,
+#'   x_order = "spi",
+#'   x_stem = "sat.g",
 #'   x_delim1 = ".",
-#'   x_delim2="_", 
-#'   distinguish_1="1", 
+#'   x_delim2="_",
+#'   distinguish_1="1",
 #'   distinguish_2="2"
 #'   )
-#'   
+#'
 #' sat.resids.script <- scriptUni(
-#'   dvn, 
+#'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat",
 #'   constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -66,7 +66,7 @@
 #'   writeTo = tempdir(),
 #'   fileName = "dUni_residual"
 #'   )
-#'   
+#'
 #' sat.ints.script <- scriptUni(
 #'   dvn,
 #'   scaleset = "FF",
@@ -76,9 +76,9 @@
 #'   writeTo = tempdir(),
 #'   fileName = "dUni_intercept"
 #'   )
-#'   
+#'
 #' sat.loads.script <- scriptUni(
-#'   dvn, 
+#'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat",
 #'   constr_dy_meas = c("loadings"),
@@ -86,9 +86,9 @@
 #'   writeTo = tempdir(),
 #'   fileName = "dUni_loading"
 #'   )
-#'   
+#'
 #' sat.config.script <- scriptUni(
-#'   dvn, 
+#'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat",
 #'   constr_dy_meas = "none",
@@ -96,7 +96,7 @@
 #'   writeTo = tempdir(),
 #'   fileName = "dUni_configural"
 #'   )
-#'   
+#'
 scriptUni <- function(
     dvn,
     scaleset = "FF",
@@ -106,38 +106,38 @@ scriptUni <- function(
     writeTo = NULL,
     fileName = NULL
     ){
-  
+
   #check for valid inputs
   if(length(dvn)!=6){
     stop("You must supply a dvn object containing information for only X [i.e., your target LV]")
   }
-  
+
   if(!scaleset %in% c("FF", "MV")){
     stop("scaleset must be either 'FF' (fixed-factor) or 'MV' (marker variable)")
   }
-  
+
   if(!any(constr_dy_meas %in% c("loadings", "intercepts", "residuals", "none"))){
     stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'")
   }
-  
+
   if(!any(constr_dy_struct %in% c("none"))){
-    stop("constr_dy_struct is not applicable to `scriptUni()`. 
+    stop("constr_dy_struct is not applicable to `scriptUni()`.
           Please leave it as the default value: 'none'.")
   }
-  
+
   #fixed factor
   if(scaleset == "FF"){
-    
+
     #loadings
     if(any(constr_dy_meas == "loadings")){
       xloadsg <- loads(
-        dvn, 
+        dvn,
         lvar = "X",
         lvname,
         partner = "g",
         type = "equated"
       )
-    } 
+    }
     else {
       xloadsg <- loads(
         dvn,
@@ -147,7 +147,7 @@ scriptUni <- function(
         type = "free"
       )
     }
-    
+
     #intercepts
     if(any(constr_dy_meas == "intercepts")){
       xints1 <- intercepts(
@@ -162,7 +162,7 @@ scriptUni <- function(
         partner = "2",
         type = "equated"
       )
-    } 
+    }
     else {
       xints1 <- intercepts(
         dvn,
@@ -177,7 +177,7 @@ scriptUni <- function(
         type = "free"
       )
     }
-    
+
     #residuals
     if(any(constr_dy_meas == "residuals")){
       xres1 <- resids(
@@ -195,7 +195,7 @@ scriptUni <- function(
     }
     else {
       xres1 <- resids(
-        dvn, 
+        dvn,
         lvar = "X",
         partner = "1",
         type = "free"
@@ -207,23 +207,23 @@ scriptUni <- function(
         type = "free"
       )
     }
-    
+
     #correlated residuals
     xcoresids <- coresids(
       dvn,
       lvar = "X",
       type = "free"
     )
-    
+
     #latent variances
     xvarg <- lvars(
-      dvn, 
-      lvar = "X", 
-      lvname, 
-      partner = "g", 
+      dvn,
+      lvar = "X",
+      lvname,
+      partner = "g",
       type = "fixed"
     )
-    
+
     #latent means
     xmeang <- lmeans(
       dvn,
@@ -232,7 +232,7 @@ scriptUni <- function(
       partner = "g",
       type = "fixed"
     )
-    
+
     #Script Creation Syntax
     script <- sprintf(
       "#Measurement Model\n\n#Loadings\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n\n#Latent Means\n%s",
@@ -241,23 +241,23 @@ scriptUni <- function(
       xres1, xres2, xcoresids,
       xvarg,
       xmeang
-    ) 
-  
+    )
+
   }
-  
+
   #marker variable
   if(scaleset == "MV"){
-    
+
     #loadings
     if(any(constr_dy_meas == "loadings")){
       xloadsg <- loads(
-        dvn, 
+        dvn,
         lvar = "X",
         lvname,
         partner = "g",
         type = "equated_mv"
       )
-    } 
+    }
     else {
       xloadsg <- loads(
         dvn,
@@ -267,7 +267,7 @@ scriptUni <- function(
         type = "fixed"
       )
     }
-    
+
     #intercepts
     if(any(constr_dy_meas == "intercepts")){
       xints1 <- intercepts(
@@ -282,13 +282,13 @@ scriptUni <- function(
         partner = "2",
         type = "equated" #keep as "equated" in scriptUni
       )
-    } 
+    }
     else {
       xints1 <- intercepts(
         dvn,
         lvar = "X",
         partner = "1",
-        type = "fixed" 
+        type = "fixed"
       )
       xints2 <- intercepts(
         dvn,
@@ -297,7 +297,7 @@ scriptUni <- function(
         type = "free" #keep as "free" in scriptUni
       )
     }
-    
+
     #residuals
     if(any(constr_dy_meas == "residuals")){
       xres1 <- resids(
@@ -315,7 +315,7 @@ scriptUni <- function(
     }
     else {
       xres1 <- resids(
-        dvn, 
+        dvn,
         lvar = "X",
         partner = "1",
         type = "free"
@@ -327,23 +327,23 @@ scriptUni <- function(
         type = "free"
       )
     }
-    
+
     #correlated residuals
     xcoresids <- coresids(
       dvn,
       lvar = "X",
       type = "free"
     )
-    
+
     #latent variances
     xvarg <- lvars(
-      dvn, 
-      lvar = "X", 
-      lvname, 
-      partner = "g", 
+      dvn,
+      lvar = "X",
+      lvname,
+      partner = "g",
       type = "free"
     )
-    
+
     #latent means
     xmeang <- lmeans(
       dvn,
@@ -352,7 +352,7 @@ scriptUni <- function(
       partner = "g",
       type = "free"
     )
-    
+
     #Script Creation Syntax
     script <- sprintf(
       "#Measurement Model\n\n#Loadings\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n\n#Latent Means\n%s",
@@ -361,17 +361,17 @@ scriptUni <- function(
       xres1, xres2, xcoresids,
       xvarg,
       xmeang
-    ) 
-    
+    )
+
   }
-  
-  
+
+
   #Write script to file if requested
   if(!is.null(writeTo) | !is.null(fileName) ){
     #if there is a path or file name,
     #check for valid input,
     #and if valid, write script
-    
+
     # checking for valid directory path and fileName
     if (!is.character(writeTo)){
       stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
@@ -382,18 +382,18 @@ scriptUni <- function(
     if (!is.character(fileName)){
       stop("The `fileName` argument must be a character string.")
     }
-    
+
     #write file
     cat(script, "\n",
         file = sprintf("%s/%s.txt",
                        writeTo,
                        fileName))
-    
+
     return(script)
   }
   else if(is.null(writeTo) & is.null(fileName)){
     #otherwise just return script
     return(script)
   }
-  
+
 }

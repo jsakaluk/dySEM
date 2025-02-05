@@ -1,6 +1,6 @@
 #' A Function Calculates Omega Total Coefficients from a Dyadic CFA
 #'
-#' This function takes the  model from fitted scriptCFA() scripts and returns omega total coefficients
+#' This function takes the  model from fitted scriptCor() scripts and returns omega total coefficients
 #' for each dyad member, adapted following Formula 2 in McNeish (2018).
 #'
 #' @param dvn input dvn list from scrapeVarCross
@@ -11,7 +11,7 @@
 #' @examples
 #' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 #' x_delim2="_", distinguish_1="1", distinguish_2="2")
-#' sat.indist.script <-  scriptCFA(dvn, lvname = "Sat")
+#' sat.indist.script <-  scriptCor(dvn, lvname = "Sat")
 #' sat.indist.mod <- lavaan::cfa(sat.indist.script, data = commitmentQ, std.lv = FALSE,
 #' auto.fix.first= FALSE, meanstructure = TRUE)
 #' getDyReliability(dvn, sat.indist.mod)

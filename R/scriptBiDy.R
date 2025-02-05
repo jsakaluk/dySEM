@@ -42,7 +42,7 @@
 #' @importFrom rlang .data
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
-#' @family script-writing functions
+#' @family bi-construct script-writing functions
 #' @export
 #' @examples
 #' dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "sexsat",

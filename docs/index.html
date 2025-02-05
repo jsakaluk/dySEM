@@ -85,28 +85,39 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"dySEM"</span><span class="op">)</span></span></code></pre></div>
 <p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<code class="sourceCode R"><span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"jsakaluk/dySEM"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="current-functionality">Current Functionality<a class="anchor" aria-label="anchor" href="#current-functionality"></a>
 </h2>
 <p>The package currently provides functionality regarding the following types of latent dyadic data models:</p>
+<p><strong>Uni-Construct Models</strong></p>
 <ol style="list-style-type: decimal">
-<li>Dyadic Confirmatory Factor Analysis</li>
+<li>Univariate Dyadic Model (NEW)</li>
+<li>Correlated Factors Model</li>
+</ol>
+<p><strong>Bi-Construct Models</strong></p>
+<ol style="list-style-type: decimal">
 <li>Latent Actor-Partner Interdependence Models (APIM)</li>
 <li>Latent Common Fate Models (CFM)</li>
 <li>Latent Bifactor Dyadic (Bi-Dy) Models</li>
 <li>Observed Actor-Partner Interdependence (APIM)</li>
+</ol>
+<p><strong>Multi-Construct Models</strong></p>
+<ol style="list-style-type: decimal">
+<li>Dyadic Confirmatory Factor Analysis</li>
 <li>Dyadic Exploratory Factor Analysis</li>
-<li>Multi-Factor Dyadic Confirmatory Factor Analysis (NEW)</li>
-<li>Univariate Dyadic Model (NEW)</li>
+</ol>
+<p><strong>Indistinguishability-Related Models</strong></p>
+<ol style="list-style-type: decimal">
+<li>I-SAT Model</li>
+<li>I-NULL Model</li>
 </ol>
 <p>Additional features currently include:</p>
 <ul>
 <li>Automated specification of invariance constraints for any model, including full indistinguishability</li>
 <li>Wrapper-function to provide variable-and-parameter specific tests of noninvariance</li>
-<li>Functions to assist with the specification of <strong>I-SAT Models</strong> and <strong>I-NULL Models</strong> for calibrated model fit indexes with indistinguishable dyad models</li>
 <li>Functions to assist with reproducible creation of path diagrams and tables of statistical output</li>
 <li>Functions to calculate supplemental statistical information (e.g., omega reliability, noninvariance effect sizes, corrected model fit indexes)</li>
 </ul>
@@ -116,7 +127,7 @@
 </h2>
 <p>Shorter-term development goals include:</p>
 <ol style="list-style-type: decimal">
-<li>Uni-construct “scripter” functions</li>
+<li>Uni-construct “scripter” functions (in progress)</li>
 <li>Covariate scripting and optionality</li>
 <li>Improved ease of item selection in scraper functions</li>
 </ol>
@@ -187,14 +198,14 @@
 <div class="section level3">
 <h3 id="id_3-script-your-preferred-model">3. <strong>Script</strong> your preferred model<a class="anchor" aria-label="anchor" href="#id_3-script-your-preferred-model"></a>
 </h3>
-<p><em>Scripter</em> functions like <a href="https://github.com/jsakaluk/dySEM/blob/master/R/scriptCFA.R" class="external-link"><code>scriptCFA</code></a> typically require only three arguments to be specified:</p>
+<p><em>Scripter</em> functions like <a href="https://github.com/jsakaluk/dySEM/blob/master/R/scriptCor.R" class="external-link"><code>scriptCor</code></a> typically require only three arguments to be specified:</p>
 <ol style="list-style-type: decimal">
 <li>the <code>dvn</code> object (e.g., from <code>scrapeVarCross</code>) to be used to script the model</li>
 <li>arbitrary name(s) for the latent variable(s) you are modeling</li>
 <li>the kind of parameter equality constraints that you wish to be imposed (if any)</li>
 </ol>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">qual.indist.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">qual.indist.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span><span class="op">)</span></span></code></pre></div>
 <p>This function returns a character object with <code>lavaan</code> compliant syntax for your chosen model, as well as exporting a reproducible .txt of the scripted model to a /scripts folder in your working directory.</p>
 </div>
 <div class="section level3">

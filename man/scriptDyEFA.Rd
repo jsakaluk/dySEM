@@ -44,22 +44,13 @@ for specifying a dyadic EFA model of a given number of exploratory factors.
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2")
 
-sat.defa1.script <- scriptDyEFA(dvn, nFactor = 1, 
+sat.defa1.script <- scriptDyEFA(dvn, nFactor = 1,
 writeTo = tempdir(), fileName = "DEFA_1fac")
 }
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on
 
-Other script-writing functions: 
-\code{\link{scriptAPIM}()},
-\code{\link{scriptBiDy}()},
-\code{\link{scriptCFA}()},
-\code{\link{scriptCFA2}()},
-\code{\link{scriptCFM}()},
-\code{\link{scriptCor}()},
-\code{\link{scriptINULL}()},
-\code{\link{scriptISAT}()},
-\code{\link{scriptMIM}()},
-\code{\link{scriptUni}()}
+Other multi-construct script-writing functions: 
+\code{\link{scriptCFA}()}
 }
-\concept{script-writing functions}
+\concept{multi-construct script-writing functions}

@@ -30,16 +30,16 @@
 #' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi",
 #' x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
 #'
-#' sat.residual.script <- scriptCFA(dvn, lvname = "Sat",
+#' sat.residual.script <- scriptCor(dvn, lvname = "Sat",
 #' constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
 #'
-#' sat.intercept.script <- scriptCFA(dvn, lvname = "Sat",
+#' sat.intercept.script <- scriptCor(dvn, lvname = "Sat",
 #' constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none")
 #'
-#' sat.loading.script <- scriptCFA(dvn, lvname = "Sat",
+#' sat.loading.script <- scriptCor(dvn, lvname = "Sat",
 #' constr_dy_meas = c("loadings"), constr_dy_struct = "none")
 #'
-#' sat.config.script <- scriptCFA(dvn, lvname = "Sat",
+#' sat.config.script <- scriptCor(dvn, lvname = "Sat",
 #' constr_dy_meas = "none", constr_dy_struct = "none")
 #'
 #' sat.residual.fit <- lavaan::cfa(sat.residual.script, data = commitmentQ,

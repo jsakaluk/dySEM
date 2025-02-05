@@ -17,7 +17,7 @@ getIndistFit(indmodel, isatmod, inullmod)
 A data frame of the original and corrected chi sq, df, p, rmsea, and tli
 }
 \description{
-This function takes the outputted model fit using scriptCFA() with model = "indist",
+This function takes the outputted model fit using scriptCor() with model = "indist",
 as well as scriptISAT(), and scriptINULL() and computes corrected model fit indexes according
 to the approach outlined by Olsen & Kenny (2006)
 }
@@ -25,7 +25,7 @@ to the approach outlined by Olsen & Kenny (2006)
 dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2")
 
-sat.indist.script <-  scriptCFA(dvn, lvname = "Sat")
+sat.indist.script <-  scriptCor(dvn, lvname = "Sat")
 sat.indist.mod <- lavaan::cfa(sat.indist.script, data = commitmentQ, std.lv = FALSE,
 auto.fix.first= FALSE, meanstructure = TRUE)
 

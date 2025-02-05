@@ -10,7 +10,7 @@
 #' dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
 #' x_delim2="_", distinguish_1="f", distinguish_2="m")
 #'
-#' sat.resids.script <- scriptCFA(dvn, lvname = "Sat",
+#' sat.resids.script <- scriptCor(dvn, lvname = "Sat",
 #' constr_dy_meas = c("loadings", "intercepts", "residuals"),
 #' constr_dy_struct = "none")
 #'
@@ -21,9 +21,9 @@
 
 
 getConstraintTests <- function(constrainFit, filterSig = FALSE){
-  
+
   lifecycle::deprecate_warn("1.1.0", "dySEM::getConstraintTests()", details = "Please use `dySEM::outputConstraintTab()` instead.")
-  
+
   #Extract score test for relaxing each equality constraint
   constrainFit.mi <- lavaan::lavTestScore(constrainFit)
   constrainFit.mi.uni <- constrainFit.mi$uni

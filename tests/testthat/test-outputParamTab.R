@@ -5,7 +5,7 @@ test_that("outputConstraintTab produces correct error when writeTo is not charac
   dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
                         x_delim2="_", distinguish_1="f", distinguish_2="m")
 
-  sat.resids.script <- scriptCFA(dvn, lvname = "Sat",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+  sat.resids.script <- scriptCor(dvn, lvname = "Sat",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
 
   sat.resids.mod <- lavaan::cfa(sat.resids.script, data = commitmentM, std.lv = FALSE,
                                 auto.fix.first= FALSE, meanstructure = TRUE)
@@ -23,7 +23,7 @@ test_that("outputParamTab produces correct error when fileName is not character 
   dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
                         x_delim2="_", distinguish_1="f", distinguish_2="m")
 
-  sat.resids.script <- scriptCFA(dvn, lvname = "Sat",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+  sat.resids.script <- scriptCor(dvn, lvname = "Sat",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
 
   sat.resids.mod <- lavaan::cfa(sat.resids.script, data = commitmentM, std.lv = FALSE,
                                 auto.fix.first= FALSE, meanstructure = TRUE)
@@ -43,7 +43,7 @@ test_that("outputParamTab produces correct output for CFA measurement table with
   dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
                         x_delim2="_", distinguish_1="1", distinguish_2="2")
 
-  script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = "none",
+  script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = "none",
                                  constr_dy_struct = "none")
 
   mod <- lavaan::cfa(script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
@@ -73,7 +73,7 @@ test_that("outputParamTab produces correct output for CFA measurement table with
   dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
                         x_delim2="_", distinguish_1="1", distinguish_2="2")
 
-  script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = "none",
+  script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = "none",
                       constr_dy_struct = "none")
 
   mod <- lavaan::cfa(script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
@@ -89,7 +89,7 @@ test_that("outputParamTab produces correct output for CFA measurement table with
   dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
                         x_delim2="_", distinguish_1="1", distinguish_2="2")
 
-  script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = "none",
+  script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = "none",
                       constr_dy_struct = "none")
 
   mod <- lavaan::cfa(script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
@@ -105,7 +105,7 @@ test_that("outputParamTab produces correct output for CFA measurement table with
   dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
                         x_delim2="_", distinguish_1="1", distinguish_2="2")
 
-  script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = "none",
+  script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = "none",
                       constr_dy_struct = "none")
 
   mod <- lavaan::cfa(script, data = commitmentQ, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)

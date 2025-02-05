@@ -70,17 +70,17 @@ invariance constraint set (see Lee, Preacher, & Little, 2011).
 \examples{
 
 dvn <- scrapeVarCross(
-  commitmentQ, 
-  x_order = "spi", 
-  x_stem = "sat.g", 
+  commitmentQ,
+  x_order = "spi",
+  x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_", 
-  distinguish_1="1", 
+  x_delim2="_",
+  distinguish_1="1",
   distinguish_2="2"
   )
-  
+
 sat.resids.script <- scriptUni(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -88,7 +88,7 @@ sat.resids.script <- scriptUni(
   writeTo = tempdir(),
   fileName = "dUni_residual"
   )
-  
+
 sat.ints.script <- scriptUni(
   dvn,
   scaleset = "FF",
@@ -98,9 +98,9 @@ sat.ints.script <- scriptUni(
   writeTo = tempdir(),
   fileName = "dUni_intercept"
   )
-  
+
 sat.loads.script <- scriptUni(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings"),
@@ -108,9 +108,9 @@ sat.loads.script <- scriptUni(
   writeTo = tempdir(),
   fileName = "dUni_loading"
   )
-  
+
 sat.config.script <- scriptUni(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = "none",
@@ -118,21 +118,12 @@ sat.config.script <- scriptUni(
   writeTo = tempdir(),
   fileName = "dUni_configural"
   )
-  
+
 }
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on.
 
-Other script-writing functions: 
-\code{\link{scriptAPIM}()},
-\code{\link{scriptBiDy}()},
-\code{\link{scriptCFA}()},
-\code{\link{scriptCFA2}()},
-\code{\link{scriptCFM}()},
-\code{\link{scriptCor}()},
-\code{\link{scriptDyEFA}()},
-\code{\link{scriptINULL}()},
-\code{\link{scriptISAT}()},
-\code{\link{scriptMIM}()}
+Other uni-construct script-writing functions: 
+\code{\link{scriptCor}()}
 }
-\concept{script-writing functions}
+\concept{uni-construct script-writing functions}

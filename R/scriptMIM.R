@@ -47,7 +47,7 @@
 #' when the recommended level of invariance is not also specified. If user supplies dvn
 #' with containing X or Y variables, they are alerted to respecify the dvn object.
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on
-#' @family script-writing functions
+#' @family bi-construct script-writing functions
 #' @export
 #' @examples
 #' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",

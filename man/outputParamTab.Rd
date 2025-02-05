@@ -60,7 +60,7 @@ creates tables of expected output and/or exports them as \code{.rtf}s.
 dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2")
 
-sat.config.script <- scriptCFA(dvnx, lvname = "Sat", constr_dy_meas = "none",
+sat.config.script <- scriptCor(dvnx, lvname = "Sat", constr_dy_meas = "none",
 constr_dy_struct = "none")
 
 sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,

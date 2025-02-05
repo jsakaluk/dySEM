@@ -98,16 +98,9 @@ fileName = "MIM_indist")
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on
 
-Other script-writing functions: 
+Other bi-construct script-writing functions: 
 \code{\link{scriptAPIM}()},
 \code{\link{scriptBiDy}()},
-\code{\link{scriptCFA}()},
-\code{\link{scriptCFA2}()},
-\code{\link{scriptCFM}()},
-\code{\link{scriptCor}()},
-\code{\link{scriptDyEFA}()},
-\code{\link{scriptINULL}()},
-\code{\link{scriptISAT}()},
-\code{\link{scriptUni}()}
+\code{\link{scriptCFM}()}
 }
-\concept{script-writing functions}
+\concept{bi-construct script-writing functions}

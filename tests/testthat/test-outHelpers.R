@@ -5,7 +5,7 @@ test_that("makeTable creates propper tibble for model = cfa and tabletyle = meas
   dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
                         x_delim2="_", distinguish_1="f", distinguish_2="m")
 
-  script <- scriptCFA(dvn, lvname = "Sat",
+  script <- scriptCor(dvn, lvname = "Sat",
                                  constr_dy_meas = c("loadings", "intercepts", "residuals"),
                                  constr_dy_struct = "none")
 

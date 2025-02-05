@@ -30,7 +30,7 @@
 #' dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 #' x_delim2="_", distinguish_1="1", distinguish_2="2")
 #'
-#' sat.config.script <- scriptCFA(dvnx, lvname = "Sat", constr_dy_meas = "none",
+#' sat.config.script <- scriptCor(dvnx, lvname = "Sat", constr_dy_meas = "none",
 #' constr_dy_struct = "none")
 #'
 #' sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
@@ -60,7 +60,7 @@ outputModel  <-  function(dvn, model = NULL, fit,
                     fileName = NULL){
 
   lifecycle::deprecate_warn("1.1.0", "dySEM::outputModel()", details = "Please use `dySEM::outputParamTab` and/or `dySEM::outputParamFig` instead.")
-  
+
   # checking for valid directory path
   if (is.null(writeTo)){
     stop("Must specify a directory to which the file should be saved. \n Use writeTo = '.' to save output file(s) in the current working directory.")

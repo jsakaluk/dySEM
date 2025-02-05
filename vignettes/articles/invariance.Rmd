@@ -378,22 +378,22 @@ These pieces of information are all that is needed for dySEM to automate scripti
 
 ### Model Scripting
 
-dySEM makes the rest of the process of testing dyadic invariance straightforward. We first need to use dySEM scripter functions to generate the correct code for `lavaan` to fit our (1) residual-invariant, (2) intercept-invariant, (3) loading-invariant, and (4) configurally invariance dyadic CFA models. Each model requires one use of scriptCFA(), which needs to be provided the dvn list we just created with scrapeVarCross(), an arbitrary name for the latent variable being modeled, the type of invariance to impose in the the "model" argument. Critically, instead of starting with configural dyadic invariance (and proceeding to more parsimonious/restrictive models), I recommend starting with the most parsimonious/restrictive model (full measurement-level indistinguishability), and then testing whether more complicated models are empirically warranted. 
+dySEM makes the rest of the process of testing dyadic invariance straightforward. We first need to use dySEM scripter functions to generate the correct code for `lavaan` to fit our (1) residual-invariant, (2) intercept-invariant, (3) loading-invariant, and (4) configurally invariance dyadic CFA models. Each model requires one use of scriptCor(), which needs to be provided the dvn list we just created with scrapeVarCross(), an arbitrary name for the latent variable being modeled, the type of invariance to impose in the the "model" argument. Critically, instead of starting with configural dyadic invariance (and proceeding to more parsimonious/restrictive models), I recommend starting with the most parsimonious/restrictive model (full measurement-level indistinguishability), and then testing whether more complicated models are empirically warranted. 
 
 ```{r scripting}
-sat.residual.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
-sat.intercept.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none")
-sat.loading.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
-sat.config.script <- scriptCFA(dvn, lvname = "Sat", constr_dy_meas = "none", constr_dy_struct = "none")
+sat.residual.script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+sat.intercept.script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none")
+sat.loading.script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
+sat.config.script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = "none", constr_dy_struct = "none")
 ```
 
-If you return the output of scriptCFA(), it doesn't look particularly nice: 
+If you return the output of scriptCor(), it doesn't look particularly nice: 
 
 ```{r printscript, eval = TRUE, echo = FALSE, results = 'hold'}
 sat.residual.script
 ```
 
-Rest assured, `lavaan` can make sense of this applesauce; all the required text is there, and with a light touch of the concatenate function (which will parse the line-breaks in the text of the script), you can see a friendly human-readable version of what scriptCFA() generated:
+Rest assured, `lavaan` can make sense of this applesauce; all the required text is there, and with a light touch of the concatenate function (which will parse the line-breaks in the text of the script), you can see a friendly human-readable version of what scriptCor() generated:
 
 ```{r cat}
 cat(sat.residual.script)

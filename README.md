@@ -43,7 +43,7 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
+
 devtools::install_github("jsakaluk/dySEM")
 ```
 
@@ -52,14 +52,27 @@ devtools::install_github("jsakaluk/dySEM")
 The package currently provides functionality regarding the following
 types of latent dyadic data models:
 
+**Uni-Construct Models**
+
+1.  Univariate Dyadic Model (NEW)
+2.  Correlated Factors Model
+
+**Bi-Construct Models**
+
+1.  Latent Actor-Partner Interdependence Models (APIM)
+2.  Latent Common Fate Models (CFM)
+3.  Latent Bifactor Dyadic (Bi-Dy) Models
+4.  Observed Actor-Partner Interdependence (APIM)
+
+**Multi-Construct Models**
+
 1.  Dyadic Confirmatory Factor Analysis
-2.  Latent Actor-Partner Interdependence Models (APIM)
-3.  Latent Common Fate Models (CFM)
-4.  Latent Bifactor Dyadic (Bi-Dy) Models
-5.  Observed Actor-Partner Interdependence (APIM)
-6.  Dyadic Exploratory Factor Analysis
-7.  Multi-Factor Dyadic Confirmatory Factor Analysis (NEW)
-8.  Univariate Dyadic Model (NEW)
+2.  Dyadic Exploratory Factor Analysis
+
+**Indistinguishability-Related Models**
+
+1.  I-SAT Model
+2.  I-NULL Model
 
 Additional features currently include:
 
@@ -67,9 +80,6 @@ Additional features currently include:
   including full indistinguishability
 - Wrapper-function to provide variable-and-parameter specific tests of
   noninvariance
-- Functions to assist with the specification of **I-SAT Models** and
-  **I-NULL Models** for calibrated model fit indexes with
-  indistinguishable dyad models
 - Functions to assist with reproducible creation of path diagrams and
   tables of statistical output
 - Functions to calculate supplemental statistical information (e.g.,
@@ -80,7 +90,7 @@ Additional features currently include:
 
 Shorter-term development goals include:
 
-1.  Uni-construct “scripter” functions
+1.  Uni-construct “scripter” functions (in progress)
 2.  Covariate scripting and optionality
 3.  Improved ease of item selection in scraper functions
 
@@ -165,7 +175,7 @@ dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_del
 ### 3. **Script** your preferred model
 
 *Scripter* functions like
-[`scriptCFA`](https://github.com/jsakaluk/dySEM/blob/master/R/scriptCFA.R)
+[`scriptCor`](https://github.com/jsakaluk/dySEM/blob/master/R/scriptCor.R)
 typically require only three arguments to be specified:
 
 1.  the `dvn` object (e.g., from `scrapeVarCross`) to be used to script
@@ -175,7 +185,7 @@ typically require only three arguments to be specified:
     imposed (if any)
 
 ``` r
-qual.indist.script <- scriptCFA(dvn, lvname = "Quality")
+qual.indist.script <- scriptCor(dvn, lvname = "Quality")
 ```
 
 This function returns a character object with `lavaan` compliant syntax

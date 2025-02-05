@@ -47,16 +47,7 @@ fileName = "I-NULL_script")
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on
 
-Other script-writing functions: 
-\code{\link{scriptAPIM}()},
-\code{\link{scriptBiDy}()},
-\code{\link{scriptCFA}()},
-\code{\link{scriptCFA2}()},
-\code{\link{scriptCFM}()},
-\code{\link{scriptCor}()},
-\code{\link{scriptDyEFA}()},
-\code{\link{scriptISAT}()},
-\code{\link{scriptMIM}()},
-\code{\link{scriptUni}()}
+Other indistinguishable script-writing functions: 
+\code{\link{scriptISAT}()}
 }
-\concept{script-writing functions}
+\concept{indistinguishable script-writing functions}

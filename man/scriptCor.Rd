@@ -66,23 +66,23 @@ invariance constraint set (see Lee, Preacher, & Little, 2011).
 }
 \examples{
 dvn <- scrapeVarCross(
-  dat = commitmentQ, 
-  x_order = "spi", 
-  x_stem = "sat.g", 
+  dat = commitmentQ,
+  x_order = "spi",
+  x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_", 
-  distinguish_1="1", 
+  x_delim2="_",
+  distinguish_1="1",
   distinguish_2="2"
   )
 
 sat.indist.script <- scriptCor(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat"
   )
 
 sat.lvars.script <- scriptCor(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = "loadings",
@@ -90,7 +90,7 @@ sat.lvars.script <- scriptCor(
   )
 
 sat.resids.script <- scriptCor(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -100,7 +100,7 @@ sat.resids.script <- scriptCor(
   )
 
 sat.ints.script <- scriptCor(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings", "intercepts"),
@@ -110,7 +110,7 @@ sat.ints.script <- scriptCor(
   )
 
 sat.loads.script <- scriptCor(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings"),
@@ -120,7 +120,7 @@ sat.loads.script <- scriptCor(
   )
 
 sat.config.script <- scriptCor(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = "none",
@@ -132,16 +132,7 @@ sat.config.script <- scriptCor(
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on.
 
-Other script-writing functions: 
-\code{\link{scriptAPIM}()},
-\code{\link{scriptBiDy}()},
-\code{\link{scriptCFA}()},
-\code{\link{scriptCFA2}()},
-\code{\link{scriptCFM}()},
-\code{\link{scriptDyEFA}()},
-\code{\link{scriptINULL}()},
-\code{\link{scriptISAT}()},
-\code{\link{scriptMIM}()},
+Other uni-construct script-writing functions: 
 \code{\link{scriptUni}()}
 }
-\concept{script-writing functions}
+\concept{uni-construct script-writing functions}

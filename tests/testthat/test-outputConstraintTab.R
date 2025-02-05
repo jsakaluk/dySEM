@@ -5,7 +5,7 @@ test_that("outputConstraintTab produces correct error when writeTo is not charac
   dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
                         x_delim2="_", distinguish_1="f", distinguish_2="m")
 
-  sat.resids.script <- scriptCFA(dvn, lvname = "Sat",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+  sat.resids.script <- scriptCor(dvn, lvname = "Sat",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
 
   sat.resids.mod <- lavaan::cfa(sat.resids.script, data = commitmentM, std.lv = FALSE,
                                 auto.fix.first= FALSE, meanstructure = TRUE)
@@ -24,7 +24,7 @@ test_that("outputConstraintTab produces correct error when fileName is not chara
   dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
                         x_delim2="_", distinguish_1="f", distinguish_2="m")
 
-  sat.resids.script <- scriptCFA(dvn, lvname = "Sat",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+  sat.resids.script <- scriptCor(dvn, lvname = "Sat",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
 
   sat.resids.mod <- lavaan::cfa(sat.resids.script, data = commitmentM, std.lv = FALSE,
                                 auto.fix.first= FALSE, meanstructure = TRUE)

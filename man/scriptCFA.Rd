@@ -3,26 +3,22 @@
 \name{scriptCFA}
 \alias{scriptCFA}
 \title{A Function That Writes, Saves, and Exports Syntax for
-Fitting Latent Dyadic Confirmatory Factor Analysis (CFA) Models}
+Fitting Latent Dyadic Confirmatory Factor Analysis (CFA) Models with Multiple Factors}
 \usage{
 scriptCFA(
   dvn,
   scaleset = "FF",
-  lvname = "X",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_struct = c("variances", "means"),
-  model = lifecycle::deprecated(),
   writeTo = NULL,
   fileName = NULL
 )
 }
 \arguments{
-\item{dvn}{input dvn list from scrapeVarCross}
+\item{dvn}{input dvn list from scrapeVarCross(); scrapeVarCross \emph{must} have been run with the var_list argument}
 
 \item{scaleset}{input character to specify how to set the scale of the latent variable(s). Default is
 "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)}
-
-\item{lvname}{input character to (arbitrarily) name LV in lavaan syntax}
 
 \item{constr_dy_meas}{input character vector detailing which measurement model parameters to constrain across dyad members.
 Default is c("loadings", "intercepts", "residuals")(in combination with defaults for constr_dy_struct, an indistinguishable dyadic CFA),
@@ -32,10 +28,6 @@ but user can specify any combination of "loadings", "intercepts", and "residuals
 \item{constr_dy_struct}{input character vector detailing which structural model parameters to constrain across dyad members.
 Default is c("variances", "means")(in combination with defaults for constr_dy_meas, an indistinguishable dyadic CFA),
 but user can specify any combination of "variances" and "means", or "none".}
-
-\item{model}{Depreceated input character used to specify which level of invariance is
-modeled ("configural", "loading", "intercept", "residual", or "indist"). Users should rely upon constr_dy_meas and
-constr_dy_struct instead, for making constraints to the measurement and/or structural portions of the model.}
 
 \item{writeTo}{A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
 If set to “.”, the .txt file will be written to the current working directory.
@@ -50,10 +42,10 @@ character object of lavaan script that can be passed immediately to
 lavaan functions
 }
 \description{
-This function takes the outputted object from scrapeVarCross()
+This function takes the outputted object from scrapeVarCross() when the var_list argument has been used,
 and automatically writes, returns, and exports (.txt) lavaan() syntax
 for specifying dyadic configural, loading, and intercept invariant
-measurement models for either a specified X or Y factor.
+measurement models for either a group of latent variables (e.g., different sub-scales from a self-report measures).
 }
 \details{
 By default, many dySEM:: functions (including scriptCFA() default to
@@ -68,53 +60,10 @@ can have disastrous down-stream consequences for the identification of
 non-invariant measurement parameters, following a the rejection of an omnibus
 #invariance constraint set (see Lee, Preacher, & Little, 2011).
 }
-\examples{
-dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2")
-
-sat.indist.script <- scriptCFA(dvn, lvname = "Sat")
-
-sat.lvars.script <- scriptCFA(dvn, lvname = "Sat",
-constr_dy_meas = "loadings",
-constr_dy_struct = "variances")
-
-sat.resids.script <- scriptCFA(dvn, lvname = "Sat",
-constr_dy_meas = c("loadings", "intercepts", "residuals"),
-constr_dy_struct = "none",
-writeTo = tempdir(),
-fileName = "dCFA_residual")
-
-sat.ints.script <- scriptCFA(dvn, lvname = "Sat",
-constr_dy_meas = c("loadings", "intercepts"),
-constr_dy_struct = "none",
-writeTo = tempdir(),
-fileName = "dCFA_intercept")
-
-sat.loads.script <- scriptCFA(dvn, lvname = "Sat",
-constr_dy_meas = c("loadings"),
-constr_dy_struct = "none",
-writeTo = tempdir(),
-fileName = "dCFA_loading")
-
-sat.config.script <- scriptCFA(dvn, lvname = "Sat",
-constr_dy_meas = "none",
-constr_dy_struct = "none",
-writeTo = tempdir(),
-fileName = "dCFA_configural")
-}
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on
 
-Other script-writing functions: 
-\code{\link{scriptAPIM}()},
-\code{\link{scriptBiDy}()},
-\code{\link{scriptCFA2}()},
-\code{\link{scriptCFM}()},
-\code{\link{scriptCor}()},
-\code{\link{scriptDyEFA}()},
-\code{\link{scriptINULL}()},
-\code{\link{scriptISAT}()},
-\code{\link{scriptMIM}()},
-\code{\link{scriptUni}()}
+Other multi-construct script-writing functions: 
+\code{\link{scriptDyEFA}()}
 }
-\concept{script-writing functions}
+\concept{multi-construct script-writing functions}

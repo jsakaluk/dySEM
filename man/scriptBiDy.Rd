@@ -97,16 +97,9 @@ writeTo = tempdir(),
 fileName = "BiDy_S")
 }
 \seealso{
-Other script-writing functions: 
+Other bi-construct script-writing functions: 
 \code{\link{scriptAPIM}()},
-\code{\link{scriptCFA}()},
-\code{\link{scriptCFA2}()},
 \code{\link{scriptCFM}()},
-\code{\link{scriptCor}()},
-\code{\link{scriptDyEFA}()},
-\code{\link{scriptINULL}()},
-\code{\link{scriptISAT}()},
-\code{\link{scriptMIM}()},
-\code{\link{scriptUni}()}
+\code{\link{scriptMIM}()}
 }
-\concept{script-writing functions}
+\concept{bi-construct script-writing functions}
