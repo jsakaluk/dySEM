@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
                         <h4 data-toc-skip class="author">John K.
 Sakaluk</h4>
             
-            <h4 data-toc-skip class="date">29/01/25</h4>
+            <h4 data-toc-skip class="date">05/02/25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/master/vignettes/articles/invariance.Rmd" class="external-link"><code>vignettes/articles/invariance.Rmd</code></a></small>
       <div class="d-none name"><code>invariance.Rmd</code></div>
@@ -373,7 +373,7 @@ straightforward. We first need to use dySEM scripter functions to
 generate the correct code for <code>lavaan</code> to fit our (1)
 residual-invariant, (2) intercept-invariant, (3) loading-invariant, and
 (4) configurally invariance dyadic CFA models. Each model requires one
-use of scriptCFA(), which needs to be provided the dvn list we just
+use of scriptCor(), which needs to be provided the dvn list we just
 created with scrapeVarCross(), an arbitrary name for the latent variable
 being modeled, the type of invariance to impose in the the “model”
 argument. Critically, instead of starting with configural dyadic
@@ -382,18 +382,18 @@ recommend starting with the most parsimonious/restrictive model (full
 measurement-level indistinguishability), and then testing whether more
 complicated models are empirically warranted.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sat.residual.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
-<span><span class="va">sat.intercept.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
-<span><span class="va">sat.loading.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
-<span><span class="va">sat.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p>If you return the output of scriptCFA(), it doesn’t look particularly
+<code class="sourceCode R"><span><span class="va">sat.residual.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="va">sat.intercept.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="va">sat.loading.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="va">sat.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<p>If you return the output of scriptCor(), it doesn’t look particularly
 nice:</p>
 <pre><code><span><span class="co">#&gt; [1] "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ thx1*sat.g.1_1\nsat.g.1_2 ~~ thx2*sat.g.1_2\nsat.g.1_3 ~~ thx3*sat.g.1_3\nsat.g.1_4 ~~ thx4*sat.g.1_4\nsat.g.1_5 ~~ thx5*sat.g.1_5\n\nsat.g.2_1 ~~ thx1*sat.g.2_1\nsat.g.2_2 ~~ thx2*sat.g.2_2\nsat.g.2_3 ~~ thx3*sat.g.2_3\nsat.g.2_4 ~~ thx4*sat.g.2_4\nsat.g.2_5 ~~ thx5*sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances\nSat1 ~~ 1*Sat1\nSat2 ~~ NA*Sat2\nSat1 ~~ Sat2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ NA*1"</span></span></code></pre>
 <p>Rest assured, <code>lavaan</code> can make sense of this applesauce;
 all the required text is there, and with a light touch of the
 concatenate function (which will parse the line-breaks in the text of
 the script), you can see a friendly human-readable version of what
-scriptCFA() generated:</p>
+scriptCor() generated:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">sat.residual.script</span><span class="op">)</span></span>
 <span><span class="co">#&gt; #Measurement Model</span></span>

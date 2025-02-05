@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -308,7 +308,7 @@ they need from a saved <code>dvn</code> object and combine it with other
 text to write the <code>lavaan</code> syntax for a particular part of
 the measurement (e.g., factor loadings, item intercepts) or structural
 (e.g., regression slopes, factor means) portion of your model.</p>
-<p><em>Scripter</em> functions like <a href="https://github.com/jsakaluk/dySEM/blob/master/R/scriptCFA.R" class="external-link"><code>scriptCFA</code></a>
+<p><em>Scripter</em> functions like <a href="https://github.com/jsakaluk/dySEM/blob/master/R/scriptCor.R" class="external-link"><code>scriptCor</code></a>
 typically require only three arguments to be specified:</p>
 <ol style="list-style-type: decimal">
 <li>the <code>dvn</code> object (e.g., from <code>scrapeVarCross</code>)
@@ -325,15 +325,15 @@ parameters are constrained to equality between partners)</li>
 <p>If you plan on scripting multiple models, I recommend that you name
 the output of <code>Scripters</code> to include information about the
 latent variable’s name (from 2.) and model (from 3.). For example, if we
-were to use <code>scriptCFA</code> to generate scripts for an
+were to use <code>scriptCor</code> to generate scripts for an
 indistinguishable CFA (i.e., both imposing dyadic invariance and
 equality of latent variances and means between partners [the default
 options for the constr_dy_meas and constr_dy_struct arguments]) of the
 PRQC items we scraped, we could specify</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">qual.indist.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span><span class="op">)</span></span></code></pre></div>
-<p><code>scriptCFA</code> returns to your environment an (ugly, to the
+<span><span class="va">qual.indist.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span><span class="op">)</span></span></code></pre></div>
+<p><code>scriptCor</code> returns to your environment an (ugly, to the
 human-eyes) character object consisting of the <code>lavaan</code>
 syntax corresponding to the model that matches the <em>Scripter</em>
 function (i.e., in this case a CFA) and input for the <code>model</code>
@@ -345,13 +345,13 @@ sequence of competing models (e.g., from configural invariance CFA –&gt;
 fully indistinguishable CFA)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">qual.res.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">qual.res.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">qual.int.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">qual.int.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">qual.load.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">qual.load.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">qual.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">qual.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">dvn</span>, lvname <span class="op">=</span> <span class="st">"Quality"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The scripting of longitudinal dyadic SEM models is not yet supported
 by <code>dySEM</code>, but we hope to develop this functionality in the
 next year or two.</p>
@@ -366,7 +366,7 @@ you cultivate a command of <code>lavaan</code>’s basic functionality
 before delving too far with <code>dySEM</code>–the package <a href="https://lavaan.ugent.be/tutorial/index.html" class="external-link">tutorial website</a>
 is a very good place to get started.</p>
 <p>You can immediately pass any script(s) returned from a
-<code>dySEM</code> scripter (e.g., <code>scriptCFA</code>) to your
+<code>dySEM</code> scripter (e.g., <code>scriptCor</code>) to your
 intended <code>lavaan</code> wrapper (we recommend <code>cfa</code>–be
 sure to disable any options that might fix parameters, as the scripter
 has already taken care of manually specifying which parameters to fix or
