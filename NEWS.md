@@ -1,3 +1,7 @@
+# dySEM 1.2.1
+
+* scriptCor() functionality assumes scripting of correlated factor models for 1-construct dyadic models; multi-construct correlated factor models now handled by scriptCFA() (previously for uni-construct correlated factor models)
+
 # dySEM 1.2.0
 
 ## Major changes
