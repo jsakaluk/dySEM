@@ -49,7 +49,7 @@ table(dat$sex.orient.2)#Frequencies for P2
 dat$couple_type_sex <- paste(dat$sex.birth.1,dat$sex.birth.2)
 table(dat$couple_type_sex)
 #Create subset of LGBTQ relationships
-queerdat_sex<-filter(dat, couple_type_sex == "Female Female"|
+queerdat_sex<-dplyr::filter(dat, couple_type_sex == "Female Female"|
                        couple_type_sex == "Male Male")
 
 #Orientations of LGBTQ couples
@@ -57,7 +57,7 @@ table(queerdat_sex$sex.orient.1)#Frequencies for P1
 table(queerdat_sex$sex.orient.2)#Frequencies for P2
 
 #Create subset of same-sex relationships
-samesexdat_sex<-filter(dat, couple_type_sex =="Female Male"|
+samesexdat_sex<-dplyr::filter(dat, couple_type_sex =="Female Male"|
                          couple_type_sex =="Male Female")
 
 #Orientations of same-sex couples
@@ -155,33 +155,10 @@ dydat<- dydat[-c(135)]
 commitmentM <- dydat
 commitmentQ <- queerdat_sex
 
-names(commitmentM)
-
-imsM <- select(commitmentM,
-               sat.g1_f:sat.g5_f,
-               qalt.g1_f:qalt.g5_f,
-               invest.g1_f:invest.g5_f,
-               com1_f:com5_f,
-               sat.g1_m:sat.g5_m,
-               qalt.g1_m:qalt.g5_m,
-               invest.g1_m:invest.g5_m,
-               com1_m:com5_m)
-
-
-commitmentM <- select(commitmentM,
-                      sat.g1_f:sat.g5_f,
-                      com1_f:com5_f,
-                      sat.g1_m:sat.g5_m,
-                      com1_m:com5_m)
-
 names(commitmentQ)
-commitmentQ <- select(commitmentQ,
-                      sat.g.1_1:sat.g.1_5,
-                      com.1_1:com.1_5,
-                      sat.g.2_1:sat.g.2_5,
-                      com.2_1:com.2_5)
 
-usethis::use_data(commitmentM, overwrite = TRUE)
-usethis::use_data(commitmentQ, overwrite = TRUE)
+prqcQ <- select(commitmentQ,
+               prqc.1_1:prqc.1_18,
+               prqc.2_1:prqc.2_18)
 
-usethis::use_data(imsM, overwrite = TRUE)
+usethis::use_data(prqcQ, overwrite = TRUE)

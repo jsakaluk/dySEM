@@ -1,3 +1,7 @@
+# dySEM 1.3.0
+
+* add two new exemplar datasets, imsM and prqcQ (both of which contain multi-construct data) for use in the vignettes and examples
+
 # dySEM 1.2.1
 
 * scriptCor() functionality assumes scripting of correlated factor models for 1-construct dyadic models; multi-construct correlated factor models now handled by scriptCFA() (previously for uni-construct correlated factor models)
