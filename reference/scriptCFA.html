@@ -13,7 +13,7 @@ measurement models for either a group of latent variables (e.g., different sub-s
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,6 +128,77 @@ non-invariant measurement parameters, following a the rejection of an omnibus
 <code><a href="scriptDyEFA.html">scriptDyEFA</a>()</code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#When different factor use distinct stems:</span></span></span>
+<span class="r-in"><span><span class="va">imsList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>lvnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sat"</span>, <span class="st">"Q_Alt"</span>, <span class="st">"Invest"</span>, <span class="st">"Comm"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>stem <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sat.g"</span>, <span class="st">"qalt.g"</span>, <span class="st">"invest.g"</span>, <span class="st">"com"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>delim1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">""</span>, <span class="st">""</span>, <span class="st">""</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>delim2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="st">"_"</span>, <span class="st">"_"</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dvnIMS</span><span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span><span class="va">imsM</span>,</span></span>
+<span class="r-in"><span>var_list <span class="op">=</span> <span class="va">imsList</span>,</span></span>
+<span class="r-in"><span>var_list_order <span class="op">=</span> <span class="st">"sip"</span>,</span></span>
+<span class="r-in"><span>distinguish_1 <span class="op">=</span> <span class="st">"f"</span>,</span></span>
+<span class="r-in"><span>distinguish_2 <span class="op">=</span> <span class="st">"m"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.ims.config</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"ims_config"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.ims.load</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"ims_load"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.ims.int</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"ims_int"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.ims.res</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"ims_res"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.ims.indist</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"ims_indist"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#When different factor use the same stem and muse be detected through numeric position</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">prqcList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>lvnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sat"</span>, <span class="st">"Comm"</span>, <span class="st">"Intim"</span>, <span class="st">"Trust"</span>, <span class="st">"Pass"</span>, <span class="st">"Love"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>stem <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prqc"</span>, <span class="st">"prqc"</span>, <span class="st">"prqc"</span>, <span class="st">"prqc"</span>, <span class="st">"prqc"</span>, <span class="st">"prqc"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>delim1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"."</span>, <span class="st">"."</span>, <span class="st">"."</span>, <span class="st">"."</span>, <span class="st">"."</span>, <span class="st">"."</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>delim2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="st">"_"</span>, <span class="st">"_"</span>, <span class="st">"_"</span>, <span class="st">"_"</span>, <span class="st">"_"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>min_num <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">10</span>, <span class="fl">13</span>, <span class="fl">16</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>max_num <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dvnPRQC</span><span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span><span class="va">prqcQ</span>,</span></span>
+<span class="r-in"><span>var_list <span class="op">=</span> <span class="va">prqcList</span>,</span></span>
+<span class="r-in"><span>var_list_order <span class="op">=</span> <span class="st">"spi"</span>,</span></span>
+<span class="r-in"><span>distinguish_1 <span class="op">=</span> <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>distinguish_2 <span class="op">=</span> <span class="st">"2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.prqc.config</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnPRQC</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"prqc_config"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.prqc.load</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnPRQC</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"prqc_load"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.prqc.int</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnPRQC</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"prqc_int"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.prqc.res</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnPRQC</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"prqc_res"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">script.prqc.indist</span> <span class="op">&lt;-</span>  <span class="fu">scriptCFA</span><span class="op">(</span><span class="va">dvnPRQC</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
+<span class="r-in"><span>constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"prqc_indist"</span><span class="op">)</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
