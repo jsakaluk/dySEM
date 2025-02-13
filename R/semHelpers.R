@@ -79,7 +79,21 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
 
 #' @rdname semHelpers
 #' @noRd
-cfloads <- function(dvn, lvxname, lvyname, type = "equated"){
+cfloads <- function(dvn, lvxname, lvyname, lvname = NULL, type = "equated"){
+  
+  if(!is.null(lvname)){
+    if(type == "equated"){
+      eta.cx <-  sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      return(eta.cx)
+    }
+    else if(type == "fixed"){
+      eta.cx <-  sprintf("%s =~ 1*%s%s + 1*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      return(eta.cx)
+    }
+  }
+  
+  else if(is.null(lvname)){
+  
   if(type == "equated"){
     eta.cx <-  sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
     eta.cy <- sprintf("%s =~ NA*%s%s + cfy*%s%s + cfy*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
@@ -90,6 +104,7 @@ cfloads <- function(dvn, lvxname, lvyname, type = "equated"){
     eta.cy <- sprintf("%s =~ 1*%s%s + 1*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
     cfloads <- paste(eta.cx, eta.cy, sep = "\n")
     return(cfloads)
+  }
   }
 }
 
