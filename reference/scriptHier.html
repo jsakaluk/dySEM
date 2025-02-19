@@ -136,23 +136,23 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="va">commitmentQ</span>, </span></span>
-<span class="r-in"><span>  x_order <span class="op">=</span> <span class="st">"spi"</span>, </span></span>
-<span class="r-in"><span>  x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, </span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="va">commitmentQ</span>,</span></span>
+<span class="r-in"><span>  x_order <span class="op">=</span> <span class="st">"spi"</span>,</span></span>
+<span class="r-in"><span>  x_stem <span class="op">=</span> <span class="st">"sat.g"</span>,</span></span>
 <span class="r-in"><span>  x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
-<span class="r-in"><span>  x_delim2<span class="op">=</span><span class="st">"_"</span>, </span></span>
-<span class="r-in"><span>  distinguish_1<span class="op">=</span><span class="st">"1"</span>, </span></span>
+<span class="r-in"><span>  x_delim2<span class="op">=</span><span class="st">"_"</span>,</span></span>
+<span class="r-in"><span>  distinguish_1<span class="op">=</span><span class="st">"1"</span>,</span></span>
 <span class="r-in"><span>  distinguish_2<span class="op">=</span><span class="st">"2"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.indist.script</span> <span class="op">&lt;-</span> <span class="fu">scriptHier</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dvn</span>, </span></span>
+<span class="r-in"><span>  <span class="va">dvn</span>,</span></span>
 <span class="r-in"><span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
 <span class="r-in"><span>  lvname <span class="op">=</span> <span class="st">"Sat"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.lvars.script</span> <span class="op">&lt;-</span> <span class="fu">scriptHier</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dvn</span>, </span></span>
+<span class="r-in"><span>  <span class="va">dvn</span>,</span></span>
 <span class="r-in"><span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
 <span class="r-in"><span>  lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
 <span class="r-in"><span>  constr_dy_meas <span class="op">=</span> <span class="st">"loadings"</span>,</span></span>
@@ -160,7 +160,7 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.resids.script</span> <span class="op">&lt;-</span> <span class="fu">scriptHier</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dvn</span>, </span></span>
+<span class="r-in"><span>  <span class="va">dvn</span>,</span></span>
 <span class="r-in"><span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
 <span class="r-in"><span>  lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
 <span class="r-in"><span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span></span>
@@ -170,7 +170,7 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.ints.script</span> <span class="op">&lt;-</span> <span class="fu">scriptHier</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dvn</span>, </span></span>
+<span class="r-in"><span>  <span class="va">dvn</span>,</span></span>
 <span class="r-in"><span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
 <span class="r-in"><span>  lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
 <span class="r-in"><span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>,</span></span>
@@ -180,7 +180,7 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.loads.script</span> <span class="op">&lt;-</span> <span class="fu">scriptHier</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dvn</span>, </span></span>
+<span class="r-in"><span>  <span class="va">dvn</span>,</span></span>
 <span class="r-in"><span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
 <span class="r-in"><span>  lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
 <span class="r-in"><span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>,</span></span>
@@ -190,7 +190,7 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.config.script</span> <span class="op">&lt;-</span> <span class="fu">scriptHier</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dvn</span>, </span></span>
+<span class="r-in"><span>  <span class="va">dvn</span>,</span></span>
 <span class="r-in"><span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span></span>
 <span class="r-in"><span>  lvname <span class="op">=</span> <span class="st">"Sat"</span>,</span></span>
 <span class="r-in"><span>  constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>,</span></span>
