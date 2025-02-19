@@ -1,9 +1,9 @@
 #' A Function That Writes, Saves, and Exports Syntax for
 #' Fitting Univariate Hierarchical Dyadic Factor Models
-#' 
+#'
 #' This function takes the outputted object from `scrapeVarCross()`
 #'  and automatically writes, returns, and exports (`.txt`) `lavaan` syntax
-#'  for specifying dyadic configural, loading, intercept, and residual invariant 
+#'  for specifying dyadic configural, loading, intercept, and residual invariant
 #'  hierarchical models.
 #'
 #' @param dvn Input dvn list from `scrapeVarCross()`
@@ -22,45 +22,45 @@
 #'  If a file with the same name already exists in the user's chosen directory, it will be overwritten.
 #' @return Character object of `lavaan` script that can be passed immediately to
 #'  `lavaan` functions.
-#'  
+#'
 #' @details
 #' * By default, many `dySEM::` functions (including `scriptHier()`) default to
 #'    a fixed-factor method of scale-setting, whereby the latent variance of
 #'    a given factor is constrained to 1 for both partners in the configurally invariant
 #'    model, and then one of these variances is freely estimated in subsequent
-#'    models of the invariance testing sequence. 
-#'    We have selected this default for two reasons: 
+#'    models of the invariance testing sequence.
+#'    We have selected this default for two reasons:
 #'    (1) the selection of a marker-variable is usually arbitrary,
-#'    yet can have a large influence on the estimation and testing of of structural parameters 
-#'    (see https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732); 
+#'    yet can have a large influence on the estimation and testing of of structural parameters
+#'    (see https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732);
 #'    and (2) the selection of a non-invariant marker-variable
 #'    can have disastrous down-stream consequences for the identification of
 #'    non-invariant measurement parameters, following a the rejection of an omnibus
 #'    invariance constraint set (see Lee, Preacher, & Little, 2011).
-#'  
+#'
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on.
 #' @family script-writing functions
 #' @export
 #'
 #' @examples
 #' dvn <- scrapeVarCross(
-#'   dat = commitmentQ, 
-#'   x_order = "spi", 
-#'   x_stem = "sat.g", 
+#'   dat = commitmentQ,
+#'   x_order = "spi",
+#'   x_stem = "sat.g",
 #'   x_delim1 = ".",
-#'   x_delim2="_", 
-#'   distinguish_1="1", 
+#'   x_delim2="_",
+#'   distinguish_1="1",
 #'   distinguish_2="2"
 #'   )
 #'
 #' sat.indist.script <- scriptHier(
-#'   dvn, 
+#'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat"
 #'   )
 #'
 #' sat.lvars.script <- scriptHier(
-#'   dvn, 
+#'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat",
 #'   constr_dy_meas = "loadings",
@@ -68,7 +68,7 @@
 #'   )
 #'
 #' sat.resids.script <- scriptHier(
-#'   dvn, 
+#'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat",
 #'   constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -78,7 +78,7 @@
 #'   )
 #'
 #' sat.ints.script <- scriptHier(
-#'   dvn, 
+#'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat",
 #'   constr_dy_meas = c("loadings", "intercepts"),
@@ -88,7 +88,7 @@
 #'   )
 #'
 #' sat.loads.script <- scriptHier(
-#'   dvn, 
+#'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat",
 #'   constr_dy_meas = c("loadings"),
@@ -98,7 +98,7 @@
 #'   )
 #'
 #' sat.config.script <- scriptHier(
-#'   dvn, 
+#'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat",
 #'   constr_dy_meas = "none",
@@ -107,7 +107,7 @@
 #'   fileName = "dHier_configural"
 #'   )
 scriptHier <- function(
-    dvn, 
+    dvn,
     scaleset = "FF",
     lvname = "X",
     constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -115,26 +115,26 @@ scriptHier <- function(
     writeTo = NULL,
     fileName = NULL
 ){
-  
+
   #check for valid inputs
   if(length(dvn)!=6){
     stop("You must supply a dvn object containing information for only X [i.e., your target LV]")
   }
-  
+
   if(!any(constr_dy_meas %in% c("loadings", "intercepts", "residuals", "none"))){
     stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'")
   }
-  
+
   if(!any(constr_dy_struct %in% c("variances", "means", "none"))){
     stop("constr_dy_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
   }
-  
+
   if(!scaleset %in% c("FF", "MV")){
     stop("scaleset must be either 'FF' (fixed-factor) or 'MV' (marker variable)")
   }
-  
+
   if(scaleset == "FF"){
-    
+
     #loadings
     if(any(constr_dy_meas == "loadings")){
       xloads1 <- loads(dvn, lvar = "X", lvname = lvname, partner="1", type = "equated")
@@ -144,10 +144,10 @@ scriptHier <- function(
       xloads1 <- loads(dvn, lvar = "X", lvname = lvname, partner="1", type = "free")
       xloads2 <- loads(dvn, lvar = "X", lvname = lvname, partner="2", type = "free")
     }
-    
+
     #common fate loadings
     hierloads <- cfloads(dvn, lvname = lvname, type = "equated")
-    
+
     #intercepts
     if(any(constr_dy_meas == "intercepts")){
       xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated")
@@ -157,7 +157,7 @@ scriptHier <- function(
       xints1 <- intercepts(dvn, lvar = "X", partner="1", type = "free")
       xints2 <- intercepts(dvn, lvar = "X", partner="2", type = "free")
     }
-    
+
     #residuals
     if(any(constr_dy_meas == "residuals")){
       xres1 <- resids(dvn, lvar = "X", partner="1", type = "equated")
@@ -166,15 +166,15 @@ scriptHier <- function(
       xres1 <- resids(dvn, lvar = "X", partner="1", type = "free")
       xres2 <- resids(dvn, lvar = "X", partner="2", type = "free")
     }
-    
+
     #correlated residuals
     xcoresids <- coresids(dvn, lvar = "X", "free")
-    
+
     #latent variances
     if(any(constr_dy_struct == "variances")){
       hierxvar <- cfvars(lvname = lvname, type = "fixed")
-      xvar1 <- lvars(dvn, lvar = "X", lvname = lvname, partner = "1", type = "equated")
-      xvar2 <- lvars(dvn, lvar = "X", lvname = lvname, partner = "2", type = "equated")
+      xvar1 <- lvars(dvn, lvar = "X", lvname = lvname, partner = "1", type = "fixed")
+      xvar2 <- lvars(dvn, lvar = "X", lvname = lvname, partner = "2", type = "fixed")
     }
     else if(!any(constr_dy_struct == "variances") & any(constr_dy_meas == "loadings") & scaleset == "FF"){
       hierxvar <- cfvars(lvname = lvname, type = "fixed")
@@ -186,45 +186,45 @@ scriptHier <- function(
       xvar1 <- lvars(dvn, lvar = "X", lvname = lvname, partner = "1", type = "fixed")
       xvar2 <- lvars(dvn, lvar = "X", lvname = lvname, partner = "2", type = "fixed")
     }
-    
+
     #hierarchical mean
     xmean <- cfmeans(lvname = lvname, type = "fixed")
-    
+
     #latent (partner) means
     if(any(constr_dy_struct == "means")){
       xmean1 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="1", type = "equated_ff")
       xmean2 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="2", type = "equated")
     }
-    
+
     else if(!any(constr_dy_struct == "means") & any(constr_dy_meas == "intercepts") & scaleset == "FF"){
       xmean1 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="1", type = "fixed")
       xmean2 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="2", type = "free")
     }
-    
+
     else{
       xmean1 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="1", type = "fixed")
       xmean2 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="2", type = "fixed")
-      
+
     }
-    
-    
-    
+
+
+
     #write script
     script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
                       xloads1, xloads2,
                       hierloads,
                       xints1, xints2,
                       xres1, xres2,
-                      xcoresids, 
+                      xcoresids,
                       hierxvar, xvar1, xvar2,
                       xmean, xmean1, xmean2
                       )
-    
+
   }
-  
-  
+
+
   if(scaleset == "MV"){
-    
+
     #loadings
     if(any(constr_dy_meas == "loadings")){
       xloads1 <- loads(dvn, lvar = "X", lvname = lvname, partner="1", type = "equated_mv")
@@ -234,10 +234,10 @@ scriptHier <- function(
       xloads1 <- loads(dvn, lvar = "X", lvname = lvname, partner="1", type = "fixed")
       xloads2 <- loads(dvn, lvar = "X", lvname = lvname, partner="2", type = "fixed")
     }
-    
+
     #common fate loadings
     hierloads <- cfloads(dvn, lvname = lvname, type = "fixed")
-    
+
     #intercepts
     if(any(constr_dy_meas == "intercepts")){
       xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated_mv")
@@ -247,7 +247,7 @@ scriptHier <- function(
       xints1 <- intercepts(dvn, lvar = "X", partner="1", type = "fixed")
       xints2 <- intercepts(dvn, lvar = "X", partner="2", type = "fixed")
     }
-    
+
     #residuals
     if(any(constr_dy_meas == "residuals")){
       xres1 <- resids(dvn, lvar = "X", partner="1", type = "equated")
@@ -257,10 +257,10 @@ scriptHier <- function(
       xres1 <- resids(dvn, lvar = "X", partner="1", type = "free")
       xres2 <- resids(dvn, lvar = "X", partner="2", type = "free")
     }
-    
+
     #correlated residuals
     xcoresids <- coresids(dvn, lvar = "X", "free")
-    
+
     #latent variances
     if(any(constr_dy_struct == "variances")){
       hierxvar <- cfvars(lvname = lvname, type = "free")
@@ -272,41 +272,40 @@ scriptHier <- function(
       xvar1 <- lvars(dvn, lvar = "X", lvname = lvname, partner = "1", type = "free")
       xvar2 <- lvars(dvn, lvar = "X", lvname = lvname, partner = "2", type = "free")
     }
-    
-    
+
+
     #hierarchical means
-    xmean <- cfmeans(lvname = lvname, type = "free")
-    ymean <- cfmeans(lvname = lvname, type = "free")
-    
-    #latent means 
+    xmean <- cfmeans(lvname = lvname, type = "fixed")
+
+    #latent means
     if(any(constr_dy_struct == "means")){
-      xmean1 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="1", type = "equated") 
+      xmean1 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="1", type = "equated")
       xmean2 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="2", type = "equated")
     }
     else{
-      xmean1 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="1", type = "free") 
+      xmean1 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="1", type = "free")
       xmean2 <- lmeans(dvn, lvar = "X", lvname = lvname, partner="2", type = "free")
     }
-    
-    
+
+
     #write script
     script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
                       xloads1, xloads2,
                       hierloads,
                       xints1, xints2,
                       xres1, xres2,
-                      xcoresids, 
+                      xcoresids,
                       hierxvar, xvar1, xvar2,
                       xmean, xmean1, xmean2
                       )
   }
-  
+
   #Write script to file if requested
   if(!is.null(writeTo) | !is.null(fileName) ){
     #if there is a path or file name,
     #check for valid input,
     #and if valid, write script
-    
+
     # checking for valid directory path and fileName
     if (!is.character(writeTo)){
       stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
@@ -317,13 +316,13 @@ scriptHier <- function(
     if (!is.character(fileName)){
       stop("The `fileName` argument must be a character string.")
     }
-    
+
     #write file
     cat(script, "\n",
         file = sprintf("%s/%s.txt",
                        writeTo,
                        fileName))
-    
+
     return(script)
   }
   else if(is.null(writeTo) & is.null(fileName)){

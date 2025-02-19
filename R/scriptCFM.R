@@ -64,6 +64,8 @@ scriptCFM  <- function(dvn, scaleset = "FF",
                      writeTo = NULL,
                      fileName = NULL){
 
+  warning("scriptCFM has some specification problems under certain patterns of constraints and is likely to see a major update in the near future; please consider delaying its use (this message will be removed when the update is complete)")
+
   #stop if model is provided
   if (lifecycle::is_present(model)) {
     lifecycle::deprecate_stop(

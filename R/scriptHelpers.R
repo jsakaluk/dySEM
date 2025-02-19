@@ -1118,7 +1118,7 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
 
 #' @rdname scriptHelpers
 #' @noRd
-cfloads <- function(dvn, lvxname, lvyname, lvname = NULL, type = "equated"){
+cfloads <- function(dvn, lvname, type = "equated"){
 
   if(!is.null(lvname)){
     if(type == "equated"){
@@ -1128,6 +1128,14 @@ cfloads <- function(dvn, lvxname, lvyname, lvname = NULL, type = "equated"){
     else if(type == "fixed"){
       eta.cx <-  sprintf("%s =~ 1*%s%s + 1*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
       return(eta.cx)
+    }
+    else if(type == "fixed_x"){
+      eta.cx <-  sprintf("%s =~ 1*%s%s + HOx*%s%s + HOx*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      return(eta.cx)
+    }
+    else if(type == "fixed_y"){
+      eta.cy <- sprintf("%s =~ 1*%s%s + HOy*%s%s + HOy*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      return(eta.cy)
     }
   }
 
@@ -1155,6 +1163,9 @@ cfvars <- function(lvname, type){
     return(lvar)
   }else if(type == "free"){
     lvar <- sprintf("%s ~~ NA*%s",lvname, lvname)
+    return(lvar)
+  }else if(type == "equated_x"){
+    lvar <- sprintf("%s ~~ psix*%s",lvname, lvname)
     return(lvar)
   }
 }

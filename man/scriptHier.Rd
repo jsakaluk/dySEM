@@ -66,23 +66,23 @@ invariance constraint set (see Lee, Preacher, & Little, 2011).
 }
 \examples{
 dvn <- scrapeVarCross(
-  dat = commitmentQ, 
-  x_order = "spi", 
-  x_stem = "sat.g", 
+  dat = commitmentQ,
+  x_order = "spi",
+  x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_", 
-  distinguish_1="1", 
+  x_delim2="_",
+  distinguish_1="1",
   distinguish_2="2"
   )
 
 sat.indist.script <- scriptHier(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat"
   )
 
 sat.lvars.script <- scriptHier(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = "loadings",
@@ -90,7 +90,7 @@ sat.lvars.script <- scriptHier(
   )
 
 sat.resids.script <- scriptHier(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -100,7 +100,7 @@ sat.resids.script <- scriptHier(
   )
 
 sat.ints.script <- scriptHier(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings", "intercepts"),
@@ -110,7 +110,7 @@ sat.ints.script <- scriptHier(
   )
 
 sat.loads.script <- scriptHier(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings"),
@@ -120,7 +120,7 @@ sat.loads.script <- scriptHier(
   )
 
 sat.config.script <- scriptHier(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = "none",
