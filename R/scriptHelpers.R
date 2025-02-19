@@ -6,6 +6,8 @@
 #' @param dvn input dvn list from scrapeVarCross
 #' @param lvar input character for whether scripting helpers target latent "X" or :Y" indicator variables in dvn
 #' @param lvname input character to (arbitrarily) name LV in lavaan syntax
+#' @param lvxname input character to (arbitrarily) name LV for X in lavaan syntax
+#' @param lvyname input character to (arbitrarily) name LV for Y in lavaan syntax
 #' @param partner input character to indicate parameters for first or second dyad member
 #' @param type input character to indicate whether parameters "fixed", "free", "equated", or "equated_mv" in estimation
 #' @family helpers
@@ -663,14 +665,14 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
   }
-  
+
   #g with marker variable scale setting
   else if(partner == "g" & type == "fixed" & lvar == "X"){
     eta_x = sprintf("%sDy =~ 1*", lvname)
     eta.x = gsub(" ", "",paste(eta_x,paste(dvn[["p1xvarnames"]], collapse = "+"), "+",paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
     return(eta.x)
   }
-  
+
   else if(partner == "g" & type == "equated_mv" & lvar == "X"){
     eta_x = sprintf("%sDy =~ 1*%s+",lvname, dvn[["p1xvarnames"]][1])
     eta.x1 = list()
@@ -683,7 +685,7 @@ loads <- function(dvn, lvar = "X", lvname, partner="1", type = "free"){
     }
     eta.x = gsub(" ", "",paste(eta_x,paste(eta.x1, collapse = "+"),"+",paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
-    
+
   }
 }
 
@@ -955,7 +957,7 @@ lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
     }
     return(lvar)
   }
-  
+
   else if(partner == "g" & type == "equated"){
     if(lvar == "X"){
       lvar <- sprintf("%sDy ~~ psix*%sDy",lvname,lvname)
@@ -1036,7 +1038,7 @@ lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
     }
     return(alpha)
   }
-  
+
   else if(partner == "g" & type == "equated"){
     if(lvar == "X"){
       alpha <- sprintf("%sDy ~ alphax*1",lvname)
@@ -1047,3 +1049,125 @@ lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
     return(alpha)
   }
 }
+
+#' @rdname scriptHelpers
+#' @noRd
+lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
+  if(param == "act"){
+    if(type == "free"){
+      beta_y1x1 = sprintf("%s%s ~ a1*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist1"]])
+      beta_y2x2 = sprintf("%s%s ~ a2*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist2"]])
+      betas <- paste(beta_y1x1, beta_y2x2, sep = "\n")
+
+    }else if(type == "equated"){
+      beta_y1x1 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist1"]])
+      beta_y2x2 = sprintf("%s%s ~ a*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist2"]])
+      betas <- paste(beta_y1x1, beta_y2x2, sep = "\n")
+
+    }else if(type == "zero"){
+      beta_y1x1 = sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist1"]])
+      beta_y2x2 = sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist2"]])
+      betas <- paste(beta_y1x1, beta_y2x2, sep = "\n")
+    }
+    return(betas)
+
+  }
+  else if(param == "apim_part"){
+    if(type == "free"){
+      beta_y1x2 = sprintf("%s%s ~ p1*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      beta_y2x1 = sprintf("%s%s ~ p2*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist1"]])
+
+      betas <- paste(beta_y1x2, beta_y2x1, sep = "\n")
+    }else if(type == "equated"){
+      beta_y1x2 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      beta_y2x1 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist1"]])
+
+      betas <- paste(beta_y1x2, beta_y2x1, sep = "\n")
+    }else if(type == "zero"){
+      beta_y1x2 = sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist1"]],lvxname, dvn[["dist2"]])
+      beta_y2x1 = sprintf("%s%s ~ 0*%s%s",lvyname, dvn[["dist2"]],lvxname, dvn[["dist1"]])
+
+      betas <- paste(beta_y1x2, beta_y2x1, sep = "\n")
+    }
+    return(betas)
+
+  }
+  else if(param == "mim_part"){
+    if(type == "free"){
+      beta_y1y2 = sprintf("%s%s ~ p1*%s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
+      beta_y2y1 = sprintf("%s%s ~ p2*%s%s",lvyname, dvn[["dist2"]],lvyname, dvn[["dist1"]])
+
+      betas <- paste(beta_y1y2, beta_y2y1, sep = "\n")
+      return(betas)
+    }else if(type == "equated"){
+      beta_y1y2 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[["dist1"]],lvyname, dvn[["dist2"]])
+      beta_y2y1 = sprintf("%s%s ~ p*%s%s",lvyname, dvn[["dist2"]],lvyname, dvn[["dist1"]])
+
+      betas <- paste(beta_y1y2, beta_y2y1, sep = "\n")
+      return(betas)
+    }
+  }
+  else if(param == "cf"){
+    beta_yx <- sprintf("%s ~ %s", lvyname, lvxname)
+
+    betas <- paste(beta_yx)
+    return(betas)
+  }
+
+}
+
+#' @rdname scriptHelpers
+#' @noRd
+cfloads <- function(dvn, lvxname, lvyname, lvname = NULL, type = "equated"){
+
+  if(!is.null(lvname)){
+    if(type == "equated"){
+      eta.cx <-  sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      return(eta.cx)
+    }
+    else if(type == "fixed"){
+      eta.cx <-  sprintf("%s =~ 1*%s%s + 1*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      return(eta.cx)
+    }
+  }
+
+  else if(is.null(lvname)){
+
+    if(type == "equated"){
+      eta.cx <-  sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
+      eta.cy <- sprintf("%s =~ NA*%s%s + cfy*%s%s + cfy*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
+      cfloads <- paste(eta.cx, eta.cy, sep = "\n")
+      return(cfloads)
+    }else if(type == "fixed"){
+      eta.cx <-  sprintf("%s =~ 1*%s%s + 1*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
+      eta.cy <- sprintf("%s =~ 1*%s%s + 1*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
+      cfloads <- paste(eta.cx, eta.cy, sep = "\n")
+      return(cfloads)
+    }
+  }
+}
+
+#' @rdname scriptHelpers
+#' @noRd
+cfvars <- function(lvname, type){
+  if(type == "fixed"){
+    lvar <- sprintf("%s ~~ 1*%s",lvname, lvname)
+    return(lvar)
+  }else if(type == "free"){
+    lvar <- sprintf("%s ~~ NA*%s",lvname, lvname)
+    return(lvar)
+  }
+}
+
+#' @rdname scriptHelpers
+#' @noRd
+cfmeans <- function(lvname, type, lvar = "X"){
+  if(type == "fixed"){
+    lmean <- sprintf("%s ~ 0*1",lvname)
+    return(lmean)
+  }else if(type == "free"){
+    lmean <- sprintf("%s ~ NA*1",lvname)
+    return(lmean)
+  }
+}
+
