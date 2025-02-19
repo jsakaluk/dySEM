@@ -955,6 +955,16 @@ lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
     }
     return(lvar)
   }
+  
+  else if(partner == "g" & type == "equated"){
+    if(lvar == "X"){
+      lvar <- sprintf("%sDy ~~ psix*%sDy",lvname,lvname)
+    }
+    else if(lvar == "Y"){
+      lvar <- sprintf("%sDy ~~ psiy*%sDy",lvname,lvname)
+    }
+    return(lvar)
+  }
 }
 
 #' @rdname scriptHelpers
@@ -1023,6 +1033,16 @@ lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
       alpha <- sprintf("%sDy ~ 0*1 + alphax*1",lvname)
     }else if(lvar == "Y"){
       alpha <- sprintf("%sDy ~ 0*1 + alphay*1",lvname)
+    }
+    return(alpha)
+  }
+  
+  else if(partner == "g" & type == "equated"){
+    if(lvar == "X"){
+      alpha <- sprintf("%sDy ~ alphax*1",lvname)
+    }
+    else if(lvar == "Y"){
+      alpha <- sprintf("%sDy ~ alphay*1",lvname)
     }
     return(alpha)
   }
