@@ -3,7 +3,7 @@
 \name{scriptBifac}
 \alias{scriptBifac}
 \title{A Function That Writes, Saves, and Exports Syntax for
-Fitting Univariate Bifactor Dyadic Models}
+Fitting Bifactor Dyadic Models}
 \usage{
 scriptBifac(
   dvn,
@@ -142,7 +142,9 @@ sat.source.script <- scriptBifac(
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on.
 
-Other script-writing functions: 
-\code{\link{scriptHier}()}
+Other uni-construct script-writing functions: 
+\code{\link{scriptCor}()},
+\code{\link{scriptHier}()},
+\code{\link{scriptUni}()}
 }
-\concept{script-writing functions}
+\concept{uni-construct script-writing functions}

@@ -3,7 +3,7 @@
 \name{scriptHier}
 \alias{scriptHier}
 \title{A Function That Writes, Saves, and Exports Syntax for
-Fitting Univariate Hierarchical Dyadic Factor Models}
+Fitting Hierarchical Dyadic Factor Models}
 \usage{
 scriptHier(
   dvn,
@@ -132,7 +132,9 @@ sat.config.script <- scriptHier(
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on.
 
-Other script-writing functions: 
-\code{\link{scriptBifac}()}
+Other uni-construct script-writing functions: 
+\code{\link{scriptBifac}()},
+\code{\link{scriptCor}()},
+\code{\link{scriptUni}()}
 }
-\concept{script-writing functions}
+\concept{uni-construct script-writing functions}

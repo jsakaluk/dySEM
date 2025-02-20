@@ -1,5 +1,5 @@
 #' A Function That Writes, Saves, and Exports Syntax for
-#' Fitting Univariate Bifactor Dyadic Models
+#' Fitting Bifactor Dyadic Models
 #'
 #' This function takes the outputted object from `scrapeVarCross()`
 #'  and automatically writes, returns, and exports (`.txt`) `lavaan` syntax
@@ -39,7 +39,7 @@
 #'    invariance constraint set (see Lee, Preacher, & Little, 2011).
 #'
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on.
-#' @family script-writing functions
+#' @family uni-construct script-writing functions
 #' @export
 #'
 #' @examples

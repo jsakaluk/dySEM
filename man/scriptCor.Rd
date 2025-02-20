@@ -133,6 +133,8 @@ sat.config.script <- scriptCor(
 \code{\link{scrapeVarCross}} which this function relies on.
 
 Other uni-construct script-writing functions: 
+\code{\link{scriptBifac}()},
+\code{\link{scriptHier}()},
 \code{\link{scriptUni}()}
 }
 \concept{uni-construct script-writing functions}

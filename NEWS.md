@@ -1,3 +1,7 @@
+# dySEM 1.3.1
+
+* deep dive ensuring correct specification + unit tests for all uniconstruct models across FF and MV scale-setting options
+
 # dySEM 1.3.0
 
 * add two new exemplar datasets, imsM and prqcQ (both of which contain multi-construct data) for use in the vignettes and examples
