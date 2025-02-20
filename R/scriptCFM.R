@@ -143,10 +143,13 @@ scriptCFM  <- function(dvn, scaleset = "FF",
 
   #Common Fate Loadings
   if(scaleset == "FF"){
-    hierloads <- cfloads(dvn, lvxname = lvxname, lvyname = lvyname, type = "equated")
+    hierloadsx <- cfloads(dvn, lvname = lvxname, type = "equated_x")
+    hierloadsy <- cfloads(dvn, lvname = lvyname, type = "equated_y")
 
   }else if(scaleset == "MV"){
-    hierloads <- cfloads(dvn, lvxname = lvxname, lvyname = lvyname, type = "fixed")
+    hierloadsx <- cfloads(dvn, lvname = lvxname, type = "fixed_x")
+    hierloadsy <- cfloads(dvn, lvname = lvyname, type = "fixed_y")
+
   }
 
   #intercepts for X
@@ -353,10 +356,10 @@ scriptCFM  <- function(dvn, scaleset = "FF",
   }
 
   #write script
-  script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n%s\n\n#Intercepts\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Dyadic Effect\n%s",
+  script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Dyadic Effect\n%s",
                     xloads1, xloads2,
                     yloads1, yloads2,
-                    hierloads,
+                    hierloadsx,hierloadsy,
                     xints1, xints2,
                     yints1, yints2,
                     xres1, xres2,

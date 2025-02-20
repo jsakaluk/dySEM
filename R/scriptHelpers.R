@@ -980,7 +980,6 @@ lcovars <- function(dvn, lvname, type = "free"){
   return(lcovar)
 }
 
-
 #' @rdname scriptHelpers
 #' @noRd
 lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free"){
@@ -1120,7 +1119,6 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free"){
 #' @noRd
 cfloads <- function(dvn, lvname, type = "equated"){
 
-  if(!is.null(lvname)){
     if(type == "equated"){
       eta.cx <-  sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
       return(eta.cx)
@@ -1130,29 +1128,19 @@ cfloads <- function(dvn, lvname, type = "equated"){
       return(eta.cx)
     }
     else if(type == "fixed_x"){
-      eta.cx <-  sprintf("%s =~ 1*%s%s + HOx*%s%s + HOx*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      eta.cx <-  sprintf("%s =~ 1*%s%s + cfx*%s%s + cfx*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
       return(eta.cx)
     }
     else if(type == "fixed_y"){
-      eta.cy <- sprintf("%s =~ 1*%s%s + HOy*%s%s + HOy*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      eta.cy <- sprintf("%s =~ 1*%s%s + cfy*%s%s + cfy*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
       return(eta.cy)
+    }else if(type == "equated_x"){
+      eta.cx <-  sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      return(eta.cx)
+    }else if(type == "equated_y"){
+      eta.cx <-  sprintf("%s =~ NA*%s%s + cfy*%s%s + cfy*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+      return(eta.cx)
     }
-  }
-
-  else if(is.null(lvname)){
-
-    if(type == "equated"){
-      eta.cx <-  sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
-      eta.cy <- sprintf("%s =~ NA*%s%s + cfy*%s%s + cfy*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
-      cfloads <- paste(eta.cx, eta.cy, sep = "\n")
-      return(cfloads)
-    }else if(type == "fixed"){
-      eta.cx <-  sprintf("%s =~ 1*%s%s + 1*%s%s", lvxname, lvxname, dvn[["dist1"]], lvxname, dvn[["dist2"]])
-      eta.cy <- sprintf("%s =~ 1*%s%s + 1*%s%s", lvyname, lvyname, dvn[["dist1"]], lvyname, dvn[["dist2"]])
-      cfloads <- paste(eta.cx, eta.cy, sep = "\n")
-      return(cfloads)
-    }
-  }
 }
 
 #' @rdname scriptHelpers

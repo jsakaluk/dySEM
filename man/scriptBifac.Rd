@@ -66,23 +66,23 @@ invariance constraint set (see Lee, Preacher, & Little, 2011).
 }
 \examples{
 dvn <- scrapeVarCross(
-  dat = commitmentQ, 
-  x_order = "spi", 
-  x_stem = "sat.g", 
+  dat = commitmentQ,
+  x_order = "spi",
+  x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_", 
-  distinguish_1="1", 
+  x_delim2="_",
+  distinguish_1="1",
   distinguish_2="2"
   )
 
 sat.indist.script <- scriptBifac(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat"
   )
 
 sat.lvars.script <- scriptBifac(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = "loadings",
@@ -90,7 +90,7 @@ sat.lvars.script <- scriptBifac(
   )
 
 sat.resids.script <- scriptBifac(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -100,7 +100,7 @@ sat.resids.script <- scriptBifac(
   )
 
 sat.ints.script <- scriptBifac(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings", "intercepts"),
@@ -110,7 +110,7 @@ sat.ints.script <- scriptBifac(
   )
 
 sat.loads.script <- scriptBifac(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = c("loadings"),
@@ -120,7 +120,7 @@ sat.loads.script <- scriptBifac(
   )
 
 sat.config.script <- scriptBifac(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = "none",
@@ -128,9 +128,9 @@ sat.config.script <- scriptBifac(
   writeTo = tempdir(),
   fileName = "dBiFac_configural"
   )
-  
+
 sat.source.script <- scriptBifac(
-  dvn, 
+  dvn,
   scaleset = "FF",
   lvname = "Sat",
   constr_dy_meas = "loadings_source",
