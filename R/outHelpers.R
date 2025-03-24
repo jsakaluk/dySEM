@@ -82,7 +82,7 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
                       !.data$lhs %in% dvn[["p2xvarnames"]]&
                       !.data$lhs %in% dvn[["p1yvarnames"]]&
                       !.data$lhs %in% dvn[["p2yvarnames"]]) %>%
-      dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, "Slope"=.data$est, "SE"=.data$se,
+      dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, "Estimate"=.data$est, "SE"=.data$se,
                     'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Slope"=.data$std.all)
     tab = tab %>%
       dplyr::mutate_if(is.numeric, round, digits = 3)
