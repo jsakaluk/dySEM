@@ -4,6 +4,9 @@
 #'  in order from most parsimonious (residual) to least parsimonious (configural)
 #'
 #' @param mods A list of nested `lavaan` dyadic invariance models, in the order of residual, intercept, loading, configural
+#' @param parsimonyFirst A logical input indicating whether to prioritize the residual dyadic invariance (i.e. most parsimonious measurement model)
+#' as the baseline model for nested comparisons, or to prioritize the configural dyadic invariance (i.e. least parsimonious measurement model).
+#' Defaults to FALSE (i.e., configural dyadic invariance is the baseline model).
 #' @param gtTab A logical input indicating whether to generate the output in `gt::gt()` table object format (`TRUE`).
 #'  By default (`FALSE`), the output is generated in `tibble::tibble()` format.
 #'  Users can also apply the `writeTo` argument if they wish to export the `gt:gt()` table object.
@@ -56,10 +59,16 @@
 #'
 #' mods <- list(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
 #'
-#' outputInvarCompTab(mods,
-#' gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar")
+#' outputInvarCompTab(mods, parsimonyFirst = FALSE,
+#' gtTab = TRUE, writeTo = ".", fileName = "dCFA_Invar_Standard")
+#'
+#' mods <- list(sat.config.fit, sat.loading.fit, sat.intercept.fit, sat.residual.fit)
+#'
+#' outputInvarCompTab(mods, parsimonyFirst = TRUE,
+#' gtTab = TRUE, writeTo = ".", fileName = "dCFA_Invar_Reverse")
 #'
 outputInvarCompTab <- function(mods,
+                               parsimonyFirst = FALSE,
                                gtTab = FALSE,
                                writeTo = NULL,
                                fileName = NULL){
@@ -88,7 +97,12 @@ outputInvarCompTab <- function(mods,
   }
 
   modfit <- as.data.frame(modfit)
-  modfit$mod <- c("residual", "intercept", "loading", "configural")
+
+  if(parsimonyFirst == TRUE){
+    modfit$mod <- c("residual", "intercept", "loading", "configural")
+  }else if(parsimonyFirst == FALSE){
+    modfit$mod <- c("configural", "loading", "intercept", "residual")
+  }
   modfit <- modfit |>
     dplyr::select(.data$mod, .data$chisq, .data$df, .data$pvalue, .data$aic, .data$bic, .data$rmsea, .data$cfi)
 
