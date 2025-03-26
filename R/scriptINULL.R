@@ -24,18 +24,21 @@
 #' qual.inull.script <- scriptINULL(dvn, lvxname = "Qual",
 #' writeTo = tempdir(),
 #' fileName = "I-NULL_script")
-scriptINULL = function(dvn, lvxname = "X", lvyname = NULL,
-                       writeTo = NULL,
-                       fileName = NULL){
-
+scriptINULL = function(
+  dvn,
+  lvxname = "X",
+  lvyname = NULL,
+  writeTo = NULL,
+  fileName = NULL
+) {
   #Intercepts equated between partners
-  xints1 = intercepts(dvn, lvar = "X", partner = "1", type  = "equated")
-  xints2 = intercepts(dvn, lvar = "X", partner = "2", type  = "equated")
+  xints1 = intercepts(dvn, lvar = "X", partner = "1", type = "equated")
+  xints2 = intercepts(dvn, lvar = "X", partner = "2", type = "equated")
 
   #If y-variable, equate their intercepts too
-  if(length(dvn) == 9){
-    yints1 = intercepts(dvn, lvar = "Y", partner = "1", type  = "equated")
-    yints2 = intercepts(dvn, lvar = "Y", partner = "2", type  = "equated")
+  if (length(dvn) == 9) {
+    yints1 = intercepts(dvn, lvar = "Y", partner = "1", type = "equated")
+    yints2 = intercepts(dvn, lvar = "Y", partner = "2", type = "equated")
   }
 
   #Variances equated between partners
@@ -43,102 +46,114 @@ scriptINULL = function(dvn, lvxname = "X", lvyname = NULL,
   xvars2 <- resids(dvn, lvar = "X", partner = "2", type = "equated")
 
   #If y-variable, equate their variances too
-  if(length(dvn) == 9){
+  if (length(dvn) == 9) {
     yvars1 <- resids(dvn, lvar = "Y", partner = "1", type = "equated")
     yvars2 <- resids(dvn, lvar = "Y", partner = "2", type = "equated")
   }
 
   #Constrain Covariances to 0
-  if(length(dvn) == 6){
+  if (length(dvn) == 6) {
     varname = c(dvn[["p1xvarnames"]], dvn[["p2xvarnames"]])
     covar.list = c()
     for (i in 1:dvn[["indnum"]]) {
-      covar.list[[i]]=c(varname[i+1:dvn[["indnum"]]])
+      covar.list[[i]] = c(varname[i + 1:dvn[["indnum"]]])
     }
     covar.list <- covar.list[-c(dvn[["indnum"]])]
     covar.list <- lapply(covar.list, function(x) x[!is.na(x)])
 
     store = c()
     for (i in 1:length(covar.list)) {
-      store[[i]] = paste("0*",covar.list[[i]],collapse = "+")
+      store[[i]] = paste("0*", covar.list[[i]], collapse = "+")
     }
 
     store = stringr::str_replace_all(store, stringr::fixed(" "), "")
 
     covars = c()
     for (i in 1:length(covar.list)) {
-      covars[[i]]=sprintf("%s ~~ %s", varname[[i]], store[[i]])
+      covars[[i]] = sprintf("%s ~~ %s", varname[[i]], store[[i]])
     }
 
     covars = paste(covars, collapse = "\n")
-  }else if(length(dvn) == 9){
-    varname = c(dvn[["p1xvarnames"]], dvn[["p2xvarnames"]],
-                dvn[["p1yvarnames"]], dvn[["p2yvarnames"]] )
+  } else if (length(dvn) == 9) {
+    varname = c(
+      dvn[["p1xvarnames"]],
+      dvn[["p2xvarnames"]],
+      dvn[["p1yvarnames"]],
+      dvn[["p2yvarnames"]]
+    )
     covar.list = c()
     for (i in 1:dvn[["indnum"]]) {
-      covar.list[[i]]=c(varname[i+1:dvn[["indnum"]]])
+      covar.list[[i]] = c(varname[i + 1:dvn[["indnum"]]])
     }
     covar.list <- covar.list[-c(dvn[["indnum"]])]
     covar.list <- lapply(covar.list, function(x) x[!is.na(x)])
 
     store = c()
     for (i in 1:length(covar.list)) {
-      store[[i]] = paste("0*",covar.list[[i]],collapse = "+")
+      store[[i]] = paste("0*", covar.list[[i]], collapse = "+")
     }
 
     store = stringr::str_replace_all(store, stringr::fixed(" "), "")
 
     covars = c()
     for (i in 1:length(covar.list)) {
-      covars[[i]]=sprintf("%s ~~ %s", varname[[i]], store[[i]])
+      covars[[i]] = sprintf("%s ~~ %s", varname[[i]], store[[i]])
     }
 
     covars = paste(covars, collapse = "\n")
   }
 
-
   #Script Creation Syntax
-  if(length(dvn) == 6){
-    script = sprintf("#Equated Means\n%s\n%s\n\n#Equated Variances\n%s\n%s\n\n#No Covariances\n%s",
-                           xints1, xints2,
-                           xvars1, xvars2,
-                           covars)
-
-
-  }else if(length(dvn) == 9){
-    script = sprintf("#Equated Means\n%s\n%s\n%s\n%s\n\n#Equated Variances\n%s\n%s\n%s\n%s\n\n#No Covariances\n%s",
-                           xints1, xints2, yints1, yints2,
-                           xvars1, xvars2, yvars1, yvars2,
-                           covars)
-
+  if (length(dvn) == 6) {
+    script = sprintf(
+      "#Equated Means\n%s\n%s\n\n#Equated Variances\n%s\n%s\n\n#No Covariances\n%s",
+      xints1,
+      xints2,
+      xvars1,
+      xvars2,
+      covars
+    )
+  } else if (length(dvn) == 9) {
+    script = sprintf(
+      "#Equated Means\n%s\n%s\n%s\n%s\n\n#Equated Variances\n%s\n%s\n%s\n%s\n\n#No Covariances\n%s",
+      xints1,
+      xints2,
+      yints1,
+      yints2,
+      xvars1,
+      xvars2,
+      yvars1,
+      yvars2,
+      covars
+    )
   }
 
   #Write script to file if requested
-  if(!is.null(writeTo) | !is.null(fileName) ){
+  if (!is.null(writeTo) | !is.null(fileName)) {
     #if there is a path or file name,
     #check for valid input,
     #and if valid, write script
 
     # checking for valid directory path and fileName
-    if (!is.character(writeTo)){
-      stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
+    if (!is.character(writeTo)) {
+      stop(
+        "The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example."
+      )
     }
-    if (!dir.exists(writeTo)){
-      stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
+    if (!dir.exists(writeTo)) {
+      stop(
+        "The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example."
+      )
     }
-    if (!is.character(fileName)){
+    if (!is.character(fileName)) {
       stop("The `fileName` argument must be a character string.")
     }
 
     #write file
-    cat(script, "\n",
-        file = sprintf("%s/%s.txt",
-                       writeTo,
-                       fileName))
+    cat(script, "\n", file = sprintf("%s/%s.txt", writeTo, fileName))
 
     return(script)
-  }
-  else if(is.null(writeTo) & is.null(fileName)){
+  } else if (is.null(writeTo) & is.null(fileName)) {
     #otherwise just return script
     return(script)
   }
