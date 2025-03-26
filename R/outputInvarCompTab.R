@@ -60,12 +60,12 @@
 #' mods <- list(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
 #'
 #' outputInvarCompTab(mods, parsimonyFirst = FALSE,
-#' gtTab = TRUE, writeTo = ".", fileName = "dCFA_Invar_Standard")
+#' gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Standard")
 #'
 #' mods <- list(sat.config.fit, sat.loading.fit, sat.intercept.fit, sat.residual.fit)
 #'
 #' outputInvarCompTab(mods, parsimonyFirst = TRUE,
-#' gtTab = TRUE, writeTo = ".", fileName = "dCFA_Invar_Reverse")
+#' gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Reverse")
 #'
 outputInvarCompTab <- function(mods,
                                parsimonyFirst = FALSE,

@@ -4,10 +4,20 @@
 \alias{outputInvarCompTab}
 \title{Compare Model Fit of Nested Dyadic Invariance Models}
 \usage{
-outputInvarCompTab(mods, gtTab = FALSE, writeTo = NULL, fileName = NULL)
+outputInvarCompTab(
+  mods,
+  parsimonyFirst = FALSE,
+  gtTab = FALSE,
+  writeTo = NULL,
+  fileName = NULL
+)
 }
 \arguments{
 \item{mods}{A list of nested \code{lavaan} dyadic invariance models, in the order of residual, intercept, loading, configural}
+
+\item{parsimonyFirst}{A logical input indicating whether to prioritize the residual dyadic invariance (i.e. most parsimonious measurement model)
+as the baseline model for nested comparisons, or to prioritize the configural dyadic invariance (i.e. least parsimonious measurement model).
+Defaults to FALSE (i.e., configural dyadic invariance is the baseline model).}
 
 \item{gtTab}{A logical input indicating whether to generate the output in \code{gt::gt()} table object format (\code{TRUE}).
 By default (\code{FALSE}), the output is generated in \code{tibble::tibble()} format.
@@ -68,7 +78,12 @@ std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 
 mods <- list(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
 
-outputInvarCompTab(mods,
-gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar")
+outputInvarCompTab(mods, parsimonyFirst = FALSE,
+gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Standard")
+
+mods <- list(sat.config.fit, sat.loading.fit, sat.intercept.fit, sat.residual.fit)
+
+outputInvarCompTab(mods, parsimonyFirst = TRUE,
+gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Reverse")
 
 }
