@@ -83,7 +83,7 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
                       !.data$lhs %in% dvn[["p1yvarnames"]]&
                       !.data$lhs %in% dvn[["p2yvarnames"]]) %>%
       dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, "Estimate"=.data$est, "SE"=.data$se,
-                    'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Slope"=.data$std.all)
+                    'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Estimate"=.data$std.all)
     tab = tab %>%
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
@@ -123,7 +123,7 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
                       !.data$lhs %in% dvn[["p1yvarnames"]]&
                       !.data$lhs %in% dvn[["p2yvarnames"]]) %>%
       dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, "Slope"=.data$est, "SE"=.data$se,
-                    'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Slope"=.data$std.all)
+                    'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Estimate"=.data$std.all)
     tab = tab %>%
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
@@ -163,7 +163,7 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
                       !.data$lhs %in% dvn[["p1yvarnames"]]&
                       !.data$lhs %in% dvn[["p2yvarnames"]]) %>%
       dplyr::select(.data$lhs, .data$op,.data$rhs, .data$est, "SE"=.data$se,
-                    'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Est"=.data$std.all)
+                    'p-value'=.data$pvalue, '95%CI LL' = .data$ci.lower, '95%CI UL' = .data$ci.upper, "Std. Estimate"=.data$std.all)
     tab = tab %>%
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
@@ -204,7 +204,7 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
                       !.data$lhs %in% dvn[["p2yvarnames"]]) %>%
       dplyr::filter(!is.na(.data$z)) %>%
       dplyr::select(.data$lhs, .data$op,.data$rhs, "Label" = .data$label, .data$est, "SE"=.data$se,
-                    'p-value'=.data$pvalue, "95%CI LL" = .data$ci.lower, "95%CI UL" = .data$ci.upper, "Std. Est"=.data$std.all)
+                    'p-value'=.data$pvalue, "95%CI LL" = .data$ci.lower, "95%CI UL" = .data$ci.upper, "Std. Estimate"=.data$std.all)
     tab = tab %>%
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
