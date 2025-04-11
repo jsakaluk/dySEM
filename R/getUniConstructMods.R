@@ -81,6 +81,13 @@ getUniConstructMods <- function(
     ...
     ){
 
+  lifecycle::deprecate_warn(
+    when = "1.4.0", 
+    what = "dySEM::getUniConstructMods()", 
+    details = "Please use `dySEM::outputUniConstructComp()` instead."
+    )
+  
+  
   if(length(dvn)!=6){
     stop("You must supply a dvn object containing information for only X [i.e., your target LV]")
   }
