@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
                         <h4 data-toc-skip class="author">Eric Tu and
 John K. Sakaluk</h4>
             
-            <h4 data-toc-skip class="date">11/04/25</h4>
+            <h4 data-toc-skip class="date">28/04/25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/master/vignettes/articles/apim.Rmd" class="external-link"><code>vignettes/articles/apim.Rmd</code></a></small>
       <div class="d-none name"><code>apim.Rmd</code></div>
@@ -244,7 +244,7 @@ generate the correct code for lavaan to fit our latent APIM.</p>
 <span>                                  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"APIM_script_config"</span><span class="op">)</span> <span class="co">#want script saved to directory? (e.g., for OSF?)</span></span></code></pre></div>
 <p>If you return the output of scriptAPIM(), it doesn’t look
 particularly nice:</p>
-<pre><code><span><span class="co">#&gt; [1] "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5\nSat2=~NA*sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\n\nCom1=~NA*com.1_1+com.1_2+com.1_3+com.1_4+com.1_5\nCom2=~NA*com.2_1+com.2_2+com.2_3+com.2_4+com.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\ncom.1_1 ~ 1\ncom.1_2 ~ 1\ncom.1_3 ~ 1\ncom.1_4 ~ 1\ncom.1_5 ~ 1\n\ncom.2_1 ~ 1\ncom.2_2 ~ 1\ncom.2_3 ~ 1\ncom.2_4 ~ 1\ncom.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\ncom.1_1 ~~ com.1_1\ncom.1_2 ~~ com.1_2\ncom.1_3 ~~ com.1_3\ncom.1_4 ~~ com.1_4\ncom.1_5 ~~ com.1_5\n\ncom.2_1 ~~ com.2_1\ncom.2_2 ~~ com.2_2\ncom.2_3 ~~ com.2_3\ncom.2_4 ~~ com.2_4\ncom.2_5 ~~ com.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\ncom.1_1 ~~ com.2_1\ncom.1_2 ~~ com.2_2\ncom.1_3 ~~ com.2_3\ncom.1_4 ~~ com.2_4\ncom.1_5 ~~ com.2_5\n\n#Structural Model\n\n#Latent (Co)Variances\nSat1 ~~ 1*Sat1\nSat2 ~~ 1*Sat2\nSat1 ~~ Sat2\n\nCom1 ~~ 1*Com1\nCom2 ~~ 1*Com2\nCom1 ~~ Com2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\n\nCom1 ~ 0*1\nCom2 ~ 0*1\n\n#Latent Actor Effects\nCom1 ~ a1*Sat1\nCom2 ~ a2*Sat2\n\n#Latent Partner Effects\nCom1 ~ p1*Sat2\nCom2 ~ p2*Sat1\n\n#k Parameter\nk1 := p1/a1\nk2 := p2/a2"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5\nSat2=~NA*sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\n\nCom1=~NA*com.1_1+com.1_2+com.1_3+com.1_4+com.1_5\nCom2=~NA*com.2_1+com.2_2+com.2_3+com.2_4+com.2_5\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\ncom.1_1 ~~ com.1_1\ncom.1_2 ~~ com.1_2\ncom.1_3 ~~ com.1_3\ncom.1_4 ~~ com.1_4\ncom.1_5 ~~ com.1_5\n\ncom.2_1 ~~ com.2_1\ncom.2_2 ~~ com.2_2\ncom.2_3 ~~ com.2_3\ncom.2_4 ~~ com.2_4\ncom.2_5 ~~ com.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\ncom.1_1 ~~ com.2_1\ncom.1_2 ~~ com.2_2\ncom.1_3 ~~ com.2_3\ncom.1_4 ~~ com.2_4\ncom.1_5 ~~ com.2_5\n\n#Structural Model\n\n#Latent (Co)Variances\nSat1 ~~ 1*Sat1\nSat2 ~~ 1*Sat2\nSat1 ~~ Sat2\n\nCom1 ~~ 1*Com1\nCom2 ~~ 1*Com2\nCom1 ~~ Com2\n\n#Latent Actor Effects\nCom1 ~ a1*Sat1\nCom2 ~ a2*Sat2\n\n#Latent Partner Effects\nCom1 ~ p1*Sat2\nCom2 ~ p2*Sat1\n\n#k Parameter\nk1 := p1/a1\nk2 := p2/a2"</span></span></code></pre>
 <p>Rest assured, <code>lavaan</code> can make sense of this applesauce;
 all the required text is there, and with a light touch of the
 concatenate function (which will parse the line-breaks in the text of
@@ -260,31 +260,6 @@ scriptAPIM() generated:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Com1=~NA*com.1_1+com.1_2+com.1_3+com.1_4+com.1_5</span></span>
 <span><span class="co">#&gt; Com2=~NA*com.2_1+com.2_2+com.2_3+com.2_4+com.2_5</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; #Intercepts</span></span>
-<span><span class="co">#&gt; sat.g.1_1 ~ 1</span></span>
-<span><span class="co">#&gt; sat.g.1_2 ~ 1</span></span>
-<span><span class="co">#&gt; sat.g.1_3 ~ 1</span></span>
-<span><span class="co">#&gt; sat.g.1_4 ~ 1</span></span>
-<span><span class="co">#&gt; sat.g.1_5 ~ 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; sat.g.2_1 ~ 1</span></span>
-<span><span class="co">#&gt; sat.g.2_2 ~ 1</span></span>
-<span><span class="co">#&gt; sat.g.2_3 ~ 1</span></span>
-<span><span class="co">#&gt; sat.g.2_4 ~ 1</span></span>
-<span><span class="co">#&gt; sat.g.2_5 ~ 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; com.1_1 ~ 1</span></span>
-<span><span class="co">#&gt; com.1_2 ~ 1</span></span>
-<span><span class="co">#&gt; com.1_3 ~ 1</span></span>
-<span><span class="co">#&gt; com.1_4 ~ 1</span></span>
-<span><span class="co">#&gt; com.1_5 ~ 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; com.2_1 ~ 1</span></span>
-<span><span class="co">#&gt; com.2_2 ~ 1</span></span>
-<span><span class="co">#&gt; com.2_3 ~ 1</span></span>
-<span><span class="co">#&gt; com.2_4 ~ 1</span></span>
-<span><span class="co">#&gt; com.2_5 ~ 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; #Residual Variances</span></span>
 <span><span class="co">#&gt; sat.g.1_1 ~~ sat.g.1_1</span></span>
@@ -334,13 +309,6 @@ scriptAPIM() generated:</p>
 <span><span class="co">#&gt; Com1 ~~ 1*Com1</span></span>
 <span><span class="co">#&gt; Com2 ~~ 1*Com2</span></span>
 <span><span class="co">#&gt; Com1 ~~ Com2</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; #Latent Means</span></span>
-<span><span class="co">#&gt; Sat1 ~ 0*1</span></span>
-<span><span class="co">#&gt; Sat2 ~ 0*1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Com1 ~ 0*1</span></span>
-<span><span class="co">#&gt; Com2 ~ 0*1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; #Latent Actor Effects</span></span>
 <span><span class="co">#&gt; Com1 ~ a1*Sat1</span></span>
@@ -517,10 +485,6 @@ scriptAPIM() generated:</p>
 <span><span class="co">#&gt;    .com.2_3           5.118    0.293   17.461    0.000    5.118    1.665</span></span>
 <span><span class="co">#&gt;    .com.2_4           4.136    0.289   14.315    0.000    4.136    1.365</span></span>
 <span><span class="co">#&gt;    .com.2_5           7.191    0.200   35.895    0.000    7.191    3.422</span></span>
-<span><span class="co">#&gt;     Sat1              0.000                               0.000    0.000</span></span>
-<span><span class="co">#&gt;     Sat2              0.000                               0.000    0.000</span></span>
-<span><span class="co">#&gt;    .Com1              0.000                               0.000    0.000</span></span>
-<span><span class="co">#&gt;    .Com2              0.000                               0.000    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all</span></span>
@@ -780,10 +744,6 @@ acceptable).</p>
 <span><span class="co">#&gt;    .com.2_3           5.118    0.290   17.623    0.000    5.118    1.680</span></span>
 <span><span class="co">#&gt;    .com.2_4           4.136    0.289   14.319    0.000    4.136    1.365</span></span>
 <span><span class="co">#&gt;    .com.2_5           7.191    0.201   35.724    0.000    7.191    3.406</span></span>
-<span><span class="co">#&gt;     Sat1              0.000                               0.000    0.000</span></span>
-<span><span class="co">#&gt;     Sat2              0.000                               0.000    0.000</span></span>
-<span><span class="co">#&gt;    .Com1              0.000                               0.000    0.000</span></span>
-<span><span class="co">#&gt;    .Com2              0.000                               0.000    0.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variances:</span></span>
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all</span></span>
