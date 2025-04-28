@@ -15,6 +15,7 @@ scriptAPIM(
   constr_dy_y_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_y_struct = c("variances", "means"),
   constr_dy_xy_struct = c("actors", "partners"),
+  includeMeanStruct = FALSE,
   model = lifecycle::deprecated(),
   equate = lifecycle::deprecated(),
   est_k = FALSE,
@@ -52,6 +53,8 @@ but user can specify any combination of "variances" and "means", or "none".}
 
 \item{constr_dy_xy_struct}{input character vector detailing which structural model parameters to constrain for modeling the predictive association(s) between
 partners' latent x and y. Default is c("actors", "partners"), but users can also specify "all", "actors_zero", "partners_zero", or "none".}
+
+\item{includeMeanStruct}{input logical for whether the user wants to include the mean structure in the model. Defaults FALSE, to support subsequent calculation of dynamic fit indexes (see Details)}
 
 \item{model}{Deprecated input character used to specify which level of invariance is
 modeled. Users should rely upon constr_dy_x_meas/constr_dy_y_meas and

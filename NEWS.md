@@ -1,3 +1,8 @@
+# dySEM 1.3.2
+
+* @omarjcamanto has built a beauty function called outputUniConstructComp() for comparing different varieties of uniconstruct models.
+* added a new argument (includeMeanStruct) to scriptAPIM() (and soon to be for other bi-construct scripters). By defaulting to FALSE, this will enable these scripted models to cooperate with dynamic fit indexes (which currently do not support mean structures)
+
 # dySEM 1.3.1
 
 * deep dive ensuring correct specification + unit tests for all uniconstruct models across FF and MV scale-setting options

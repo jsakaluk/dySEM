@@ -27,6 +27,7 @@
 #' but user can specify any combination of "variances" and "means", or "none".
 #' @param constr_dy_xy_struct input character vector detailing which structural model parameters to constrain for modeling the predictive association(s) between
 #' partners' latent x and y. Default is c("actors", "partners"), but users can also specify "all", "actors_zero", "partners_zero", or "none".
+#' @param includeMeanStruct input logical for whether the user wants to include the mean structure in the model. Defaults FALSE, to support subsequent calculation of dynamic fit indexes (see Details)
 #' @param model Deprecated input character used to specify which level of invariance is
 #' modeled. Users should rely upon constr_dy_x_meas/constr_dy_y_meas and
 #' constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the measurement and/or structural portions of the model for latent x and y.
@@ -64,6 +65,7 @@ scriptAPIM <- function(dvn, scaleset = "FF",
                        constr_dy_y_meas = c("loadings", "intercepts", "residuals"),
                        constr_dy_y_struct = c("variances", "means"),
                        constr_dy_xy_struct = c("actors", "partners"),
+                       includeMeanStruct = FALSE,
                        model = lifecycle::deprecated(), equate = lifecycle::deprecated(), est_k = FALSE,
                        writeTo = NULL,
                        fileName = NULL){
@@ -154,42 +156,45 @@ scriptAPIM <- function(dvn, scaleset = "FF",
     }
   }
 
-  #intercepts for X
-  if(any(constr_dy_x_meas == "intercepts")){
-    if(scaleset == "FF"){
-      xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated")
-      xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
-    }else if(scaleset == "MV"){
-      xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated_mv")
-      xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+  #only script intercepts if mean structure is requested
+  if(isTRUE(includeMeanStruct)){
+    #intercepts for X
+    if(any(constr_dy_x_meas == "intercepts")){
+      if(scaleset == "FF"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        xints1 = intercepts(dvn, lvar = "X", partner="1", type = "equated_mv")
+        xints2 = intercepts(dvn, lvar = "X", partner="2", type = "equated")
+      }
+    }else{
+      if(scaleset == "FF"){
+        xints1 <- intercepts(dvn, lvar = "X", partner="1", type = "free")
+        xints2 <- intercepts(dvn, lvar = "X", partner="2", type = "free")
+      }
+      else if(scaleset == "MV"){
+        xints1 <- intercepts(dvn, lvar = "X", partner="1", type = "fixed")
+        xints2 <- intercepts(dvn, lvar = "X", partner="2", type = "fixed")
+      }
     }
-  }else{
-    if(scaleset == "FF"){
-      xints1 <- intercepts(dvn, lvar = "X", partner="1", type = "free")
-      xints2 <- intercepts(dvn, lvar = "X", partner="2", type = "free")
-    }
-    else if(scaleset == "MV"){
-      xints1 <- intercepts(dvn, lvar = "X", partner="1", type = "fixed")
-      xints2 <- intercepts(dvn, lvar = "X", partner="2", type = "fixed")
-    }
-  }
-  #intercepts for Y
-  if(any(constr_dy_y_meas == "intercepts")){
-    if(scaleset == "FF"){
-      yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated")
-      yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
-    }else if(scaleset == "MV"){
-      yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated_mv")
-      yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
-    }
-  }else{
-    if(scaleset == "FF"){
-      yints1 <- intercepts(dvn, lvar = "Y", partner="1", type = "free")
-      yints2 <- intercepts(dvn, lvar = "Y", partner="2", type = "free")
-    }
-    else if(scaleset == "MV"){
-      yints1 <- intercepts(dvn, lvar = "Y", partner="1", type = "fixed")
-      yints2 <- intercepts(dvn, lvar = "Y", partner="2", type = "fixed")
+    #intercepts for Y
+    if(any(constr_dy_y_meas == "intercepts")){
+      if(scaleset == "FF"){
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        yints1 = intercepts(dvn, lvar = "Y", partner="1", type = "equated_mv")
+        yints2 = intercepts(dvn, lvar = "Y", partner="2", type = "equated")
+      }
+    }else{
+      if(scaleset == "FF"){
+        yints1 <- intercepts(dvn, lvar = "Y", partner="1", type = "free")
+        yints2 <- intercepts(dvn, lvar = "Y", partner="2", type = "free")
+      }
+      else if(scaleset == "MV"){
+        yints1 <- intercepts(dvn, lvar = "Y", partner="1", type = "fixed")
+        yints2 <- intercepts(dvn, lvar = "Y", partner="2", type = "fixed")
+      }
     }
   }
 
@@ -275,50 +280,55 @@ scriptAPIM <- function(dvn, scaleset = "FF",
     ycovar <- lcovars(dvn, lvname = lvyname, type = "free")
   }
 
-  #latent means for X
-  if(any(constr_dy_x_struct == "means")){
-    if(scaleset == "FF"){
-      xmean1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated_ff")
-      xmean2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
-    }else if(scaleset == "MV"){
-      xmean1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated")
-      xmean2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
-    }
-  }else if(!any(constr_dy_x_struct == "means") & any(constr_dy_x_meas == "intercepts") & scaleset == "FF"){
-    xmean1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
-    xmean2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
-  }else{
-    if(scaleset == "FF"){
+
+  #script latent means only if mean structure is requested
+  if(isTRUE(includeMeanStruct)){
+    #latent means for X
+    if(any(constr_dy_x_struct == "means")){
+      if(scaleset == "FF"){
+        xmean1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated_ff")
+        xmean2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        xmean1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "equated")
+        xmean2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "equated")
+      }
+    }else if(!any(constr_dy_x_struct == "means") & any(constr_dy_x_meas == "intercepts") & scaleset == "FF"){
       xmean1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
-      xmean2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "fixed")
-    }
-    else if(scaleset == "MV"){
-      xmean1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
       xmean2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+    }else{
+      if(scaleset == "FF"){
+        xmean1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "fixed")
+        xmean2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "fixed")
+      }
+      else if(scaleset == "MV"){
+        xmean1 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="1", type = "free")
+        xmean2 <- lmeans(dvn, lvar = "X", lvname = lvxname, partner="2", type = "free")
+      }
     }
-  }
-  #latent means for Y
-  if(any(constr_dy_y_struct == "means")){
-    if(scaleset == "FF"){
-      ymean1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated_ff")
-      ymean2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
-    }else if(scaleset == "MV"){
-      ymean1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated")
-      ymean2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
-    }
-  }else if(!any(constr_dy_y_struct == "means") & any(constr_dy_y_meas == "intercepts") & scaleset == "FF"){
-    ymean1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
-    ymean2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
-  }else{
-    if(scaleset == "FF"){
+    #latent means for Y
+    if(any(constr_dy_y_struct == "means")){
+      if(scaleset == "FF"){
+        ymean1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated_ff")
+        ymean2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }else if(scaleset == "MV"){
+        ymean1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "equated")
+        ymean2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "equated")
+      }
+    }else if(!any(constr_dy_y_struct == "means") & any(constr_dy_y_meas == "intercepts") & scaleset == "FF"){
       ymean1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
-      ymean2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "fixed")
-    }
-    else if(scaleset == "MV"){
-      ymean1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
       ymean2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+    }else{
+      if(scaleset == "FF"){
+        ymean1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "fixed")
+        ymean2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "fixed")
+      }
+      else if(scaleset == "MV"){
+        ymean1 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="1", type = "free")
+        ymean2 <- lmeans(dvn, lvar = "Y", lvname = lvyname, partner="2", type = "free")
+      }
     }
   }
+
   #actor effects
   if(any(constr_dy_xy_struct == "actors"|constr_dy_xy_struct == "all")){
     actors <- lregs(dvn, param = "act", lvxname, lvyname, type = "equated")
@@ -354,38 +364,67 @@ scriptAPIM <- function(dvn, scaleset = "FF",
     stop("You cannot estimate k when constraining actor or partner effects to zero")
   }
 
-  #create script
-  if(est_k == FALSE){
-    script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n\n%s\n%s\n\n#Latent Actor Effects\n%s\n\n#Latent Partner Effects\n%s",
-                      xloads1, xloads2,
-                      yloads1, yloads2,
-                      xints1, xints2,
-                      yints1, yints2,
-                      xres1, xres2,
-                      yres1, yres2,
-                      xcoresids, ycoresids,
-                      xvar1, xvar2, xcovar,
-                      yvar1, yvar2, ycovar,
-                      xmean1, xmean2,
-                      ymean1, ymean2,
-                      actors, partners)
+  #create script without (default) or with mean structure element
+  if(!isTRUE(includeMeanStruct)){
+    #create script
+    if(est_k == FALSE){
+      script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Actor Effects\n%s\n\n#Latent Partner Effects\n%s",
+                        xloads1, xloads2,
+                        yloads1, yloads2,
+                        xres1, xres2,
+                        yres1, yres2,
+                        xcoresids, ycoresids,
+                        xvar1, xvar2, xcovar,
+                        yvar1, yvar2, ycovar,
+                        actors, partners)
 
-  }else if(est_k == TRUE){
-    script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n\n%s\n%s\n\n#Latent Actor Effects\n%s\n\n#Latent Partner Effects\n%s\n\n#k Parameter\n%s",
-                      xloads1, xloads2,
-                      yloads1, yloads2,
-                      xints1, xints2,
-                      yints1, yints2,
-                      xres1, xres2,
-                      yres1, yres2,
-                      xcoresids, ycoresids,
-                      xvar1, xvar2, xcovar,
-                      yvar1, yvar2, ycovar,
-                      xmean1, xmean2,
-                      ymean1, ymean2,
-                      actors, partners,
-                      k)
+    }else if(est_k == TRUE){
+      script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Actor Effects\n%s\n\n#Latent Partner Effects\n%s\n\n#k Parameter\n%s",
+                        xloads1, xloads2,
+                        yloads1, yloads2,
+                        xres1, xres2,
+                        yres1, yres2,
+                        xcoresids, ycoresids,
+                        xvar1, xvar2, xcovar,
+                        yvar1, yvar2, ycovar,
+                        actors, partners,
+                        k)
+    }
+  }else if(isTRUE(includeMeanStruct)){
+    #create script
+    if(est_k == FALSE){
+      script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n\n%s\n%s\n\n#Latent Actor Effects\n%s\n\n#Latent Partner Effects\n%s",
+                        xloads1, xloads2,
+                        yloads1, yloads2,
+                        xints1, xints2,
+                        yints1, yints2,
+                        xres1, xres2,
+                        yres1, yres2,
+                        xcoresids, ycoresids,
+                        xvar1, xvar2, xcovar,
+                        yvar1, yvar2, ycovar,
+                        xmean1, xmean2,
+                        ymean1, ymean2,
+                        actors, partners)
+
+    }else if(est_k == TRUE){
+      script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n\n%s\n%s\n\n#Latent Actor Effects\n%s\n\n#Latent Partner Effects\n%s\n\n#k Parameter\n%s",
+                        xloads1, xloads2,
+                        yloads1, yloads2,
+                        xints1, xints2,
+                        yints1, yints2,
+                        xres1, xres2,
+                        yres1, yres2,
+                        xcoresids, ycoresids,
+                        xvar1, xvar2, xcovar,
+                        yvar1, yvar2, ycovar,
+                        xmean1, xmean2,
+                        ymean1, ymean2,
+                        actors, partners,
+                        k)
+    }
   }
+
 
   #Write script to file if requested
   if(!is.null(writeTo) | !is.null(fileName) ){
