@@ -224,7 +224,7 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
 
 makeFigure <- function(fit, type, writeTo, fileName){
   #user provides fileName
-  if(!is.null(fileName)){
+  if(!is.null(writeTo) & !is.null(fileName)){
 
     if(type == "raw"){
       semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
@@ -248,9 +248,7 @@ makeFigure <- function(fit, type, writeTo, fileName){
                                    edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
     }
   }
-
-  #default
-  if(is.null(fileName)){
+  else if(!is.null(writeTo)& is.null(fileName)){
 
     if(type == "raw"){
       semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
@@ -269,6 +267,27 @@ makeFigure <- function(fit, type, writeTo, fileName){
       semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
                                    curvePivot = F, intercepts = T,
                                    edge.color = "black", filetype = "png", filename = sprintf("%s/dySEM_figure lab", writeTo), weighted = F,
+                                   edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+    }
+  }
+  else if(is.null(writeTo) & is.null(fileName)){
+
+    if(type == "raw"){
+      semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "est", edge.label.cex = 0.5,
+                                   curvePivot = F, intercepts = F,
+                                   edge.color = "black", weighted = F,
+                                   edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+    }
+    else if(type == "std"){
+      semplot <- semPlot::semPaths(fit, what = "std", whatLabels = "std", edge.label.cex = 0.5,
+                                   curvePivot = F, intercepts = F,
+                                   edge.color = "black", weighted = F,
+                                   edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
+    }
+    else if(type == "lab"){
+      semplot <- semPlot::semPaths(fit, what = "est", whatLabels = "names", edge.label.cex = 0.5,
+                                   curvePivot = F, intercepts = T,
+                                   edge.color = "black", weighted = F,
                                    edge.label.position = .3, nCharNodes = 0, fixedStyle = c("black", 2))
     }
   }

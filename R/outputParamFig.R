@@ -55,18 +55,15 @@ outputParamFig <- function(fit,
                            fileName = NULL
                            ){
 
-  # checking for valid directory path
-  if (is.null(writeTo)){
-    stop("Must specify a directory to which the file should be saved. \n Use writeTo = '.' to save output file(s) in the current working directory.")
-  }
-  if (!is.character(writeTo)){
-    stop("The `writeTo` argument must be a character string. \n Use writeTo = '.' to save output file(s) in the current working directory.")
-  }
-  if (!dir.exists(writeTo)){
-    stop("The specified directory does not exist. \n Use writeTo = '.' to save output file(s) in the current working directory.")
-  }
-  if (!is.null(fileName) && !is.character(fileName)){
-    stop("The `fileName` argument must be a character string.")}
+
+  #if (!is.character(writeTo)| !is.null(writeTo)){
+  #  stop("The `writeTo` argument must be a character string or NULL. \n Use writeTo = '.' to save output file(s) in the current working directory.")
+  #}
+  #if (!is.null(writeTo) & !dir.exists(writeTo)){
+  #  stop("The specified directory does not exist. \n Use writeTo = '.' to save output file(s) in the current working directory.")
+  #}
+  #if (!is.null(fileName) && !is.character(fileName)){
+  #  stop("The `fileName` argument must be a character string.")}
 
   #Make path diagram
   if(figtype == "unstandardized"){
