@@ -43,7 +43,7 @@ The M-CDFM is typically the model people mean when they refer to "dyadic CFA", t
 
 ```{r setup, message= FALSE}
 
-library(tidyverse) #for data management
+library(dplyr) #for data management
 library(gt) #for reproducible tabling
 library(dySEM) #for dyadic SEM scripting and outputting
 library(lavaan) #for fitting dyadic SEMs

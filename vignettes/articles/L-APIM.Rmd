@@ -48,7 +48,7 @@ The observed (i.e., non-latent) APIM is, by an incredibly wide margin, the most 
 ## Packages and Data
 
 ```{r setup, message= FALSE}
-library(tidyverse) #for data management
+library(dplyr) #for data management
 library(janitor) # for cleaning up data frames for tabling
 library(gt) #for reproducible tabling
 library(dySEM) #for dyadic SEM scripting and outputting

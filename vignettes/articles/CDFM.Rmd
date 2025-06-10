@@ -42,7 +42,7 @@ Owing to it serving as one half of the measurement model of a latent-APIM--and t
 This exemplar makes use of the `tidverse` meta-package, and the  `gt`, `dySEM`, and `lavaan` (Rosseel, 2012) packages. 
 
 ```{r setup, message= FALSE}
-library(tidyverse) #for data management
+library(dplyr) #for data management
 library(gt) #for reproducible tabling
 library(dySEM) #for dyadic SEM scripting and outputting
 library(lavaan) #for fitting dyadic SEMs
