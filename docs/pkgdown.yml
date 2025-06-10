@@ -1,12 +1,14 @@
-pandoc: '3.2'
+pandoc: '3.4'
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  articles/apim: apim.html
+  articles/CDFM: CDFM.html
   dySEM: dySEM.html
   articles/invariance: invariance.html
+  articles/L-APIM: L-APIM.html
+  articles/M-CDFM: M-CDFM.html
   varnames: varnames.html
-last_built: 2025-04-28T15:07Z
+last_built: 2025-06-10T19:34Z
 urls:
   reference: https://jsakaluk.github.io/dySEM/reference
   article: https://jsakaluk.github.io/dySEM/articles

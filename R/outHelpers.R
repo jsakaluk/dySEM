@@ -6,7 +6,7 @@
 #' @param dvn input dvn list from scrapeVarCross
 #' @param fit name of fitted lavaan model
 #' @param model type of fitted dyadic model (i.e., "apim", "bidyc", "bidys","cfa", "cfm", "mim")
-#' @param tabletype kind of parameter estimates requested (i.e. from "measurement" or "structural" model)
+#' @param tabletype kind of parameter estimates requested (i.e. from "measurement" or "structural" model, or "correlation" table for latent variables)
 #' @param type input character for sempaths to indicate whether parameters "free" or "equated" in estimation
 #' @param writeTo A character string specifying a directory path to where the file(s) should be saved.
 #' The default is NULL, and examples use a temporary directory created by tempdir().
@@ -28,6 +28,21 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
     tab = tab %>%
       dplyr::mutate_if(is.numeric, round, digits = 3)
     tab$'p-value'[tab$'p-value' < .001] = "< .001"
+
+    if(gtTab == TRUE){
+      tab <- gt::gt(tab)
+    }
+    if(gtTab == FALSE){
+      tab <- tibble::as_tibble(tab)
+    }
+    return(tab)
+  }
+  else if(length(dvn) == 6 & model == "cfa" & tabletype == "correlation"){
+
+    tab <- lavaan::lavInspect(fit, "cor.lv") |>
+      as.data.frame()|>
+      dplyr::mutate_if(is.numeric, round, digits = 3) |>
+      tibble::rownames_to_column(var = " ")
 
     if(gtTab == TRUE){
       tab <- gt::gt(tab)

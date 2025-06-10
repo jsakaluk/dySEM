@@ -85,49 +85,95 @@ outputParamTab <- function(dvn,
   #cfa
   if (model == "cfa"){
 
-    if (gtTab == FALSE){
-      meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement", gtTab = FALSE)
-      return(meas.tab)
-    }
+    #for measurement model table
+    if(tabletype == "measurement"){
+      if (gtTab == FALSE){
+        meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement", gtTab = FALSE)
+        return(meas.tab)
+      }
 
-    else if (gtTab == TRUE){
+      else if (gtTab == TRUE){
 
-      #user specifies writeTo
-      if (!is.null(writeTo)){
-        meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement", gtTab = TRUE)
+        #user specifies writeTo
+        if (!is.null(writeTo)){
+          meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement", gtTab = TRUE)
 
-        if (is.null(fileName)){
-          gt::gtsave(meas.tab,
-                     filename = "dySEM_table.rtf",
-                     path = writeTo)
-          message( #confirmation message
-            sprintf(
-              "Output stored in: %s/dySEM_table.rtf",
-              writeTo)
+          if (is.null(fileName)){
+            gt::gtsave(meas.tab,
+                       filename = "dySEM_table.rtf",
+                       path = writeTo)
+            message( #confirmation message
+              sprintf(
+                "Output stored in: %s/dySEM_table.rtf",
+                writeTo)
             )
           }
 
-        else if (!is.null(fileName)){
-          gt::gtsave(meas.tab,
-                     filename = sprintf("%s.rtf",
-                                        fileName),
-                     path = writeTo)
-          message( #confirmation message
-            sprintf(
-              "Output stored in: %s/%s.rtf",
-              writeTo, fileName)
+          else if (!is.null(fileName)){
+            gt::gtsave(meas.tab,
+                       filename = sprintf("%s.rtf",
+                                          fileName),
+                       path = writeTo)
+            message( #confirmation message
+              sprintf(
+                "Output stored in: %s/%s.rtf",
+                writeTo, fileName)
             )
           }
-      }
+        }
 
-      #user does not specify writeTo
-      else if (is.null(writeTo)){
-        meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement", gtTab = TRUE)
-      }
+        #user does not specify writeTo
+        else if (is.null(writeTo)){
+          meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement", gtTab = TRUE)
+        }
 
-      return(meas.tab)
+        return(meas.tab)
+      }
     }
+    if(tabletype == "correlation"){
+      if (gtTab == FALSE){
+        corr.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "correlation", gtTab = FALSE)
+        return(corr.tab)
+      }
 
+      else if (gtTab == TRUE){
+
+        #user specifies writeTo
+        if (!is.null(writeTo)){
+          corr.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "correlation", gtTab = TRUE)
+
+          if (is.null(fileName)){
+            gt::gtsave(corr.tab,
+                       filename = "dySEM_table.rtf",
+                       path = writeTo)
+            message( #confirmation message
+              sprintf(
+                "Output stored in: %s/dySEM_table.rtf",
+                writeTo)
+            )
+          }
+
+          else if (!is.null(fileName)){
+            gt::gtsave(corr.tab,
+                       filename = sprintf("%s.rtf",
+                                          fileName),
+                       path = writeTo)
+            message( #confirmation message
+              sprintf(
+                "Output stored in: %s/%s.rtf",
+                writeTo, fileName)
+            )
+          }
+        }
+
+        #user does not specify writeTo
+        else if (is.null(writeTo)){
+          corr.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "correlation", gtTab = TRUE)
+        }
+
+        return(corr.tab)
+      }
+    }
   }
 
   #bidy-c

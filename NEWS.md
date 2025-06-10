@@ -1,3 +1,8 @@
+# dySEM 1.4.0
+
+* outputParamTab() can now generate df of correlation matrix of latent variables in the model
+* vignettes for Correlated Dyadic Factors Model, Mulitple Correlated Dyadic Factors Model, and Latent APIM written in advance of preprint/submission of Sakaluk & Camanto
+
 # dySEM 1.3.2
 
 * @omarjcamanto has built a beauty function called outputUniConstructComp() for comparing different varieties of uniconstruct models.
@@ -10,6 +15,7 @@
 # dySEM 1.3.0
 
 * add two new exemplar datasets, imsM and prqcQ (both of which contain multi-construct data) for use in the vignettes and examples
+* scriptHier() and scriptBifac() added to list of uni-construct scripters
 
 # dySEM 1.2.1
 

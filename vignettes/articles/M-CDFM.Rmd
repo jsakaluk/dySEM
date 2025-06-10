@@ -1,0 +1,265 @@
+---
+title: "Fitting and Interpretting the Multiple Correlated Dyadic Factors Model (M-CDFM)"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Fair Use of this Tutorial 
+
+This tutorial is a supplemental material from the following article: 
+
+Sakaluk, J. K., & Camanto, O. J. (2025). *Dyadic Data Analysis via Structural Equation Modeling with Latent Variables: A Tutorial with the dySEM package for R*. 
+
+This article is intended to serve as the primary citation of record for the dySEM package's functionality for the techniques described in this tutorial. **If this tutorial has informed your modeling strategy (including but not limited to your use of `dySEM`), please cite this article**. 
+
+The citation of research software aiding in analyses--like the use of `dySEM`--is a required practice, according to the Journal Article Reporting Standards (JARS) for Quantitative Research in Psychology ([Appelbaum et al., 2018](https://psycnet.apa.org/fulltext/2018-00750-002.html)). 
+
+Furthermore, citations remain essential for our development team to demonstrate the impact of our work to our local institutions and our funding sources, and with your support, we will be able to continue justifying our time and efforts spent improving `dySEM` and expanding its reach. 
+
+## Overview
+
+The M-CDFM is a **"multi-construct"** dyadic SEM (i.e., used to represent dyadic data about more than two constructs--like different features of relationship quality, e.g., Fletcher et al., 2000). 
+
+It contains:
+
+-  parallel/identical sets of latent variables, onto which
+-  each partner's observed variables discriminantly load (i.e., one partner's observed variables onto their respective factors, and the other partner's observed variables onto their respective factors)
+
+It also features several varieties of covariances (or correlations, depending on scale-setting/output standardization):
+
+-  those between  two latent variables for the same construct across partners (effectively, latent "intraclass" correlation coefficients, when standardized; e.g., Partner A's latent commitment with Partner B's latent commitment), 
+-  those between  two latent variables for different constructs within each partner (e.g., effectively, latent "intrapartner" correlation coefficients, when standardized; e.g., Partner A's latent commitment with Partner A's latent passion),
+-  those between  two latent variables for different constructs across partners (e.g., effectively, latent "interpartner" correlation coefficients, when standardized; e.g., Partner A's latent commitment with Partner B's latent passion) , and
+-  several between the residual variances of the same observed variables across each partner (e.g., between Item 1 for Partner A and Partner B; another between Item 2 for Partner A and Partner B, etc.,). 
+
+The M-CDFM is typically the model people mean when they refer to "dyadic CFA", though dyadic CFA is more of a statistical framework that could be used to fit multi-construct dyadic data that corresponds to other data generating mechanisms of uni-construct dyadic data (e.g., from multiple constructs embodying Univariate Dyadic Factor Models). It is therefore likely the most common model used for psychometric tests of dyadic data. 
+
+## Packages and Data
+
+```{r setup, message= FALSE}
+
+library(tidyverse) #for data management
+library(gt) #for reproducible tabling
+library(dySEM) #for dyadic SEM scripting and outputting
+library(lavaan) #for fitting dyadic SEMs
+```
+
+For this exemplar, we use two built-in datasets from dySEM (focusing more on one). Of primary interest, the imsM dataset corresponds to data from the “global” items from 282 mixed-sex couples responding to the full Rusbult et al. (1998) Investment Model Scale (including 5 items each for satisfaction, quality of alternatives, investment, and commitment). More information about this data set can be found in [Sakaluk et al. (2021)](https://doi.org/10.1111/pere.12341).
+
+All variables in this data frame follow a [“sip” naming pattern]((https://jsakaluk.github.io/dySEM/articles/varnames.html)):
+
+```{r, tibble imsM, echo = TRUE}
+
+imsM_dat <- imsM
+
+imsM_dat |> 
+  as_tibble()
+```
+
+We will also use data from the prqcQ dataset, which contains data from 118 queer couples responding to the Perceived Relationship Quality Components Inventory (Fletcher et al., 2000) (including 3 items each for satisfaction, commitment, intimacy, trust, passion, and love). While substantive analyses of this data set have not yet been reported, the data collection took place in parallel to the analyses reported in [Sakaluk et al. (2021)](https://doi.org/10.1111/pere.12341).
+
+In contrast to imsM, variable names in the prqcQ data frame follow the [“spi” naming pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html):
+
+```{r, tibble prqc, echo = TRUE}
+
+prqc_dat <- prqcQ
+
+prqc_dat |> 
+  as_tibble()
+```
+
+## 1. Scraping the Variables
+
+Users will take note that the imsM dataset contains variabels for items for which there are distinctive stems for each subscale (e.g., "sat", "invest", "com"), whereas the prqcQ dataset contains a repetitive uninformative stem ("prqc"), despite the presence of multidimensionality. Rest assured, `scrapeVarCross()` has been developed with functionality to scrape variable information from both kinds of stems from multidimensional instruments. Further, scraping variable information remains relatively straightforward (and the key to unlocking the powerful functionality of *dySEM*'s scripters), with just one added "twist" from the simpler case of uni-construct or bi-construct models: the creation of a *named list* spelling out the naming 'formula' for each set of indicators.
+
+
+### Distinctive Indicator Stems
+
+The case when indicators have distinctive stems--usually indicating the putative factor onto which they load (e.g., "sat", "com")--is the most straightforward to scrape with `scrapeVarCross()`. 
+
+In this case, users will need to provide the names of the latent variables, the stem for each set of indicators, and the delimiters used in the variable names. In the case of the `imsM` exemplar (i.e., when stems are distinct), the named list must contain the following four elements/vectors (and the names of these elements/vectors must follow what is shown below):
+
+- **lvnames**: a vector of the (arbitrary) names that will be used for the latent variables in the `lavaan` script
+- **stem**: a vector containing each distinctive stem for each set of indicators (e.g., "sat.g", "qalt.g", "invest.g", "com")-- `scrapeVarCross()` will use these to search for indicators with matching stems
+- **delim1**: a vector containing the first delimiter used in the variable names (e.g., "", "", "", "")-- `scrapeVarCross()` will use these to search for indicators with matching patterns of delimination
+- **delim2**: a vector containing the second delimiter used in the variable names (e.g., "_", "_", "_", "_")-- `scrapeVarCross()` will use these to search for indicators with matching patterns of delimination
+
+Each of these elements/vectors must be of the same length, and the order of the elements in each vector must correspond to the order of the latent variables in `lvnames`. And so, saving this named list (in essence, the "recipe card" of indicator names for each factor) into its own object:
+
+```{r, ims list, echo = TRUE}
+
+#When different factor use distinct stems:
+imsList <- list(lvnames = c("Sat", "Q_Alt", "Invest", "Comm"),
+stem = c("sat.g", "qalt.g", "invest.g", "com"),
+delim1 = c("", "", "", ""),
+delim2 = c("_", "_", "_", "_"))
+```
+
+This list can then be passed to `scrapeVarCross()` to scrape the variable names from the `imsM` data frame, using the `var_list` argument. The `var_list_order` argument must then be set to indicate that the variables follow the ["sip" naming pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html), and distinguishing characters must also be specified with the `distinguish_1` and `distinguish_2` arguments^[In future updates of `scrapeVarCross()` we may consider enabling users to specify different naming patterns and/or distinguishing characters for indicators from each latent variable, but for now, the same pattern and characters must be used (and we assume that most users already follow this kind of variable naming convention)]:
+
+```{r, ims scrape, echo = TRUE}
+
+dvnIMS <- scrapeVarCross(imsM,
+var_list = imsList,
+var_list_order = "sip",
+distinguish_1 = "f",
+distinguish_2 = "m")
+
+```
+
+The resulting *dvn* remains as unremarkable as ever, but continues to serve as the foundation for unlocking the functionality of multi-construct scripters in *dySEM*. The only difference from the one-construct use-case of `scrapeVarCross()` is that the `$p1xvarnames` and `$p2xvarnames` elements now contain a nested set of vectors of variable names (as opposed to only set of variable names):
+
+```{r, ims dvn, echo = TRUE}
+
+dvnIMS
+
+```
+
+### Non-Distinctive Indicator Stems
+
+The case when indicators have non-distinctive stems only requires that your named list--that you later supply to `scrapeVarCross()`--has two more elements/vectors. Currently, **this functionality assumes indicators from the same latent variable (e.g., items measuring Satisfaction) are clustered together, sequentially, in item number (e.g., prqc.1_1 prqc.1_2 prqc.1_3) rather than being interspersed with items from other latent variables (e.g., prqc.1_1 prqc.1_5, prqc.1_8)**.
+
+The additional arguments that must be added to the named list are:
+
+- **min_num**: a vector containing the item number in the sequence of non-destinctively named indicators that corresponds to the first item for each latent variable (e.g., 1, 4, 7, 10, 13, 16 for Satisfaction, Commitment, Intimacy, Trust, Passion, and Love, respectively), and
+- **max_num**: a vector containing the item number in the sequence of non-distinctively named indicators that corresponds to the last item for each latent variable (e.g., 3, 6, 9, 12, 15, 18 for Satisfaction, Commitment, Intimacy, Trust, Passion, and Love, respectively).
+
+```{r, prqc list, echo = TRUE}
+
+#When different factor use non-distinct stems:
+prqcList <- list(lvnames = c("Sat", "Comm", "Intim", "Trust", "Pass", "Love"),
+stem = c("prqc", "prqc", "prqc", "prqc", "prqc", "prqc"),
+delim1 = c(".", ".", ".", ".", ".", "."),
+delim2 = c("_", "_", "_", "_", "_", "_"),
+min_num = c(1, 4, 7, 10, 13, 16),
+max_num = c(3, 6, 9, 12, 15, 18))
+```
+
+This named list can then be passed to `scrapeVarCross()` to the same effect (noting that in this case, the `prqcQ` data set follows a ["spi" naming pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html), and "1" and "2" as the distinguishing characters):
+
+```{r, prqc scrape, echo = TRUE}
+
+dvnPRQC<- scrapeVarCross(prqcQ,
+var_list = prqcList,
+var_list_order = "spi",
+distinguish_1 = "1",
+distinguish_2 = "2")
+
+dvnPRQC
+```
+
+Whether your *dvn* contains variable information for indicators with distinctive or non-distinctive stems makes no difference to the functionality you can draw upon from *dySEM*, or how you pass this information to scripters--it remains the same (and straightforward) for both kinds of indicators. 
+
+## 2. Scripting the Model(s)
+
+Continuing with the `imsM` exemplar for this rest of this vignette, we can now quickly script a series of M-CDFMs using the `scriptCFA()` function (so named given that most imagine a M-CDFM model when conducting "dyadic CFA"), and incrementally layer on more dyadic invariance constraints via the `constr_dy_meas` argument. 
+
+The `writeTo` and `fileName` arguments (not depicted here) remain available to those wanting to export a .txt file of their concatenated `lavaan` script(s) (e.g., for posting on the OSF). `scaleset` remains fixed-factor, by default, but this is changeable to marker-variable ("MV") for those interested. Given the consequential nature of this choice (e.g., for interpreting the scale of parameter estimates), we strongly recommend making this argument explicit (despite its implicit default to "FF"):
+
+```{r, script ims, echo = TRUE}
+
+script.ims.config <-  scriptCFA(dvnIMS, scaleset = "FF", constr_dy_meas = "none", constr_dy_struct = "none")
+
+script.ims.load <-  scriptCFA(dvnIMS, scaleset = "FF", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
+
+script.ims.int <-  scriptCFA(dvnIMS, scaleset = "FF", constr_dy_meas = c("loadings", "intercepts"),constr_dy_struct = "none")
+
+script.ims.res <-  scriptCFA(dvnIMS, scaleset = "FF",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+
+
+```
+
+You can concatenate these scripts, if you wish, using the base `cat()` function, to make them more human-readable in your console, but beware: the amount of `lavaan` scripting is considerabel (and therefore we do not show what it returns here):
+
+```{r, cat ims script, include = TRUE, eval = FALSE}
+
+cat(script.ims.config)
+
+```
+
+
+## 3. Fitting the Model(s) 
+
+All of these models can now be fit with whichever lavaan wrapper the user prefers, and with their chosen analytic options (e.g., estimator, missing data treatment, etc.); our demonstration uses default specifications for `cfa()`: 
+
+```{r, fit ims, echo = TRUE}
+
+ims.config.mod <- cfa(script.ims.config, data = imsM_dat)
+
+ims.load.mod <- cfa(script.ims.load, data = imsM_dat)
+
+ims.int.mod <- cfa(script.ims.int, data = imsM_dat)
+
+ims.res.mod <- cfa(script.ims.res, data = imsM_dat)
+
+```
+
+
+## 4. Outputting and Interpreting the Model(s)
+
+As with the CDFM, competing nested M-CDFMs--like for dyadic invariance testing with a larger measure--can be compared with the base `anova()` function:
+
+```{r, anova ims, echo = TRUE}
+
+anova(ims.config.mod, ims.load.mod, ims.int.mod, ims.res.mod)
+```
+
+Or, for a more reproducible-reporting-friendly option, *dySEM*'s `outputInvarComp()` function is available, and amenable to other tabling packages/functions (e.g., `gt::gt()`, as we demonstrate below), and/or can write an .rtf if the user makes use of the `writeTo` and `fileName` arguments:
+
+```{r, invarcomp ims, echo = TRUE}
+
+mods <- list(ims.config.mod, ims.load.mod, ims.int.mod, ims.res.mod)
+
+outputInvarCompTab(mods) |> 
+  gt()
+```
+
+```{r, compare_store, include = FALSE}
+
+comp <- anova(ims.config.mod, ims.load.mod, ims.int.mod, ims.res.mod)
+comp <- janitor::clean_names(comp)
+
+chisq_diff <- round(comp$chisq_diff, 2)
+p <- round(comp$pr_chisq, 2)
+
+
+```
+
+Were one strictly to follow only the likelihood ratio test statistic as a guide, they would reject the possibility of the relatively low bar of loading invariance for the IMQ, $\chi^2$ (`r comp$df_diff[2]`) = `r chisq_diff[2]`, *p* `r if(p[2] < .001){paste("<.001")}`. Of course, other methods of model comparison and selection (and their respective thresholds) are available, and whatever method is chosen probably ought to be preregistered. 
+
+Meanwhile, the standard outputters from *dySEM* are available to help researchers either table and/or visualize their results. Given the complexity of the M-CDFM (often many more factors and items) than the CDFM, we recommend tabling (vs. visualizing) model output:
+
+```{r, tables ims, echo = TRUE}
+
+outputParamTab(dvn = dvnIMS, model = "cfa", fit = ims.config.mod,
+               tabletype = "measurement") |> 
+  gt()
+
+```
+
+We have also provided a `tabletype = "correlation"` option to assist with providing reproducible correlation tables for reporting on the intraclass, intrapartner, and interpartner correlations, from larger multi-construct models: 
+
+```{r corr_tab, echo = TRUE}
+
+outputParamTab(dvn = dvnIMS, model = "cfa", fit = ims.config.mod,
+               tabletype = "correlation") |> 
+  gt()
+```
+
+## 5. Optional Indexes and Output
+
+Finally, like with the CDFM, users can use additional *dySEM* functions to output additional information about their model, such as the computation of Langrange multiplier tests to identify for which items and measurement model parameters there is significant nonivariance:
+
+```{r ims noninvariance, echo = TRUE}
+
+outputConstraintTab(ims.load.mod) |> 
+  gt()
+
+```
+
+In this particular example, significant noninvariance is present in all but the third item of the *Commitment* factor the the IMS. 

@@ -2,3 +2,17 @@ url: https://jsakaluk.github.io/dySEM/
 template:
   bootstrap: 5
 
+articles:
+- title: The Big Picture of Using dySEM
+  navbar: The Big Picture of Using dySEM
+  contents:
+  - dySEM
+  - varnames
+
+- title: Tutorials for Specific Models
+  navbar: Tutorials for Specific Models
+  contents:
+  - articles/CDFM
+  - articles/M-CDFM
+  - articles/L-APIM
+  - articles/invariance

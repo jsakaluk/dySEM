@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,9 +19,15 @@
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/apim.html">The Latent Actor-Partner Interdependence Model: Rationale, Empirical Trade-offs, and Analytic Resources</a></li>
-    <li><a class="dropdown-item" href="../articles/invariance.html">Invariance Testing with Potentially Indistinguishable Dyads: Rationale and Practices for a More Logical and Inclusive Testing Sequence</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>The Big Picture of Using dySEM</h6></li>
     <li><a class="dropdown-item" href="../articles/varnames.html">Anatomy of a Variable Name</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials for Specific Models</h6></li>
+    <li><a class="dropdown-item" href="../articles/CDFM.html">Fitting and Interpretting the Correlated Dyadic Factors Model (CDFM)</a></li>
+    <li><a class="dropdown-item" href="../articles/M-CDFM.html">Fitting and Interpretting the Multiple Correlated Dyadic Factors Model (M-CDFM)</a></li>
+    <li><a class="dropdown-item" href="../articles/L-APIM.html">Fitting and Interpretting the Latent Actor-Partner Interdependence Model (L-APIM)</a></li>
+    <li><a class="dropdown-item" href="../articles/invariance.html">Invariance Testing with Potentially Indistinguishable Dyads: Rationale and Practices for a More Logical and Inclusive Testing Sequence</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -39,8 +45,15 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.0" id="dysem-140">dySEM 1.4.0<a class="anchor" aria-label="anchor" href="#dysem-140"></a></h2>
+<ul><li>outputParamTab() can now generate df of correlation matrix of latent variables in the model</li>
+<li>vignettes for Correlated Dyadic Factors Model, Mulitple Correlated Dyadic Factors Model, and Latent APIM written in advance of preprint/submission of Sakaluk &amp; Camanto</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.2" id="dysem-132">dySEM 1.3.2<a class="anchor" aria-label="anchor" href="#dysem-132"></a></h2>
-</div>
+<ul><li>@omarjcamanto has built a beauty function called outputUniConstructComp() for comparing different varieties of uniconstruct models.</li>
+<li>added a new argument (includeMeanStruct) to scriptAPIM() (and soon to be for other bi-construct scripters). By defaulting to FALSE, this will enable these scripted models to cooperate with dynamic fit indexes (which currently do not support mean structures)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.1" id="dysem-131">dySEM 1.3.1<a class="anchor" aria-label="anchor" href="#dysem-131"></a></h2>
 <ul><li>deep dive ensuring correct specification + unit tests for all uniconstruct models across FF and MV scale-setting options</li>
@@ -48,6 +61,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.0" id="dysem-130">dySEM 1.3.0<a class="anchor" aria-label="anchor" href="#dysem-130"></a></h2>
 <ul><li>add two new exemplar datasets, imsM and prqcQ (both of which contain multi-construct data) for use in the vignettes and examples</li>
+<li>scriptHier() and scriptBifac() added to list of uni-construct scripters</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.1" id="dysem-121">dySEM 1.2.1<a class="anchor" aria-label="anchor" href="#dysem-121"></a></h2>

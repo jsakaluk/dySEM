@@ -55,6 +55,7 @@ outputParamFig <- function(fit,
                            fileName = NULL
                            ){
 
+# TODO - update checks for `figtype` and `writeTo` arguments
 
   #if (!is.character(writeTo)| !is.null(writeTo)){
   #  stop("The `writeTo` argument must be a character string or NULL. \n Use writeTo = '.' to save output file(s) in the current working directory.")
