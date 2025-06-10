@@ -53,7 +53,9 @@ library(janitor) # for cleaning up data frames for tabling
 library(gt) #for reproducible tabling
 library(dySEM) #for dyadic SEM scripting and outputting
 library(lavaan) #for fitting dyadic SEMs
-library(dynamic) # development version for calculating 3DFIs
+
+#devtools::install_github("melissagwolf/dynamic")
+#library(dynamic) # development version for calculating 3DFIs
 
 ```
 
@@ -180,10 +182,12 @@ apim.fit.free.actpart.noms <- cfa(apim.script.free.actpart.noms, data = com_dat)
 
 Then, it's as simple as supplying the fitted *lavaan* model to the *dynamic* package's `DDDFI()` function. Because this is a simulation-based function, it's good practice to set a random seed (to ensure you can get the same numeric results from run to run): 
 
-```{r calc 3DFIS, echo = TRUE}
+```{r calc 3DFIS, echo = TRUE, eval = FALSE}
 set.seed(519)
 DDDFI(apim.fit.free.actpart.noms)
 ```
+
+**Note**: since the `DDDFI()` function is not yet in the CRAN version of dynamic, we can't reproducibly run it and include the output here, in this automatically compiling online tutorial, but you can run this code in your own R session to see the results.
 
 Based on these 3DFI targets, both our observed model fit values of RMSEA = `r round(mis_actpart[1], 3)` and CFI = `r round(mis_actpart[2],3)` fall between the "Fair" and "Mediocre" level of fit. This is likely driven (in part) by exceptionally low loading values observed for some of the commitment items (which we would further explore, if this were a real analysis and we were so inclined)
 

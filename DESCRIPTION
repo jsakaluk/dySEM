@@ -26,6 +26,7 @@ Imports:
     dplyr,
     EGAnet,
     gt,
+    janitor,
     lavaan,
     lifecycle,
     magrittr,
