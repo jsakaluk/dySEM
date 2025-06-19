@@ -1,5 +1,5 @@
 ---
-title: "Fitting and Interpretting the Latent Actor-Partner Interdependence Model (L-APIM)"
+title: "Fitting and Interpreting the Latent Actor-Partner Interdependence Model (L-APIM)"
 ---
 
 ```{r, include = FALSE}
@@ -15,15 +15,15 @@ This tutorial is a supplemental material from the following article:
 
 Sakaluk, J. K., & Camanto, O. J. (2025). *Dyadic Data Analysis via Structural Equation Modeling with Latent Variables: A Tutorial with the dySEM package for R*. 
 
-This article is intended to serve as the primary citation of record for the dySEM package's functionality for the techniques described in this tutorial. **If this tutorial has informed your modeling strategy (including but not limited to your use of `dySEM`), please cite this article**. 
+This article is intended to serve as the primary citation of record for the `dySEM` package's functionality for the techniques described in this tutorial. **If this tutorial has informed your modeling strategy (including but not limited to your use of `dySEM`), please cite this article**. 
 
-The citation of research software aiding in analyses--like the use of `dySEM`--is a required practice, according to the Journal Article Reporting Standards (JARS) for Quantitative Research in Psychology ([Appelbaum et al., 2018](https://psycnet.apa.org/fulltext/2018-00750-002.html)). 
+The citation of research software aiding in analyses---like the use of `dySEM`---is a required practice, according to the Journal Article Reporting Standards (JARS) for Quantitative Research in Psychology ([Appelbaum et al., 2018](https://psycnet.apa.org/fulltext/2018-00750-002.html)). 
 
 Furthermore, citations remain essential for our development team to demonstrate the impact of our work to our local institutions and our funding sources, and with your support, we will be able to continue justifying our time and efforts spent improving `dySEM` and expanding its reach. 
 
 ## Overview
 
-The L-APIM is a **"bi-construct"** dyadic SEM (i.e., used to represent dyadic data about two constructs--like latent relationship satisfaction and latent relationship commitment). 
+The L-APIM is a **"bi-construct"** dyadic SEM (i.e., used to represent dyadic data about two constructs---like latent relationship satisfaction and latent relationship commitment). 
 
 It contains:
 
@@ -41,11 +41,13 @@ Finally, and most distinctively, it also features a few slopes, of different kin
 -   "actor" effects are slopes estimated from each partner's latent predictor to their own latent outcome (e.g., Partner A's latent relationship satisfaction predicting their own latent relationship commitment, and Partner B's latent relationship satisfaction predicting their own latent relationship commitment),
 -   "partner" effects are slopes estimated from each partner's latent predictor to their partner's latent outcome (e.g., Partner A's latent relationship satisfaction predicting Partner B's latent relationship commitment, and Partner B's latent relationship satisfaction predicting Partner A's latent relationship commitment)
 
-These slopes maybe estimated separately for each partner (i.e., producing unique actor and partner effect for each partner) to produce a "distinguishable" L-APIM, or some or all of these slopes may be constrained (i.e., producing a shared/pooled effect for a given slope(s)) introduce some level of "indistinguishability" to the structural model. Further, sometimes researchers are interested in estimating a boutique parameter that captures the ratio between actor and partner effects--the *k* parameter--in order to characterize the "pattern" of dyadic effects.
+These slopes may be estimated separately for each partner (i.e., producing unique actor and partner effect for each partner) to produce a "distinguishable" L-APIM, or some or all of these slopes may be constrained (i.e., producing a shared/pooled effect for a given slope(s)) introduce some level of "indistinguishability" to the structural model. Further, sometimes researchers are interested in estimating a boutique parameter that captures the ratio between actor and partner effects---the *k* parameter---in order to characterize the "pattern" of dyadic effects.
 
-The observed (i.e., non-latent) APIM is, by an incredibly wide margin, the most popular bi-construct dyadic data model. Though the L-APIM is not as popular (likely owing to its increased programming difficulty--a barrier we hope *dySEM* helps to remove), it is well-suited to address the problems that measurement error and statistical control interactively introduce that would otherwise contaminate the insights of the observed APIM. It also enables researchers to simultaneously appraise dyadic invariance for both the latent predictors and latent outcomes--a tacit assumption of informative comparisons of actor and partner effects across partners and the estimation of the *k* parameter.
+The observed (i.e., non-latent) APIM is, by an incredibly wide margin, the most popular bi-construct dyadic data model. Though the L-APIM is not as popular (likely owing to its increased programming difficulty---a barrier we hope `dySEM` helps to remove), it is well-suited to address the problems that measurement error and statistical control interactively introduce that would otherwise contaminate the insights of the observed APIM. It also enables researchers to simultaneously appraise dyadic invariance for both the latent predictors and latent outcomes---a tacit assumption of informative comparisons of actor and partner effects across partners and the estimation of the *k* parameter.
 
 ## Packages and Data
+
+This exemplar makes use of the `dplyr`, `janitor`, `gt`, `dySEM`, and `lavaan` (Rosseel, 2012) packages, as well as the development version of the `dynamic` package.
 
 ```{r setup, message= FALSE}
 library(dplyr) #for data management
@@ -59,7 +61,7 @@ library(lavaan) #for fitting dyadic SEMs
 
 ```
 
-For this exemplar, we use the `commitmentQ` dataset from dySEM, collected using the "global" version of items for relationship satisfaction from the Rusbult et al. (1998) *Investment Model Scale*. This dataset includes the very same items as the `commitmentM` data set used in the exemplar for the CDFM, except responses come from 118 LGBTQ+ dyads (distinguished by partner "1" or "2") and the variable naming elements [follow a “spi” pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html). In this bi-construct exemplar, we will make use of both the responses to the satisfaction and commitment items:
+For this exemplar, we use the [`commitmentQ`](https://jsakaluk.github.io/dySEM/reference/commitmentQ.html) dataset from `dySEM`, collected using the "global" version of items for relationship satisfaction from the Rusbult et al. (1998) *Investment Model Scale*. This dataset includes the very same items as the [`commitmentM`](https://jsakaluk.github.io/dySEM/reference/commitmentM.html) data set used in the exemplar for the [CDFM](https://jsakaluk.github.io/dySEM/articles/CDFM.html), except responses come from 118 LGBTQ+ dyads (distinguished by partner "1" or "2") and the variable naming elements [follow a “spi” pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html). In this bi-construct exemplar, we will make use of both the responses to the satisfaction and commitment items:
 
 ```{r data}
 com_dat <- commitmentQ
@@ -70,7 +72,7 @@ com_dat |>
 
 ## 1. Scraping the Variables
 
-We first scrape the satisfaction and commitment indicators with `scrapeVarCross()`; when two constructs have information for their indicators scraped, researchers can make use of the `y_` arguments (e.g., `y_order`, `y_stem`) that parallel the `x_` arguments for specifying the variable naming pattern that x (satisfaction) and y (commitment) indicators follow (though the function currently presumes that the same distinguishing characters--in this case, "1' and "2") are used for both x and y indicators):
+We first scrape the satisfaction and commitment indicators with [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html); when two constructs have information for their indicators scraped, researchers can make use of the `y_` arguments (e.g., `y_order`, `y_stem`) that parallel the `x_` arguments for specifying the variable naming pattern that x (satisfaction) and y (commitment) indicators follow (though the function currently presumes that the same distinguishing characters---in this case, "1' and "2"---are used for both x and y indicators):
 
 ```{r, scrape commitmentQ items, echo = TRUE}
 
@@ -82,13 +84,13 @@ apim_dvn <- scrapeVarCross(dat = com_dat,
 
 ## 2. Scripting the Model(s)
 
-Scripting latent APIMs is subsequently expeditious with the `scriptAPIM()` function. All that is required is a “dvn” of scraped information for x- and y- indicators, and (arbitrary) names for the latent X and latent Y variables. Users then can invoke whatever optional argumentation they wish to control dyadic measurement invariance constraints for either their x- and/or y-indicators through the `constr_dy_x_meas` and `constr_dy_y_meas` arguments. Likewise, structural level equality constraints on features of latent x and latent y (i.e., variances and means) are controlled through `constr_dy_x_struct` and `constr_dy_y_struct`, while users control equality constraints on the latent slopes (i.e., actor and/or partner effects) through the `constr_dy_xy_struct` argument. 
+Scripting L-APIMs is subsequently expeditious with the [`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.html) function. All that is required is a “dvn” of scraped information for x- and y- indicators, and (arbitrary) names for the latent X and latent Y variables. Users then can invoke whatever optional argumentation they wish to control dyadic measurement invariance constraints for their x- and/or y-indicators through the `constr_dy_x_meas` and `constr_dy_y_meas` arguments. Likewise, structural level equality constraints on features of latent x and latent y (i.e., variances and means) are controlled through `constr_dy_x_struct` and `constr_dy_y_struct`, while users control equality constraints on the latent slopes (i.e., actor and/or partner effects) through the `constr_dy_xy_struct` argument. 
 
-In an effort to boost the inclusivity of dyadic data analysis methods (Sakaluk et al., 2025), `scriptAPIM()` defaults to a fully indistinguishable model—one in which loadings, intercepts, residuals, latent variances, latent means, and latent slopes are all constrained to be equal across dyad members. The burden is thereby placed on researchers to provide evidence for a less parsimonious model (Kenny et al., 2006), by manually specifying less constrained models and testing against the fully indistinguishable model as a baseline. Finally, scriptAPIM() enables researchers to optionally estimate the k parameter (Kenny & Ledermann, 2010) based on the latent slopes, by setting the `est_k` argument to `TRUE`; the estimation of k is programmed to automatically adjust depending what constraints, if any, are made on actor and/or partner effects. 
+In an effort to boost the inclusivity of dyadic data analysis methods (Sakaluk et al., 2025), `scriptAPIM()` defaults to a fully indistinguishable model—one in which loadings, intercepts, residuals, latent variances, latent means, and latent slopes are all constrained to be equal across dyad members. The burden is thereby placed on researchers to provide evidence for a less parsimonious model (Kenny et al., 2006), by manually specifying less constrained models and testing against the fully indistinguishable model as a baseline. Finally, `scriptAPIM()` enables researchers to optionally estimate the *k* parameter (Kenny & Ledermann, 2010) based on the latent slopes, by setting the `est_k` argument to `TRUE`; the estimation of *k* is programmed to automatically adjust depending what constraints, if any, are made on actor and/or partner effects. 
 
-Any model generated by `scriptAPIM()` can be outputted to a .txt file for transparent sharing of research materials, through the use of the optional `writeTo` and `fileName` arguments.
+Any model generated by `scriptAPIM()` can be outputted to a `.txt` file for transparent sharing of research materials, through the use of the optional `writeTo` and `fileName` arguments.
 
-Here, we depict the process of fitting competing latent APIMs that have indistinguishable measurement models, latent variances, and means, while indulging different patterns of actor- and partner-effects, and estimating k in each model:
+Here, we depict the process of fitting competing L-APIMs that have indistinguishable measurement models, latent variances, and means, while indulging different patterns of actor- and partner-effects, and estimating *k* in each model:
 
 ```{r, script latent APIMs, echo = TRUE}
 
@@ -109,7 +111,7 @@ apim.script.free.actpart <-  scriptAPIM(apim_dvn, lvxname = "Sat", lvyname = "Co
 
 ## 3. Fitting the Model(s) 
 
-We can then pass these scripted models to lavaan for model fitting:
+We can then pass these scripted models to `lavaan` for model fitting:
 
 ```{r fit latent APIMS, echo = TRUE}
 apim.fit.indist <- cfa(apim.script.indist, data = com_dat)
@@ -131,7 +133,7 @@ comp_act <- janitor::clean_names(comp_act)
 comp_part <- janitor::clean_names(comp_part)
 comp_actpart <- janitor::clean_names(comp_actpart)
 
-#rounding for reporitng
+#rounding for reporting
 chisq_diff_act <- round(comp_act$chisq_diff, 2)
 p_act <- round(comp_act$pr_chisq, 2)
 
@@ -146,7 +148,7 @@ mis_actpart <- fitMeasures(apim.fit.free.actpart, c("rmsea", "cfi"))
 
 Interestingly, while neither freely estimating the actor paths, $\chi^2$ (`r comp_act$df_diff[2]`) = `r chisq_diff_act[2]`, *p* = `r p_act[2]`, or partner paths, $\chi^2$ (`r comp_part$df_diff[2]`) = `r chisq_diff_part[2]`, *p* = `r p_part[2]`, significantly improved the fit of the model, freely estimating both actor and partner paths did, $\chi^2$ (`r comp_actpart$df_diff[2]`) = `r chisq_diff_actpart[2]`, *p* = `r p_actpart[2]`. That said, the freely estimated model did not fit the data particularly well according to traditional model fit cutoffs (Hu & Bentler, 1999), with RMSEA = `r round(mis_actpart[1], 3)` and CFI = `r round(mis_actpart[2],3)`.
 
-`outputParamFig()` makes it easy to visualize the parameter estimates from the L-APIM, via *semPlot* package (Epskamp, 2015):
+[`outputParamFig()`](https://jsakaluk.github.io/dySEM/reference/outputParamFig.html) makes it easy to visualize the parameter estimates from the L-APIM, via `semPlot` package (Epskamp, 2015):
 
 ```{r, apim figure, echo = TRUE}
 
@@ -154,7 +156,7 @@ outputParamFig(fit = apim.fit.free.actpart, figtype = "unstandardized")
 
 ```
 
-Likewise, `outputParamTab()` provides reproducible tables of APIM output, and can be directed to provide only structural model output (as we demonstrate), measurement model output, or both:
+Likewise, [`outputParamTab()`](https://jsakaluk.github.io/dySEM/reference/outputParamTab.html) provides reproducible tables of APIM output, and can be directed to provide only structural model output (as we demonstrate), measurement model output, or both:
 
 ```{r, apim table, echo = TRUE}
 
@@ -164,11 +166,11 @@ outputParamTab(apim_dvn, model = "apim", fit = apim.fit.free.actpart,
 
 ```
 
-In this instance, the output suggests that whereas Partner 2’s level of satisfaction is a significant predictor of their own commitment (a2) and their partner’s (p1), Partner 1’s level of satisfaction is not a significant predictor of either partner’s level of commitment. Meanwhile, Partner 1’s k parameter is so imprecise (owing to its modest actor effect) that its confidence interval spans all possible dyadic patterns, while Partner 2’s k parameter is more indicative of an actor-only pattern (0), such that we can reject the possibility of either a contrast-pattern (-1) or a couple-pattern (1).  
+In this instance, the output suggests that whereas Partner 2’s level of satisfaction is a significant predictor of their own commitment (a2) and their partner’s (p1), Partner 1’s level of satisfaction is not a significant predictor of either partner’s level of commitment. Meanwhile, Partner 1’s *k* parameter is so imprecise (owing to its modest actor effect) that its confidence interval spans all possible dyadic patterns, while Partner 2’s *k* parameter is more indicative of an actor-only pattern (0), such that we can reject the possibility of either a contrast-pattern (-1) or a couple-pattern (1).  
 
 ## 5. Optional Indexes and Output
 
-This exemplar of the latent APIM also serves to briefly demonstrate the benefits of building dySEM on top of the foundation of lavaan, as any core or external improvement or modernation for lavaan-based functionality can thereby benefit dySEM. McNeish’s work (McNeish et al., 2018), for example, has brought appropriate renewed attention to the limits of depending on the cutoffs for model fit indexes that were popularized, most successfully, by Hu and Bentler (Hu & Bentler, 1999). Subsequently, McNeish and colleagues have provided lavaan-friendly functionality to calculate so-called “dynamic” fit indexes, which identify simulation-generated targets for model fit indexes that are calibrated a given fitted model (McNeish, 2023; McNeish & Manapat, 2024; McNeish & Wolf, 2022, 2023). More recently, McNeish and Wolf have proposed Direct Discrepancy Dynamic Fit Index (“DD-DFI” or “3DFI”) cutoffs, which are robust in application across many kinds of fitted models, response scales, estimators, and missing data conditions (McNeish & Wolf, 2024). And with their *dynamic* package for R, **it is quite straightforward to use 3DFIs, with** ***dySEM***, **to perform a more rigorous appraisal of the fit of our selected latent APIMs: a practice that, whenever possible, we recommend as the default approach for the appraisal of dyadic SEMs with** ***dySEM*** **when their features match the requirements of 3DFIs**—namely, in the absence of a mean structure. 
+This exemplar of the L-APIM also serves to briefly demonstrate the benefits of building `dySEM` on top of the foundation of `lavaan`, as any core or external improvement or modernation for `lavaan`-based functionality can thereby benefit `dySEM`. McNeish’s work (McNeish et al., 2018), for example, has brought appropriate renewed attention to the limits of depending on the cutoffs for model fit indexes that were popularized, most successfully, by Hu and Bentler (Hu & Bentler, 1999). Subsequently, McNeish and colleagues have provided `lavaan`-friendly functionality to calculate so-called “dynamic” fit indexes, which identify simulation-generated targets for model fit indexes that are calibrated to a given fitted model (McNeish, 2023; McNeish & Manapat, 2024; McNeish & Wolf, 2022, 2023). More recently, McNeish and Wolf have proposed Direct Discrepancy Dynamic Fit Index (“DD-DFI” or “3DFI”) cutoffs, which are robust in application across many kinds of fitted models, response scales, estimators, and missing data conditions (McNeish & Wolf, 2024). And with their `dynamic` package for R, **it is quite straightforward to use 3DFIs, with** ***dySEM***, **to perform a more rigorous appraisal of the fit of our selected L-APIMs: a practice that, whenever possible, we recommend as the default approach for the appraisal of dyadic SEMs with** ***dySEM*** **when their features match the requirements of 3DFIs**—namely, in the absence of a mean structure. 
 
 To evaluate the dynamic fit of our selected L-APIM, we can quickly re-fit it without a mean structure (to make it appropriate for calculating 3DFIs) using the optional  `includeMeanStruct` argument (and setting it to `FALSE`) for `scriptAPIM()`, which will ensure no intercepts or latent means are estimated (you can verify this for yourself with `summary()`):
 
@@ -180,15 +182,15 @@ apim.script.free.actpart.noms <-  scriptAPIM(apim_dvn, lvxname = "Sat", lvyname 
 apim.fit.free.actpart.noms <- cfa(apim.script.free.actpart.noms, data = com_dat)
 ```
 
-Then, it's as simple as supplying the fitted *lavaan* model to the *dynamic* package's `DDDFI()` function. Because this is a simulation-based function, it's good practice to set a random seed (to ensure you can get the same numeric results from run to run): 
+Then, it's as simple as supplying the fitted `lavaan` model to the `dynamic` package's `DDDFI()` function. Because this is a simulation-based function, it's good practice to set a random seed (to ensure you can get the same numeric results from run to run): 
 
 ```{r calc 3DFIS, echo = TRUE, eval = FALSE}
 set.seed(519)
 DDDFI(apim.fit.free.actpart.noms)
 ```
 
-**Note**: since the `DDDFI()` function is not yet in the CRAN version of dynamic, we can't reproducibly run it and include the output here, in this automatically compiling online tutorial, but you can run this code in your own R session to see the results.
+**Note**: since the `DDDFI()` function is not yet in the CRAN version of `dynamic`, we can't reproducibly run it and include the output here, in this automatically compiling online tutorial, but you can run this code in your own R session to see the results.
 
-Based on these 3DFI targets, both our observed model fit values of RMSEA = `r round(mis_actpart[1], 3)` and CFI = `r round(mis_actpart[2],3)` fall between the "Fair" and "Mediocre" level of fit. This is likely driven (in part) by exceptionally low loading values observed for some of the commitment items (which we would further explore, if this were a real analysis and we were so inclined)
+Based on these 3DFI targets, both our observed model fit values of RMSEA = `r round(mis_actpart[1], 3)` and CFI = `r round(mis_actpart[2],3)` fall between the "Fair" and "Mediocre" level of fit. This is likely driven (in part) by exceptionally low loading values observed for some of the commitment items (which we would further explore, if this were a real analysis and we were so inclined).
 
 
