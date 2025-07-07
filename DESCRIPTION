@@ -26,7 +26,6 @@ Imports:
     dplyr,
     EGAnet,
     gt,
-    janitor,
     lavaan,
     lifecycle,
     magrittr,
@@ -35,6 +34,7 @@ Imports:
     stringr,
     tibble
 Suggests: 
+    janitor,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
