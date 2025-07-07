@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Fitting and Interpretting the Correlated Dyadic Factors Model (CDFM) • dySEM</title>
+<title>Fitting and Interpreting the Correlated Dyadic Factors Model (CDFM) • dySEM</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,7 +15,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fitting and Interpretting the Correlated Dyadic Factors Model (CDFM)">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fitting and Interpreting the Correlated Dyadic Factors Model (CDFM)">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -44,9 +44,9 @@
     <li><a class="dropdown-item" href="../articles/varnames.html">Anatomy of a Variable Name</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Tutorials for Specific Models</h6></li>
-    <li><a class="dropdown-item" href="../articles/CDFM.html">Fitting and Interpretting the Correlated Dyadic Factors Model (CDFM)</a></li>
-    <li><a class="dropdown-item" href="../articles/M-CDFM.html">Fitting and Interpretting the Multiple Correlated Dyadic Factors Model (M-CDFM)</a></li>
-    <li><a class="dropdown-item" href="../articles/L-APIM.html">Fitting and Interpretting the Latent Actor-Partner Interdependence Model (L-APIM)</a></li>
+    <li><a class="dropdown-item" href="../articles/CDFM.html">Fitting and Interpreting the Correlated Dyadic Factors Model (CDFM)</a></li>
+    <li><a class="dropdown-item" href="../articles/M-CDFM.html">Fitting and Interpreting the Multiple Correlated Dyadic Factors Model (M-CDFM)</a></li>
+    <li><a class="dropdown-item" href="../articles/L-APIM.html">Fitting and Interpreting the Latent Actor-Partner Interdependence Model (L-APIM)</a></li>
     <li><a class="dropdown-item" href="../articles/invariance.html">Invariance Testing with Potentially Indistinguishable Dyads: Rationale and Practices for a More Logical and Inclusive Testing Sequence</a></li>
   </ul>
 </li>
@@ -69,7 +69,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Fitting and Interpretting the Correlated Dyadic Factors Model (CDFM)</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Fitting and Interpreting the Correlated Dyadic Factors Model (CDFM)</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/master/vignettes/articles/CDFM.Rmd" class="external-link"><code>vignettes/articles/CDFM.Rmd</code></a></small>
@@ -87,12 +87,12 @@ article:</p>
 via Structural Equation Modeling with Latent Variables: A Tutorial with
 the dySEM package for R</em>.</p>
 <p>This article is intended to serve as the primary citation of record
-for the dySEM package’s functionality for the techniques described in
-this tutorial. <strong>If this tutorial has informed your modeling
-strategy (including but not limited to your use of <code>dySEM</code>),
-please cite this article</strong>.</p>
-<p>The citation of research software aiding in analyses–like the use of
-<code>dySEM</code>–is a required practice, according to the
+for the <code>dySEM</code> package’s functionality for the techniques
+described in this tutorial. <strong>If this tutorial has informed your
+modeling strategy (including but not limited to your use of
+<code>dySEM</code>), please cite this article</strong>.</p>
+<p>The citation of research software aiding in analyses—like the use of
+<code>dySEM</code>—is a required practice, according to the
 <strong>Journal Article Reporting Standards (JARS) for Quantitative
 Research in Psychology</strong> (<a href="https://psycnet.apa.org/fulltext/2018-00750-002.html" class="external-link">Appelbaum et
 al., 2018</a>).</p>
@@ -106,7 +106,7 @@ expanding its reach.</p>
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p>The CDFM is a <strong>“uni-construct”</strong> dyadic SEM (i.e., used
-to represent dyadic data about one–and only one–construct, like
+to represent dyadic data about one—and only one—construct, like
 “relationship satisfaction”).</p>
 <p>It contains:</p>
 <ul>
@@ -119,22 +119,22 @@ observed variables onto their factor)</li>
 depending on scale-setting/output standardization):</p>
 <ul>
 <li>one between the two latent variables (effectively, the latent
-intraclass correlation coefficient), and</li>
+intraclass correlation coefficient [ICC]), and</li>
 <li>several between the residual variances of the same observed
 variables across each partner (e.g., between Item 1 for Partner A and
 Partner B; another between Item 2 for Partner A and Partner B,
 etc.,).</li>
 </ul>
-<p>Owing to it serving as one half of the measurement model of a
-latent-APIM–and the APIM being the clear default structural model in
-relationship science (<a href="https://doi.org/10.1111/pere.12240" class="external-link">Kenny, 2018</a>)–the CDFM
-could (taciltly) be considered relationship science’s “default”–for
-better and for worse–uni-construct dyadic SEM.</p>
+<p>Owing to it serving as one half of the measurement model of a <a href="https://jsakaluk.github.io/dySEM/articles/L-APIM.html">latent
+actor-partner interdependence model (APIM)</a>—and the APIM being the
+clear default structural model in relationship science (<a href="https://doi.org/10.1111/pere.12240" class="external-link">Kenny, 2018</a>)—the CDFM
+could (tacitly) be considered relationship science’s “default”—for
+better and for worse—uni-construct dyadic SEM.</p>
 </div>
 <div class="section level2">
-<h2 id="packages-data-and-dysem-overview">Packages, Data, and dySEM Overview<a class="anchor" aria-label="anchor" href="#packages-data-and-dysem-overview"></a>
+<h2 id="packages-data-and-dysem-overview">Packages, Data, and <code>dySEM</code> Overview<a class="anchor" aria-label="anchor" href="#packages-data-and-dysem-overview"></a>
 </h2>
-<p>This exemplar makes use of the <code>tidverse</code> meta-package,
+<p>This exemplar makes use of the <code>tidyverse</code> meta-package,
 and the <code>gt</code>, <code>dySEM</code>, and <code>lavaan</code>
 (Rosseel, 2012) packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -142,23 +142,24 @@ and the <code>gt</code>, <code>dySEM</code>, and <code>lavaan</code>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com" class="external-link">gt</a></span><span class="op">)</span> <span class="co">#for reproducible tabling</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jsakaluk/dySEM" class="external-link">dySEM</a></span><span class="op">)</span> <span class="co">#for dyadic SEM scripting and outputting</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span> <span class="co">#for fitting dyadic SEMs</span></span></code></pre></div>
-<p>For the exemplar, we will use the built-in <code>commitmentM</code>
+<p>For the exemplar, we will use the built-in <a href="https://jsakaluk.github.io/dySEM/reference/commitmentM.html"><code>commitmentM</code></a>
 dataset from <code>dySEM</code>, which includes ratings of satisfaction
-and committment from 282 mixed-sex dyads. These data were collected
-using the “global” version of items for relationship satisfaction from
-the Rusbult et al. (1998) <em>Investment Model Scale</em>. More
-information about this data set can be found in <a href="https://doi.org/10.1111/pere.12341" class="external-link">Sakaluk et al. (2021)</a>.</p>
+and commitment from 282 mixed-sex dyads. These data were collected using
+the “global” version of items for relationship satisfaction from the
+Rusbult et al. (1998) <em>Investment Model Scale</em>. More information
+about this data set can be found in <a href="https://doi.org/10.1111/pere.12341" class="external-link">Sakaluk et al. (2021)</a>.</p>
 <p>This dataset already possesses many of the desirable features of a
-dataset for use with dySEM, as it is in wide format, and the variable
-names have a repetitive predictable structure (to learn more, see <a href="https://jsakaluk.github.io/dySEM/articles/varnames.html">our
-tutorial on variable name structure</a>). Specificially:</p>
+dataset for use with <code>dySEM</code>, as it is in wide format, and
+the variable names have a repetitive predictable structure (to learn
+more, see <a href="https://jsakaluk.github.io/dySEM/articles/varnames.html">our
+tutorial on variable name structure</a>). Specifically:</p>
 <ul>
 <li><p>The <em>satisfaction</em> items follow a “sip” pattern (Stem,
 Item, Partner) with a stem of “sat.g”, followed immediately by a number
-for the item (i.e., no delimeter between these elements), followed by a
-delimiting “_”, and then either the character “f” or “m to indicate to
+for the item (i.e., no delimiter between these elements), followed by a
+delimiting “_”, and then either the character “f” or “m” to indicate to
 which partner the item refers. For example, the first satisfaction item
-for partner 1 is”sat.g1_f”, and the first satisfaction item for partner
+for partner 1 is “sat.g1_f”, and the first satisfaction item for partner
 2 is “sat.g1_m”.</p></li>
 <li><p>Likewise, the <em>commitment</em> items follow a similar “sip”
 pattern, albeit with a different stem, “com”.</p></li>
@@ -191,44 +192,47 @@ data frame called <code>my_dat</code>:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: sat.g4_m &lt;int&gt;, sat.g5_m &lt;int&gt;</span></span></span></code></pre></div>
 <p>As described in the paper, and the <a href="https://jsakaluk.github.io/dySEM/articles/dySEM.html">Get Started
 tutorial for <code>dySEM</code></a> , the steps we must take to carry
-out dyadic invariance testing with dySEM are:</p>
+out dyadic invariance testing with <code>dySEM</code> are:</p>
 <ol style="list-style-type: decimal">
 <li>
 <strong>Scrape</strong> the relevant items from the data set, to be
 included in each CDFM</li>
 <li>
-<strong>Script</strong> the lavaan syntax for the dyadic configural,
-loading, interecept, and residual invariance models</li>
+<strong>Script</strong> the <code>lavaan</code> syntax for the
+dyadic configural, loading, intercept, and residual invariance
+models</li>
 <li>
-<strong>Fit</strong> the invariance models with lavaan</li>
+<strong>Fit</strong> the invariance models with
+<code>lavaan</code>
+</li>
 <li>generate reproducible <strong>output</strong> of our analyses,
 and</li>
 <li>consider the use of <strong>optional</strong> functionality for
-supplementary indexes and tests that dySEM can compute (we will
-demonstrate a couple)</li>
+supplementary indexes and tests that <code>dySEM</code> can compute (we
+will demonstrate a couple)</li>
 </ol>
 </div>
 <div class="section level2">
 <h2 id="scrape-the-variables">1. <em>Scrape</em> the Variables<a class="anchor" aria-label="anchor" href="#scrape-the-variables"></a>
 </h2>
-<p>The <a href="https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html"><code>scrapeVarCross</code></a>
-from dySEM is the appropriate function to scrape the variable
-information needed for automating the scripting of latent dyadic models
-of cross-sectional data. In this instance, we are only scraping
-information about indicators about one (pair of) dyadic latent
+<p>The <a href="https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html"><code>scrapeVarCross()</code></a>
+from <code>dySEM</code> is the appropriate function to scrape the
+variable information needed for automating the scripting of latent
+dyadic models of cross-sectional data. In this instance, we are only
+scraping information about indicators about one (pair of) dyadic latent
 variable(s): men and women’s latent relationship satisfaction.</p>
 <p>As described before, the <em>satisfaction</em> items follow a <a href="https://jsakaluk.github.io/dySEM/articles/varnames.html">“sip”
 pattern (Stem, Item, Partner)</a> with a stem of “sat.g”, followed
-immediately by a number for the item (i.e., no delimeter between these
-elements), followed by a delimiting “_“, and then either the
-character”f” or “m to indicate to which partner the item refers.</p>
+immediately by a number for the item (i.e., no delimiter between these
+elements), followed by a delimiting “_”, and then either the character
+“f” or “m” to indicate to which partner the item refers.</p>
 <p>We therefore refer to our data frame (“<code>my_dat</code>”) for the
-<code>dat</code> argument, and the pattern, stem, delimeters (if any),
+<code>dat</code> argument, and the pattern, stem, delimiters (if any),
 and distinguishing characters for the <code>x_order</code>,
 <code>x_stem</code>, <code>x_delim1</code>, <code>x_delim2</code>,
 <code>distinguish_1</code>, and <code>distinguish_2</code> arguments,
 respectively. In this instance, our stem is “sat.g”; there is no first
-delimeter, and an “_” for the second delimeter; and the distinguishing
+delimiter, and an “_” for the second delimiter; and the distinguishing
 characters are “f” and “m”.</p>
 <p>We assign the output of this function (a list of variable names an
 information) to an object we are (arbitrarily) calling “sat_dvn”; <em>we
@@ -262,31 +266,31 @@ mundane: the indicator names for the “f” partners (e.g., “sat.g1_f”),
 the indicator names for the “m” partners (e.g., “sat.g5_m”), the number
 of indicators per partner (in this case, 5), the distinguishing
 characters (“f” and “m”), and the total number of indicators (10) in the
-entire set. Yet this information is all that is needed for dySEM to
-dramatically simplify the process of scripting dyadic SEM models,
-including dyadic invariance models.</p>
+entire set. Yet this information is all that is needed for
+<code>dySEM</code> to dramatically simplify the process of scripting
+dyadic SEM models, including dyadic invariance models.</p>
 </div>
 <div class="section level2">
 <h2 id="script-the-models">2. <em>Script</em> the Model(s)<a class="anchor" aria-label="anchor" href="#script-the-models"></a>
 </h2>
 <p>Next, we will script the dyadic configural, loading, intercept, and
-residual invariance models. We will use the <code>scriptCor</code>
-function from dySEM to do this. This function requires the
+residual invariance models. We will use the <a href="https://jsakaluk.github.io/dySEM/reference/scriptCor.html"><code>scriptCor()</code></a>
+function from <code>dySEM</code> to do this. This function requires the
 <code>dvn</code> object we created in the prior step, an arbitrary name
-for the latent variable for lavaan, and the <code>constr_dy_meas</code>
-and <code>constr_dy_struct</code> arguments to indicate which
-measurement (i.e., “meas”) and structural (i.e., “struct”) parameters we
-want to constraint (i.e., “constr”) across dyad members (i.e., “dy”).
-The <code>scaleset</code> argument automatically defaults to the
-fixed-factor scale-setting and identification method, prefered for
-invariance testing . However, we encourage users who are just beginning
-to include this argument explicitly, so they (and others) can readily
-determine their model specification approach.</p>
+for the latent variable for <code>lavaan</code>, and the
+<code>constr_dy_meas</code> and <code>constr_dy_struct</code> arguments
+to indicate which measurement (i.e., “meas”) and structural (i.e.,
+“struct”) parameters we want to constraint (i.e., “constr”) across dyad
+members (i.e., “dy”). The <code>scaleset</code> argument automatically
+defaults to the fixed-factor scale-setting and identification method,
+preferred for invariance testing . However, we encourage users who are
+just beginning to include this argument explicitly, so they (and others)
+can readily determine their model specification approach.</p>
 <p>Below, we script the sequence of four models to be fit and compared;
 we forego the use of the <code>writeTo</code> and <code>fileName</code>
-arguments, which are used to save the .txt of scripts to a file.
-Finally, we use an intuitive naming structure to keep track of which
-model script resides in which R object.</p>
+arguments, which are used to save the <code>.txt</code> of scripts to a
+file. Finally, we use an intuitive naming structure to keep track of
+which model script resides in which R object.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">sat.config.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">sat_dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>, constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
@@ -297,7 +301,8 @@ model script resides in which R object.</p>
 <span></span>
 <span><span class="va">sat.resid.script</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scriptCor.html">scriptCor</a></span><span class="op">(</span><span class="va">sat_dvn</span>, lvname <span class="op">=</span> <span class="st">"Sat"</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p>In their stored form, these scripts are not particularly readable,
-but as we shall soon see, they are immediately passable to lavaan:</p>
+but as we shall soon see, they are immediately passable to
+<code>lavaan</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">sat.resid.script</span></span>
@@ -305,7 +310,7 @@ but as we shall soon see, they are immediately passable to lavaan:</p>
 <p>However, when exported (via the <code>writeTo</code> and
 <code>fileName</code> arguments) or concatenated, they can be presented
 in a much more readable format that mirrors what users expect from a
-manually written lavaan script:</p>
+manually written <code>lavaan</code> script:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">sat.resid.script</span><span class="op">)</span></span>
@@ -362,9 +367,10 @@ manually written lavaan script:</p>
 <div class="section level2">
 <h2 id="fit-the-models">3. <em>Fit</em> the Model(s)<a class="anchor" aria-label="anchor" href="#fit-the-models"></a>
 </h2>
-<p>All of these models can now be fit with whichever lavaan wrapper the
-user prefers, and with their chosen analytic options (e.g., estimator,
-missing data treatment, etc)</p>
+<p>All of these models can now be fit with whichever <code>lavaan</code>
+wrapper the user prefers, and with their chosen analytic options (e.g.,
+estimator, missing data treatment, etc); our demonstration uses default
+specifications for <code><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">sat.config.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">sat.config.script</span>, data <span class="op">=</span> <span class="va">my_dat</span><span class="op">)</span></span>
@@ -404,10 +410,9 @@ below:</p>
 <span><span class="co">#&gt; sat.resid.mod  ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
-<p>Conversely, they could instead consider the use of
-<code><a href="../reference/outputInvarCompTab.html">outputInvarCompTab()</a></code>, a function we have written to wrap
-some of the same comparative output in a more
-reproducible-reporting-friendly format:</p>
+<p>Conversely, they could instead consider the use of <a href="https://jsakaluk.github.io/dySEM/reference/outputInvarCompTab.html"><code>outputInvarCompTab()</code></a>,
+a function we have written to wrap some of the same comparative output
+in a more reproducible-reporting-friendly format:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sat.config.mod</span>, <span class="va">sat.load.mod</span>, <span class="va">sat.int.mod</span>, <span class="va">sat.resid.mod</span><span class="op">)</span></span>
@@ -422,15 +427,15 @@ reproducible-reporting-friendly format:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> residual  110.     42  0     <span style="text-decoration: underline;">8</span>232. <span style="text-decoration: underline;">8</span>315. 0.077 0.983      42.8        5  0    </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: aic_diff &lt;dbl&gt;, bic_diff &lt;dbl&gt;, rmsea_diff &lt;dbl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   cfi_diff &lt;dbl&gt;</span></span></span></code></pre></div>
-<p>Without additional arguemntation, <code><a href="../reference/outputInvarCompTab.html">outputInvarCompTab()</a></code>
+<p>Without additional argumentation, <code><a href="../reference/outputInvarCompTab.html">outputInvarCompTab()</a></code>
 (and other outputters in <code>dySEM</code>) return data frames; these
 are the most flexible output types to supply to other tabling and/or
 visualization functionality. However, users looking for a more expedient
 way to “clean up” reporting from outputters can either make use of the
-<code>gtTab</code> argument; TRUE will return a basic gt table which can
-then be further modified using additional <code>gt</code> layers. This
-is a good option for reproducible reporting document formats (like .Rmd
-and .Qmd):</p>
+<code>gtTab</code> argument; <code>TRUE</code> will return a basic
+<code>gt</code> table which can then be further modified using
+additional <code>gt</code> layers. This is a good option for
+reproducible reporting document formats (like .Rmd and .Qmd):</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/outputInvarCompTab.html">outputInvarCompTab</a></span><span class="op">(</span><span class="va">mods</span>, gtTab <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -978,8 +983,8 @@ set the additional <code>writeTo</code> argument to a directory path (a
 path of “.” will write to the user’s current working directory, like
 that associated with an .Rproj file), and the <code>fileName</code>
 argument to a desired base name for the output file. This will save the
-output as an .rtf file in that directory, which can then be opened in
-Microsoft Word or other word processing software:</p>
+output as an <code>.rtf</code> file in that directory, which can then be
+opened in Microsoft Word or other word processing software:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/outputInvarCompTab.html">outputInvarCompTab</a></span><span class="op">(</span><span class="va">mods</span>, gtTab <span class="op">=</span> <span class="cn">TRUE</span>, writeTo <span class="op">=</span> <span class="st">"."</span>, fileName <span class="op">=</span> <span class="st">"sat_invar_comp"</span><span class="op">)</span></span></code></pre></div>
@@ -989,12 +994,12 @@ support for most forms of dyadic invariance, with the exception of
 significant residual noninvariances,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>χ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\chi^2</annotation></semantics></math>
 (5) = 42.83, <em>p</em> = 0.</p>
-<p>Users can then request that <em>dySEM</em> provide them with
-reproducible output via either the <code><a href="../reference/outputParamTab.html">outputParamTab()</a></code> (for
-tabular output) or the <code><a href="../reference/outputParamFig.html">outputParamFig()</a></code> (for a path
-diagram, back-ended by <em>semPlot</em>). For example, if one wanted a
-table of measurement model output from the dyadic intercept invariance
-model they could use:</p>
+<p>Users can then request that <code>dySEM</code> provide them with
+reproducible output via either the <a href="https://jsakaluk.github.io/dySEM/reference/outputParamTab.html"><code>outputParamTab()</code></a>
+(for tabular output) or the <a href="https://jsakaluk.github.io/dySEM/reference/outputParamFig.html"><code>outputParamFig()</code></a>
+(for a path diagram, back-ended by <code>semPlot</code>). For example,
+if one wanted a table of measurement model output from the dyadic
+intercept invariance model they could use:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/outputParamTab.html">outputParamTab</a></span><span class="op">(</span><span class="va">sat_dvn</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">sat.int.mod</span>, </span>
@@ -1565,17 +1570,17 @@ model they could use:</p>
 </table>
 </div>
 <p>The <code>model</code> and <code>tabletype</code> arguments are the
-main providers of optionality to be aware of, as outputParamTab is also
-used to provide tabular output from other model types (e.g., APIMs), and
-users may be most interested in the output from one portion of the model
-(e.g., the measurement model) versus another (e.g., the structural
-model).</p>
+main providers of optionality to be aware of, as
+<code><a href="../reference/outputParamTab.html">outputParamTab()</a></code> is also used to provide tabular output
+from other model types (e.g., APIMs), and users may be most interested
+in the output from one portion of the model (e.g., the measurement
+model) versus another (e.g., the structural model).</p>
 <p>Path diagrams, meanwhile, are created with the
 <code><a href="../reference/outputParamFig.html">outputParamFig()</a></code> function, which is used in a similar
 manner to <code><a href="../reference/outputParamTab.html">outputParamTab()</a></code> (and includes the same
 <code>writeTo</code> and <code>fileName</code> arguments if you wish to
-export a .png). Otherwise, the primary argument to be aware of is
-<code>figtype</code>, which allows users to specify what kind of
+export a <code>.png</code>). Otherwise, the primary argument to be aware
+of is <code>figtype</code>, which allows users to specify what kind of
 parameter estimates they wish to be depicted in the path diagram.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -1587,20 +1592,21 @@ comparisons using the Correlated Dyadic Factors Model. From this,
 researchers would learn that the satisfaction measure demonstrates
 reasonable configural, loading, and intercept invariance between
 partners, and that the latent ICC between partner’s satisfaction levels
-is 0.71, z = 16.15, p &lt;.001 (95% CI: 0.62, 0.8).</p>
+is 0.71, <em>z</em> = 16.15, <em>p</em> &lt;.001 (95% CI: 0.62,
+0.8).</p>
 </div>
 <div class="section level2">
 <h2 id="consider-optional-indexes-and-output">5. Consider <em>Optional</em> Indexes and Output<a class="anchor" aria-label="anchor" href="#consider-optional-indexes-and-output"></a>
 </h2>
 <p>A remaining question would be: if our chosen model fails to
 demonstrate residual invariance, which indicator(s) are responsible for
-introducing the noninvariance? The <code><a href="../reference/outputConstraintTab.html">outputConstraintTab()</a></code>
-function from dySEM, while not strictly necessary, offers supplemental
-functionality to help answer this question.</p>
-<p>Users simply enter the lavaan model responsible for the statistically
-significant degradation of model fit, and are provided with a table of
-each dyadic invariance constraint, by indicator, and its Langrange
-multiplier test statistic and corresponding test:</p>
+introducing the noninvariance? The <a href="https://jsakaluk.github.io/dySEM/reference/outputConstraintTab.html"><code>outputConstraintTab()</code></a>
+function from <code>dySEM</code>, while not strictly necessary, offers
+supplemental functionality to help answer this question.</p>
+<p>Users simply enter the <code>lavaan</code> model responsible for the
+statistically significant degradation of model fit, and are provided
+with a table of each dyadic invariance constraint, by indicator, and its
+Lagrange multiplier test statistic and corresponding test:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/outputConstraintTab.html">outputConstraintTab</a></span><span class="op">(</span><span class="va">sat.resid.mod</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -2205,7 +2211,7 @@ multiplier test statistic and corresponding test:</p>
 </div>
 <p>In this particular instance, significant noninvariance was only
 introduced by forcing the constraint on the residual variances for the
-1st and 5th items</p>
+1st and 5th items.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Fitting and Interpretting the Multiple Correlated Dyadic Factors Model (M-CDFM) • dySEM</title>
+<title>Fitting and Interpreting the Multiple Correlated Dyadic Factors Model (M-CDFM) • dySEM</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,7 +15,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fitting and Interpretting the Multiple Correlated Dyadic Factors Model (M-CDFM)">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fitting and Interpreting the Multiple Correlated Dyadic Factors Model (M-CDFM)">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -44,9 +44,9 @@
     <li><a class="dropdown-item" href="../articles/varnames.html">Anatomy of a Variable Name</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Tutorials for Specific Models</h6></li>
-    <li><a class="dropdown-item" href="../articles/CDFM.html">Fitting and Interpretting the Correlated Dyadic Factors Model (CDFM)</a></li>
-    <li><a class="dropdown-item" href="../articles/M-CDFM.html">Fitting and Interpretting the Multiple Correlated Dyadic Factors Model (M-CDFM)</a></li>
-    <li><a class="dropdown-item" href="../articles/L-APIM.html">Fitting and Interpretting the Latent Actor-Partner Interdependence Model (L-APIM)</a></li>
+    <li><a class="dropdown-item" href="../articles/CDFM.html">Fitting and Interpreting the Correlated Dyadic Factors Model (CDFM)</a></li>
+    <li><a class="dropdown-item" href="../articles/M-CDFM.html">Fitting and Interpreting the Multiple Correlated Dyadic Factors Model (M-CDFM)</a></li>
+    <li><a class="dropdown-item" href="../articles/L-APIM.html">Fitting and Interpreting the Latent Actor-Partner Interdependence Model (L-APIM)</a></li>
     <li><a class="dropdown-item" href="../articles/invariance.html">Invariance Testing with Potentially Indistinguishable Dyads: Rationale and Practices for a More Logical and Inclusive Testing Sequence</a></li>
   </ul>
 </li>
@@ -69,7 +69,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Fitting and Interpretting the Multiple Correlated Dyadic Factors Model (M-CDFM)</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Fitting and Interpreting the Multiple Correlated Dyadic Factors Model (M-CDFM)</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/master/vignettes/articles/M-CDFM.Rmd" class="external-link"><code>vignettes/articles/M-CDFM.Rmd</code></a></small>
@@ -87,12 +87,12 @@ article:</p>
 via Structural Equation Modeling with Latent Variables: A Tutorial with
 the dySEM package for R</em>.</p>
 <p>This article is intended to serve as the primary citation of record
-for the dySEM package’s functionality for the techniques described in
-this tutorial. <strong>If this tutorial has informed your modeling
-strategy (including but not limited to your use of <code>dySEM</code>),
-please cite this article</strong>.</p>
-<p>The citation of research software aiding in analyses–like the use of
-<code>dySEM</code>–is a required practice, according to the Journal
+for the <code>dySEM</code> package’s functionality for the techniques
+described in this tutorial. <strong>If this tutorial has informed your
+modeling strategy (including but not limited to your use of
+<code>dySEM</code>), please cite this article</strong>.</p>
+<p>The citation of research software aiding in analyses—like the use of
+<code>dySEM</code>—is a required practice, according to the Journal
 Article Reporting Standards (JARS) for Quantitative Research in
 Psychology (<a href="https://psycnet.apa.org/fulltext/2018-00750-002.html" class="external-link">Appelbaum et
 al., 2018</a>).</p>
@@ -106,7 +106,7 @@ expanding its reach.</p>
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p>The M-CDFM is a <strong>“multi-construct”</strong> dyadic SEM (i.e.,
-used to represent dyadic data about more than two constructs–like
+used to represent dyadic data about more than two constructs—like
 different features of relationship quality, e.g., Fletcher et al.,
 2000).</p>
 <p>It contains:</p>
@@ -147,18 +147,22 @@ dyadic data.</p>
 <div class="section level2">
 <h2 id="packages-and-data">Packages and Data<a class="anchor" aria-label="anchor" href="#packages-and-data"></a>
 </h2>
+<p>This exemplar makes use of the <code>dplyr</code>, <code>gt</code>,
+<code>dySEM</code>, and <code>lavaan</code> (Rosseel, 2012)
+packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> <span class="co">#for data management</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com" class="external-link">gt</a></span><span class="op">)</span> <span class="co">#for reproducible tabling</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jsakaluk/dySEM" class="external-link">dySEM</a></span><span class="op">)</span> <span class="co">#for dyadic SEM scripting and outputting</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span> <span class="co">#for fitting dyadic SEMs</span></span></code></pre></div>
-<p>For this exemplar, we use two built-in datasets from dySEM (focusing
-more on one). Of primary interest, the imsM dataset corresponds to data
-from the “global” items from 282 mixed-sex couples responding to the
-full Rusbult et al. (1998) Investment Model Scale (including 5 items
-each for satisfaction, quality of alternatives, investment, and
-commitment). More information about this data set can be found in <a href="https://doi.org/10.1111/pere.12341" class="external-link">Sakaluk et al. (2021)</a>.</p>
+<p>For this exemplar, we use two built-in datasets from
+<code>dySEM</code> (focusing more on one). Of primary interest, the <a href="https://jsakaluk.github.io/dySEM/reference/imsM.html"><code>imsM</code></a>
+dataset corresponds to data from the “global” items from 282 mixed-sex
+couples responding to the full Rusbult et al. (1998) Investment Model
+Scale (IMS) (including 5 items each for satisfaction, quality of
+alternatives, investment, and commitment). More information about this
+data set can be found in <a href="https://doi.org/10.1111/pere.12341" class="external-link">Sakaluk et al. (2021)</a>.</p>
 <p>All variables in this data frame follow a <a href="(https://jsakaluk.github.io/dySEM/articles/varnames.html)">“sip”
 naming pattern</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -187,14 +191,15 @@ naming pattern</a>:</p>
 <span><span class="co">#&gt; <span style="color: #949494;">#   sat.g1_m &lt;int&gt;, sat.g2_m &lt;int&gt;, sat.g3_m &lt;int&gt;, sat.g4_m &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   sat.g5_m &lt;int&gt;, qalt.g1_m &lt;int&gt;, qalt.g2_m &lt;int&gt;, qalt.g3_m &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   qalt.g4_m &lt;int&gt;, qalt.g5_m &lt;int&gt;, invest.g1_m &lt;int&gt;, invest.g2_m &lt;int&gt;, …</span></span></span></code></pre></div>
-<p>We will also use data from the prqcQ dataset, which contains data
-from 118 queer couples responding to the Perceived Relationship Quality
-Components Inventory (Fletcher et al., 2000) (including 3 items each for
-satisfaction, commitment, intimacy, trust, passion, and love). While
-substantive analyses of this data set have not yet been reported, the
-data collection took place in parallel to the analyses reported in <a href="https://doi.org/10.1111/pere.12341" class="external-link">Sakaluk et al. (2021)</a>.</p>
-<p>In contrast to imsM, variable names in the prqcQ data frame follow
-the <a href="https://jsakaluk.github.io/dySEM/articles/varnames.html">“spi”
+<p>We will also use data from the <a href="https://jsakaluk.github.io/dySEM/reference/prqcQ.html"><code>prqcQ</code></a>
+dataset, which contains data from 118 queer couples responding to the
+Perceived Relationship Quality Components Inventory (Fletcher et al.,
+2000) (including 3 items each for satisfaction, commitment, intimacy,
+trust, passion, and love). While substantive analyses of this data set
+have not yet been reported, the data collection took place in parallel
+to the analyses reported in <a href="https://doi.org/10.1111/pere.12341" class="external-link">Sakaluk et al. (2021)</a>.</p>
+<p>In contrast to <code>imsM</code>, variable names in the
+<code>prqcQ</code> data frame follow the <a href="https://jsakaluk.github.io/dySEM/articles/varnames.html">“spi”
 naming pattern</a>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -226,23 +231,24 @@ naming pattern</a>:</p>
 <div class="section level2">
 <h2 id="scraping-the-variables">1. Scraping the Variables<a class="anchor" aria-label="anchor" href="#scraping-the-variables"></a>
 </h2>
-<p>Users will take note that the imsM dataset contains variabels for
-items for which there are distinctive stems for each subscale (e.g.,
-“sat”, “invest”, “com”), whereas the prqcQ dataset contains a repetitive
-uninformative stem (“prqc”), despite the presence of
-multidimensionality. Rest assured, <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> has
-been developed with functionality to scrape variable information from
-both kinds of stems from multidimensional instruments. Further, scraping
-variable information remains relatively straightforward (and the key to
-unlocking the powerful functionality of <em>dySEM</em>’s scripters),
-with just one added “twist” from the simpler case of uni-construct or
-bi-construct models: the creation of a <em>named list</em> spelling out
-the naming ‘formula’ for each set of indicators.</p>
+<p>Users will take note that the <code>imsM</code> dataset contains
+variables for items for which there are distinctive stems for each
+subscale (e.g., “sat”, “invest”, “com”), whereas the <code>prqcQ</code>
+dataset contains a repetitive uninformative stem (“prqc”), despite the
+presence of multidimensionality. Rest assured, <a href="https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html"><code>scrapeVarCross()</code></a>
+has been developed with functionality to scrape variable information
+from both kinds of stems from multidimensional instruments. Further,
+scraping variable information remains relatively straightforward (and
+the key to unlocking the powerful functionality of <code>dySEM</code>‘s
+scripters), with just one added “twist” from the simpler case of
+uni-construct or bi-construct models: the creation of a <em>named
+list</em> spelling out the naming ’formula’ for each set of
+indicators.</p>
 <div class="section level3">
 <h3 id="distinctive-indicator-stems">Distinctive Indicator Stems<a class="anchor" aria-label="anchor" href="#distinctive-indicator-stems"></a>
 </h3>
-<p>The case when indicators have distinctive stems–usually indicating
-the putative factor onto which they load (e.g., “sat”, “com”)–is the
+<p>The case when indicators have distinctive stems—usually indicating
+the putative factor onto which they load (e.g., “sat”, “com”)—is the
 most straightforward to scrape with <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code>.</p>
 <p>In this case, users will need to provide the names of the latent
 variables, the stem for each set of indicators, and the delimiters used
@@ -257,17 +263,17 @@ will be used for the latent variables in the <code>lavaan</code>
 script</li>
 <li>
 <strong>stem</strong>: a vector containing each distinctive stem for
-each set of indicators (e.g., “sat.g”, “qalt.g”, “invest.g”, “com”)–
+each set of indicators (e.g., “sat.g”, “qalt.g”, “invest.g”, “com”)—
 <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> will use these to search for indicators
 with matching stems</li>
 <li>
 <strong>delim1</strong>: a vector containing the first delimiter
-used in the variable names (e.g., ““,”“,”“,”“)–
+used in the variable names (e.g., ““,”“,”“,”“)—
 <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> will use these to search for indicators
 with matching patterns of delimination</li>
 <li>
 <strong>delim2</strong>: a vector containing the second delimiter
-used in the variable names (e.g., “<em>”, ”</em>”, “<em>”, ”</em>”)–
+used in the variable names (e.g., “<em>”, ”</em>”, “<em>”, ”</em>”)—
 <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> will use these to search for indicators
 with matching patterns of delimination</li>
 </ul>
@@ -304,9 +310,9 @@ convention)&lt;/p&gt;'><sup>1</sup></a>:</p>
 <span>distinguish_2 <span class="op">=</span> <span class="st">"m"</span><span class="op">)</span></span></code></pre></div>
 <p>The resulting <em>dvn</em> remains as unremarkable as ever, but
 continues to serve as the foundation for unlocking the functionality of
-multi-construct scripters in <em>dySEM</em>. The only difference from
-the one-construct use-case of <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> is that the
-<code>$p1xvarnames</code> and <code>$p2xvarnames</code> elements now
+multi-construct scripters in <code>dySEM</code>. The only difference
+from the one-construct use-case of <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> is that
+the <code>$p1xvarnames</code> and <code>$p2xvarnames</code> elements now
 contain a nested set of vectors of variable names (as opposed to only
 set of variable names):</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -356,8 +362,8 @@ set of variable names):</p>
 <h3 id="non-distinctive-indicator-stems">Non-Distinctive Indicator Stems<a class="anchor" aria-label="anchor" href="#non-distinctive-indicator-stems"></a>
 </h3>
 <p>The case when indicators have non-distinctive stems only requires
-that your named list–that you later supply to
-<code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code>–has two more elements/vectors. Currently,
+that your named list—that you later supply to
+<code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code>—has two more elements/vectors. Currently,
 <strong>this functionality assumes indicators from the same latent
 variable (e.g., items measuring Satisfaction) are clustered together,
 sequentially, in item number (e.g., prqc.1_1 prqc.1_2 prqc.1_3) rather
@@ -368,7 +374,7 @@ are:</p>
 <ul>
 <li>
 <strong>min_num</strong>: a vector containing the item number in the
-sequence of non-destinctively named indicators that corresponds to the
+sequence of non-distinctively named indicators that corresponds to the
 first item for each latent variable (e.g., 1, 4, 7, 10, 13, 16 for
 Satisfaction, Commitment, Intimacy, Trust, Passion, and Love,
 respectively), and</li>
@@ -455,8 +461,8 @@ characters):</p>
 <span><span class="co">#&gt; [1] 36</span></span></code></pre></div>
 <p>Whether your <em>dvn</em> contains variable information for
 indicators with distinctive or non-distinctive stems makes no difference
-to the functionality you can draw upon from <em>dySEM</em>, or how you
-pass this information to scripters–it remains the same (and
+to the functionality you can draw upon from <code>dySEM</code>, or how
+you pass this information to scripters—it remains the same (and
 straightforward) for both kinds of indicators.</p>
 </div>
 </div>
@@ -464,19 +470,19 @@ straightforward) for both kinds of indicators.</p>
 <h2 id="scripting-the-models">2. Scripting the Model(s)<a class="anchor" aria-label="anchor" href="#scripting-the-models"></a>
 </h2>
 <p>Continuing with the <code>imsM</code> exemplar for this rest of this
-vignette, we can now quickly script a series of M-CDFMs using the
-<code><a href="../reference/scriptCFA.html">scriptCFA()</a></code> function (so named given that most imagine a
-M-CDFM model when conducting “dyadic CFA”), and incrementally layer on
-more dyadic invariance constraints via the <code>constr_dy_meas</code>
-argument.</p>
+vignette, we can now quickly script a series of M-CDFMs using the <a href="https://jsakaluk.github.io/dySEM/reference/scriptCFA.html"><code>scriptCFA()</code></a>
+function (so named given that most imagine a M-CDFM model when
+conducting “dyadic CFA”), and incrementally layer on more dyadic
+invariance constraints via the <code>constr_dy_meas</code> argument.</p>
 <p>The <code>writeTo</code> and <code>fileName</code> arguments (not
-depicted here) remain available to those wanting to export a .txt file
-of their concatenated <code>lavaan</code> script(s) (e.g., for posting
-on the OSF). <code>scaleset</code> remains fixed-factor, by default, but
-this is changeable to marker-variable (“MV”) for those interested. Given
-the consequential nature of this choice (e.g., for interpreting the
-scale of parameter estimates), we strongly recommend making this
-argument explicit (despite its implicit default to “FF”):</p>
+depicted here) remain available to those wanting to export a
+<code>.txt</code> file of their concatenated <code>lavaan</code>
+script(s) (e.g., for posting on the OSF). <code>scaleset</code> remains
+fixed-factor, by default, but this is changeable to marker-variable
+(“MV”) for those interested. Given the consequential nature of this
+choice (e.g., for interpreting the scale of parameter estimates), we
+strongly recommend making this argument explicit (despite its implicit
+default to “FF”):</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">script.ims.config</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>, constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
@@ -489,7 +495,7 @@ argument explicit (despite its implicit default to “FF”):</p>
 <p>You can concatenate these scripts, if you wish, using the base
 <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> function, to make them more human-readable in your
 console, but beware: the amount of <code>lavaan</code> scripting is
-considerabel (and therefore we do not show what it returns here):</p>
+considerable (and therefore we do not show what it returns here):</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">script.ims.config</span><span class="op">)</span></span></code></pre></div>
@@ -497,9 +503,9 @@ considerabel (and therefore we do not show what it returns here):</p>
 <div class="section level2">
 <h2 id="fitting-the-models">3. Fitting the Model(s)<a class="anchor" aria-label="anchor" href="#fitting-the-models"></a>
 </h2>
-<p>All of these models can now be fit with whichever lavaan wrapper the
-user prefers, and with their chosen analytic options (e.g., estimator,
-missing data treatment, etc.); our demonstration uses default
+<p>All of these models can now be fit with whichever <code>lavaan</code>
+wrapper the user prefers, and with their chosen analytic options (e.g.,
+estimator, missing data treatment, etc.); our demonstration uses default
 specifications for <code><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa()</a></code>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -514,9 +520,10 @@ specifications for <code><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class
 <div class="section level2">
 <h2 id="outputting-and-interpreting-the-models">4. Outputting and Interpreting the Model(s)<a class="anchor" aria-label="anchor" href="#outputting-and-interpreting-the-models"></a>
 </h2>
-<p>As with the CDFM, competing nested M-CDFMs–like for dyadic invariance
-testing with a larger measure–can be compared with the base
-<code><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova()</a></code> function:</p>
+<p>As with the <a href="https://jsakaluk.github.io/dySEM/articles/CDFM.html">CDFM</a>,
+competing nested M-CDFMs—like for dyadic invariance testing with a
+larger measure—can be compared with the base <code><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova()</a></code>
+function:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">ims.config.mod</span>, <span class="va">ims.load.mod</span>, <span class="va">ims.int.mod</span>, <span class="va">ims.res.mod</span><span class="op">)</span></span>
@@ -536,11 +543,11 @@ testing with a larger measure–can be compared with the base
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
 <p>Or, for a more reproducible-reporting-friendly option,
-<em>dySEM</em>’s <code>outputInvarComp()</code> function is available,
-and amenable to other tabling packages/functions (e.g.,
-<code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code>, as we demonstrate below), and/or can write an
-.rtf if the user makes use of the <code>writeTo</code> and
-<code>fileName</code> arguments:</p>
+<code>dySEM</code>’s <a href="https://jsakaluk.github.io/dySEM/reference/outputInvarCompTab.html"><code>outputInvarCompTab()</code></a>
+function is available, and amenable to other tabling packages/functions
+(e.g., <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code>, as we demonstrate below), and/or can write
+an <code>.rtf</code> if the user makes use of the <code>writeTo</code>
+and <code>fileName</code> arguments:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ims.config.mod</span>, <span class="va">ims.load.mod</span>, <span class="va">ims.int.mod</span>, <span class="va">ims.res.mod</span><span class="op">)</span></span>
@@ -1088,16 +1095,17 @@ and amenable to other tabling packages/functions (e.g.,
 </div>
 <p>Were one strictly to follow only the likelihood ratio test statistic
 as a guide, they would reject the possibility of the relatively low bar
-of loading invariance for the IMQ,
+of loading invariance for the IMS,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>χ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\chi^2</annotation></semantics></math>
 (16) = 44.18, <em>p</em> &lt;.001. Of course, other methods of model
 comparison and selection (and their respective thresholds) are
 available, and whatever method is chosen probably ought to be
 preregistered.</p>
-<p>Meanwhile, the standard outputters from <em>dySEM</em> are available
-to help researchers either table and/or visualize their results. Given
-the complexity of the M-CDFM (often many more factors and items) than
-the CDFM, we recommend tabling (vs. visualizing) model output:</p>
+<p>Meanwhile, the standard outputters from <code>dySEM</code> are
+available to help researchers either table and/or visualize their
+results. Given the complexity of the M-CDFM (often many more factors and
+items) than the CDFM, we recommend tabling (vs. visualizing) model
+output:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/outputParamTab.html">outputParamTab</a></span><span class="op">(</span>dvn <span class="op">=</span> <span class="va">dvnIMS</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">ims.config.mod</span>,</span>
@@ -2533,11 +2541,11 @@ larger multi-construct models:</p>
 <div class="section level2">
 <h2 id="optional-indexes-and-output">5. Optional Indexes and Output<a class="anchor" aria-label="anchor" href="#optional-indexes-and-output"></a>
 </h2>
-<p>Finally, like with the CDFM, users can use additional <em>dySEM</em>
-functions to output additional information about their model, such as
-the computation of Langrange multiplier tests to identify for which
-items and measurement model parameters there is significant
-nonivariance:</p>
+<p>Finally, like with the CDFM, users can use additional
+<code>dySEM</code> functions to output additional information about
+their model, such as the computation of Lagrange multiplier tests to
+identify for which items and measurement model parameters there is
+significant noninvariance:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/outputConstraintTab.html">outputConstraintTab</a></span><span class="op">(</span><span class="va">ims.load.mod</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
