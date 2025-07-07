@@ -1,5 +1,5 @@
 ---
-title: "Fitting and Interpretting the Correlated Dyadic Factors Model (CDFM)"
+title: "Fitting and Interpreting the Correlated Dyadic Factors Model (CDFM)"
 ---
 
 ```{r, include = FALSE}
@@ -9,37 +9,37 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Fair Use of this Tutorial 
+## Fair Use of this Tutorial
 
-This tutorial is a supplemental material from the following article: 
+This tutorial is a supplemental material from the following article:
 
-Sakaluk, J. K., & Camanto, O. J. (2025). *Dyadic Data Analysis via Structural Equation Modeling with Latent Variables: A Tutorial with the dySEM package for R*. 
+Sakaluk, J. K., & Camanto, O. J. (2025). *Dyadic Data Analysis via Structural Equation Modeling with Latent Variables: A Tutorial with the dySEM package for R*.
 
-This article is intended to serve as the primary citation of record for the dySEM package's functionality for the techniques described in this tutorial. **If this tutorial has informed your modeling strategy (including but not limited to your use of `dySEM`), please cite this article**. 
+This article is intended to serve as the primary citation of record for the `dySEM` package's functionality for the techniques described in this tutorial. **If this tutorial has informed your modeling strategy (including but not limited to your use of `dySEM`), please cite this article**.
 
-The citation of research software aiding in analyses--like the use of `dySEM`--is a required practice, according to the **Journal Article Reporting Standards (JARS) for Quantitative Research in Psychology** ([Appelbaum et al., 2018](https://psycnet.apa.org/fulltext/2018-00750-002.html)). 
+The citation of research software aiding in analyses---like the use of `dySEM`---is a required practice, according to the **Journal Article Reporting Standards (JARS) for Quantitative Research in Psychology** ([Appelbaum et al., 2018](https://psycnet.apa.org/fulltext/2018-00750-002.html)).
 
-Furthermore, citations remain essential for our development team to demonstrate the impact of our work to our local institutions and our funding sources, and with your support, we will be able to continue justifying our time and efforts spent improving `dySEM` and expanding its reach. 
+Furthermore, citations remain essential for our development team to demonstrate the impact of our work to our local institutions and our funding sources, and with your support, we will be able to continue justifying our time and efforts spent improving `dySEM` and expanding its reach.
 
 ## Overview
 
-The CDFM is a **"uni-construct"** dyadic SEM (i.e., used to represent dyadic data about one--and only one--construct, like "relationship satisfaction"). 
+The CDFM is a **"uni-construct"** dyadic SEM (i.e., used to represent dyadic data about one---and only one---construct, like "relationship satisfaction").
 
 It contains:
 
--  two latent variables/factors, onto which 
--  each partner's observed variables discriminantly load (i.e., one partner's observed variables onto their factor, and the other partner's observed variables onto their factor)
+-   two latent variables/factors, onto which
+-   each partner's observed variables discriminantly load (i.e., one partner's observed variables onto their factor, and the other partner's observed variables onto their factor)
 
 It also features two varieties of covariances (or correlations, depending on scale-setting/output standardization):
 
--  one between the two latent variables (effectively, the latent intraclass correlation coefficient), and 
--  several between the residual variances of the same observed variables across each partner (e.g., between Item 1 for Partner A and Partner B; another between Item 2 for Partner A and Partner B, etc.,). 
+-   one between the two latent variables (effectively, the latent intraclass correlation coefficient [ICC]), and
+-   several between the residual variances of the same observed variables across each partner (e.g., between Item 1 for Partner A and Partner B; another between Item 2 for Partner A and Partner B, etc.,).
 
-Owing to it serving as one half of the measurement model of a latent-APIM--and the APIM being the clear default structural model in relationship science ([Kenny, 2018](https://doi.org/10.1111/pere.12240))--the CDFM could (taciltly) be considered relationship science's "default"--for better and for worse--uni-construct dyadic SEM.
+Owing to it serving as one half of the measurement model of a [latent actor-partner interdependence model (APIM)](https://jsakaluk.github.io/dySEM/articles/L-APIM.html)---and the APIM being the clear default structural model in relationship science ([Kenny, 2018](https://doi.org/10.1111/pere.12240))---the CDFM could (tacitly) be considered relationship science's "default"---for better and for worse---uni-construct dyadic SEM.
 
-## Packages, Data, and dySEM Overview
+## Packages, Data, and `dySEM` Overview
 
-This exemplar makes use of the `tidverse` meta-package, and the  `gt`, `dySEM`, and `lavaan` (Rosseel, 2012) packages. 
+This exemplar makes use of the `tidyverse` meta-package, and the `gt`, `dySEM`, and `lavaan` (Rosseel, 2012) packages.
 
 ```{r setup, message= FALSE}
 library(dplyr) #for data management
@@ -49,11 +49,11 @@ library(lavaan) #for fitting dyadic SEMs
 
 ```
 
-For the exemplar, we will use the built-in `commitmentM` dataset from `dySEM`, which includes ratings of satisfaction and committment from 282 mixed-sex dyads. These data were collected using the "global" version of items for relationship satisfaction from the Rusbult et al. (1998) *Investment Model Scale*. More information about this data set can be found in [Sakaluk et al. (2021)](https://doi.org/10.1111/pere.12341).
+For the exemplar, we will use the built-in [`commitmentM`](https://jsakaluk.github.io/dySEM/reference/commitmentM.html) dataset from `dySEM`, which includes ratings of satisfaction and commitment from 282 mixed-sex dyads. These data were collected using the "global" version of items for relationship satisfaction from the Rusbult et al. (1998) *Investment Model Scale*. More information about this data set can be found in [Sakaluk et al. (2021)](https://doi.org/10.1111/pere.12341).
 
-This dataset already possesses many of the desirable features of a dataset for use with dySEM, as it is in wide format, and the variable names have a repetitive predictable structure (to learn more, see [our tutorial on variable name structure](https://jsakaluk.github.io/dySEM/articles/varnames.html)). Specificially:
+This dataset already possesses many of the desirable features of a dataset for use with `dySEM`, as it is in wide format, and the variable names have a repetitive predictable structure (to learn more, see [our tutorial on variable name structure](https://jsakaluk.github.io/dySEM/articles/varnames.html)). Specifically:
 
--   The *satisfaction* items follow a "sip" pattern (Stem, Item, Partner) with a stem of "sat.g", followed immediately by a number for the item (i.e., no delimeter between these elements), followed by a delimiting "\_", and then either the character "f" or "m to indicate to which partner the item refers. For example, the first satisfaction item for partner 1 is "sat.g1_f", and the first satisfaction item for partner 2 is "sat.g1_m".
+-   The *satisfaction* items follow a "sip" pattern (Stem, Item, Partner) with a stem of "sat.g", followed immediately by a number for the item (i.e., no delimiter between these elements), followed by a delimiting "\_", and then either the character "f" or "m" to indicate to which partner the item refers. For example, the first satisfaction item for partner 1 is "sat.g1_f", and the first satisfaction item for partner 2 is "sat.g1_m".
 
 -   Likewise, the *commitment* items follow a similar "sip" pattern, albeit with a different stem, "com".
 
@@ -70,21 +70,21 @@ my_dat |>
 
 ```
 
-As described in the paper, and the [Get Started tutorial for `dySEM`](https://jsakaluk.github.io/dySEM/articles/dySEM.html) , the steps we must take to carry out dyadic invariance testing with dySEM are:
+As described in the paper, and the [Get Started tutorial for `dySEM`](https://jsakaluk.github.io/dySEM/articles/dySEM.html) , the steps we must take to carry out dyadic invariance testing with `dySEM` are:
 
 1.  **Scrape** the relevant items from the data set, to be included in each CDFM
-2.  **Script** the lavaan syntax for the dyadic configural, loading, interecept, and residual invariance models
-3.  **Fit** the invariance models with lavaan
-4.  generate reproducible **output** of our analyses, and 
-5.  consider the use of **optional** functionality for supplementary indexes and tests that dySEM can compute (we will demonstrate a couple)
+2.  **Script** the `lavaan` syntax for the dyadic configural, loading, intercept, and residual invariance models
+3.  **Fit** the invariance models with `lavaan`
+4.  generate reproducible **output** of our analyses, and
+5.  consider the use of **optional** functionality for supplementary indexes and tests that `dySEM` can compute (we will demonstrate a couple)
 
 ## 1. *Scrape* the Variables
 
-The [`scrapeVarCross`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html) from dySEM is the appropriate function to scrape the variable information needed for automating the scripting of latent dyadic models of cross-sectional data. In this instance, we are only scraping information about indicators about one (pair of) dyadic latent variable(s): men and women's latent relationship satisfaction.
+The [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html) from `dySEM` is the appropriate function to scrape the variable information needed for automating the scripting of latent dyadic models of cross-sectional data. In this instance, we are only scraping information about indicators about one (pair of) dyadic latent variable(s): men and women's latent relationship satisfaction.
 
-As described before, the *satisfaction* items follow a ["sip" pattern (Stem, Item, Partner)](https://jsakaluk.github.io/dySEM/articles/varnames.html) with a stem of "sat.g", followed immediately by a number for the item (i.e., no delimeter between these elements), followed by a delimiting "_", and then either the character "f" or "m to indicate to which partner the item refers.
+As described before, the *satisfaction* items follow a ["sip" pattern (Stem, Item, Partner)](https://jsakaluk.github.io/dySEM/articles/varnames.html) with a stem of "sat.g", followed immediately by a number for the item (i.e., no delimiter between these elements), followed by a delimiting "\_", and then either the character "f" or "m" to indicate to which partner the item refers.
 
-We therefore refer to our data frame ("`my_dat`") for the `dat` argument, and the pattern, stem, delimeters (if any), and distinguishing characters for the `x_order`, `x_stem`, `x_delim1`, `x_delim2`, `distinguish_1`, and `distinguish_2` arguments, respectively. In this instance, our stem is "sat.g"; there is no first delimeter, and an "_" for the second delimeter; and the distinguishing characters are "f" and "m".
+We therefore refer to our data frame ("`my_dat`") for the `dat` argument, and the pattern, stem, delimiters (if any), and distinguishing characters for the `x_order`, `x_stem`, `x_delim1`, `x_delim2`, `distinguish_1`, and `distinguish_2` arguments, respectively. In this instance, our stem is "sat.g"; there is no first delimiter, and an "\_" for the second delimiter; and the distinguishing characters are "f" and "m".
 
 We assign the output of this function (a list of variable names an information) to an object we are (arbitrarily) calling "sat_dvn"; *we often refer to this list as a* **"dyad variable names"** *list, or* **"dvn"** *for short*.
 
@@ -96,13 +96,13 @@ sat_dvn
 
 ```
 
-As can be seen, the information contained in the dvn is rather mundane: the indicator names for the "f" partners (e.g., "sat.g1_f"), the indicator names for the "m" partners (e.g., "sat.g5_m"), the number of indicators per partner (in this case, 5), the distinguishing characters ("f" and "m"), and the total number of indicators (10) in the entire set. Yet this information is all that is needed for dySEM to dramatically simplify the process of scripting dyadic SEM models, including dyadic invariance models.
+As can be seen, the information contained in the dvn is rather mundane: the indicator names for the "f" partners (e.g., "sat.g1_f"), the indicator names for the "m" partners (e.g., "sat.g5_m"), the number of indicators per partner (in this case, 5), the distinguishing characters ("f" and "m"), and the total number of indicators (10) in the entire set. Yet this information is all that is needed for `dySEM` to dramatically simplify the process of scripting dyadic SEM models, including dyadic invariance models.
 
 ## 2. *Script* the Model(s)
 
-Next, we will script the dyadic configural, loading, intercept, and residual invariance models. We will use the `scriptCor` function from dySEM to do this. This function requires the `dvn` object we created in the prior step, an arbitrary name for the latent variable for lavaan, and the `constr_dy_meas` and `constr_dy_struct` arguments to indicate which measurement (i.e., "meas") and structural (i.e., "struct") parameters we want to constraint (i.e., "constr") across dyad members (i.e., "dy"). The `scaleset` argument automatically defaults to the fixed-factor scale-setting and identification method, prefered for invariance testing . However, we encourage users who are just beginning to include this argument explicitly, so they (and others) can readily determine their model specification approach.
+Next, we will script the dyadic configural, loading, intercept, and residual invariance models. We will use the [`scriptCor()`](https://jsakaluk.github.io/dySEM/reference/scriptCor.html) function from `dySEM` to do this. This function requires the `dvn` object we created in the prior step, an arbitrary name for the latent variable for `lavaan`, and the `constr_dy_meas` and `constr_dy_struct` arguments to indicate which measurement (i.e., "meas") and structural (i.e., "struct") parameters we want to constraint (i.e., "constr") across dyad members (i.e., "dy"). The `scaleset` argument automatically defaults to the fixed-factor scale-setting and identification method, preferred for invariance testing . However, we encourage users who are just beginning to include this argument explicitly, so they (and others) can readily determine their model specification approach.
 
-Below, we script the sequence of four models to be fit and compared; we forego the use of the `writeTo` and `fileName` arguments, which are used to save the .txt of scripts to a file. Finally, we use an intuitive naming structure to keep track of which model script resides in which R object.
+Below, we script the sequence of four models to be fit and compared; we forego the use of the `writeTo` and `fileName` arguments, which are used to save the `.txt` of scripts to a file. Finally, we use an intuitive naming structure to keep track of which model script resides in which R object.
 
 ```{r, script, echo = TRUE}
 
@@ -116,23 +116,23 @@ sat.resid.script <- scriptCor(sat_dvn, lvname = "Sat", scaleset = "FF", constr_d
 
 ```
 
-In their stored form, these scripts are not particularly readable, but as we shall soon see, they are immediately passable to lavaan:
+In their stored form, these scripts are not particularly readable, but as we shall soon see, they are immediately passable to `lavaan`:
 
 ```{r, print script, echo = TRUE}
 
 sat.resid.script
 ```
 
-However, when exported (via the `writeTo` and `fileName` arguments) or concatenated, they can be presented in a much more readable format that mirrors what users expect from a manually written lavaan script:
+However, when exported (via the `writeTo` and `fileName` arguments) or concatenated, they can be presented in a much more readable format that mirrors what users expect from a manually written `lavaan` script:
 
 ```{r, print script (concatenated), echo = TRUE}
 
 cat(sat.resid.script)
 ```
 
-## 3. *Fit* the Model(s) 
+## 3. *Fit* the Model(s)
 
-All of these models can now be fit with whichever lavaan wrapper the user prefers, and with their chosen analytic options (e.g., estimator, missing data treatment, etc)
+All of these models can now be fit with whichever `lavaan` wrapper the user prefers, and with their chosen analytic options (e.g., estimator, missing data treatment, etc); our demonstration uses default specifications for `cfa()`:
 
 ```{r, fit, echo = TRUE}
 
@@ -157,7 +157,7 @@ anova(sat.config.mod, sat.load.mod, sat.int.mod, sat.resid.mod)
 
 ```
 
-Conversely, they could instead consider the use of `outputInvarCompTab()`, a function we have written to wrap some of the same comparative output in a more reproducible-reporting-friendly format:
+Conversely, they could instead consider the use of [`outputInvarCompTab()`](https://jsakaluk.github.io/dySEM/reference/outputInvarCompTab.html), a function we have written to wrap some of the same comparative output in a more reproducible-reporting-friendly format:
 
 ```{r, mod comp, echo = TRUE}
 
@@ -166,7 +166,7 @@ mods <- list(sat.config.mod, sat.load.mod, sat.int.mod, sat.resid.mod)
 outputInvarCompTab(mods)
 ```
 
-Without additional arguemntation, `outputInvarCompTab()` (and other outputters in `dySEM`) return data frames; these are the most flexible output types to supply to other tabling and/or visualization functionality. However, users looking for a more expedient way to "clean up" reporting from outputters can either make use of the `gtTab` argument; TRUE will return a basic gt table which can then be further modified using additional `gt` layers. This is a good option for reproducible reporting document formats (like .Rmd and .Qmd):
+Without additional argumentation, `outputInvarCompTab()` (and other outputters in `dySEM`) return data frames; these are the most flexible output types to supply to other tabling and/or visualization functionality. However, users looking for a more expedient way to "clean up" reporting from outputters can either make use of the `gtTab` argument; `TRUE` will return a basic `gt` table which can then be further modified using additional `gt` layers. This is a good option for reproducible reporting document formats (like .Rmd and .Qmd):
 
 ```{r, mod comp gt, echo = TRUE}
 
@@ -174,7 +174,7 @@ outputInvarCompTab(mods, gtTab = TRUE)
 
 ```
 
-Conversely, if users prefer to export the output to a file, they can set the additional `writeTo` argument to a directory path (a path of "." will write to the user's current working directory, like that associated with an .Rproj file), and the `fileName` argument to a desired base name for the output file. This will save the output as an .rtf file in that directory, which can then be opened in Microsoft Word or other word processing software:
+Conversely, if users prefer to export the output to a file, they can set the additional `writeTo` argument to a directory path (a path of "." will write to the user's current working directory, like that associated with an .Rproj file), and the `fileName` argument to a desired base name for the output file. This will save the output as an `.rtf` file in that directory, which can then be opened in Microsoft Word or other word processing software:
 
 ```{r mod comp write, include = TRUE, eval = FALSE}
 
@@ -194,7 +194,7 @@ p <- round(comp$pr_chisq, 2)
 
 Were one strictly to follow only the likelihood ratio test statistic as a guide, they might feel comfortable claiming they have reasonable support for most forms of dyadic invariance, with the exception of significant residual noninvariances, $\chi^2$ (`r comp$df_diff[4]`) = `r chisq_diff[4]`, *p* = `r p[4]`.
 
-Users can then request that *dySEM* provide them with reproducible output via either the `outputParamTab()` (for tabular output) or the `outputParamFig()` (for a path diagram, back-ended by *semPlot*). For example, if one wanted a table of measurement model output from the dyadic intercept invariance model they could use:
+Users can then request that `dySEM` provide them with reproducible output via either the [`outputParamTab()`](https://jsakaluk.github.io/dySEM/reference/outputParamTab.html) (for tabular output) or the [`outputParamFig()`](https://jsakaluk.github.io/dySEM/reference/outputParamFig.html) (for a path diagram, back-ended by `semPlot`). For example, if one wanted a table of measurement model output from the dyadic intercept invariance model they could use:
 
 ```{r, outputTable, echo = TRUE}
 
@@ -203,16 +203,15 @@ outputParamTab(sat_dvn, model = "cfa", fit = sat.int.mod,
   gt()
 ```
 
-The `model` and `tabletype` arguments are the main providers of optionality to be aware of, as outputParamTab is also used to provide tabular output from other model types (e.g., APIMs), and users may be most interested in the output from one portion of the model (e.g., the measurement model) versus another (e.g., the structural model).
+The `model` and `tabletype` arguments are the main providers of optionality to be aware of, as `outputParamTab()` is also used to provide tabular output from other model types (e.g., APIMs), and users may be most interested in the output from one portion of the model (e.g., the measurement model) versus another (e.g., the structural model).
 
-Path diagrams, meanwhile, are created with the `outputParamFig()` function, which is used in a similar manner to `outputParamTab()` (and includes the same `writeTo` and `fileName` arguments if you wish to export a .png). Otherwise, the primary argument to be aware of is `figtype`, which allows users to specify what kind of parameter estimates they wish to be depicted in the path diagram.
+Path diagrams, meanwhile, are created with the `outputParamFig()` function, which is used in a similar manner to `outputParamTab()` (and includes the same `writeTo` and `fileName` arguments if you wish to export a `.png`). Otherwise, the primary argument to be aware of is `figtype`, which allows users to specify what kind of parameter estimates they wish to be depicted in the path diagram.
 
 ```{r, outputFigure, echo = TRUE}
 
 outputParamFig(fit = sat.int.mod, figtype = "standardized")
 
 ```
-
 
 ```{r, latent_corr, include = FALSE}
 
@@ -225,13 +224,13 @@ params <- params |>
 
 ```
 
-Thus, in little more than a dozen lines of code, researchers can script, fit, compare, and output a series of dyadic invariance comparisons using the Correlated Dyadic Factors Model. From this, researchers would learn that the satisfaction measure demonstrates reasonable configural, loading, and intercept invariance between partners, and that the latent ICC between partner's satisfaction levels is `r params$std.all`, z = `r params$z`, p `r if(params$p < .001){paste("<.001")}` (95% CI: `r params$ci.lower`, `r params$ci.upper`).
+Thus, in little more than a dozen lines of code, researchers can script, fit, compare, and output a series of dyadic invariance comparisons using the Correlated Dyadic Factors Model. From this, researchers would learn that the satisfaction measure demonstrates reasonable configural, loading, and intercept invariance between partners, and that the latent ICC between partner's satisfaction levels is `r params$std.all`, *z* = `r params$z`, *p* `r if(params$p < .001){paste("<.001")}` (95% CI: `r params$ci.lower`, `r params$ci.upper`).
 
 ## 5. Consider *Optional* Indexes and Output
 
-A remaining question would be: if our chosen model fails to demonstrate residual invariance, which indicator(s) are responsible for introducing the noninvariance? The `outputConstraintTab()` function from dySEM, while not strictly necessary, offers supplemental functionality to help answer this question.
+A remaining question would be: if our chosen model fails to demonstrate residual invariance, which indicator(s) are responsible for introducing the noninvariance? The [`outputConstraintTab()`](https://jsakaluk.github.io/dySEM/reference/outputConstraintTab.html) function from `dySEM`, while not strictly necessary, offers supplemental functionality to help answer this question.
 
-Users simply enter the lavaan model responsible for the statistically significant degradation of model fit, and are provided with a table of each dyadic invariance constraint, by indicator, and its Langrange multiplier test statistic and corresponding test:
+Users simply enter the `lavaan` model responsible for the statistically significant degradation of model fit, and are provided with a table of each dyadic invariance constraint, by indicator, and its Lagrange multiplier test statistic and corresponding test:
 
 ```{r, outputConstraintTab, echo = TRUE}
 
@@ -240,4 +239,4 @@ outputConstraintTab(sat.resid.mod) |>
 
 ```
 
-In this particular instance, significant noninvariance was only introduced by forcing the constraint on the residual variances for the 1st and 5th items
+In this particular instance, significant noninvariance was only introduced by forcing the constraint on the residual variances for the 1st and 5th items.
