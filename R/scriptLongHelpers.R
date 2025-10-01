@@ -8,7 +8,7 @@
 #' @param lvar input character for whether scripting helpers target latent "X" or "Y" indicator variables in dvn
 #' @param lvname input character to (arbitrarily) name LV in lavaan syntax
 #' @param partner input character to indicate parameters for first or second dyad member
-#' @param type input character to indicate whether parameters "fixed", "free", "equated_dy", "equated_long", or "equated_dy_long" in estimation
+#' @param type input character to indicate whether parameters "fixed", "free", "equated_dy", "equated_long", "equated_dy_long", "equated_dy_mv", "equated_long_mv", or "equated_dy_long_mv" in estimation
 #' @family helpers
 
 #' @noRd
@@ -19,8 +19,8 @@ longLoads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     }
 
     # Check for valid type input
-    if (!type %in% c("free", "fixed", "equated_dy", "equated_long", "equated_dy_long")) {
-        stop("Invalid type argument. Use 'free', 'fixed', 'equated_dy', 'equated_long', or 'equated_dy_long'.")
+    if (!type %in% c("free", "fixed", "equated_dy", "equated_long", "equated_dy_long", "equated_dy_mv", "equated_long_mv", "equated_dy_long_mv")) {
+        stop("Invalid type argument. Use 'free', 'fixed', 'equated_dy', 'equated_long', 'equated_dy_long', 'equated_dy_mv', 'equated_long_mv', or 'equated_dy_long_mv'.")
     }
 
     # Get the relevant variable names and number of waves
@@ -159,6 +159,131 @@ longLoads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
             )
             lavaan_statements <- c(lavaan_statements, loading_statement)
         }
+    } else if (type == "equated_dy_mv") {
+        # Equated across dyad members with marker variable - first indicator fixed to 1 with label
+        # Total labels needed: xindnum/2 (since same labels used for both partners)
+        total_labels <- dvn$xindnum / 2
+        labels <- paste0("l", tolower(lvar), 1:total_labels)
+
+        label_index <- 1
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvname, wave, dist)
+            indicators <- xvarnames[[wave]]
+
+            # Create loading statement with first indicator fixed to 1 and labeled
+            labeled_indicators <- c()
+            for (i in seq_along(indicators)) {
+                if (i == 1) {
+                    # First indicator: fixed to 1 with label
+                    if (label_index <= length(labels)) {
+                        labeled_indicators[i] <- paste0("1*", indicators[i], " + ", labels[label_index], "*", indicators[i])
+                        label_index <- label_index + 1
+                    } else {
+                        labeled_indicators[i] <- paste0("1*", indicators[i])
+                    }
+                } else {
+                    # Other indicators: just labeled
+                    if (label_index <= length(labels)) {
+                        labeled_indicators[i] <- paste0(labels[label_index], "*", indicators[i])
+                        label_index <- label_index + 1
+                    } else {
+                        labeled_indicators[i] <- indicators[i]
+                    }
+                }
+            }
+
+            loading_statement <- paste0(
+                latent_var_name, " =~ ",
+                paste(labeled_indicators, collapse = " + ")
+            )
+            lavaan_statements <- c(lavaan_statements, loading_statement)
+        }
+    } else if (type == "equated_long_mv") {
+        # Equated across time with marker variable - first indicator fixed to 1 with label
+        # Labels per partner: p1xindnum/p1waves (or p2xindnum/p2waves)
+        if (partner == "1") {
+            labels_per_partner <- dvn$p1xindnum / dvn$p1waves
+        } else {
+            labels_per_partner <- dvn$p2xindnum / dvn$p2waves
+        }
+
+        # Generate labels for this partner
+        if (partner == "1") {
+            label_start <- 1
+            label_end <- labels_per_partner
+        } else {
+            label_start <- labels_per_partner + 1
+            label_end <- labels_per_partner * 2
+        }
+
+        labels <- paste0("l", tolower(lvar), label_start:label_end)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvname, wave, dist)
+            indicators <- xvarnames[[wave]]
+
+            # Create loading statement with first indicator fixed to 1 and labeled
+            labeled_indicators <- c()
+            for (i in seq_along(indicators)) {
+                if (i == 1) {
+                    # First indicator: fixed to 1 with label
+                    if (i <= length(labels)) {
+                        labeled_indicators[i] <- paste0("1*", indicators[i], " + ", labels[i], "*", indicators[i])
+                    } else {
+                        labeled_indicators[i] <- paste0("1*", indicators[i])
+                    }
+                } else {
+                    # Other indicators: just labeled
+                    if (i <= length(labels)) {
+                        labeled_indicators[i] <- paste0(labels[i], "*", indicators[i])
+                    } else {
+                        labeled_indicators[i] <- indicators[i]
+                    }
+                }
+            }
+
+            loading_statement <- paste0(
+                latent_var_name, " =~ ",
+                paste(labeled_indicators, collapse = " + ")
+            )
+            lavaan_statements <- c(lavaan_statements, loading_statement)
+        }
+    } else if (type == "equated_dy_long_mv") {
+        # Equated across both dyad and time with marker variable - first indicator fixed to 1 with label
+        # Labels needed: xindperwave (same labels for both partners and all time points)
+        labels_needed <- dvn$xindperwave
+        labels <- paste0("l", tolower(lvar), 1:labels_needed)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvname, wave, dist)
+            indicators <- xvarnames[[wave]]
+
+            # Create loading statement with first indicator fixed to 1 and labeled
+            labeled_indicators <- c()
+            for (i in seq_along(indicators)) {
+                if (i == 1) {
+                    # First indicator: fixed to 1 with label
+                    if (i <= length(labels)) {
+                        labeled_indicators[i] <- paste0("1*", indicators[i], " + ", labels[i], "*", indicators[i])
+                    } else {
+                        labeled_indicators[i] <- paste0("1*", indicators[i])
+                    }
+                } else {
+                    # Other indicators: just labeled
+                    if (i <= length(labels)) {
+                        labeled_indicators[i] <- paste0(labels[i], "*", indicators[i])
+                    } else {
+                        labeled_indicators[i] <- indicators[i]
+                    }
+                }
+            }
+
+            loading_statement <- paste0(
+                latent_var_name, " =~ ",
+                paste(labeled_indicators, collapse = " + ")
+            )
+            lavaan_statements <- c(lavaan_statements, loading_statement)
+        }
     }
 
     # Return the lavaan statements as character output
@@ -174,8 +299,8 @@ longIntercepts <- function(dvn, lvar = "X", partner = "1", type = "free") {
     }
 
     # Check for valid type input
-    if (!type %in% c("free", "fixed", "equated_dy", "equated_long", "equated_dy_long")) {
-        stop("Invalid type argument. Use 'free', 'fixed', 'equated_dy', 'equated_long', or 'equated_dy_long'.")
+    if (!type %in% c("free", "fixed", "equated_dy", "equated_long", "equated_dy_long", "equated_dy_mv", "equated_long_mv", "equated_dy_long_mv")) {
+        stop("Invalid type argument. Use 'free', 'fixed', 'equated_dy', 'equated_long', 'equated_dy_long', 'equated_dy_mv', 'equated_long_mv', or 'equated_dy_long_mv'.")
     }
 
     # Get the relevant variable names and number of waves
@@ -281,6 +406,104 @@ longIntercepts <- function(dvn, lvar = "X", partner = "1", type = "free") {
                     intercept_statement <- paste0(indicators[i], " ~ ", labels[i], "*1")
                 } else {
                     intercept_statement <- paste0(indicators[i], " ~ 1")
+                }
+                lavaan_statements <- c(lavaan_statements, intercept_statement)
+            }
+        }
+    } else if (type == "equated_dy_mv") {
+        # Equated across dyad members with marker variable - first indicator fixed to 0 with label
+        # Total labels needed: xindnum/2 (since same labels used for both partners)
+        total_labels <- dvn$xindnum / 2
+        labels <- paste0("t", tolower(lvar), 1:total_labels)
+
+        label_index <- 1
+        for (wave in 1:waves) {
+            indicators <- xvarnames[[wave]]
+            for (i in seq_along(indicators)) {
+                if (i == 1) {
+                    # First indicator: fixed to 0 with label
+                    if (label_index <= length(labels)) {
+                        intercept_statement <- paste0(indicators[i], " ~ 0*1 + ", labels[label_index], "*1")
+                        label_index <- label_index + 1
+                    } else {
+                        intercept_statement <- paste0(indicators[i], " ~ 0*1")
+                    }
+                } else {
+                    # Other indicators: just labeled
+                    if (label_index <= length(labels)) {
+                        intercept_statement <- paste0(indicators[i], " ~ ", labels[label_index], "*1")
+                        label_index <- label_index + 1
+                    } else {
+                        intercept_statement <- paste0(indicators[i], " ~ 1")
+                    }
+                }
+                lavaan_statements <- c(lavaan_statements, intercept_statement)
+            }
+        }
+    } else if (type == "equated_long_mv") {
+        # Equated across time with marker variable - first indicator fixed to 0 with label
+        # Labels per partner: p1xindnum/p1waves (or p2xindnum/p2waves)
+        if (partner == "1") {
+            labels_per_partner <- dvn$p1xindnum / dvn$p1waves
+        } else {
+            labels_per_partner <- dvn$p2xindnum / dvn$p2waves
+        }
+
+        # Generate labels for this partner
+        if (partner == "1") {
+            label_start <- 1
+            label_end <- labels_per_partner
+        } else {
+            label_start <- labels_per_partner + 1
+            label_end <- labels_per_partner * 2
+        }
+
+        labels <- paste0("t", tolower(lvar), label_start:label_end)
+
+        for (wave in 1:waves) {
+            indicators <- xvarnames[[wave]]
+            for (i in seq_along(indicators)) {
+                if (i == 1) {
+                    # First indicator: fixed to 0 with label
+                    if (i <= length(labels)) {
+                        intercept_statement <- paste0(indicators[i], " ~ 0*1 + ", labels[i], "*1")
+                    } else {
+                        intercept_statement <- paste0(indicators[i], " ~ 0*1")
+                    }
+                } else {
+                    # Other indicators: just labeled
+                    if (i <= length(labels)) {
+                        intercept_statement <- paste0(indicators[i], " ~ ", labels[i], "*1")
+                    } else {
+                        intercept_statement <- paste0(indicators[i], " ~ 1")
+                    }
+                }
+                lavaan_statements <- c(lavaan_statements, intercept_statement)
+            }
+        }
+    } else if (type == "equated_dy_long_mv") {
+        # Equated across both dyad and time with marker variable - first indicator fixed to 0 with label
+        # Labels needed: xindperwave (same labels for both partners and all time points)
+        labels_needed <- dvn$xindperwave
+        labels <- paste0("t", tolower(lvar), 1:labels_needed)
+
+        for (wave in 1:waves) {
+            indicators <- xvarnames[[wave]]
+            for (i in seq_along(indicators)) {
+                if (i == 1) {
+                    # First indicator: fixed to 0 with label
+                    if (i <= length(labels)) {
+                        intercept_statement <- paste0(indicators[i], " ~ 0*1 + ", labels[i], "*1")
+                    } else {
+                        intercept_statement <- paste0(indicators[i], " ~ 0*1")
+                    }
+                } else {
+                    # Other indicators: just labeled
+                    if (i <= length(labels)) {
+                        intercept_statement <- paste0(indicators[i], " ~ ", labels[i], "*1")
+                    } else {
+                        intercept_statement <- paste0(indicators[i], " ~ 1")
+                    }
                 }
                 lavaan_statements <- c(lavaan_statements, intercept_statement)
             }
@@ -536,12 +759,7 @@ longCoresidsTime <- function(dvn, lvar = "X", type = "free") {
             }
 
             # For each variable, create covariances across time
-            for (var_index in 1:length(xvarnames[[1]])) {
-                # Get the variable name pattern (e.g., "X1", "X2", etc.)
-                var_name <- xvarnames[[1]][var_index]
-                # Extract the base variable name (remove partner and time suffix)
-                base_var <- gsub("\\.[AB]\\.[0-9]+$", "", var_name)
-
+            for (var_index in seq_along(xvarnames[[1]])) {
                 # Create covariances for this variable across time
                 for (wave1 in 1:(waves - 1)) {
                     for (wave2 in (wave1 + 1):waves) {
@@ -565,12 +783,7 @@ longCoresidsTime <- function(dvn, lvar = "X", type = "free") {
             }
 
             # For each variable, create zero covariances across time
-            for (var_index in 1:length(xvarnames[[1]])) {
-                # Get the variable name pattern (e.g., "X1", "X2", etc.)
-                var_name <- xvarnames[[1]][var_index]
-                # Extract the base variable name (remove partner and time suffix)
-                base_var <- gsub("\\.[AB]\\.[0-9]+$", "", var_name)
-
+            for (var_index in seq_along(xvarnames[[1]])) {
                 # Create zero covariances for this variable across time
                 for (wave1 in 1:(waves - 1)) {
                     for (wave2 in (wave1 + 1):waves) {
@@ -605,7 +818,7 @@ longCoresidsTime <- function(dvn, lvar = "X", type = "free") {
             }
 
             # For each variable, create labeled covariances across time
-            for (var_index in 1:length(xvarnames[[1]])) {
+            for (var_index in seq_along(xvarnames[[1]])) {
                 # Create covariances for this variable across time
                 for (wave1 in 1:(waves - 1)) {
                     for (wave2 in (wave1 + 1):waves) {
@@ -643,8 +856,8 @@ longLvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     }
 
     # Check for valid type input
-    if (!type %in% c("free", "fixed")) {
-        stop("Invalid type argument. Use 'free' or 'fixed'.")
+    if (!type %in% c("free", "fixed", "equated_dy", "equated_long", "equated_dy_long", "equated_dy_ff", "equated_long_ff", "equated_dy_long_ff")) {
+        stop("Invalid type argument. Use 'free', 'fixed', 'equated_dy', 'equated_long', 'equated_dy_long', 'equated_dy_ff', 'equated_long_ff', or 'equated_dy_long_ff'.")
     }
 
     # Get the relevant variable names and number of waves
@@ -679,6 +892,108 @@ longLvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
         for (wave in 1:waves) {
             latent_var_name <- paste0(lvname, wave, dist)
             variance_statement <- paste0(latent_var_name, " ~~ 1*", latent_var_name)
+            lavaan_statements <- c(lavaan_statements, variance_statement)
+        }
+    } else if (type == "equated_dy") {
+        # Equated across dyad members - same labels for both partners
+        # Total labels needed: waves (since same labels used for both partners)
+        labels <- paste0("psi", tolower(lvar), 1:waves)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvname, wave, dist)
+            if (wave <= length(labels)) {
+                variance_statement <- paste0(latent_var_name, " ~~ ", labels[wave], "*", latent_var_name)
+            } else {
+                variance_statement <- paste0(latent_var_name, " ~~ NA*", latent_var_name)
+            }
+            lavaan_statements <- c(lavaan_statements, variance_statement)
+        }
+    } else if (type == "equated_long") {
+        # Equated across time - same labels across time for each partner
+        # Labels per partner: waves (same labels for all time points within partner)
+        if (partner == "1") {
+            label_start <- 1
+            label_end <- waves
+        } else {
+            label_start <- waves + 1
+            label_end <- waves * 2
+        }
+
+        labels <- paste0("psi", tolower(lvar), label_start:label_end)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvname, wave, dist)
+            if (wave <= length(labels)) {
+                variance_statement <- paste0(latent_var_name, " ~~ ", labels[wave], "*", latent_var_name)
+            } else {
+                variance_statement <- paste0(latent_var_name, " ~~ NA*", latent_var_name)
+            }
+            lavaan_statements <- c(lavaan_statements, variance_statement)
+        }
+    } else if (type == "equated_dy_long") {
+        # Equated across both dyad and time - same labels for everything
+        # Labels needed: 1 (same label for both partners and all time points)
+        labels <- paste0("psi", tolower(lvar), 1)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvname, wave, dist)
+            variance_statement <- paste0(latent_var_name, " ~~ ", labels[1], "*", latent_var_name)
+            lavaan_statements <- c(lavaan_statements, variance_statement)
+        }
+    } else if (type == "equated_dy_ff") {
+        # Equated across dyad members with fixed-factor - first latent variance fixed to 1 with label
+        # Total labels needed: waves (since same labels used for both partners)
+        labels <- paste0("psi", tolower(lvar), 1:waves)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvname, wave, dist)
+            if (wave == 1) {
+                # First latent variance: fixed to 1 (no label)
+                variance_statement <- paste0(latent_var_name, " ~~ 1*", latent_var_name)
+            } else {
+                # Other latent variances: NA* (freely estimated)
+                variance_statement <- paste0(latent_var_name, " ~~ NA*", latent_var_name)
+            }
+            lavaan_statements <- c(lavaan_statements, variance_statement)
+        }
+    } else if (type == "equated_long_ff") {
+        # Equated across time with fixed-factor - first latent variance fixed to 1 with label
+        # Labels per partner: waves (same labels for all time points within partner)
+        if (partner == "1") {
+            label_start <- 1
+            label_end <- waves
+        } else {
+            label_start <- waves + 1
+            label_end <- waves * 2
+        }
+
+        labels <- paste0("psi", tolower(lvar), label_start:label_end)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvname, wave, dist)
+            if (wave == 1) {
+                # First latent variance: fixed to 1 (no label)
+                variance_statement <- paste0(latent_var_name, " ~~ 1*", latent_var_name)
+            } else {
+                # Other latent variances: NA* (freely estimated)
+                variance_statement <- paste0(latent_var_name, " ~~ NA*", latent_var_name)
+            }
+            lavaan_statements <- c(lavaan_statements, variance_statement)
+        }
+    } else if (type == "equated_dy_long_ff") {
+        # Equated across both dyad and time with fixed-factor - first latent variance fixed to 1 with label
+        # Labels needed: 1 (same label for both partners and all time points)
+        labels <- paste0("psi", tolower(lvar), 1)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvname, wave, dist)
+            if (wave == 1) {
+                # First latent variance: fixed to 1 with label
+                variance_statement <- paste0(latent_var_name, " ~~ 1*", latent_var_name, " + ", labels[1], "*", latent_var_name)
+            } else {
+                # Other latent variances: just labeled
+                variance_statement <- paste0(latent_var_name, " ~~ ", labels[1], "*", latent_var_name)
+            }
             lavaan_statements <- c(lavaan_statements, variance_statement)
         }
     }
@@ -833,17 +1148,24 @@ longLcovarsInterind <- function(dvn, type = "free") {
 #' @rdname scriptLongHelpers
 #' @noRd
 longLmeans <- function(dvn, lvar = "X", partner = "1", type = "free") {
+    # Check for valid partner input
+    if (!partner %in% c("1", "2")) {
+        stop("Invalid partner argument. Use '1' or '2'.")
+    }
+
     # Check for valid type input
-    if (!type %in% c("free", "fixed")) {
-        stop("Invalid type argument. Use 'free' or 'fixed'.")
+    if (!type %in% c("free", "fixed", "equated_dy", "equated_long", "equated_dy_long", "equated_dy_ff", "equated_long_ff", "equated_dy_long_ff")) {
+        stop("Invalid type argument. Use 'free', 'fixed', 'equated_dy', 'equated_long', 'equated_dy_long', 'equated_dy_ff', 'equated_long_ff', or 'equated_dy_long_ff'.")
     }
 
     # Get the relevant variable names and number of waves
     if (partner == "1") {
         xvarnames <- dvn$p1xvarnames
+        waves <- dvn$p1waves
         dist <- dvn$dist1
-    } else {
+    } else if (partner == "2") {
         xvarnames <- dvn$p2xvarnames
+        waves <- dvn$p2waves
         dist <- dvn$dist2
     }
 
@@ -855,17 +1177,131 @@ longLmeans <- function(dvn, lvar = "X", partner = "1", type = "free") {
     # Initialize an empty character vector for output
     lavaan_statements <- c()
 
-    # Generate latent mean statements for each time point
-    for (wave in 1:length(xvarnames)) {
-        latent_var_name <- paste0(lvar, wave, dist)
-
-        if (type == "free") {
+    # Generate latent mean statements based on type
+    if (type == "free") {
+        # Free latent means - all latent variables get free means
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvar, wave, dist)
             mean_statement <- paste0(latent_var_name, " ~ NA*1")
-        } else if (type == "fixed") {
+            lavaan_statements <- c(lavaan_statements, mean_statement)
+        }
+    } else if (type == "fixed") {
+        # Fixed latent means - all latent variables fixed to 0
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvar, wave, dist)
             mean_statement <- paste0(latent_var_name, " ~ 0*1")
+            lavaan_statements <- c(lavaan_statements, mean_statement)
+        }
+    } else if (type == "equated_dy") {
+        # Equated across dyad members - same labels for both partners
+        # Total labels needed: waves (since same labels used for both partners)
+        labels <- paste0("alpha", tolower(lvar), 1:waves)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvar, wave, dist)
+            if (wave <= length(labels)) {
+                mean_statement <- paste0(latent_var_name, " ~ ", labels[wave], "*1")
+            } else {
+                mean_statement <- paste0(latent_var_name, " ~ NA*1")
+            }
+            lavaan_statements <- c(lavaan_statements, mean_statement)
+        }
+    } else if (type == "equated_long") {
+        # Equated across time - same labels across time for each partner
+        # Labels per partner: waves (same labels for all time points within partner)
+        if (partner == "1") {
+            label_start <- 1
+            label_end <- waves
+        } else {
+            label_start <- waves + 1
+            label_end <- waves * 2
         }
 
-        lavaan_statements <- c(lavaan_statements, mean_statement)
+        labels <- paste0("alpha", tolower(lvar), label_start:label_end)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvar, wave, dist)
+            if (wave <= length(labels)) {
+                mean_statement <- paste0(latent_var_name, " ~ ", labels[wave], "*1")
+            } else {
+                mean_statement <- paste0(latent_var_name, " ~ NA*1")
+            }
+            lavaan_statements <- c(lavaan_statements, mean_statement)
+        }
+    } else if (type == "equated_dy_long") {
+        # Equated across both dyad and time - same labels for everything
+        # Labels needed: 1 (same label for both partners and all time points)
+        labels <- paste0("alpha", tolower(lvar), 1)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvar, wave, dist)
+            mean_statement <- paste0(latent_var_name, " ~ ", labels[1], "*1")
+            lavaan_statements <- c(lavaan_statements, mean_statement)
+        }
+    } else if (type == "equated_dy_ff") {
+        # Equated across dyad members with fixed-factor - first latent mean fixed to 0 with label
+        # Total labels needed: waves (since same labels used for both partners)
+        labels <- paste0("alpha", tolower(lvar), 1:waves)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvar, wave, dist)
+            if (wave == 1) {
+                # First latent mean: fixed to 0 with label
+                if (wave <= length(labels)) {
+                    mean_statement <- paste0(latent_var_name, " ~ 0*1 + ", labels[wave], "*1")
+                } else {
+                    mean_statement <- paste0(latent_var_name, " ~ 0*1")
+                }
+            } else {
+                # Other latent means: just labeled
+                if (wave <= length(labels)) {
+                    mean_statement <- paste0(latent_var_name, " ~ ", labels[wave], "*1")
+                } else {
+                    mean_statement <- paste0(latent_var_name, " ~ NA*1")
+                }
+            }
+            lavaan_statements <- c(lavaan_statements, mean_statement)
+        }
+    } else if (type == "equated_long_ff") {
+        # Equated across time with fixed-factor - first latent mean fixed to 0 with label
+        # Labels per partner: waves (same labels for all time points within partner)
+        if (partner == "1") {
+            label_start <- 1
+            label_end <- waves
+        } else {
+            label_start <- waves + 1
+            label_end <- waves * 2
+        }
+
+        labels <- paste0("alpha", tolower(lvar), label_start:label_end)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvar, wave, dist)
+            if (wave == 1) {
+                # First latent mean: fixed to 0 (no label)
+                mean_statement <- paste0(latent_var_name, " ~ 0*1")
+            } else {
+                # Other latent means: NA*1 (freely estimated)
+                mean_statement <- paste0(latent_var_name, " ~ NA*1")
+            }
+            lavaan_statements <- c(lavaan_statements, mean_statement)
+        }
+    } else if (type == "equated_dy_long_ff") {
+        # Equated across both dyad and time with fixed-factor - first latent mean fixed to 0 with label
+        # Labels needed: 1 (same label for both partners and all time points)
+        labels <- paste0("alpha", tolower(lvar), 1)
+
+        for (wave in 1:waves) {
+            latent_var_name <- paste0(lvar, wave, dist)
+            if (wave == 1) {
+                # First latent mean: fixed to 0 with label
+                mean_statement <- paste0(latent_var_name, " ~ 0*1 + ", labels[1], "*1")
+            } else {
+                # Other latent means: just labeled
+                mean_statement <- paste0(latent_var_name, " ~ ", labels[1], "*1")
+            }
+            lavaan_statements <- c(lavaan_statements, mean_statement)
+        }
     }
 
     # Return the lavaan statements as character output
