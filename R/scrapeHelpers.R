@@ -14,51 +14,51 @@
 #' @family helpers
 
 #' @noRd
-sipExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
-  stem_delim <-stringr::str_c(stem, delim1)
+sipExtractor <- function(dat, stem, delim1, item_num, delim2, distinguish) {
+  stem_delim <- stringr::str_c(stem, delim1)
   delim_distinguish <- stringr::str_c(delim2, distinguish)
 
-  vars <- stringr::str_extract(names(dat), stringr::str_c(stem_delim, item_num, delim_distinguish))
+  vars <- stringr::str_extract(names(dat), stringr::str_c("^", stem_delim, item_num, delim_distinguish))
   vars <- vars[!is.na(vars)]
   return(vars)
 }
 
 #' @rdname scrapeHelpers
 #' @noRd
-spiExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
-  stem_delim <-stringr::str_c(stem, delim1, distinguish)
-  vars <- stringr::str_extract(names(dat), stringr::str_c(stem_delim, delim2, item_num))
+spiExtractor <- function(dat, stem, delim1, item_num, delim2, distinguish) {
+  stem_delim <- stringr::str_c(stem, delim1, distinguish)
+  vars <- stringr::str_extract(names(dat), stringr::str_c("^", stem_delim, delim2, item_num))
   vars <- vars[!is.na(vars)]
   return(vars)
 }
 
 #' @rdname scrapeHelpers
 #' @noRd
-psiExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish){
-  stem_delim <-stringr::str_c(distinguish, delim1, stem)
-  vars <- stringr::str_extract(names(dat), stringr::str_c(stem_delim, delim2, item_num))
+psiExtractor <- function(dat, stem, delim1, item_num, delim2, distinguish) {
+  stem_delim <- stringr::str_c(distinguish, delim1, stem)
+  vars <- stringr::str_extract(names(dat), stringr::str_c("^", stem_delim, delim2, item_num))
   vars <- vars[!is.na(vars)]
   return(vars)
 }
 
 #' @rdname scrapeHelpers
 #' @noRd
-spitExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish, delim3, wave){
-  stem_delim_distinguish <-stringr::str_c(stem, delim1, distinguish)
+spitExtractor <- function(dat, stem, delim1, item_num, delim2, distinguish, delim3, wave) {
+  stem_delim_distinguish <- stringr::str_c(stem, delim1, distinguish)
 
-  vars <- stringr::str_extract(names(dat), stringr::str_c(stem_delim_distinguish, delim2, item_num, delim3, wave))
+  vars <- stringr::str_extract(names(dat), stringr::str_c("^", stem_delim_distinguish, delim2, item_num, delim3, wave))
   vars <- vars[!is.na(vars)]
   return(vars)
 }
 
 #' @rdname scrapeHelpers
 #' @noRd
-siptExtractor <- function(dat, stem, delim1, item_num,delim2, distinguish, delim3, wave){
-  stem_delim <-stringr::str_c(stem, delim1)
+siptExtractor <- function(dat, stem, delim1, item_num, delim2, distinguish, delim3, wave) {
+  stem_delim <- stringr::str_c(stem, delim1)
   delim_distinguish <- stringr::str_c(delim2, distinguish)
   delim_wave <- stringr::str_c(delim3, wave)
 
-  vars <- stringr::str_extract(names(dat), stringr::str_c(stem_delim, item_num, delim_distinguish, delim_wave))
+  vars <- stringr::str_extract(names(dat), stringr::str_c("^", stem_delim, item_num, delim_distinguish, delim_wave))
   vars <- vars[!is.na(vars)]
   return(vars)
 }
