@@ -1307,3 +1307,23 @@ longLmeans <- function(dvn, lvar = "X", partner = "1", type = "free") {
     # Return the lavaan statements as character output
     return(lavaan_statements)
 }
+
+# Helper function for CLI messages in scrapeVarLong
+print_scrape_long <- function(varlist, x_stem = NULL, y_stem = NULL, distinguish_1 = "1", distinguish_2 = "2") {
+    cli::cli_h2("Longitudinal Variable Scraping Summary")
+
+    if (!is.null(y_stem)) {
+        # Both X and Y variables
+        cli::cli_alert_success("Successfully scraped 2 latent variables across {varlist$p1xwaves} waves: {x_stem} and {y_stem}")
+        cli::cli_alert_info("{.strong {x_stem}}: {varlist$xindperwave} indicators per wave for P1 ({distinguish_1}), {varlist$xindperwave} indicators per wave for P2 ({distinguish_2})")
+        cli::cli_alert_info("{.strong {y_stem}}: {varlist$yindperwave} indicators per wave for P1 ({distinguish_1}), {varlist$yindperwave} indicators per wave for P2 ({distinguish_2})")
+        cli::cli_alert_info("Total indicators across all waves: {varlist$indnum}")
+        cli::cli_alert_info("Waves: {varlist$p1xwaves} for X variables, {varlist$p1ywaves} for Y variables")
+    } else {
+        # Only X variables
+        cli::cli_alert_success("Successfully scraped 1 latent variable across {varlist$p1waves} waves: {x_stem}")
+        cli::cli_alert_info("{.strong {x_stem}}: {varlist$xindperwave} indicators per wave for P1 ({distinguish_1}), {varlist$xindperwave} indicators per wave for P2 ({distinguish_2})")
+        cli::cli_alert_info("Total indicators across all waves: {varlist$xindnum}")
+        cli::cli_alert_info("Waves: {varlist$p1waves}")
+    }
+}
