@@ -62,3 +62,32 @@ siptExtractor <- function(dat, stem, delim1, item_num, delim2, distinguish, deli
   vars <- vars[!is.na(vars)]
   return(vars)
 }
+
+# Helper function for CLI messages in scrapeVarCross
+print_scrape_cross <- function(varlist, var_list = NULL, x_stem = NULL, y_stem = NULL, distinguish_1 = "1", distinguish_2 = "2") {
+  if (!is.null(var_list)) {
+    # Multi-LV summary
+    cli::cli_h2("Variable Scraping Summary")
+    cli::cli_alert_success("Successfully scraped {length(var_list$lvnames)} latent variable{?s}")
+    for (i in 1:length(var_list$lvnames)) {
+      lv_name <- var_list$lvnames[i]
+      p1_count <- length(varlist$p1xvarnames[[lv_name]])
+      p2_count <- length(varlist$p2xvarnames[[lv_name]])
+      cli::cli_alert_info("{.strong {lv_name}}: {p1_count} indicators for P1 ({distinguish_1}), {p2_count} indicators for P2 ({distinguish_2})")
+    }
+    cli::cli_alert_info("Total indicators: {varlist$indnum}")
+  } else {
+    # Single LV summary
+    cli::cli_h2("Variable Scraping Summary")
+    if (!is.null(y_stem)) {
+      cli::cli_alert_success("Successfully scraped 2 latent variables: {x_stem} and {y_stem}")
+      cli::cli_alert_info("{.strong {x_stem}}: {varlist$xindper} indicators for P1 ({distinguish_1}), {varlist$xindper} indicators for P2 ({distinguish_2})")
+      cli::cli_alert_info("{.strong {y_stem}}: {varlist$yindper} indicators for P1 ({distinguish_1}), {varlist$yindper} indicators for P2 ({distinguish_2})")
+      cli::cli_alert_info("Total indicators: {varlist$indnum}")
+    } else {
+      cli::cli_alert_success("Successfully scraped 1 latent variable: {x_stem}")
+      cli::cli_alert_info("{.strong {x_stem}}: {varlist$xindper} indicators for P1 ({distinguish_1}), {varlist$xindper} indicators for P2 ({distinguish_2})")
+      cli::cli_alert_info("Total indicators: {varlist$indnum}")
+    }
+  }
+}
