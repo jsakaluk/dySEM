@@ -54,8 +54,10 @@ types of latent dyadic data models:
 
 **Uni-Construct Models**
 
-1.  Univariate Dyadic Model (NEW)
-2.  Correlated Factors Model
+1.  Univariate Dyadic Model
+2.  Correlated Dyadic Factors Model
+3.  Hierarchical Dyadic Factor Model
+4.  Bifactor Dyadic Model
 
 **Bi-Construct Models**
 
@@ -66,7 +68,8 @@ types of latent dyadic data models:
 
 **Multi-Construct Models**
 
-1.  Dyadic Confirmatory Factor Analysis
+1.  Multiple Correlated Dyadic Factors Model (Dyadic Confirmatory Factor
+    Analysis)
 2.  Dyadic Exploratory Factor Analysis
 
 **Indistinguishability-Related Models**
@@ -90,9 +93,8 @@ Additional features currently include:
 
 Shorter-term development goals include:
 
-1.  Uni-construct “scripter” functions (in progress)
-2.  Covariate scripting and optionality
-3.  Improved ease of item selection in scraper functions
+1.  Covariate scripting and optionality
+2.  Improved ease of item selection in scraper functions
 
 Longer-term goals, meanwhile, include:
 
@@ -130,6 +132,8 @@ There are additional optional functions, as well, that help users to
 calculate certain additional quantitative values (e.g., reliability,
 corrected model fit indexes in models with indistinguishable dyad
 members).
+
+    #> Warning: package 'ggplot2' was built under R version 4.4.3
 
 ### 1. Import and wrangle **data**
 
@@ -170,6 +174,12 @@ what order the elements of variable names are ordered.
 
 ``` r
 dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_delim2=".",  distinguish_1="1", distinguish_2="2")
+#> 
+#> ── Variable Scraping Summary ──
+#> 
+#> ✔ Successfully scraped 1 latent variable: PRQC
+#> ℹ PRQC: 9 indicators for P1 (1), 9 indicators for P2 (2)
+#> ℹ Total indicators: 18
 ```
 
 ### 3. **Script** your preferred model

@@ -51,8 +51,10 @@ The package currently provides functionality regarding the following types of la
 
 **Uni-Construct Models**
 
-1. Univariate Dyadic Model (NEW)
-1. Correlated Factors Model
+1. Univariate Dyadic Model 
+1. Correlated Dyadic Factors Model
+1. Hierarchical Dyadic Factor Model
+1. Bifactor Dyadic Model
 
 **Bi-Construct Models**
 
@@ -63,7 +65,7 @@ The package currently provides functionality regarding the following types of la
 
 **Multi-Construct Models**
 
-1. Dyadic Confirmatory Factor Analysis
+1. Multiple Correlated Dyadic Factors Model (Dyadic Confirmatory Factor Analysis)
 1. Dyadic Exploratory Factor Analysis
 
 **Indistinguishability-Related Models**
@@ -82,7 +84,6 @@ Additional features currently include:
   
 Shorter-term development goals include: 
 
-1. Uni-construct "scripter" functions (in progress)
 1. Covariate scripting and optionality
 1. Improved ease of item selection in scraper functions
 
