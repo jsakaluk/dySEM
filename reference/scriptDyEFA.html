@@ -106,13 +106,19 @@ lavaan functions</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="scrapeVarCross.html">scrapeVarCross</a></code> which this function relies on</p>
 <p>Other multi-construct script-writing functions:
-<code><a href="scriptCFA.html">scriptCFA</a>()</code></p></div>
+<code><a href="scriptCFA.html">scriptCFA()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
 <span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Variable Scraping Summary</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Successfully scraped 1 latent variable: sat.g</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">sat.g</span>: 5 indicators for P1 (1), 5 indicators for P2 (2)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Total indicators: 10</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.defa1.script</span> <span class="op">&lt;-</span> <span class="fu">scriptDyEFA</span><span class="op">(</span><span class="va">dvn</span>, nFactor <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"DEFA_1fac"</span><span class="op">)</span></span></span>
@@ -127,7 +133,7 @@ lavaan functions</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

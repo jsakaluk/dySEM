@@ -73,7 +73,7 @@
                         <h4 data-toc-skip class="author">John K.
 Sakaluk</h4>
             
-            <h4 data-toc-skip class="date">12/09/25</h4>
+            <h4 data-toc-skip class="date">08/12/25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/master/vignettes/articles/invariance.Rmd" class="external-link"><code>vignettes/articles/invariance.Rmd</code></a></small>
       <div class="d-none name"><code>invariance.Rmd</code></div>
@@ -278,23 +278,23 @@ researchers begin by specifying a measurement-level indistinguishable
 (i.e., residual-invariant) dyadic measurement model as the initial
 baseline model, with loadings, intercepts, and residual variances
 equated between partners:</p>
-<p><img src="invariance_files/figure-html/resid_fig-1.png" width="700"></p>
+<p><img src="invariance_files/figure-html/resid_fig-1.png" class="r-plt" width="700"></p>
 <p>Researchers would then compare the residual-invariant model against
 the incrementally less-parsimonious intercept-invariant model (with
 freely estimated residual variances):</p>
-<p><img src="invariance_files/figure-html/intercept_fig-1.png" width="700"></p>
+<p><img src="invariance_files/figure-html/intercept_fig-1.png" class="r-plt" width="700"></p>
 <p>If the residual-invariant model was rejected in favour of the
 intercept-invariant model, the intercept-invariant model would become
 the new baseline model. Researchers would then compare it against the
 incrementally less-parsimonious loading-invariant model (with freely
 estimated residual variances and intercepts):</p>
-<p><img src="invariance_files/figure-html/loading_fig-1.png" width="700"></p>
+<p><img src="invariance_files/figure-html/loading_fig-1.png" class="r-plt" width="700"></p>
 <p>If the intercept-invariant model was rejected in favour of the
 loading-invariant model, the loading-invariant model would become the
 new baseline model. Researchers would then compare it against the
 incrementally least-parsimonious configurally invariant model (with
 freely estimated residual variances, intercepts, and loadings):</p>
-<p><img src="invariance_files/figure-html/config_fig-1.png" width="700"></p>
+<p><img src="invariance_files/figure-html/config_fig-1.png" class="r-plt" width="700"></p>
 <p>If the loading-invariant model was rejected in favour of the
 configurally invariant model, the configurally invariant model would be
 the best-supported measurement model. Otherwise, the best supported
@@ -333,6 +333,12 @@ information about (d)yad (v)ariable (n)ames):</p>
 <code class="sourceCode R"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, </span>
 <span>                      x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>, x_delim2<span class="op">=</span><span class="st">"_"</span>, </span>
 <span>                      distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Variable Scraping Summary</span> ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Successfully scraped 1 latent variable: sat.g</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">sat.g</span>: 5 indicators for P1 (1), 5 indicators for P2 (2)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total indicators: 10</span></span>
 <span><span class="va">dvn</span></span>
 <span><span class="co">#&gt; $p1xvarnames</span></span>
 <span><span class="co">#&gt; [1] "sat.g.1_1" "sat.g.1_2" "sat.g.1_3" "sat.g.1_4" "sat.g.1_5"</span></span>
@@ -890,7 +896,7 @@ influences ‘washed out’ by the other invariant items.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

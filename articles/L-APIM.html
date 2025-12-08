@@ -236,7 +236,14 @@ this case, “1’ and”2”—are used for both x and y indicators):</p>
 <span><span class="va">apim_dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">com_dat</span>, </span>
 <span>                           x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>,x_delim2<span class="op">=</span><span class="st">"_"</span>,  </span>
 <span>                           y_order<span class="op">=</span><span class="st">"spi"</span>, y_stem<span class="op">=</span><span class="st">"com"</span>, y_delim1 <span class="op">=</span> <span class="st">"."</span>, y_delim2<span class="op">=</span><span class="st">"_"</span>,</span>
-<span>                           distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span></code></pre></div>
+<span>                           distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Variable Scraping Summary</span> ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Successfully scraped 2 latent variables: sat.g and com</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">sat.g</span>: 5 indicators for P1 (1), 5 indicators for P2 (2)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">com</span>: 5 indicators for P1 (1), 5 indicators for P2 (2)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total indicators: 20</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="scripting-the-models">2. Scripting the Model(s)<a class="anchor" aria-label="anchor" href="#scripting-the-models"></a>
@@ -342,7 +349,7 @@ makes it easy to visualize the parameter estimates from the L-APIM, via
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/outputParamFig.html">outputParamFig</a></span><span class="op">(</span>fit <span class="op">=</span> <span class="va">apim.fit.free.actpart</span>, figtype <span class="op">=</span> <span class="st">"unstandardized"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="L-APIM_files/figure-html/apim%20figure-1.png" width="700"></p>
+<p><img src="L-APIM_files/figure-html/apim%20figure-1.png" class="r-plt" width="700"></p>
 <p>Likewise, <a href="https://jsakaluk.github.io/dySEM/reference/outputParamTab.html"><code>outputParamTab()</code></a>
 provides reproducible tables of APIM output, and can be directed to
 provide only structural model output (as we demonstrate), measurement
@@ -1044,7 +1051,7 @@ inclined).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

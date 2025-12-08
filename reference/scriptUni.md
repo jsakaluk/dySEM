@@ -1,0 +1,165 @@
+# A Function That Writes, Saves, and Exports Syntax for Fitting Unidimensional Dyadic Factor Models
+
+This function takes the outputted object from scrapeVarCross() and
+automatically writes, returns, and exports (`.txt`) `lavaan` syntax for
+specifying dyadic configural, loading, intercept, and residual invariant
+one-factor models.
+
+## Usage
+
+``` r
+scriptUni(
+  dvn,
+  scaleset = "FF",
+  lvname = "X",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = "none",
+  writeTo = NULL,
+  fileName = NULL
+)
+```
+
+## Arguments
+
+- dvn:
+
+  Input dvn list from
+  [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.md).
+
+- scaleset:
+
+  Input character to specify how to set the scale of the latent
+  variable. Default is `"FF"` (fixed-factor; see Details for rationale),
+  but user can specify `"MV"` (Marker Variable).
+
+- lvname:
+
+  Input character to (arbitrarily) name the latent variable in `lavaan`
+  syntax.
+
+- constr_dy_meas:
+
+  Input character vector detailing which measurement model parameters to
+  constrain across dyad members.
+
+- constr_dy_struct:
+
+  Input character vector detailing which structural model parameters to
+  constrain across dyad members. **Note**: Within the context of
+  `scriptUni()`, `constr_dy_struct` is **irrelevant**, as the
+  unidimensional dyadic factor model assumes a single latent variable
+  shared by both partners, leaving no structural parameters to constrain
+  across the modeled dyad members. For consistency with other scripter
+  functions, `constr_dy_struct` is included as an argument, but defaults
+  to `"none"`.
+
+- writeTo:
+
+  A character string specifying a directory path to where a `.txt` file
+  of the resulting `lavaan` script should be written. If set to `“.”`,
+  the `.txt` file will be written to the current working directory. The
+  default is `NULL`, and examples use a temporary directory created by
+  [`tempdir()`](https://rdrr.io/r/base/tempfile.html).
+
+- fileName:
+
+  A character string specifying a desired base name for the `.txt`
+  output file. The default is `NULL`. The specified name will be
+  automatically appended with the `.txt` file extension. If a file with
+  the same name already exists in the user's chosen directory, it will
+  be overwritten.
+
+## Value
+
+Character object of `lavaan` script that can be passed immediately to
+`lavaan` functions.
+
+## Details
+
+- Users do not need to modify `constr_dy_struct` when using
+  `scriptUni()`.
+
+- By default, many `dySEM::` functions (including `scriptUni()`) default
+  to a fixed-factor method of scale-setting, whereby the latent variance
+  of a given factor is constrained to 1 for both partners in the
+  configurally invariant model, and then one of these variances is
+  freely estimated in subsequent models of the invariance testing
+  sequence. We have selected this default for two reasons: (1) the
+  selection of a marker-variable is usually arbitrary, yet can have a
+  large influence on the estimation and testing of of structural
+  parameters (see
+  https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732);
+  and (2) the selection of a non-invariant marker-variable can have
+  disastrous down-stream consequences for the identification of
+  non-invariant measurement parameters, following a the rejection of an
+  omnibus invariance constraint set (see Lee, Preacher, & Little, 2011).
+
+## See also
+
+[`scrapeVarCross`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.md)
+which this function relies on.
+
+Other uni-construct script-writing functions:
+[`scriptBifac()`](https://jsakaluk.github.io/dySEM/reference/scriptBifac.md),
+[`scriptCor()`](https://jsakaluk.github.io/dySEM/reference/scriptCor.md),
+[`scriptHier()`](https://jsakaluk.github.io/dySEM/reference/scriptHier.md)
+
+## Examples
+
+``` r
+dvn <- scrapeVarCross(
+  commitmentQ,
+  x_order = "spi",
+  x_stem = "sat.g",
+  x_delim1 = ".",
+  x_delim2="_",
+  distinguish_1="1",
+  distinguish_2="2"
+  )
+#> 
+#> ── Variable Scraping Summary ──
+#> 
+#> ✔ Successfully scraped 1 latent variable: sat.g
+#> ℹ sat.g: 5 indicators for P1 (1), 5 indicators for P2 (2)
+#> ℹ Total indicators: 10
+
+sat.resids.script <- scriptUni(
+  dvn,
+  scaleset = "FF",
+  lvname = "Sat",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = "none",
+  writeTo = tempdir(),
+  fileName = "dUni_residual"
+  )
+
+sat.ints.script <- scriptUni(
+  dvn,
+  scaleset = "FF",
+  lvname = "Sat",
+  constr_dy_meas = c("loadings", "intercepts"),
+  constr_dy_struct = "none",
+  writeTo = tempdir(),
+  fileName = "dUni_intercept"
+  )
+
+sat.loads.script <- scriptUni(
+  dvn,
+  scaleset = "FF",
+  lvname = "Sat",
+  constr_dy_meas = c("loadings"),
+  constr_dy_struct = "none",
+  writeTo = tempdir(),
+  fileName = "dUni_loading"
+  )
+
+sat.config.script <- scriptUni(
+  dvn,
+  scaleset = "FF",
+  lvname = "Sat",
+  constr_dy_meas = "none",
+  constr_dy_struct = "none",
+  writeTo = tempdir(),
+  fileName = "dUni_configural"
+  )
+```

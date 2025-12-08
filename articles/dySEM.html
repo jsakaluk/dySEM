@@ -259,7 +259,13 @@ our PRQC indicators, which have the following properties:</p>
 <p>Feeding this information to <code>scrapeVarCross</code> is quite
 straightforward:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span><span class="va">DRES</span>, x_order <span class="op">=</span> <span class="st">"sip"</span>, x_stem <span class="op">=</span> <span class="st">"PRQC"</span>, x_delim1<span class="op">=</span><span class="st">"_"</span>,x_delim2<span class="op">=</span><span class="st">"."</span>,  distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span><span class="va">DRES</span>, x_order <span class="op">=</span> <span class="st">"sip"</span>, x_stem <span class="op">=</span> <span class="st">"PRQC"</span>, x_delim1<span class="op">=</span><span class="st">"_"</span>,x_delim2<span class="op">=</span><span class="st">"."</span>,  distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Variable Scraping Summary</span> ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Successfully scraped 1 latent variable: PRQC</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">PRQC</span>: 9 indicators for P1 (1), 9 indicators for P2 (2)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total indicators: 18</span></span></code></pre></div>
 <p>Before looking at what <code>scrapeVarCross</code> returns, you may
 be wondering:</p>
 <ol style="list-style-type: decimal">
@@ -460,7 +466,7 @@ measurement- or structural-model parameter, or both) are created.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

@@ -179,9 +179,9 @@ with containing X or Y variables, they are alerted to respecify the dvn object.<
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="scrapeVarCross.html">scrapeVarCross</a></code> which this function relies on</p>
 <p>Other bi-construct script-writing functions:
-<code><a href="scriptBiDy.html">scriptBiDy</a>()</code>,
-<code><a href="scriptCFM.html">scriptCFM</a>()</code>,
-<code><a href="scriptMIM.html">scriptMIM</a>()</code></p></div>
+<code><a href="scriptBiDy.html">scriptBiDy()</a></code>,
+<code><a href="scriptCFM.html">scriptCFM()</a></code>,
+<code><a href="scriptMIM.html">scriptMIM()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -189,6 +189,13 @@ with containing X or Y variables, they are alerted to respecify the dvn object.<
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">commitmentQ</span>, x_order <span class="op">=</span> <span class="st">"spi"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
 <span class="r-in"><span>x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"1"</span>, distinguish_2<span class="op">=</span><span class="st">"2"</span>,</span></span>
 <span class="r-in"><span>y_order<span class="op">=</span><span class="st">"spi"</span>, y_stem<span class="op">=</span><span class="st">"com"</span>, y_delim1 <span class="op">=</span> <span class="st">"."</span>, y_delim2<span class="op">=</span><span class="st">"_"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Variable Scraping Summary</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Successfully scraped 2 latent variables: sat.g and com</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">sat.g</span>: 5 indicators for P1 (1), 5 indicators for P2 (2)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">com</span>: 5 indicators for P1 (1), 5 indicators for P2 (2)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Total indicators: 20</span>
 <span class="r-in"><span><span class="va">apim.script.indist</span> <span class="op">&lt;-</span>  <span class="fu">scriptAPIM</span><span class="op">(</span><span class="va">dvn</span>, lvxname <span class="op">=</span> <span class="st">"Sat"</span>, lvyname <span class="op">=</span> <span class="st">"Com"</span>, est_k <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>fileName <span class="op">=</span> <span class="st">"latAPIM_indist"</span><span class="op">)</span></span></span>
@@ -203,7 +210,7 @@ with containing X or Y variables, they are alerted to respecify the dvn object.<
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

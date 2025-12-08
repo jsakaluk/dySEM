@@ -242,6 +242,12 @@ short</em>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">sat_dvn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">my_dat</span>, x_order <span class="op">=</span> <span class="st">"sip"</span>, x_stem <span class="op">=</span> <span class="st">"sat.g"</span>, x_delim1 <span class="op">=</span> <span class="st">""</span>, x_delim2<span class="op">=</span><span class="st">"_"</span>, distinguish_1<span class="op">=</span><span class="st">"f"</span>, distinguish_2<span class="op">=</span><span class="st">"m"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Variable Scraping Summary</span> ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Successfully scraped 1 latent variable: sat.g</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">sat.g</span>: 5 indicators for P1 (f), 5 indicators for P2 (m)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total indicators: 10</span></span>
 <span></span>
 <span><span class="va">sat_dvn</span></span>
 <span><span class="co">#&gt; $p1xvarnames</span></span>
@@ -1585,7 +1591,7 @@ parameter estimates they wish to be depicted in the path diagram.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/outputParamFig.html">outputParamFig</a></span><span class="op">(</span>fit <span class="op">=</span> <span class="va">sat.int.mod</span>, figtype <span class="op">=</span> <span class="st">"standardized"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CDFM_files/figure-html/outputFigure-1.png" width="700"></p>
+<p><img src="CDFM_files/figure-html/outputFigure-1.png" class="r-plt" width="700"></p>
 <p>Thus, in little more than a dozen lines of code, researchers can
 script, fit, compare, and output a series of dyadic invariance
 comparisons using the Correlated Dyadic Factors Model. From this,
@@ -2224,7 +2230,7 @@ introduced by forcing the constraint on the residual variances for the
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
