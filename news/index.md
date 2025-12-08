@@ -7,6 +7,8 @@
 - vignettes for Correlated Dyadic Factors Model, Mulitple Correlated
   Dyadic Factors Model, and Latent APIM written in advance of
   preprint/submission of Sakaluk & Camanto
+- added verbose option to scrapeVarCross() to print progress messages
+  during data scraping
 
 ## dySEM 1.3.2
 
