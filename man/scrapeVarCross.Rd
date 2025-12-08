@@ -101,8 +101,4 @@ dvnxy <- scrapeVarCross(
   y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
 )
 }
-\seealso{
-Other variable-scraping functions: 
-\code{\link{scrapeVarLong}()}
-}
 \concept{variable-scraping functions}

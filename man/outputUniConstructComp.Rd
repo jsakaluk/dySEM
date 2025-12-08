@@ -93,33 +93,33 @@ dvn <- scrapeVarCross(
   x_order = "spi",
   x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_",
-  distinguish_1="1",
-  distinguish_2="2"
-  )
-  
-  outputUniConstructComp(
+  x_delim2 = "_",
+  distinguish_1 = "1",
+  distinguish_2 = "2"
+)
+
+outputUniConstructComp(
   dvn,
   commitmentQ,
   missing = "fiml"
-  )
-  
-  outputUniConstructComp(
+)
+
+outputUniConstructComp(
   dvn,
   commitmentQ,
   indexes = c("df", "bic"),
   missing = "fiml"
-  )
-  
-  outputUniConstructComp(
+)
+
+outputUniConstructComp(
   dvn,
   commitmentQ,
   indexes = c("df", "bic"),
   estimator = "ml",
   missing = "fiml"
-  )
-  
-  outputUniConstructComp(
+)
+
+outputUniConstructComp(
   dvn,
   commitmentQ,
   indexes = c("df", "bic"),
@@ -127,6 +127,6 @@ dvn <- scrapeVarCross(
   gtTab = TRUE,
   writeTo = tempdir(),
   fileName = "uni-construct-dyad-models"
-  )
+)
 
 }
