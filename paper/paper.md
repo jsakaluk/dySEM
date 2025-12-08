@@ -227,7 +227,7 @@ outputParamTab(dvnxy, model = "apim", gtTab = TRUE ,
 ```
 
 : `outputParamTab()`. []{label="fig-measurement"}
-![Measurement Table](images/Measurement Table.png){ width=70% }
+![Measurement Table](images/measurement-table.png){ width=70% }
 
 ```{.r}
 
@@ -240,7 +240,7 @@ outputParamFig(apim.mod, figtype = "standardized",
 ```
 
 : `outputParamFig()`. []{label="fig-structural"}
-![Structural Figure](images/APIM Diagram.png){ width=70% }
+![Structural Figure](images/apim-diagram.png){ width=70% }
 
 ```{.r}
 
@@ -252,7 +252,7 @@ outputConstraintTab(sat.resids.mod, filterSig = FALSE, gtTab = TRUE)
 ```
 
 : `outputConstraintTab()`. []{label="fig-invariance"}
-![Invariance Table](images/Invariance Table.png){ width=70% }
+![Invariance Table](images/invariance-table.png){ width=70% }
 
 # Acknowledgements
 
