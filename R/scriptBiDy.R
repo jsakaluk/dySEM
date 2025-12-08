@@ -12,7 +12,7 @@
 #' @param constr_dy_x_meas input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
 #' Default is c("loadings", "intercepts", "residuals"),
 #' but user can specify any combination of "loadings", "intercepts", and "residuals",
-#' #or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
+#' or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
 #' boutique patterns of bifactor loading constraints with "loadings_source" or "loadings_mutual".
 #' @param constr_dy_x_struct input character vector detailing which structural model parameters to constrain across dyad members for latent X.
 #' Default is c("variances", "means"),
@@ -20,7 +20,7 @@
 #' @param constr_dy_y_meas input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
 #' Default is c("loadings", "intercepts", "residuals"),
 #' but user can specify any combination of "loadings", "intercepts", and "residuals",
-#' #or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
+#' or "none" to specify an otherwise unconstrained dyadic configural invariance model. Users may also specify more
 #' boutique patterns of bifactor loading constraints with "loadings_source" or "loadings_mutual".
 #' @param constr_dy_y_struct input character vector detailing which structural model parameters to constrain across dyad members for latent X.
 #' Default is c("variances", "means"),

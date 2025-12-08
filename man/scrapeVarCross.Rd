@@ -24,7 +24,8 @@ scrapeVarCross(
   covs_order = NULL,
   covs_stem = NULL,
   covs_delim1 = NULL,
-  covs_delim2 = NULL
+  covs_delim2 = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -76,6 +77,8 @@ Defaults to NULL.}
 \item{covs_delim1}{optional character to separate stem from partner number (spi) or item number (sip) for covariate(s). Defaults to NULL.}
 
 \item{covs_delim2}{optional character to separate stem/partner number (spi) or stem/item number (sip) from}
+
+\item{verbose}{logical indicating whether to print a summary of scraped variables to the console. Defaults to TRUE.}
 }
 \value{
 a list, referred in short-hand as a "dvn" (dyad variable names list) containing variable names for p1, p2, # of items per LV,
@@ -88,10 +91,18 @@ and indexes which indicators correspond to which partner, for which LV.
 It is used primarily to guide the syntax-writing of the other dySEM functions.
 }
 \examples{
-dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2")
-dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2",
-y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+dvnx <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+)
+dvnxy <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+  y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
+)
+}
+\seealso{
+Other variable-scraping functions: 
+\code{\link{scrapeVarLong}()}
 }
 \concept{variable-scraping functions}

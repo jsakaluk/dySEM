@@ -23,7 +23,7 @@ scriptCFA(
 \item{constr_dy_meas}{input character vector detailing which measurement model parameters to constrain across dyad members.
 Default is c("loadings", "intercepts", "residuals")(in combination with defaults for constr_dy_struct, an indistinguishable dyadic CFA),
 but user can specify any combination of "loadings", "intercepts", and "residuals",
-#or "none" to specify an otherwise unconstrained dyadic configural invariance model}
+or "none" to specify an otherwise unconstrained dyadic configural invariance model}
 
 \item{constr_dy_struct}{input character vector detailing which structural model parameters to constrain across dyad members.
 Default is c("variances", "means")(in combination with defaults for constr_dy_meas, an indistinguishable dyadic CFA),

@@ -14,14 +14,14 @@
 #' @param constr_dy_x_meas input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
 #' Default is c("loadings", "intercepts", "residuals"),
 #' but user can specify any combination of "loadings", "intercepts", and "residuals",
-#' #or "none" to specify an otherwise unconstrained dyadic configural invariance model
+#' or "none" to specify an otherwise unconstrained dyadic configural invariance model
 #' @param constr_dy_x_struct input character vector detailing which structural model parameters to constrain across dyad members for latent X.
 #' Default is c("variances", "means"),
 #' but user can specify any combination of "variances" and "means", or "none".
 #' @param constr_dy_y_meas input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
 #' Default is c("loadings", "intercepts", "residuals"),
 #' but user can specify any combination of "loadings", "intercepts", and "residuals",
-#' #or "none" to specify an otherwise unconstrained dyadic configural invariance model
+#' or "none" to specify an otherwise unconstrained dyadic configural invariance model
 #' @param constr_dy_y_struct input character vector detailing which structural model parameters to constrain across dyad members for latent X.
 #' Default is c("variances", "means"),
 #' but user can specify any combination of "variances" and "means", or "none".

@@ -18,26 +18,36 @@ scriptUni(
 \arguments{
 \item{dvn}{Input dvn list from \code{scrapeVarCross()}.}
 
-\item{scaleset}{Input character to specify how to set the scale of the latent variable. Default is
-\code{"FF"} (fixed-factor; see Details for rationale), but user can specify \code{"MV"} (Marker Variable).}
+\item{scaleset}{Input character to specify how to set the scale of the latent
+variable. Default is \code{"FF"} (fixed-factor; see Details for rationale), but
+user can specify \code{"MV"} (Marker Variable).}
 
-\item{lvname}{Input character to (arbitrarily) name the latent variable in \code{lavaan} syntax.}
+\item{lvname}{Input character to (arbitrarily) name the latent variable in
+\code{lavaan} syntax.}
 
-\item{constr_dy_meas}{Input character vector detailing which measurement model parameters to constrain across dyad members.}
+\item{constr_dy_meas}{Input character vector detailing which measurement
+model parameters to constrain across dyad members.}
 
-\item{constr_dy_struct}{Input character vector detailing which structural model parameters to constrain across dyad members.
-\strong{Note}: Within the context of \code{scriptUni()}, \code{constr_dy_struct} is \strong{irrelevant}, as the unidimensional dyadic factor model
-assumes a single latent variable shared by both partners, leaving no structural parameters to constrain across the modeled dyad members.
-For consistency with other scripter functions, \code{constr_dy_struct} is included as an argument,
-but defaults to \code{"none"}.}
+\item{constr_dy_struct}{Input character vector detailing which structural
+model parameters to constrain across dyad members.
+\strong{Note}: Within the context of \code{scriptUni()}, \code{constr_dy_struct} is
+\strong{irrelevant}, as the unidimensional dyadic factor model assumes a single
+latent variable shared by both partners, leaving no structural parameters to
+constrain across the modeled dyad members. For consistency with other
+scripter functions, \code{constr_dy_struct} is included as an argument, but
+defaults to \code{"none"}.}
 
-\item{writeTo}{A character string specifying a directory path to where a \code{.txt} file of the resulting \code{lavaan} script should be written.
-If set to \verb{“.”}, the \code{.txt} file will be written to the current working directory.
-The default is \code{NULL}, and examples use a temporary directory created by \code{tempdir()}.}
+\item{writeTo}{A character string specifying a directory path to where a
+\code{.txt} file of the resulting \code{lavaan} script should be written. If set to
+\verb{“.”}, the \code{.txt} file will be written to the current working directory. The
+default is \code{NULL}, and examples use a temporary directory created by
+\code{tempdir()}.}
 
-\item{fileName}{A character string specifying a desired base name for the \code{.txt} output file.
-The default is \code{NULL}. The specified name will be automatically appended with the \code{.txt} file extension.
-If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
+\item{fileName}{A character string specifying a desired base name for the
+\code{.txt} output file. The default is \code{NULL}. The specified name will be
+automatically appended with the \code{.txt} file extension. If a file with the
+same name already exists in the user's chosen directory, it will be
+overwritten.}
 }
 \value{
 Character object of \code{lavaan} script that can be passed immediately to
@@ -52,19 +62,19 @@ one-factor models.
 \details{
 \itemize{
 \item Users do not need to modify \code{constr_dy_struct} when using \code{scriptUni()}.
-\item By default, many \verb{dySEM::} functions (including \code{scriptUni()}) default to
-a fixed-factor method of scale-setting, whereby the latent variance of
-a given factor is constrained to 1 for both partners in the configurally invariant
-model, and then one of these variances is freely estimated in subsequent
-models of the invariance testing sequence.
-We have selected this default for two reasons:
-(1) the selection of a marker-variable is usually arbitrary,
-yet can have a large influence on the estimation and testing of of structural parameters
-(see https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732);
-and (2) the selection of a non-invariant marker-variable
-can have disastrous down-stream consequences for the identification of
-non-invariant measurement parameters, following a the rejection of an omnibus
-invariance constraint set (see Lee, Preacher, & Little, 2011).
+\item By default, many \verb{dySEM::} functions (including \code{scriptUni()}) default to a
+fixed-factor method of scale-setting, whereby the latent variance of a
+given factor is constrained to 1 for both partners in the configurally
+invariant model, and then one of these variances is freely estimated in
+subsequent models of the invariance testing sequence. We have selected
+this default for two reasons: (1) the selection of a marker-variable is
+usually arbitrary, yet can have a large influence on the estimation and
+testing of of structural parameters (see
+https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732);
+and (2) the selection of a non-invariant marker-variable can have
+disastrous down-stream consequences for the identification of
+non-invariant measurement parameters, following a the rejection of an
+omnibus invariance constraint set (see Lee, Preacher, & Little, 2011).
 }
 }
 \examples{
@@ -74,10 +84,10 @@ dvn <- scrapeVarCross(
   x_order = "spi",
   x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_",
-  distinguish_1="1",
-  distinguish_2="2"
-  )
+  x_delim2 = "_",
+  distinguish_1 = "1",
+  distinguish_2 = "2"
+)
 
 sat.resids.script <- scriptUni(
   dvn,
@@ -87,7 +97,7 @@ sat.resids.script <- scriptUni(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dUni_residual"
-  )
+)
 
 sat.ints.script <- scriptUni(
   dvn,
@@ -97,7 +107,7 @@ sat.ints.script <- scriptUni(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dUni_intercept"
-  )
+)
 
 sat.loads.script <- scriptUni(
   dvn,
@@ -107,7 +117,7 @@ sat.loads.script <- scriptUni(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dUni_loading"
-  )
+)
 
 sat.config.script <- scriptUni(
   dvn,
@@ -117,7 +127,7 @@ sat.config.script <- scriptUni(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dUni_configural"
-  )
+)
 
 }
 \seealso{
