@@ -112,10 +112,10 @@ dvn <- scrapeVarCross(
   x_order = "spi",
   x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_",
-  distinguish_1="1",
-  distinguish_2="2"
-  )
+  x_delim2 = "_",
+  distinguish_1 = "1",
+  distinguish_2 = "2"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
@@ -131,7 +131,7 @@ sat.resids.script <- scriptUni(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dUni_residual"
-  )
+)
 
 sat.ints.script <- scriptUni(
   dvn,
@@ -141,7 +141,7 @@ sat.ints.script <- scriptUni(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dUni_intercept"
-  )
+)
 
 sat.loads.script <- scriptUni(
   dvn,
@@ -151,7 +151,7 @@ sat.loads.script <- scriptUni(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dUni_loading"
-  )
+)
 
 sat.config.script <- scriptUni(
   dvn,
@@ -161,5 +161,5 @@ sat.config.script <- scriptUni(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dUni_configural"
-  )
+)
 ```

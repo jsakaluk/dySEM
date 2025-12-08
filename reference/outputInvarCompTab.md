@@ -120,7 +120,7 @@ mods <- list(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fi
 
 outputInvarCompTab(mods, parsimonyFirst = FALSE,
 gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Standard")
-#> Output stored in: /tmp/RtmpjwRMMo/dCFA_Invar_Standard.rtf
+#> Output stored in: /tmp/RtmpI1Kx5o/dCFA_Invar_Standard.rtf
 
 
   
@@ -281,7 +281,7 @@ sat.loading.fit, sat.intercept.fit, sat.residual.fit)
 outputInvarCompTab(mods, parsimonyFirst = TRUE, gtTab = TRUE, writeTo =
 [tempdir](https://rdrr.io/r/base/tempfile.html)(), fileName =
 "dCFA_Invar_Reverse") \#\> Output stored in:
-/tmp/RtmpjwRMMo/dCFA_Invar_Reverse.rtf
+/tmp/RtmpI1Kx5o/dCFA_Invar_Reverse.rtf
 
 | mod        |  chisq |  df | pvalue |      aic |      bic | rmsea |   cfi | chisq_diff | df_diff | p_diff | aic_diff | bic_diff | rmsea_diff | cfi_diff |
 |:-----------|-------:|----:|-------:|---------:|---------:|------:|------:|-----------:|--------:|-------:|---------:|---------:|-----------:|---------:|

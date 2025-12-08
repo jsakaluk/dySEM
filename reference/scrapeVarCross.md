@@ -29,7 +29,8 @@ scrapeVarCross(
   covs_order = NULL,
   covs_stem = NULL,
   covs_delim1 = NULL,
-  covs_delim2 = NULL
+  covs_delim2 = NULL,
+  verbose = TRUE
 )
 ```
 
@@ -146,6 +147,11 @@ scrapeVarCross(
   optional character to separate stem/partner number (spi) or stem/item
   number (sip) from
 
+- verbose:
+
+  logical indicating whether to print a summary of scraped variables to
+  the console. Defaults to TRUE.
+
 ## Value
 
 a list, referred in short-hand as a "dvn" (dyad variable names list)
@@ -155,17 +161,21 @@ distinguishing partners, and total number of indicators
 ## Examples
 
 ``` r
-dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2")
+dvnx <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
 #> ✔ Successfully scraped 1 latent variable: sat.g
 #> ℹ sat.g: 5 indicators for P1 (1), 5 indicators for P2 (2)
 #> ℹ Total indicators: 10
-dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2",
-y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+dvnxy <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+  y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 

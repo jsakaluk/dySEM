@@ -98,7 +98,7 @@ auto.fix.first= FALSE, meanstructure = TRUE)
 
 outputConstraintTab(sat.resids.mod, filterSig = FALSE,
 gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Residual")
-#> Output stored in: /tmp/RtmpjwRMMo/dCFA_Residual.rtf
+#> Output stored in: /tmp/RtmpI1Kx5o/dCFA_Residual.rtf
 
 
   

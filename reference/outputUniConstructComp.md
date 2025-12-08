@@ -136,32 +136,49 @@ dvn <- scrapeVarCross(
   x_order = "spi",
   x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_",
-  distinguish_1="1",
-  distinguish_2="2"
-  )
+  x_delim2 = "_",
+  distinguish_1 = "1",
+  distinguish_2 = "2"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
 #> ✔ Successfully scraped 1 latent variable: sat.g
 #> ℹ sat.g: 5 indicators for P1 (1), 5 indicators for P2 (2)
 #> ℹ Total indicators: 10
-  
-  outputUniConstructComp(
+
+outputUniConstructComp(
   dvn,
   commitmentQ,
   missing = "fiml"
-  )
-#> Error in dplyr::mutate(., genTEFI = dplyr::case_when(gen_tefi$Lower.Order.VN <     gen_tefi$Higher.Order.VN & Model %in% c("Unidimensional",     "Correlated Factors") ~ "Yes", gen_tefi$Higher.Order.VN <     gen_tefi$Lower.Order.VN & Model %in% c("Hierarchical", "Bifactor") ~     "Yes", TRUE ~ "No")): ℹ In argument: `genTEFI = dplyr::case_when(...)`.
-#> Caused by error:
-#> ! `genTEFI` must be size 4 or 1, not 0.
-  
-  outputUniConstructComp(
+)
+#> According to GenTEFI (-15.173),
+#>           higher-order models (e.g., bifactor or hierarchical) fit the data better than lower-order models (e.g., correlated factors),
+#>           as the higher-order TEFI (-9.419) is smaller than the lower-order TEFI (-5.754).
+#> $Indexes
+#> # A tibble: 4 × 14
+#>   Model          Type  genTEFI    df chisq   cfi  rmsea   bic df_diff chisq_diff
+#>   <chr>          <chr> <chr>   <dbl> <dbl> <dbl>  <dbl> <dbl>   <dbl>      <dbl>
+#> 1 Bifactor       High… Yes        20  41.3 0.983 0.0951 4077.      NA      NA   
+#> 2 Hierarchical   High… Yes        29  49.1 0.984 0.0767 4042.       9       7.78
+#> 3 Correlated Fa… Lowe… No         29  49.1 0.984 0.0767 4042.      NA      NA   
+#> 4 Unidimensional Lowe… No         30 235.  0.839 0.240  4223.       1     186.  
+#> # ℹ 4 more variables: chisq_diff_test_p <dbl>, cfi_diff <dbl>,
+#> #   rmsea_diff <dbl>, bic_diff <dbl>
+#> 
+#> $`GenTEFI Details`
+#> # A tibble: 1 × 3
+#>   VN.Entropy.Fit Level_1_VN Level_2_VN
+#>            <dbl>      <dbl>      <dbl>
+#> 1          -15.2      -5.75      -9.42
+#> 
+
+outputUniConstructComp(
   dvn,
   commitmentQ,
   indexes = c("df", "bic"),
   missing = "fiml"
-  )
+)
 #> # A tibble: 4 × 6
 #>   Model              Type            df   bic df_diff bic_diff
 #>   <chr>              <chr>        <dbl> <dbl>   <dbl>    <dbl>
@@ -169,14 +186,14 @@ dvn <- scrapeVarCross(
 #> 2 Hierarchical       Higher Order    29 4042.       9    -35.2
 #> 3 Correlated Factors Lower Order     29 4042.      NA     NA  
 #> 4 Unidimensional     Lower Order     30 4223.       1    181. 
-  
-  outputUniConstructComp(
+
+outputUniConstructComp(
   dvn,
   commitmentQ,
   indexes = c("df", "bic"),
   estimator = "ml",
   missing = "fiml"
-  )
+)
 #> # A tibble: 4 × 6
 #>   Model              Type            df   bic df_diff bic_diff
 #>   <chr>              <chr>        <dbl> <dbl>   <dbl>    <dbl>
@@ -184,8 +201,8 @@ dvn <- scrapeVarCross(
 #> 2 Hierarchical       Higher Order    29 4042.       9    -35.2
 #> 3 Correlated Factors Lower Order     29 4042.      NA     NA  
 #> 4 Unidimensional     Lower Order     30 4223.       1    181. 
-  
-  outputUniConstructComp(
+
+outputUniConstructComp(
   dvn,
   commitmentQ,
   indexes = c("df", "bic"),
@@ -193,8 +210,8 @@ dvn <- scrapeVarCross(
   gtTab = TRUE,
   writeTo = tempdir(),
   fileName = "uni-construct-dyad-models"
-  )
-#> Output stored in: /tmp/RtmpjwRMMo/uni-construct-dyad-models.rtf
+)
+#> Output stored in: /tmp/RtmpI1Kx5o/uni-construct-dyad-models.rtf
 
 
   

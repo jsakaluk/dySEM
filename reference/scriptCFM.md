@@ -50,7 +50,7 @@ scriptCFM(
   input character vector detailing which measurement model parameters to
   constrain across dyad members for latent X. Default is c("loadings",
   "intercepts", "residuals"), but user can specify any combination of
-  "loadings", "intercepts", and "residuals", \#or "none" to specify an
+  "loadings", "intercepts", and "residuals", or "none" to specify an
   otherwise unconstrained dyadic configural invariance model
 
 - constr_dy_x_struct:
@@ -65,7 +65,7 @@ scriptCFM(
   input character vector detailing which measurement model parameters to
   constrain across dyad members for latent X. Default is c("loadings",
   "intercepts", "residuals"), but user can specify any combination of
-  "loadings", "intercepts", and "residuals", \#or "none" to specify an
+  "loadings", "intercepts", and "residuals", or "none" to specify an
   otherwise unconstrained dyadic configural invariance model
 
 - constr_dy_y_struct:

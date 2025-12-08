@@ -80,36 +80,46 @@ one-factor models.</p>
 
 
 <dt id="arg-scaleset">scaleset<a class="anchor" aria-label="anchor" href="#arg-scaleset"></a></dt>
-<dd><p>Input character to specify how to set the scale of the latent variable. Default is
-<code>"FF"</code> (fixed-factor; see Details for rationale), but user can specify <code>"MV"</code> (Marker Variable).</p></dd>
+<dd><p>Input character to specify how to set the scale of the latent
+variable. Default is <code>"FF"</code> (fixed-factor; see Details for rationale), but
+user can specify <code>"MV"</code> (Marker Variable).</p></dd>
 
 
 <dt id="arg-lvname">lvname<a class="anchor" aria-label="anchor" href="#arg-lvname"></a></dt>
-<dd><p>Input character to (arbitrarily) name the latent variable in <code>lavaan</code> syntax.</p></dd>
+<dd><p>Input character to (arbitrarily) name the latent variable in
+<code>lavaan</code> syntax.</p></dd>
 
 
 <dt id="arg-constr-dy-meas">constr_dy_meas<a class="anchor" aria-label="anchor" href="#arg-constr-dy-meas"></a></dt>
-<dd><p>Input character vector detailing which measurement model parameters to constrain across dyad members.</p></dd>
+<dd><p>Input character vector detailing which measurement
+model parameters to constrain across dyad members.</p></dd>
 
 
 <dt id="arg-constr-dy-struct">constr_dy_struct<a class="anchor" aria-label="anchor" href="#arg-constr-dy-struct"></a></dt>
-<dd><p>Input character vector detailing which structural model parameters to constrain across dyad members.
-<strong>Note</strong>: Within the context of <code>scriptUni()</code>, <code>constr_dy_struct</code> is <strong>irrelevant</strong>, as the unidimensional dyadic factor model
-assumes a single latent variable shared by both partners, leaving no structural parameters to constrain across the modeled dyad members.
-For consistency with other scripter functions, <code>constr_dy_struct</code> is included as an argument,
-but defaults to <code>"none"</code>.</p></dd>
+<dd><p>Input character vector detailing which structural
+model parameters to constrain across dyad members.
+<strong>Note</strong>: Within the context of <code>scriptUni()</code>, <code>constr_dy_struct</code> is
+<strong>irrelevant</strong>, as the unidimensional dyadic factor model assumes a single
+latent variable shared by both partners, leaving no structural parameters to
+constrain across the modeled dyad members. For consistency with other
+scripter functions, <code>constr_dy_struct</code> is included as an argument, but
+defaults to <code>"none"</code>.</p></dd>
 
 
 <dt id="arg-writeto">writeTo<a class="anchor" aria-label="anchor" href="#arg-writeto"></a></dt>
-<dd><p>A character string specifying a directory path to where a <code>.txt</code> file of the resulting <code>lavaan</code> script should be written.
-If set to <code>“.”</code>, the <code>.txt</code> file will be written to the current working directory.
-The default is <code>NULL</code>, and examples use a temporary directory created by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></dd>
+<dd><p>A character string specifying a directory path to where a
+<code>.txt</code> file of the resulting <code>lavaan</code> script should be written. If set to
+<code>“.”</code>, the <code>.txt</code> file will be written to the current working directory. The
+default is <code>NULL</code>, and examples use a temporary directory created by
+<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></dd>
 
 
 <dt id="arg-filename">fileName<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>A character string specifying a desired base name for the <code>.txt</code> output file.
-The default is <code>NULL</code>. The specified name will be automatically appended with the <code>.txt</code> file extension.
-If a file with the same name already exists in the user's chosen directory, it will be overwritten.</p></dd>
+<dd><p>A character string specifying a desired base name for the
+<code>.txt</code> output file. The default is <code>NULL</code>. The specified name will be
+automatically appended with the <code>.txt</code> file extension. If a file with the
+same name already exists in the user's chosen directory, it will be
+overwritten.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -121,19 +131,19 @@ If a file with the same name already exists in the user's chosen directory, it w
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
 
 <ul><li><p>Users do not need to modify <code>constr_dy_struct</code> when using <code>scriptUni()</code>.</p></li>
-<li><p>By default, many <code>dySEM::</code> functions (including <code>scriptUni()</code>) default to
-a fixed-factor method of scale-setting, whereby the latent variance of
-a given factor is constrained to 1 for both partners in the configurally invariant
-model, and then one of these variances is freely estimated in subsequent
-models of the invariance testing sequence.
-We have selected this default for two reasons:
-(1) the selection of a marker-variable is usually arbitrary,
-yet can have a large influence on the estimation and testing of of structural parameters
-(see https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732);
-and (2) the selection of a non-invariant marker-variable
-can have disastrous down-stream consequences for the identification of
-non-invariant measurement parameters, following a the rejection of an omnibus
-invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
+<li><p>By default, many <code>dySEM::</code> functions (including <code>scriptUni()</code>) default to a
+fixed-factor method of scale-setting, whereby the latent variance of a
+given factor is constrained to 1 for both partners in the configurally
+invariant model, and then one of these variances is freely estimated in
+subsequent models of the invariance testing sequence. We have selected
+this default for two reasons: (1) the selection of a marker-variable is
+usually arbitrary, yet can have a large influence on the estimation and
+testing of of structural parameters (see
+https://stats.stackexchange.com/questions/402133/in-cfa-does-it-matter-which-factor-loading-is-set-to-1/402732#402732);
+and (2) the selection of a non-invariant marker-variable can have
+disastrous down-stream consequences for the identification of
+non-invariant measurement parameters, following a the rejection of an
+omnibus invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -152,10 +162,10 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 <span class="r-in"><span>  x_order <span class="op">=</span> <span class="st">"spi"</span>,</span></span>
 <span class="r-in"><span>  x_stem <span class="op">=</span> <span class="st">"sat.g"</span>,</span></span>
 <span class="r-in"><span>  x_delim1 <span class="op">=</span> <span class="st">"."</span>,</span></span>
-<span class="r-in"><span>  x_delim2<span class="op">=</span><span class="st">"_"</span>,</span></span>
-<span class="r-in"><span>  distinguish_1<span class="op">=</span><span class="st">"1"</span>,</span></span>
-<span class="r-in"><span>  distinguish_2<span class="op">=</span><span class="st">"2"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  x_delim2 <span class="op">=</span> <span class="st">"_"</span>,</span></span>
+<span class="r-in"><span>  distinguish_1 <span class="op">=</span> <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>  distinguish_2 <span class="op">=</span> <span class="st">"2"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">Variable Scraping Summary</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -171,7 +181,7 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 <span class="r-in"><span>  constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span></span>
 <span class="r-in"><span>  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  fileName <span class="op">=</span> <span class="st">"dUni_residual"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.ints.script</span> <span class="op">&lt;-</span> <span class="fu">scriptUni</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">dvn</span>,</span></span>
@@ -181,7 +191,7 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 <span class="r-in"><span>  constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span></span>
 <span class="r-in"><span>  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  fileName <span class="op">=</span> <span class="st">"dUni_intercept"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.loads.script</span> <span class="op">&lt;-</span> <span class="fu">scriptUni</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">dvn</span>,</span></span>
@@ -191,7 +201,7 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 <span class="r-in"><span>  constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span></span>
 <span class="r-in"><span>  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  fileName <span class="op">=</span> <span class="st">"dUni_loading"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sat.config.script</span> <span class="op">&lt;-</span> <span class="fu">scriptUni</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">dvn</span>,</span></span>
@@ -201,7 +211,7 @@ invariance constraint set (see Lee, Preacher, &amp; Little, 2011).</p></li>
 <span class="r-in"><span>  constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span></span>
 <span class="r-in"><span>  writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  fileName <span class="op">=</span> <span class="st">"dUni_configural"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
