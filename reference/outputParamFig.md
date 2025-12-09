@@ -88,7 +88,7 @@ outputParamFig(sat.config.mod,
   figtype = "standardized",
   writeTo = tempdir(), fileName = "dCFA_configural"
 )
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpEa4tcV/dCFA_configural std.png
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpONn732/dCFA_configural std.png
 
 dvnxy <- scrapeVarCross(
   dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
@@ -114,5 +114,5 @@ outputParamFig(apim.indist.mod,
   figtype = "standardized",
   writeTo = tempdir(), fileName = "APIM_indist"
 )
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpEa4tcV/APIM_indist std.png
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpONn732/APIM_indist std.png
 ```
