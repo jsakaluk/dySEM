@@ -41,209 +41,238 @@
 #' @export
 #' @examples
 #'
-#' #When different factor use distinct stems:
-#' imsList <- list(lvnames = c("Sat", "Q_Alt", "Invest", "Comm"),
-#' stem = c("sat.g", "qalt.g", "invest.g", "com"),
-#' delim1 = c("", "", "", ""),
-#' delim2 = c("_", "_", "_", "_"))
+#' # When different factor use distinct stems:
+#' imsList <- list(
+#'   lvnames = c("Sat", "Q_Alt", "Invest", "Comm"),
+#'   stem = c("sat.g", "qalt.g", "invest.g", "com"),
+#'   delim1 = c("", "", "", ""),
+#'   delim2 = c("_", "_", "_", "_")
+#' )
 #'
-#' dvnIMS<- scrapeVarCross(imsM,
-#' var_list = imsList,
-#' var_list_order = "sip",
-#' distinguish_1 = "f",
-#' distinguish_2 = "m")
+#' dvnIMS <- scrapeVarCross(imsM,
+#'   var_list = imsList,
+#'   var_list_order = "sip",
+#'   distinguish_1 = "f",
+#'   distinguish_2 = "m"
+#' )
 #'
-#' script.ims.config <-  scriptCFA(dvnIMS, scaleset = "FF",
-#' constr_dy_meas = "none",
-#' constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_config")
+#' script.ims.config <- scriptCFA(dvnIMS,
+#'   scaleset = "FF",
+#'   constr_dy_meas = "none",
+#'   constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_config"
+#' )
 #'
-#' script.ims.load <-  scriptCFA(dvnIMS, scaleset = "FF",
-#' constr_dy_meas = c("loadings"),
-#' constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_load")
+#' script.ims.load <- scriptCFA(dvnIMS,
+#'   scaleset = "FF",
+#'   constr_dy_meas = c("loadings"),
+#'   constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_load"
+#' )
 #'
-#' script.ims.int <-  scriptCFA(dvnIMS, scaleset = "FF",
-#' constr_dy_meas = c("loadings", "intercepts"),
-#' constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_int")
+#' script.ims.int <- scriptCFA(dvnIMS,
+#'   scaleset = "FF",
+#'   constr_dy_meas = c("loadings", "intercepts"),
+#'   constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_int"
+#' )
 #'
-#' script.ims.res <-  scriptCFA(dvnIMS, scaleset = "FF",
-#' constr_dy_meas = c("loadings", "intercepts", "residuals"),
-#' constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_res")
+#' script.ims.res <- scriptCFA(dvnIMS,
+#'   scaleset = "FF",
+#'   constr_dy_meas = c("loadings", "intercepts", "residuals"),
+#'   constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_res"
+#' )
 #'
-#' script.ims.indist <-  scriptCFA(dvnIMS, scaleset = "FF",
-#' constr_dy_meas = c("loadings", "intercepts", "residuals"),
-#' constr_dy_struct = c("variances", "means"), writeTo = tempdir(), fileName = "ims_indist")
+#' script.ims.indist <- scriptCFA(dvnIMS,
+#'   scaleset = "FF",
+#'   constr_dy_meas = c("loadings", "intercepts", "residuals"),
+#'   constr_dy_struct = c("variances", "means"), writeTo = tempdir(), fileName = "ims_indist"
+#' )
 #'
-#' #When different factor use the same stem and muse be detected through numeric position
+#' # When different factor use the same stem and muse be detected through numeric position
 #'
-#' prqcList <- list(lvnames = c("Sat", "Comm", "Intim", "Trust", "Pass", "Love"),
-#' stem = c("prqc", "prqc", "prqc", "prqc", "prqc", "prqc"),
-#' delim1 = c(".", ".", ".", ".", ".", "."),
-#' delim2 = c("_", "_", "_", "_", "_", "_"),
-#' min_num = c(1, 4, 7, 10, 13, 16),
-#' max_num = c(3, 6, 9, 12, 15, 18))
+#' prqcList <- list(
+#'   lvnames = c("Sat", "Comm", "Intim", "Trust", "Pass", "Love"),
+#'   stem = c("prqc", "prqc", "prqc", "prqc", "prqc", "prqc"),
+#'   delim1 = c(".", ".", ".", ".", ".", "."),
+#'   delim2 = c("_", "_", "_", "_", "_", "_"),
+#'   min_num = c(1, 4, 7, 10, 13, 16),
+#'   max_num = c(3, 6, 9, 12, 15, 18)
+#' )
 #'
-#' dvnPRQC<- scrapeVarCross(prqcQ,
-#' var_list = prqcList,
-#' var_list_order = "spi",
-#' distinguish_1 = "1",
-#' distinguish_2 = "2")
+#' dvnPRQC <- scrapeVarCross(prqcQ,
+#'   var_list = prqcList,
+#'   var_list_order = "spi",
+#'   distinguish_1 = "1",
+#'   distinguish_2 = "2"
+#' )
 #'
-#' script.prqc.config <-  scriptCFA(dvnPRQC, scaleset = "FF",
-#' constr_dy_meas = "none",
-#' constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_config")
+#' script.prqc.config <- scriptCFA(dvnPRQC,
+#'   scaleset = "FF",
+#'   constr_dy_meas = "none",
+#'   constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_config"
+#' )
 #'
-#' script.prqc.load <-  scriptCFA(dvnPRQC, scaleset = "FF",
-#' constr_dy_meas = c("loadings"),
-#' constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_load")
+#' script.prqc.load <- scriptCFA(dvnPRQC,
+#'   scaleset = "FF",
+#'   constr_dy_meas = c("loadings"),
+#'   constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_load"
+#' )
 #'
-#' script.prqc.int <-  scriptCFA(dvnPRQC, scaleset = "FF",
-#' constr_dy_meas = c("loadings", "intercepts"),
-#' constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_int")
+#' script.prqc.int <- scriptCFA(dvnPRQC,
+#'   scaleset = "FF",
+#'   constr_dy_meas = c("loadings", "intercepts"),
+#'   constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_int"
+#' )
 #'
-#' script.prqc.res <-  scriptCFA(dvnPRQC, scaleset = "FF",
-#' constr_dy_meas = c("loadings", "intercepts", "residuals"),
-#' constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_res")
+#' script.prqc.res <- scriptCFA(dvnPRQC,
+#'   scaleset = "FF",
+#'   constr_dy_meas = c("loadings", "intercepts", "residuals"),
+#'   constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_res"
+#' )
 #'
-#' script.prqc.indist <-  scriptCFA(dvnPRQC, scaleset = "FF",
-#' constr_dy_meas = c("loadings", "intercepts", "residuals"),
-#' constr_dy_struct = c("variances", "means"), writeTo = tempdir(), fileName = "prqc_indist")
-
-
+#' script.prqc.indist <- scriptCFA(dvnPRQC,
+#'   scaleset = "FF",
+#'   constr_dy_meas = c("loadings", "intercepts", "residuals"),
+#'   constr_dy_struct = c("variances", "means"), writeTo = tempdir(), fileName = "prqc_indist"
+#' )
 scriptCFA <- function(dvn, scaleset = "FF",
                       constr_dy_meas = c("loadings", "intercepts", "residuals"),
                       constr_dy_struct = c("variances", "means"),
                       writeTo = NULL,
-                      fileName = NULL){
+                      fileName = NULL) {
+  # Input validation
+  # Validate dvn argument
+  if (missing(dvn) || is.null(dvn)) {
+    stop("The `dvn` argument is required and cannot be NULL.")
+  }
+  if (!is.list(dvn)) {
+    stop("The `dvn` argument must be a list object.")
+  }
+
+  # Validate scaleset argument
+  if (!is.character(scaleset)) {
+    stop("The `scaleset` argument must be a character string.")
+  }
 
 
-  #check for valid inputs
-  if(!is.list(dvn$p1xvarnames) | !is.list(dvn$p2xvarnames)){
+  # check for valid inputs
+  if (!is.list(dvn$p1xvarnames) | !is.list(dvn$p2xvarnames)) {
     stop("You must supply a dvn object from an instance of scrapeVarCross() when the var_list argument has been used (i.e., the dvn should contain indicators for multiple factors per partner. If you are looking to script a correlated factors model (scriptCFA()'s previous functionality), please use scriptCor() instead.")
   }
 
-  if(!any(constr_dy_meas %in% c("loadings", "intercepts", "residuals", "none"))){
+  if (!any(constr_dy_meas %in% c("loadings", "intercepts", "residuals", "none"))) {
     stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'")
   }
 
-  if(!any(constr_dy_struct %in% c("variances", "means", "none"))){
+  if (!any(constr_dy_struct %in% c("variances", "means", "none"))) {
     stop("constr_dy_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
   }
 
-  if(!scaleset %in% c("FF", "MV")){
+  if (!scaleset %in% c("FF", "MV")) {
     stop("scaleset must be either 'FF' (fixed-factor) or 'MV' (marker variable)")
   }
 
-  #loadings
-  if(any(constr_dy_meas == "loadings")){
-    if(scaleset == "FF"){
-      x1loads <- multifac_loads(dvn, partner="1", type = "equated")
-      x2loads <- multifac_loads(dvn, partner="2", type = "equated")
-
+  # loadings
+  if (any(constr_dy_meas == "loadings")) {
+    if (scaleset == "FF") {
+      x1loads <- multifac_loads(dvn, partner = "1", type = "equated")
+      x2loads <- multifac_loads(dvn, partner = "2", type = "equated")
+    } else if (scaleset == "MV") {
+      xloads1 <- multifac_loads(dvn, partner = "1", type = "fixed")
+      x2loads <- multifac_loads(dvn, partner = "2", type = "equated")
     }
-    else if(scaleset == "MV"){
-      xloads1 <- multifac_loads(dvn, partner="1", type = "fixed")
-      x2loads <- multifac_loads(dvn, partner="2", type = "equated")
-
-    }
-  }else{
-    if(scaleset == "FF"){
-
-      x1loads <- multifac_loads(dvn, partner="1", type = "free")
-      x2loads <- multifac_loads(dvn, partner="2", type = "free")
-    }
-    else if(scaleset == "MV"){
-      x1loads <- multifac_loads(dvn, partner="1", type = "fixed")
-      x2loads <- multifac_loads(dvn, partner="2", type = "fixed")
+  } else {
+    if (scaleset == "FF") {
+      x1loads <- multifac_loads(dvn, partner = "1", type = "free")
+      x2loads <- multifac_loads(dvn, partner = "2", type = "free")
+    } else if (scaleset == "MV") {
+      x1loads <- multifac_loads(dvn, partner = "1", type = "fixed")
+      x2loads <- multifac_loads(dvn, partner = "2", type = "fixed")
     }
   }
 
-  #intercepts
-  if(any(constr_dy_meas == "intercepts")){
-    if(scaleset == "FF"){
-      xints1 <- multifac_intercepts(dvn, partner="1", type = "equated")
-      xints2 <- multifac_intercepts(dvn, partner="2", type = "equated")
-    }else if(scaleset == "MV"){
-      xints1 <- multifac_intercepts(dvn, partner="1", type = "fixed")
-      xints2 <- multifac_intercepts(dvn, partner="2", type = "equated")
+  # intercepts
+  if (any(constr_dy_meas == "intercepts")) {
+    if (scaleset == "FF") {
+      xints1 <- multifac_intercepts(dvn, partner = "1", type = "equated")
+      xints2 <- multifac_intercepts(dvn, partner = "2", type = "equated")
+    } else if (scaleset == "MV") {
+      xints1 <- multifac_intercepts(dvn, partner = "1", type = "fixed")
+      xints2 <- multifac_intercepts(dvn, partner = "2", type = "equated")
     }
-  }else{
-    if(scaleset == "FF"){
-      xints1 <- multifac_intercepts(dvn, partner="1", type = "free")
-      xints2 <- multifac_intercepts(dvn, partner="2", type = "free")
-    }
-    else if(scaleset == "MV"){
-      xints1 <- multifac_intercepts(dvn, partner="1", type = "fixed")
-      xints2 <- multifac_intercepts(dvn, partner="2", type = "fixed")
+  } else {
+    if (scaleset == "FF") {
+      xints1 <- multifac_intercepts(dvn, partner = "1", type = "free")
+      xints2 <- multifac_intercepts(dvn, partner = "2", type = "free")
+    } else if (scaleset == "MV") {
+      xints1 <- multifac_intercepts(dvn, partner = "1", type = "fixed")
+      xints2 <- multifac_intercepts(dvn, partner = "2", type = "fixed")
     }
   }
 
-  #residual variances
-  if(any(constr_dy_meas == "residuals")){
-    xres1 <- multifac_resids(dvn, partner="1", type = "equated")
-    xres2 <- multifac_resids(dvn, partner="2", type = "equated")
-  }else{
-    #Residual variances
-    xres1 <- multifac_resids(dvn, partner="1", type = "free")
-    xres2 <- multifac_resids(dvn, partner="2", type = "free")
+  # residual variances
+  if (any(constr_dy_meas == "residuals")) {
+    xres1 <- multifac_resids(dvn, partner = "1", type = "equated")
+    xres2 <- multifac_resids(dvn, partner = "2", type = "equated")
+  } else {
+    # Residual variances
+    xres1 <- multifac_resids(dvn, partner = "1", type = "free")
+    xres2 <- multifac_resids(dvn, partner = "2", type = "free")
   }
 
-  #Correlated residuals
-  xcoresids <- multifac_coresids(dvn, type ="free")
+  # Correlated residuals
+  xcoresids <- multifac_coresids(dvn, type = "free")
 
-  #latent variances
-  if(any(constr_dy_struct == "variances")){
-    if(scaleset == "FF"){
+  # latent variances
+  if (any(constr_dy_struct == "variances")) {
+    if (scaleset == "FF") {
       xvar1 <- multifac_lvars(dvn, partner = "1", type = "constrain")
       xvar2 <- multifac_lvars(dvn, partner = "2", type = "equate")
-    }else if(scaleset == "MV"){
+    } else if (scaleset == "MV") {
       xvar1 <- multifac_lvars(dvn, partner = "1", type = "equate")
       xvar2 <- multifac_lvars(dvn, partner = "2", type = "equate")
     }
-  }else if(!any(constr_dy_struct == "variances") & any(constr_dy_meas == "loadings") & scaleset == "FF"){
+  } else if (!any(constr_dy_struct == "variances") & any(constr_dy_meas == "loadings") & scaleset == "FF") {
     xvar1 <- multifac_lvars(dvn, partner = "1", type = "constrain")
     xvar2 <- multifac_lvars(dvn, partner = "2", type = "free")
-  }else{
-    if(scaleset == "FF"){
+  } else {
+    if (scaleset == "FF") {
       xvar1 <- multifac_lvars(dvn, partner = "1", type = "constrain")
       xvar2 <- multifac_lvars(dvn, partner = "2", type = "constrain")
-    }
-    else if(scaleset == "MV"){
+    } else if (scaleset == "MV") {
       xvar1 <- multifac_lvars(dvn, partner = "1", type = "free")
       xvar2 <- multifac_lvars(dvn, partner = "2", type = "free")
     }
   }
 
-  #latent covariance
-  if(any(constr_dy_struct == "orthogonal")){
+  # latent covariance
+  if (any(constr_dy_struct == "orthogonal")) {
     xcovar <- multifac_lcovars(dvn, type = "zero")
-  }else{
+  } else {
     xcovar <- multifac_lcovars(dvn, type = "free")
   }
 
-  #latent means
-  if(any(constr_dy_struct == "means")){
-    if(scaleset == "FF"){
+  # latent means
+  if (any(constr_dy_struct == "means")) {
+    if (scaleset == "FF") {
       xmean1 <- multifac_lmeans(dvn, partner = "1", type = "fixed")
       xmean2 <- multifac_lmeans(dvn, partner = "2", type = "equated")
-    }else if(scaleset == "MV"){
+    } else if (scaleset == "MV") {
       xmean1 <- multifac_lmeans(dvn, partner = "1", type = "equated")
       xmean2 <- multifac_lmeans(dvn, partner = "2", type = "equated")
     }
-  }else if(!any(constr_dy_struct == "means") & any(constr_dy_meas == "intercepts") & scaleset == "FF"){
+  } else if (!any(constr_dy_struct == "means") & any(constr_dy_meas == "intercepts") & scaleset == "FF") {
     xmean1 <- multifac_lmeans(dvn, partner = "1", type = "fixed")
     xmean2 <- multifac_lmeans(dvn, partner = "2", type = "free")
-  }else{
-    if(scaleset == "FF"){
+  } else {
+    if (scaleset == "FF") {
       xmean1 <- multifac_lmeans(dvn, partner = "1", type = "fixed")
       xmean2 <- multifac_lmeans(dvn, partner = "2", type = "fixed")
-    }
-    else if(scaleset == "MV"){
+    } else if (scaleset == "MV") {
       xmean1 <- multifac_lmeans(dvn, partner = "1", type = "free")
       xmean2 <- multifac_lmeans(dvn, partner = "2", type = "free")
     }
   }
 
-  #Script Creation Syntax
+  # Script Creation Syntax
   script <- sprintf(
     "#Measurement Model\n\n#Loadings\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s",
     paste(x1loads, collapse = "\n"),
@@ -260,37 +289,37 @@ scriptCFA <- function(dvn, scaleset = "FF",
     paste(xmean2, collapse = "\n")
   )
 
-  #Write script to file if requested
+  # Write script to file if requested
 
-  if(!is.null(writeTo) | !is.null(fileName)){
-    #if there is a path or file name,
-    #check for valid input,
-    #and if valid, write script
+  if (!is.null(writeTo) | !is.null(fileName)) {
+    # if there is a path or file name,
+    # check for valid input,
+    # and if valid, write script
 
 
     # checking for valid directory path and fileName
-    if (!is.character(writeTo)){
+    if (!is.character(writeTo)) {
       stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
     }
-    if (!dir.exists(writeTo)){
+    if (!dir.exists(writeTo)) {
       stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
     }
-    if (!is.character(fileName)){
+    if (!is.character(fileName)) {
       stop("The `fileName` argument must be a character string.")
     }
 
-    #write file
+    # write file
     cat(script, "\n",
-        file = sprintf("%s/%s.txt",
-                       writeTo,
-                       fileName))
+      file = sprintf(
+        "%s/%s.txt",
+        writeTo,
+        fileName
+      )
+    )
 
     return(script)
-
-  }else if(is.null(writeTo) & is.null(fileName)){
-    #otherwise just return script
+  } else if (is.null(writeTo) & is.null(fileName)) {
+    # otherwise just return script
     return(script)
   }
-
 }
-

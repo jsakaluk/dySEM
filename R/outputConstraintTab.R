@@ -28,139 +28,164 @@
 #' @export
 #'
 #' @examples
-#' dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
-#' x_delim2="_", distinguish_1="f", distinguish_2="m")
+#' dvn <- scrapeVarCross(
+#'   dat = commitmentM, x_order = "sip", x_stem = "sat.g",
+#'   x_delim2 = "_", distinguish_1 = "f", distinguish_2 = "m"
+#' )
 #'
-#' sat.resids.script <- scriptCor(dvn, lvname = "Sat",
-#' constr_dy_meas = c("loadings", "intercepts", "residuals"),
-#' constr_dy_struct = "none")
+#' sat.resids.script <- scriptCor(dvn,
+#'   lvname = "Sat",
+#'   constr_dy_meas = c("loadings", "intercepts", "residuals"),
+#'   constr_dy_struct = "none"
+#' )
 #'
-#' sat.resids.mod <- lavaan::cfa(sat.resids.script, data = commitmentM, std.lv = FALSE,
-#' auto.fix.first= FALSE, meanstructure = TRUE)
+#' sat.resids.mod <- lavaan::cfa(sat.resids.script,
+#'   data = commitmentM, std.lv = FALSE,
+#'   auto.fix.first = FALSE, meanstructure = TRUE
+#' )
 #'
-#' outputConstraintTab(sat.resids.mod, filterSig = FALSE,
-#' gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Residual")
+#' outputConstraintTab(sat.resids.mod,
+#'   filterSig = FALSE,
+#'   gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Residual"
+#' )
 #'
-
 outputConstraintTab <- function(constrainFit, filterSig = FALSE,
-                                gtTab = FALSE, writeTo = NULL, fileName = NULL){
+                                gtTab = FALSE, writeTo = NULL, fileName = NULL) {
+  # Input validation
+  # Validate constrainFit argument
+  if (missing(constrainFit) || is.null(constrainFit)) {
+    stop("The `constrainFit` argument is required and cannot be NULL.")
+  }
+  if (!inherits(constrainFit, "lavaan")) {
+    stop("The `constrainFit` argument must be a fitted lavaan model object.")
+  }
 
-  #checking for valid directory path
-  if (gtTab == TRUE && !is.null(writeTo)){
+  # Validate filterSig argument
+  if (!is.logical(filterSig)) {
+    stop("The `filterSig` argument must be a logical value (TRUE or FALSE).")
+  }
 
-    if (!is.character(writeTo)){
+  # Validate gtTab argument
+  if (!is.logical(gtTab)) {
+    stop("The `gtTab` argument must be a logical value (TRUE or FALSE).")
+  }
+
+  # checking for valid directory path
+  if (gtTab == TRUE && !is.null(writeTo)) {
+    if (!is.character(writeTo)) {
       stop("The `writeTo` argument must be a character string. \n Use `writeTo = '.'` to save output file(s) in the current working directory.")
     }
-    if (!dir.exists(writeTo)){
+    if (!dir.exists(writeTo)) {
       stop("The specified directory does not exist. \n Use `writeTo = '.'` to save output file(s) in the current working directory.")
     }
-    if (!is.null(fileName) && !is.character(fileName)){
+    if (!is.null(fileName) && !is.character(fileName)) {
       stop("The `fileName` argument must be a character string.")
     }
-
   }
 
 
-  #Extract score test for relaxing each equality constraint
+  # Extract score test for relaxing each equality constraint
   constrainFit.mi <- lavaan::lavTestScore(constrainFit)
   constrainFit.mi.uni <- constrainFit.mi$uni
   constrainFit.mi.uni <- constrainFit.mi.uni |>
     dplyr::rename(constraint = .data$op)
 
-  #Extract parameter table and create more informative parameter description
+  # Extract parameter table and create more informative parameter description
   constrainFit.PT <- lavaan::parTable(constrainFit)
   constrainFit.PT$param <- paste(constrainFit.PT$lhs, constrainFit.PT$op, constrainFit.PT$rhs, sep = " ")
   constrainFit.PT.reduce <- constrainFit.PT |>
     dplyr::select(.data$plabel, .data$param)
 
-  #Create subset of lhs labeled parameters
+  # Create subset of lhs labeled parameters
   constrainFit.PT.plabel.lhs <- constrainFit.PT.reduce |>
-    #use dplyr filter to select for cases where plabel matches the values of lhs or rhs in int.fit.mi.uni
+    # use dplyr filter to select for cases where plabel matches the values of lhs or rhs in int.fit.mi.uni
     dplyr::filter(.data$plabel %in% constrainFit.mi.uni$lhs) |>
-    dplyr::rename(plabel1 = .data$plabel,
-                  param1 = .data$param) |>
+    dplyr::rename(
+      plabel1 = .data$plabel,
+      param1 = .data$param
+    ) |>
     dplyr::mutate(constraint = "==")
 
-  #Create subset of rhs labeled parameters
+  # Create subset of rhs labeled parameters
   constrainFit.PT.plabel.rhs <- constrainFit.PT.reduce |>
-    #use dplyr filter to select for cases where plabel matches the values of lhs or rhs in int.fit.mi.uni
+    # use dplyr filter to select for cases where plabel matches the values of lhs or rhs in int.fit.mi.uni
     dplyr::filter(.data$plabel %in% constrainFit.mi.uni$rhs) |>
-    dplyr::rename(plabel2 = .data$plabel,
-                  param2 = .data$param)
+    dplyr::rename(
+      plabel2 = .data$plabel,
+      param2 = .data$param
+    )
 
-  #cbind subsets together
+  # cbind subsets together
   constrainFit.PT.merge <- cbind(constrainFit.PT.plabel.lhs, constrainFit.PT.plabel.rhs)
 
-  #carry over chi2, df, and p, and round
+  # carry over chi2, df, and p, and round
   constrainFit.PT.merge <- constrainFit.PT.merge |>
-    dplyr::mutate(chi2 = constrainFit.mi.uni$X2,
-                  df = constrainFit.mi.uni$df,
-                  pvalue = constrainFit.mi.uni$p.value,
-                  sig = dplyr::case_when(pvalue < .05 & pvalue > .01 ~ "*",
-                                         pvalue < .01 & pvalue > .001 ~ "**",
-                                         pvalue < .001 ~ "***")) |>
+    dplyr::mutate(
+      chi2 = constrainFit.mi.uni$X2,
+      df = constrainFit.mi.uni$df,
+      pvalue = constrainFit.mi.uni$p.value,
+      sig = dplyr::case_when(
+        pvalue < .05 & pvalue > .01 ~ "*",
+        pvalue < .01 & pvalue > .001 ~ "**",
+        pvalue < .001 ~ "***"
+      )
+    ) |>
     dplyr::select(-.data$plabel1, -.data$plabel2) |>
     dplyr::mutate_if(is.numeric, round, 3)
 
-  #filter for significance if filterSig is TRUE
-  if(filterSig == TRUE){
+  # filter for significance if filterSig is TRUE
+  if (filterSig == TRUE) {
     constrainFit.PT.merge <- constrainFit.PT.merge |>
       dplyr::filter(.data$pvalue < .05)
   }
 
-  if (gtTab == FALSE){
-
+  if (gtTab == FALSE) {
     constrainFit.PT.merge <- constrainFit.PT.merge |>
       tibble::as_tibble()
 
     return(constrainFit.PT.merge)
-  }
-
-  else if (gtTab == TRUE){ #Create gt table
+  } else if (gtTab == TRUE) { # Create gt table
 
 
-    #user specifies writeTo
-    if (!is.null(writeTo)){
-
+    # user specifies writeTo
+    if (!is.null(writeTo)) {
       constrainFit.PT.merge <- constrainFit.PT.merge |>
         gt::gt()
 
-      if (is.null(fileName)){
+      if (is.null(fileName)) {
         gt::gtsave(constrainFit.PT.merge,
-                   filename = "dySEM_table.rtf",
-                   path = writeTo)
-        message( #confirmation message
+          filename = "dySEM_table.rtf",
+          path = writeTo
+        )
+        message( # confirmation message
           sprintf(
             "Output stored in: %s/dySEM_table.rtf",
-            writeTo)
+            writeTo
+          )
         )
-      }
-
-      else if (!is.null(fileName)){
+      } else if (!is.null(fileName)) {
         gt::gtsave(constrainFit.PT.merge,
-                   filename = sprintf("%s.rtf",
-                                      fileName),
-                   path = writeTo)
-        message( #confirmation message
+          filename = sprintf(
+            "%s.rtf",
+            fileName
+          ),
+          path = writeTo
+        )
+        message( # confirmation message
           sprintf(
             "Output stored in: %s/%s.rtf",
-            writeTo, fileName)
+            writeTo, fileName
+          )
         )
       }
     }
 
-    #user does not specify writeTo
-    else if (is.null(writeTo)){
-
+    # user does not specify writeTo
+    else if (is.null(writeTo)) {
       constrainFit.PT.merge <- constrainFit.PT.merge |>
         gt::gt()
-
     }
 
     return(constrainFit.PT.merge)
-
   }
-
 }
-
-

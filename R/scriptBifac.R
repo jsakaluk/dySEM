@@ -48,16 +48,16 @@
 #'   x_order = "spi",
 #'   x_stem = "sat.g",
 #'   x_delim1 = ".",
-#'   x_delim2="_",
-#'   distinguish_1="1",
-#'   distinguish_2="2"
-#'   )
+#'   x_delim2 = "_",
+#'   distinguish_1 = "1",
+#'   distinguish_2 = "2"
+#' )
 #'
 #' sat.indist.script <- scriptBifac(
 #'   dvn,
 #'   scaleset = "FF",
 #'   lvname = "Sat"
-#'   )
+#' )
 #'
 #' sat.lvars.script <- scriptBifac(
 #'   dvn,
@@ -65,7 +65,7 @@
 #'   lvname = "Sat",
 #'   constr_dy_meas = "loadings",
 #'   constr_dy_struct = "variances"
-#'   )
+#' )
 #'
 #' sat.resids.script <- scriptBifac(
 #'   dvn,
@@ -75,7 +75,7 @@
 #'   constr_dy_struct = "none",
 #'   writeTo = tempdir(),
 #'   fileName = "dBiFac_residual"
-#'   )
+#' )
 #'
 #' sat.ints.script <- scriptBifac(
 #'   dvn,
@@ -85,7 +85,7 @@
 #'   constr_dy_struct = "none",
 #'   writeTo = tempdir(),
 #'   fileName = "dBiFac_intercept"
-#'   )
+#' )
 #'
 #' sat.loads.script <- scriptBifac(
 #'   dvn,
@@ -95,7 +95,7 @@
 #'   constr_dy_struct = "none",
 #'   writeTo = tempdir(),
 #'   fileName = "dBiFac_loading"
-#'   )
+#' )
 #'
 #' sat.config.script <- scriptBifac(
 #'   dvn,
@@ -105,7 +105,7 @@
 #'   constr_dy_struct = "none",
 #'   writeTo = tempdir(),
 #'   fileName = "dBiFac_configural"
-#'   )
+#' )
 #'
 #' sat.source.script <- scriptBifac(
 #'   dvn,
@@ -115,7 +115,7 @@
 #'   constr_dy_struct = "none",
 #'   writeTo = tempdir(),
 #'   fileName = "dBiFac_source"
-#'   )
+#' )
 scriptBifac <- function(
     dvn,
     scaleset = "FF",
@@ -123,34 +123,43 @@ scriptBifac <- function(
     constr_dy_meas = c("loadings", "intercepts", "residuals"),
     constr_dy_struct = c("variances", "means"),
     writeTo = NULL,
-    fileName = NULL
-){
+    fileName = NULL) {
+  # Input validation
+  # Validate dvn argument
+  if (missing(dvn) || is.null(dvn)) {
+    stop("The `dvn` argument is required and cannot be NULL.")
+  }
+  if (!is.list(dvn)) {
+    stop("The `dvn` argument must be a list object.")
+  }
 
-  #check for valid inputs
-  if(length(dvn)!=6){
+  # Validate lvname argument
+  if (!is.character(lvname)) {
+    stop("The `lvname` argument must be a character string.")
+  }
+
+  # check for valid inputs
+  if (length(dvn) != 6) {
     stop("You must supply a dvn object containing information for only X [i.e., your target LV]")
   }
 
-  if(!scaleset %in% c("FF", "MV")){
+  if (!scaleset %in% c("FF", "MV")) {
     stop("scaleset must be either 'FF' (fixed-factor) or 'MV' (marker variable)")
   }
 
-  if(!any(constr_dy_meas %in% c("loadings", "loadings_source", "intercepts", "residuals", "none"))){
+  if (!any(constr_dy_meas %in% c("loadings", "loadings_source", "intercepts", "residuals", "none"))) {
     stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'")
   }
 
-  if(!any(constr_dy_struct %in% c("variances", "means", "none"))){
+  if (!any(constr_dy_struct %in% c("variances", "means", "none"))) {
     stop("constr_dy_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
   }
 
-  if(scaleset == "FF"){
+  if (scaleset == "FF") {
+    # measurement model
 
-
-    #measurement model
-
-    #loadings
-    if(any(constr_dy_meas == "loadings")){
-
+    # loadings
+    if (any(constr_dy_meas == "loadings")) {
       xloadsg <- loads(
         dvn,
         lvar = "X",
@@ -163,21 +172,20 @@ scriptBifac <- function(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "equated"
       )
       xloads2 <- loads(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "equated"
       )
     }
 
-    #boutique loading invariance models
-    else if(any(constr_dy_meas == "loadings_source")){
-
+    # boutique loading invariance models
+    else if (any(constr_dy_meas == "loadings_source")) {
       xloadsg <- loads(
         dvn,
         lvar = "X",
@@ -190,20 +198,17 @@ scriptBifac <- function(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "equated_source"
       )
       xloads2 <- loads(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "equated_source"
       )
-    }
-
-    else{
-
+    } else {
       xloadsg <- loads(
         dvn,
         lvar = "X",
@@ -215,83 +220,77 @@ scriptBifac <- function(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "free"
       )
       xloads2 <- loads(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "free"
       )
     }
 
-    #intercepts
-    if(any(constr_dy_meas == "intercepts")){
-      xints1 = intercepts(
-        dvn,
-        lvar = "X",
-        partner="1",
-        type = "equated"
-      )
-      xints2 = intercepts(
-        dvn,
-        lvar = "X",
-        partner="2",
-        type = "equated"
-      )
-    }
-
-    else{
+    # intercepts
+    if (any(constr_dy_meas == "intercepts")) {
       xints1 <- intercepts(
         dvn,
         lvar = "X",
-        partner="1",
+        partner = "1",
+        type = "equated"
+      )
+      xints2 <- intercepts(
+        dvn,
+        lvar = "X",
+        partner = "2",
+        type = "equated"
+      )
+    } else {
+      xints1 <- intercepts(
+        dvn,
+        lvar = "X",
+        partner = "1",
         type = "free"
       )
       xints2 <- intercepts(
         dvn,
         lvar = "X",
-        partner="2",
+        partner = "2",
         type = "free"
       )
     }
 
-    #residuals
-    if(any(constr_dy_meas == "residuals")){
-
+    # residuals
+    if (any(constr_dy_meas == "residuals")) {
       xres1 <- resids(
         dvn,
         lvar = "X",
-        partner="1",
+        partner = "1",
         type = "equated"
       )
       xres2 <- resids(
         dvn,
         lvar = "X",
-        partner="2",
+        partner = "2",
         type = "equated"
       )
-
-    }
-
-    else{
+    } else {
       xres1 <- resids(
         dvn,
         lvar = "X",
-        partner="1",
+        partner = "1",
         type = "free"
       )
       xres2 <- resids(
         dvn,
         lvar = "X",
-        partner="2",
+        partner = "2",
         type = "free"
       )
     }
 
-    #correlated residuals
+    # correlated residuals
     xcoresids <- coresids(
       dvn,
       lvar = "X",
@@ -299,11 +298,11 @@ scriptBifac <- function(
     )
 
 
-    #structural model
+    # structural model
 
-    #latent variances
-    if(any(constr_dy_struct == "variances")){
-      xvarg  <- lvars(
+    # latent variances
+    if (any(constr_dy_struct == "variances")) {
+      xvarg <- lvars(
         dvn,
         lvar = "X",
         lvname,
@@ -324,10 +323,9 @@ scriptBifac <- function(
         partner = "2",
         type = "equated"
       )
-    }
-    else if(!any(constr_dy_struct == "variances") &
-            any(constr_dy_meas %in% c("loadings"))){
-      xvarg  <- lvars(
+    } else if (!any(constr_dy_struct == "variances") &
+      any(constr_dy_meas %in% c("loadings"))) {
+      xvarg <- lvars(
         dvn,
         lvar = "X",
         lvname,
@@ -348,8 +346,7 @@ scriptBifac <- function(
         partner = "2",
         type = "free"
       )
-    }
-    else{
+    } else {
       xvarg <- lvars(
         dvn,
         lvar = "X",
@@ -373,96 +370,94 @@ scriptBifac <- function(
       )
     }
 
-    #orthogonal between bifactor and specific factors
-    xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s",lvname,lvname, dvn[["dist1"]])
-    xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s",lvname,lvname, dvn[["dist2"]])
-    xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
+    # orthogonal between bifactor and specific factors
+    xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist1"]])
+    xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist2"]])
+    xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
 
-    #latent means for X
-    if(any(constr_dy_struct == "means")){
+    # latent means for X
+    if (any(constr_dy_struct == "means")) {
       xmeang <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="g",
+        partner = "g",
         type = "equated_ff"
       )
       xmean1 <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "equated"
       )
       xmean2 <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "equated"
       )
-    }
-    else if(!any(constr_dy_struct == "means") & any(constr_dy_meas == "intercepts")){
+    } else if (!any(constr_dy_struct == "means") & any(constr_dy_meas == "intercepts")) {
       xmeang <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="g",
+        partner = "g",
         type = "fixed"
       )
       xmean1 <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "free"
       )
       xmean2 <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "free"
       )
-    }
-    else{
+    } else {
       xmeang <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="g",
+        partner = "g",
         type = "fixed"
       )
       xmean1 <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "fixed"
       )
       xmean2 <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "fixed"
       )
     }
 
-    #Script Creation Syntax
-    script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
-                      xloads1, xloads2, xloadsg,
-                      xints1, xints2,
-                      xres1, xres2, xcoresids,
-                      xvar1, xvar2, xvarg, xcovargxx1, xcovargxx2, xcovarx1x2,
-                      xmean1, xmean2, xmeang)
-
+    # Script Creation Syntax
+    script <- sprintf(
+      "#Measurement Model\n\n#Loadings\n%s\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
+      xloads1, xloads2, xloadsg,
+      xints1, xints2,
+      xres1, xres2, xcoresids,
+      xvar1, xvar2, xvarg, xcovargxx1, xcovargxx2, xcovarx1x2,
+      xmean1, xmean2, xmeang
+    )
   }
 
-  if(scaleset == "MV"){
-
-    #loadings
-    if(any(constr_dy_meas == "loadings") & any(constr_dy_struct == "variances")){
+  if (scaleset == "MV") {
+    # loadings
+    if (any(constr_dy_meas == "loadings") & any(constr_dy_struct == "variances")) {
       xloadsg <- loads(
         dvn,
         lvar = "X",
@@ -474,18 +469,17 @@ scriptBifac <- function(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "equated"
       )
       xloads2 <- loads(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "equated"
       )
-    }else if(any(constr_dy_meas == "loadings")){
-
+    } else if (any(constr_dy_meas == "loadings")) {
       xloadsg <- loads(
         dvn,
         lvar = "X",
@@ -497,18 +491,17 @@ scriptBifac <- function(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "equated"
       )
       xloads2 <- loads(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "equated"
       )
-    }
-    else {
+    } else {
       xloadsg <- loads(
         dvn,
         lvar = "X",
@@ -521,20 +514,20 @@ scriptBifac <- function(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "fixed"
       )
       xloads2 <- loads(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "fixed"
       )
     }
 
-    #intercepts
-    if(any(constr_dy_meas == "intercepts")){
+    # intercepts
+    if (any(constr_dy_meas == "intercepts")) {
       xints1 <- intercepts(
         dvn,
         lvar = "X",
@@ -547,8 +540,7 @@ scriptBifac <- function(
         partner = "2",
         type = "equated"
       )
-    }
-    else {
+    } else {
       xints1 <- intercepts(
         dvn,
         lvar = "X",
@@ -563,8 +555,8 @@ scriptBifac <- function(
       )
     }
 
-    #residuals
-    if(any(constr_dy_meas == "residuals")){
+    # residuals
+    if (any(constr_dy_meas == "residuals")) {
       xres1 <- resids(
         dvn,
         lvar = "X",
@@ -577,8 +569,7 @@ scriptBifac <- function(
         partner = "2",
         type = "equated"
       )
-    }
-    else {
+    } else {
       xres1 <- resids(
         dvn,
         lvar = "X",
@@ -594,13 +585,13 @@ scriptBifac <- function(
     }
 
 
-    #correlated residuals for X
+    # correlated residuals for X
     xcoresids <- coresids(dvn, lvar = "X", "free")
 
 
-    #latent variances
-    if(any(constr_dy_struct == "variances")){
-      xvarg  <- lvars(
+    # latent variances
+    if (any(constr_dy_struct == "variances")) {
+      xvarg <- lvars(
         dvn,
         lvar = "X",
         lvname,
@@ -622,9 +613,7 @@ scriptBifac <- function(
         partner = "2",
         type = "equated"
       )
-    }
-
-    else{
+    } else {
       xvarg <- lvars(
         dvn,
         lvar = "X",
@@ -649,19 +638,19 @@ scriptBifac <- function(
       )
     }
 
-    #orthogonal between bifactor and specific factors
-    xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s",lvname,lvname, dvn[["dist1"]])
-    xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s",lvname,lvname, dvn[["dist2"]])
-    xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s",lvname, dvn[["dist1"]],lvname, dvn[["dist2"]])
+    # orthogonal between bifactor and specific factors
+    xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist1"]])
+    xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist2"]])
+    xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
 
 
-    #latent means
-    if(any(constr_dy_struct == "means")){
+    # latent means
+    if (any(constr_dy_struct == "means")) {
       xmeang <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="g",
+        partner = "g",
         type = "equated"
       )
 
@@ -669,22 +658,22 @@ scriptBifac <- function(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "equated"
       )
       xmean2 <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "equated"
       )
-    }else if(any(constr_dy_meas == "intercepts")){
+    } else if (any(constr_dy_meas == "intercepts")) {
       xmeang <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="g",
+        partner = "g",
         type = "free"
       )
 
@@ -692,23 +681,22 @@ scriptBifac <- function(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "free"
       )
       xmean2 <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "free"
       )
-    }
-    else{
+    } else {
       xmeang <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="g",
+        partner = "g",
         type = "fixed"
       )
 
@@ -716,58 +704,60 @@ scriptBifac <- function(
         dvn,
         lvar = "X",
         lvname,
-        partner="1",
+        partner = "1",
         type = "free"
       )
       xmean2 <- lmeans(
         dvn,
         lvar = "X",
         lvname,
-        partner="2",
+        partner = "2",
         type = "free"
       )
     }
 
 
-    #Script Creation Syntax
-    script <- sprintf("#Measurement Model\n\n#Loadings\n%s\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
-                      xloads1, xloads2, xloadsg,
-                      xints1, xints2,
-                      xres1, xres2, xcoresids,
-                      xvar1, xvar2, xvarg, xcovargxx1, xcovargxx2, xcovarx1x2,
-                      xmean1, xmean2, xmeang)
-
+    # Script Creation Syntax
+    script <- sprintf(
+      "#Measurement Model\n\n#Loadings\n%s\n%s\n%s\n\n#Intercepts\n%s\n\n%s\n\n#Residual Variances\n%s\n\n%s\n\n#Residual Covariances\n%s\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\n%s\n%s\n%s\n\n%s\n%s\n%s\n\n#Latent Means\n%s\n%s\n%s",
+      xloads1, xloads2, xloadsg,
+      xints1, xints2,
+      xres1, xres2, xcoresids,
+      xvar1, xvar2, xvarg, xcovargxx1, xcovargxx2, xcovarx1x2,
+      xmean1, xmean2, xmeang
+    )
   }
 
 
-  #Write script to file if requested
-  if(!is.null(writeTo) | !is.null(fileName) ){
-    #if there is a path or file name,
-    #check for valid input,
-    #and if valid, write script
+  # Write script to file if requested
+  if (!is.null(writeTo) | !is.null(fileName)) {
+    # if there is a path or file name,
+    # check for valid input,
+    # and if valid, write script
 
     # checking for valid directory path and fileName
-    if (!is.character(writeTo)){
+    if (!is.character(writeTo)) {
       stop("The `writeout` argument must be a character string. \n Use writeTo = '.' to save script in the current working directory, for example.")
     }
-    if (!dir.exists(writeTo)){
+    if (!dir.exists(writeTo)) {
       stop("The specified directory does not exist. \n Use writeTo = '.' to save script in the current working directory, for example.")
     }
-    if (!is.character(fileName)){
+    if (!is.character(fileName)) {
       stop("The `fileName` argument must be a character string.")
     }
 
-    #write file
+    # write file
     cat(script, "\n",
-        file = sprintf("%s/%s.txt",
-                       writeTo,
-                       fileName))
+      file = sprintf(
+        "%s/%s.txt",
+        writeTo,
+        fileName
+      )
+    )
 
     return(script)
-  }
-  else if(is.null(writeTo) & is.null(fileName)){
-    #otherwise just return script
+  } else if (is.null(writeTo) & is.null(fileName)) {
+    # otherwise just return script
     return(script)
   }
-
 }

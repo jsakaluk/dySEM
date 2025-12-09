@@ -34,140 +34,182 @@
 #' @export
 #'
 #' @examples
-#' dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-#' x_delim2="_", distinguish_1="1", distinguish_2="2")
+#' dvnx <- scrapeVarCross(
+#'   dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#'   x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+#' )
 #'
-#' sat.config.script <- scriptCor(dvnx, lvname = "Sat", constr_dy_meas = "none",
-#' constr_dy_struct = "none")
+#' sat.config.script <- scriptCor(dvnx,
+#'   lvname = "Sat", constr_dy_meas = "none",
+#'   constr_dy_struct = "none"
+#' )
 #'
-#' sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
-#' auto.fix.first= FALSE, meanstructure = TRUE)
+#' sat.config.mod <- lavaan::cfa(sat.config.script,
+#'   data = commitmentQ, std.lv = FALSE,
+#'   auto.fix.first = FALSE, meanstructure = TRUE
+#' )
 #'
-#' outputParamTab(dvnx, model = "cfa", sat.config.mod, tabletype = "measurement",
-#' writeTo = tempdir(), fileName = "dCFA_configural")
+#' outputParamTab(dvnx,
+#'   model = "cfa", sat.config.mod, tabletype = "measurement",
+#'   writeTo = tempdir(), fileName = "dCFA_configural"
+#' )
 #'
-#' dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-#' x_delim2="_", distinguish_1="1", distinguish_2="2",
-#' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+#' dvnxy <- scrapeVarCross(
+#'   dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#'   x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+#'   y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
+#' )
 #'
-#' apim.indist.script <-  scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
+#' apim.indist.script <- scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
 #'
-#' apim.indist.mod <- lavaan::cfa(apim.indist.script, data = commitmentQ, std.lv = FALSE,
-#' auto.fix.first= FALSE, meanstructure = TRUE)
+#' apim.indist.mod <- lavaan::cfa(apim.indist.script,
+#'   data = commitmentQ, std.lv = FALSE,
+#'   auto.fix.first = FALSE, meanstructure = TRUE
+#' )
 #'
-#' outputParamTab(dvnxy, model = "cfa", sat.config.mod, tabletype = "measurement",
-#' writeTo = tempdir(), fileName = "APIM_indist")
-
+#' outputParamTab(dvnxy,
+#'   model = "cfa", sat.config.mod, tabletype = "measurement",
+#'   writeTo = tempdir(), fileName = "APIM_indist"
+#' )
 outputParamTab <- function(dvn,
                            model = NULL,
                            fit,
                            tabletype = NULL,
                            gtTab = FALSE,
                            writeTo = NULL,
-                           fileName = NULL
-                           ){
+                           fileName = NULL) {
+  # Input validation
+  # Validate dvn argument
+  if (missing(dvn) || is.null(dvn)) {
+    stop("The `dvn` argument is required and cannot be NULL.")
+  }
+  if (!is.list(dvn)) {
+    stop("The `dvn` argument must be a list object.")
+  }
 
-  #checking for valid directory path
-  if (gtTab == TRUE && !is.null(writeTo)){
+  # Validate fit argument
+  if (missing(fit) || is.null(fit)) {
+    stop("The `fit` argument is required and cannot be NULL.")
+  }
+  if (!inherits(fit, "lavaan")) {
+    stop("The `fit` argument must be a fitted lavaan model object.")
+  }
 
-    if (!is.null(writeTo) && !is.character(writeTo)){
+  # Validate model argument if provided
+  if (!is.null(model) && !is.character(model)) {
+    stop("The `model` argument must be a character string.")
+  }
+
+  # Validate tabletype argument if provided
+  if (!is.null(tabletype) && !is.character(tabletype)) {
+    stop("The `tabletype` argument must be a character string.")
+  }
+
+  # Validate gtTab argument
+  if (!is.logical(gtTab)) {
+    stop("The `gtTab` argument must be a logical value (TRUE or FALSE).")
+  }
+
+  # checking for valid directory path
+  if (gtTab == TRUE && !is.null(writeTo)) {
+    if (!is.null(writeTo) && !is.character(writeTo)) {
       stop("The `writeTo` argument must be a character string. \n Use `writeTo = '.'` to save output file(s) in the current working directory.")
     }
-    if (!dir.exists(writeTo)){
+    if (!dir.exists(writeTo)) {
       stop("The specified directory does not exist. \n Use `writeTo = '.'` to save output file(s) in the current working directory.")
     }
-    if (!is.null(fileName) && !is.character(fileName)){
+    if (!is.null(fileName) && !is.character(fileName)) {
       stop("The `fileName` argument must be a character string.")
     }
-
   }
 
-  #cfa
-  if (model == "cfa"){
-
-    #for measurement model table
-    if(tabletype == "measurement"){
-      if (gtTab == FALSE){
+  # cfa
+  if (model == "cfa") {
+    # for measurement model table
+    if (tabletype == "measurement") {
+      if (gtTab == FALSE) {
         meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement", gtTab = FALSE)
         return(meas.tab)
-      }
-
-      else if (gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      } else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = "dySEM_table.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/dySEM_table.rtf",
-                writeTo)
+                writeTo
+              )
             )
-          }
-
-          else if (!is.null(fileName)){
+          } else if (!is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = sprintf("%s.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/%s.rtf",
-                writeTo, fileName)
+                writeTo, fileName
+              )
             )
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "measurement", gtTab = TRUE)
         }
 
         return(meas.tab)
       }
     }
-    if(tabletype == "correlation"){
-      if (gtTab == FALSE){
+    if (tabletype == "correlation") {
+      if (gtTab == FALSE) {
         corr.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "correlation", gtTab = FALSE)
         return(corr.tab)
-      }
-
-      else if (gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      } else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           corr.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "correlation", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(corr.tab,
-                       filename = "dySEM_table.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/dySEM_table.rtf",
-                writeTo)
+                writeTo
+              )
             )
-          }
-
-          else if (!is.null(fileName)){
+          } else if (!is.null(fileName)) {
             gt::gtsave(corr.tab,
-                       filename = sprintf("%s.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/%s.rtf",
-                writeTo, fileName)
+                writeTo, fileName
+              )
             )
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           corr.tab <- makeTable(dvn, fit, model = "cfa", tabletype = "correlation", gtTab = TRUE)
         }
 
@@ -176,711 +218,710 @@ outputParamTab <- function(dvn,
     }
   }
 
-  #bidy-c
-  else if(model == "bidyc"){
-
-    if (gtTab == FALSE){
+  # bidy-c
+  else if (model == "bidyc") {
+    if (gtTab == FALSE) {
       meas.tab <- makeTable(dvn, fit, model = "bidyc", tabletype = "measurement", gtTab = FALSE)
       return(meas.tab)
-    }
-
-    else if (gtTab == TRUE){
-
-      #user specifies writeTo
-      if (!is.null(writeTo)){
+    } else if (gtTab == TRUE) {
+      # user specifies writeTo
+      if (!is.null(writeTo)) {
         meas.tab <- makeTable(dvn, fit, model = "bidyc", tabletype = "measurement", gtTab = TRUE)
 
-        if (is.null(fileName)){
+        if (is.null(fileName)) {
           gt::gtsave(meas.tab,
-                     filename = "dySEM_table.rtf",
-                     path = writeTo)
-          message( #confirmation message
+            filename = "dySEM_table.rtf",
+            path = writeTo
+          )
+          message( # confirmation message
             sprintf(
               "Output stored in: %s/dySEM_table.rtf",
-              writeTo)
+              writeTo
+            )
           )
-        }
-
-        else if (!is.null(fileName)){
+        } else if (!is.null(fileName)) {
           gt::gtsave(meas.tab,
-                     filename = sprintf("%s.rtf",
-                                        fileName),
-                     path = writeTo)
-          message( #confirmation message
+            filename = sprintf(
+              "%s.rtf",
+              fileName
+            ),
+            path = writeTo
+          )
+          message( # confirmation message
             sprintf(
               "Output stored in: %s/%s.rtf",
-              writeTo, fileName)
+              writeTo, fileName
+            )
           )
         }
       }
 
-      #user does not specify writeTo
-      else if (is.null(writeTo)){
+      # user does not specify writeTo
+      else if (is.null(writeTo)) {
         meas.tab <- makeTable(dvn, fit, model = "bidyc", tabletype = "measurement", gtTab = TRUE)
       }
 
       return(meas.tab)
     }
-
   }
 
-  #apim/mim
-  else if(model == "apim"){
-
-    if(tabletype == "both"){
-
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+  # apim/mim
+  else if (model == "apim") {
+    if (tabletype == "both") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement", gtTab = FALSE)
         struct.tab <- makeTable(dvn, fit, model = "apim", tabletype = "structural", gtTab = FALSE)
         return(list(measurement = meas.tab, structural = struct.tab))
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement", gtTab = TRUE)
           struct.tab <- makeTable(dvn, fit, model = "apim", tabletype = "structural", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = "dySEM_table_measurement.rtf",
-                       path = writeTo)
+              filename = "dySEM_table_measurement.rtf",
+              path = writeTo
+            )
             gt::gtsave(struct.tab,
-                       filename = "dySEM_table_structural.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table_structural.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: \n %s/dySEM_table_measurement.rtf \n %s/dySEM_table_structural.rtf",
-                writeTo, writeTo)
+                writeTo, writeTo
+              )
             )
-          }
-
-          else if (!is.null(fileName)){
+          } else if (!is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = sprintf("%s_measurement.rtf",
-                                          fileName),
-                       path = writeTo)
+              filename = sprintf(
+                "%s_measurement.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
             gt::gtsave(struct.tab,
-                       filename = sprintf("%s_structural.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s_structural.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: \n %s/%s_measurement.rtf \n %s/%s_structural.rtf",
-                writeTo, fileName, writeTo, fileName)
+                writeTo, fileName, writeTo, fileName
+              )
             )
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement", gtTab = TRUE)
           struct.tab <- makeTable(dvn, fit, model = "apim", tabletype = "structural", gtTab = TRUE)
         }
 
         return(list(measurement = meas.tab, structural = struct.tab))
       }
-
+    } else if (tabletype == "measurement") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
+        meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement", gtTab = FALSE)
+        return(meas.tab)
       }
 
-    else if(tabletype == "measurement"){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
+          meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement", gtTab = TRUE)
 
-        #gtTab = FALSE
-        if (gtTab == FALSE){
-          meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement", gtTab = FALSE)
-          return(meas.tab)
+          if (is.null(fileName)) {
+            gt::gtsave(meas.tab,
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
+              sprintf(
+                "Output stored in: %s/dySEM_table.rtf",
+                writeTo
+              )
+            )
+          } else if (!is.null(fileName)) {
+            gt::gtsave(meas.tab,
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
+              sprintf(
+                "Output stored in: %s/%s.rtf",
+                writeTo, fileName
+              )
+            )
+          }
         }
 
-        #gtTab = TRUE
-        else if(gtTab == TRUE){
-
-          #user specifies writeTo
-          if (!is.null(writeTo)){
-            meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement", gtTab = TRUE)
-
-            if (is.null(fileName)){
-              gt::gtsave(meas.tab,
-                         filename = "dySEM_table.rtf",
-                         path = writeTo)
-              message( #confirmation message
-                sprintf(
-                  "Output stored in: %s/dySEM_table.rtf",
-                  writeTo)
-              )
-            }
-
-            else if (!is.null(fileName)){
-              gt::gtsave(meas.tab,
-                         filename = sprintf("%s.rtf",
-                                            fileName),
-                         path = writeTo)
-              message( #confirmation message
-                sprintf(
-                  "Output stored in: %s/%s.rtf",
-                  writeTo, fileName)
-              )
-            }
-          }
-
-          #user does not specify writeTo
-          else if (is.null(writeTo)){
-            meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement", gtTab = TRUE)
-          }
-
-          return(meas.tab)
-
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
+          meas.tab <- makeTable(dvn, fit, model = "apim", tabletype = "measurement", gtTab = TRUE)
         }
 
+        return(meas.tab)
       }
-
-    else if (tabletype == "structural"){
-
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+    } else if (tabletype == "structural") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         struct.tab <- makeTable(dvn, fit, model = "apim", tabletype = "structural", gtTab = FALSE)
         return(struct.tab)
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           struct.tab <- makeTable(dvn, fit, model = "apim", tabletype = "structural", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(struct.tab,
-                       filename = "dySEM_table.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/dySEM_table.rtf",
-                writeTo)
+                writeTo
+              )
             )
           }
 
-          if (!is.null(fileName)){
+          if (!is.null(fileName)) {
             gt::gtsave(struct.tab,
-                       filename = sprintf("%s.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/%s.rtf",
-                writeTo, fileName)
+                writeTo, fileName
+              )
             )
-
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           struct.tab <- makeTable(dvn, fit, model = "apim", tabletype = "structural", gtTab = TRUE)
         }
 
         return(struct.tab)
-
       }
-
     }
-
   }
 
-  #mim
-  else if(model == "mim"){
-
-    if(tabletype == "both"){
-
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+  # mim
+  else if (model == "mim") {
+    if (tabletype == "both") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         meas.tab <- makeTable(dvn, fit, model = "mim", tabletype = "measurement", gtTab = FALSE)
         struct.tab <- makeTable(dvn, fit, model = "mim", tabletype = "structural", gtTab = FALSE)
         return(list(measurement = meas.tab, structural = struct.tab))
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "mim", tabletype = "measurement", gtTab = TRUE)
           struct.tab <- makeTable(dvn, fit, model = "mim", tabletype = "structural", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = "dySEM_table_measurement.rtf",
-                       path = writeTo)
+              filename = "dySEM_table_measurement.rtf",
+              path = writeTo
+            )
             gt::gtsave(struct.tab,
-                       filename = "dySEM_table_structural.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table_structural.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: \n %s/dySEM_table_measurement.rtf \n %s/dySEM_table_structural.rtf",
-                writeTo, writeTo)
+                writeTo, writeTo
+              )
             )
-          }
-
-          else if (!is.null(fileName)){
+          } else if (!is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = sprintf("%s_measurement.rtf",
-                                          fileName),
-                       path = writeTo)
+              filename = sprintf(
+                "%s_measurement.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
             gt::gtsave(struct.tab,
-                       filename = sprintf("%s_structural.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s_structural.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: \n %s/%s_measurement.rtf \n %s/%s_structural.rtf",
-                writeTo, fileName, writeTo, fileName)
+                writeTo, fileName, writeTo, fileName
+              )
             )
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "mim", tabletype = "measurement", gtTab = TRUE)
           struct.tab <- makeTable(dvn, fit, model = "mim", tabletype = "structural", gtTab = TRUE)
         }
 
         return(list(measurement = meas.tab, structural = struct.tab))
       }
-
-    }
-
-    else if(tabletype == "measurement"){
-
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+    } else if (tabletype == "measurement") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         meas.tab <- makeTable(dvn, fit, model = "mim", tabletype = "measurement", gtTab = FALSE)
         return(meas.tab)
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "mim", tabletype = "measurement", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = "dySEM_table.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/dySEM_table.rtf",
-                writeTo)
+                writeTo
+              )
             )
-          }
-
-          else if (!is.null(fileName)){
+          } else if (!is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = sprintf("%s.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/%s.rtf",
-                writeTo, fileName)
+                writeTo, fileName
+              )
             )
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "mim", tabletype = "measurement", gtTab = TRUE)
         }
 
         return(meas.tab)
-
       }
-
-    }
-
-    else if (tabletype == "structural"){
-
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+    } else if (tabletype == "structural") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         struct.tab <- makeTable(dvn, fit, model = "mim", tabletype = "structural", gtTab = FALSE)
         return(struct.tab)
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           struct.tab <- makeTable(dvn, fit, model = "mim", tabletype = "structural", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(struct.tab,
-                       filename = "dySEM_table.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/dySEM_table.rtf",
-                writeTo)
+                writeTo
+              )
             )
           }
 
-          if (!is.null(fileName)){
+          if (!is.null(fileName)) {
             gt::gtsave(struct.tab,
-                       filename = sprintf("%s.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/%s.rtf",
-                writeTo, fileName)
+                writeTo, fileName
+              )
             )
-
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           struct.tab <- makeTable(dvn, fit, model = "mim", tabletype = "structural", gtTab = TRUE)
         }
 
         return(struct.tab)
-
       }
-
     }
-
   }
 
-  #cfm
-  else if(model == "cfm"){
-
-
-    if(tabletype == "both"){
-
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+  # cfm
+  else if (model == "cfm") {
+    if (tabletype == "both") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         meas.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "measurement", gtTab = FALSE)
         struct.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "structural", gtTab = FALSE)
         return(list(measurement = meas.tab, structural = struct.tab))
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "measurement", gtTab = TRUE)
           struct.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "structural", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = "dySEM_table_measurement.rtf",
-                       path = writeTo)
+              filename = "dySEM_table_measurement.rtf",
+              path = writeTo
+            )
             gt::gtsave(struct.tab,
-                       filename = "dySEM_table_structural.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table_structural.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: \n %s/dySEM_table_measurement.rtf \n %s/dySEM_table_structural.rtf",
-                writeTo, writeTo)
+                writeTo, writeTo
+              )
             )
-          }
-
-          else if (!is.null(fileName)){
+          } else if (!is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = sprintf("%s_measurement.rtf",
-                                          fileName),
-                       path = writeTo)
+              filename = sprintf(
+                "%s_measurement.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
             gt::gtsave(struct.tab,
-                       filename = sprintf("%s_structural.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s_structural.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: \n %s/%s_measurement.rtf \n %s/%s_structural.rtf",
-                writeTo, fileName, writeTo, fileName)
+                writeTo, fileName, writeTo, fileName
+              )
             )
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "measurement", gtTab = TRUE)
           struct.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "structural", gtTab = TRUE)
         }
 
         return(list(measurement = meas.tab, structural = struct.tab))
       }
-
-    }
-
-    else if(tabletype == "measurement"){
-
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+    } else if (tabletype == "measurement") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         meas.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "measurement", gtTab = FALSE)
         return(meas.tab)
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "measurement", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = "dySEM_table.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/dySEM_table.rtf",
-                writeTo)
+                writeTo
+              )
             )
-          }
-
-          else if (!is.null(fileName)){
+          } else if (!is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = sprintf("%s.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/%s.rtf",
-                writeTo, fileName)
+                writeTo, fileName
+              )
             )
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "measurement", gtTab = TRUE)
         }
 
         return(meas.tab)
-
       }
-
-    }
-
-    else if (tabletype == "structural"){
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+    } else if (tabletype == "structural") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         struct.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "structural", gtTab = FALSE)
         return(struct.tab)
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           struct.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "structural", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(struct.tab,
-                       filename = "dySEM_table.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/dySEM_table.rtf",
-                writeTo)
+                writeTo
+              )
             )
           }
 
-          if (!is.null(fileName)){
+          if (!is.null(fileName)) {
             gt::gtsave(struct.tab,
-                       filename = sprintf("%s.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/%s.rtf",
-                writeTo, fileName)
+                writeTo, fileName
+              )
             )
-
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           struct.tab <- makeTable(dvn, fit, model = "cfm", tabletype = "structural", gtTab = TRUE)
         }
 
         return(struct.tab)
-
       }
-
     }
-
   }
 
-  #bidy-s
-  else if(model == "bidys"){
-
-    if(tabletype == "both"){
-
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+  # bidy-s
+  else if (model == "bidys") {
+    if (tabletype == "both") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         meas.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "measurement", gtTab = FALSE)
         struct.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "structural", gtTab = FALSE)
         return(list(measurement = meas.tab, structural = struct.tab))
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "measurement", gtTab = TRUE)
           struct.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "structural", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = "dySEM_table_measurement.rtf",
-                       path = writeTo)
+              filename = "dySEM_table_measurement.rtf",
+              path = writeTo
+            )
             gt::gtsave(struct.tab,
-                       filename = "dySEM_table_structural.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table_structural.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: \n %s/dySEM_table_measurement.rtf \n %s/dySEM_table_structural.rtf",
-                writeTo, writeTo)
+                writeTo, writeTo
+              )
             )
-          }
-
-          else if (!is.null(fileName)){
+          } else if (!is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = sprintf("%s_measurement.rtf",
-                                          fileName),
-                       path = writeTo)
+              filename = sprintf(
+                "%s_measurement.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
             gt::gtsave(struct.tab,
-                       filename = sprintf("%s_structural.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s_structural.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: \n %s/%s_measurement.rtf \n %s/%s_structural.rtf",
-                writeTo, fileName, writeTo, fileName)
+                writeTo, fileName, writeTo, fileName
+              )
             )
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "measurement", gtTab = TRUE)
           struct.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "structural", gtTab = TRUE)
         }
 
         return(list(measurement = meas.tab, structural = struct.tab))
       }
-
-    }
-
-    else if(tabletype == "measurement"){
-
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+    } else if (tabletype == "measurement") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         meas.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "measurement", gtTab = FALSE)
         return(meas.tab)
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "measurement", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = "dySEM_table.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/dySEM_table.rtf",
-                writeTo)
+                writeTo
+              )
             )
-          }
-
-          else if (!is.null(fileName)){
+          } else if (!is.null(fileName)) {
             gt::gtsave(meas.tab,
-                       filename = sprintf("%s.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/%s.rtf",
-                writeTo, fileName)
+                writeTo, fileName
+              )
             )
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           meas.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "measurement", gtTab = TRUE)
         }
 
         return(meas.tab)
-
       }
-
-    }
-
-    else if (tabletype == "structural"){
-      #gtTab = FALSE
-      if (gtTab == FALSE){
+    } else if (tabletype == "structural") {
+      # gtTab = FALSE
+      if (gtTab == FALSE) {
         struct.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "structural", gtTab = FALSE)
         return(struct.tab)
       }
 
-      #gtTab = TRUE
-      else if(gtTab == TRUE){
-
-        #user specifies writeTo
-        if (!is.null(writeTo)){
+      # gtTab = TRUE
+      else if (gtTab == TRUE) {
+        # user specifies writeTo
+        if (!is.null(writeTo)) {
           struct.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "structural", gtTab = TRUE)
 
-          if (is.null(fileName)){
+          if (is.null(fileName)) {
             gt::gtsave(struct.tab,
-                       filename = "dySEM_table.rtf",
-                       path = writeTo)
-            message( #confirmation message
+              filename = "dySEM_table.rtf",
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/dySEM_table.rtf",
-                writeTo)
+                writeTo
+              )
             )
           }
 
-          if (!is.null(fileName)){
+          if (!is.null(fileName)) {
             gt::gtsave(struct.tab,
-                       filename = sprintf("%s.rtf",
-                                          fileName),
-                       path = writeTo)
-            message( #confirmation message
+              filename = sprintf(
+                "%s.rtf",
+                fileName
+              ),
+              path = writeTo
+            )
+            message( # confirmation message
               sprintf(
                 "Output stored in: %s/%s.rtf",
-                writeTo, fileName)
+                writeTo, fileName
+              )
             )
-
           }
         }
 
-        #user does not specify writeTo
-        else if (is.null(writeTo)){
+        # user does not specify writeTo
+        else if (is.null(writeTo)) {
           struct.tab <- makeTable(dvn, fit, model = "bidys", tabletype = "structural", gtTab = TRUE)
         }
 
         return(struct.tab)
-
       }
-
     }
-
   }
-
 }

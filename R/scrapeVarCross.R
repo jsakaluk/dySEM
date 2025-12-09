@@ -52,6 +52,66 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1 = NULL, x_deli
                            y_order = NULL, y_stem = NULL, y_delim1 = NULL, y_delim2 = NULL, y_item_num = "\\d+",
                            var_list = NULL, var_list_order = NULL, var_list_item_num = "\\d+",
                            covs_order = NULL, covs_stem = NULL, covs_delim1 = NULL, covs_delim2 = NULL, verbose = TRUE) {
+  # Input validation
+  # Validate dat argument
+  if (!is.data.frame(dat)) {
+    stop("The `dat` argument must be a data.frame object.")
+  }
+
+  # Validate x_stem argument (required unless var_list is provided)
+  if (is.null(var_list)) {
+    if (missing(x_stem) || is.null(x_stem)) {
+      stop("The `x_stem` argument is required and cannot be NULL when `var_list` is not provided.")
+    }
+    if (!is.character(x_stem)) {
+      stop("The `x_stem` argument must be a character string.")
+    }
+    if (nchar(x_stem) == 0) {
+      stop("The `x_stem` argument cannot be an empty string.")
+    }
+  } else {
+    # When var_list is provided, x_stem is optional but if provided must be valid
+    if (!missing(x_stem) && !is.null(x_stem)) {
+      if (!is.character(x_stem)) {
+        stop("The `x_stem` argument must be a character string.")
+      }
+      if (nchar(x_stem) == 0) {
+        stop("The `x_stem` argument cannot be an empty string.")
+      }
+    }
+  }
+
+  # Validate x_order argument
+  if (!is.null(x_order) && !is.character(x_order)) {
+    stop("The `x_order` argument must be a character string.")
+  }
+  if (!is.null(x_order) && !x_order %in% c("spi", "sip", "psi")) {
+    stop("The `x_order` argument must be one of: 'spi', 'sip', or 'psi'.")
+  }
+
+  # Validate y_order argument if provided
+  if (!is.null(y_order) && !is.character(y_order)) {
+    stop("The `y_order` argument must be a character string.")
+  }
+  if (!is.null(y_order) && !y_order %in% c("spi", "sip", "psi")) {
+    stop("The `y_order` argument must be one of: 'spi', 'sip', or 'psi'.")
+  }
+
+  # Validate distinguish_1 argument
+  if (!is.character(distinguish_1)) {
+    stop("The `distinguish_1` argument must be a character string.")
+  }
+
+  # Validate distinguish_2 argument
+  if (!is.character(distinguish_2)) {
+    stop("The `distinguish_2` argument must be a character string.")
+  }
+
+  # Validate verbose argument
+  if (!is.logical(verbose)) {
+    stop("The `verbose` argument must be a logical value (TRUE or FALSE).")
+  }
+
   if (!is.null(var_list)) {
     if (var_list_order == "sip") {
       x1vars <- list()

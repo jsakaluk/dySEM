@@ -115,10 +115,24 @@ scriptUni <- function(
     constr_dy_struct = "none", # Users do not need to modify `constr_dy_struct` when using `scriptUni()`.
     writeTo = NULL,
     fileName = NULL) {
-  # check for valid inputs
+  # Input validation
+  # Validate dvn argument
+  if (missing(dvn) || is.null(dvn)) {
+    stop("The `dvn` argument is required and cannot be NULL.")
+  }
+  if (!is.list(dvn)) {
+    stop("The `dvn` argument must be a list object.")
+  }
   if (length(dvn) != 6) {
     stop("You must supply a dvn object containing information for only X [i.e., your target LV]")
   }
+
+  # Validate lvname argument
+  if (!is.character(lvname)) {
+    stop("The `lvname` argument must be a character string.")
+  }
+
+  # check for valid inputs
 
   if (!scaleset %in% c("FF", "MV")) {
     stop("scaleset must be either 'FF' (fixed-factor) or 'MV' (marker variable)")

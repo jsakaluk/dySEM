@@ -25,56 +25,83 @@
 #' @export
 #'
 #' @examples
-#' dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-#' x_delim2="_", distinguish_1="1", distinguish_2="2")
+#' dvnx <- scrapeVarCross(
+#'   dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#'   x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+#' )
 #'
-#' sat.config.script <- scriptCor(dvnx, lvname = "Sat", constr_dy_meas = "none",
-#' constr_dy_struct = "none")
+#' sat.config.script <- scriptCor(dvnx,
+#'   lvname = "Sat", constr_dy_meas = "none",
+#'   constr_dy_struct = "none"
+#' )
 #'
-#' sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
-#' auto.fix.first= FALSE, meanstructure = TRUE)
+#' sat.config.mod <- lavaan::cfa(sat.config.script,
+#'   data = commitmentQ, std.lv = FALSE,
+#'   auto.fix.first = FALSE, meanstructure = TRUE
+#' )
 #'
-#' outputParamFig(sat.config.mod, figtype = "standardized",
-#' writeTo = tempdir(), fileName = "dCFA_configural")
+#' outputParamFig(sat.config.mod,
+#'   figtype = "standardized",
+#'   writeTo = tempdir(), fileName = "dCFA_configural"
+#' )
 #'
-#' dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-#' x_delim2="_", distinguish_1="1", distinguish_2="2",
-#' y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+#' dvnxy <- scrapeVarCross(
+#'   dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+#'   x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+#'   y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
+#' )
 #'
-#' apim.indist.script <-  scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
+#' apim.indist.script <- scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
 #'
-#' apim.indist.mod <- lavaan::cfa(apim.indist.script, data = commitmentQ, std.lv = FALSE,
-#' auto.fix.first= FALSE, meanstructure = TRUE)
+#' apim.indist.mod <- lavaan::cfa(apim.indist.script,
+#'   data = commitmentQ, std.lv = FALSE,
+#'   auto.fix.first = FALSE, meanstructure = TRUE
+#' )
 #'
-#' outputParamFig(apim.indist.mod, figtype = "standardized",
-#' writeTo = tempdir(), fileName = "APIM_indist")
-
+#' outputParamFig(apim.indist.mod,
+#'   figtype = "standardized",
+#'   writeTo = tempdir(), fileName = "APIM_indist"
+#' )
 outputParamFig <- function(fit,
                            figtype = NULL,
                            writeTo = NULL,
-                           fileName = NULL
-                           ){
+                           fileName = NULL) {
+  # Input validation
+  # Validate fit argument
+  if (missing(fit) || is.null(fit)) {
+    stop("The `fit` argument is required and cannot be NULL.")
+  }
+  if (!inherits(fit, "lavaan")) {
+    stop("The `fit` argument must be a fitted lavaan model object.")
+  }
 
-# TODO - update checks for `figtype` and `writeTo` arguments
+  # Validate figtype argument if provided
+  if (!is.null(figtype) && !is.character(figtype)) {
+    stop("The `figtype` argument must be a character string.")
+  }
+  if (!is.null(figtype) && !figtype %in% c("unstandardized", "standardized", "labels")) {
+    stop("The `figtype` argument must be one of: 'unstandardized', 'standardized', or 'labels'.")
+  }
 
-  #if (!is.character(writeTo)| !is.null(writeTo)){
-  #  stop("The `writeTo` argument must be a character string or NULL. \n Use writeTo = '.' to save output file(s) in the current working directory.")
-  #}
-  #if (!is.null(writeTo) & !dir.exists(writeTo)){
-  #  stop("The specified directory does not exist. \n Use writeTo = '.' to save output file(s) in the current working directory.")
-  #}
-  #if (!is.null(fileName) && !is.character(fileName)){
-  #  stop("The `fileName` argument must be a character string.")}
+  # Validate writeTo argument if provided
+  if (!is.null(writeTo) && !is.character(writeTo)) {
+    stop("The `writeTo` argument must be a character string.")
+  }
+  if (!is.null(writeTo) && !dir.exists(writeTo)) {
+    stop("The specified directory does not exist. \n Use `writeTo = '.'` to save output file(s) in the current working directory.")
+  }
 
-  #Make path diagram
-  if(figtype == "unstandardized"){
+  # Validate fileName argument if provided
+  if (!is.null(fileName) && !is.character(fileName)) {
+    stop("The `fileName` argument must be a character string.")
+  }
+
+  # Make path diagram
+  if (figtype == "unstandardized") {
     semplot <- makeFigure(fit, type = "raw", writeTo, fileName)
-  }
-  else if(figtype == "standardized"){
+  } else if (figtype == "standardized") {
     semplot <- makeFigure(fit, type = "std", writeTo, fileName)
-  }
-  else if(figtype == "labels"){
+  } else if (figtype == "labels") {
     semplot <- makeFigure(fit, type = "lab", writeTo, fileName)
   }
-
 }
