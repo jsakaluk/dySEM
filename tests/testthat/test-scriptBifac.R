@@ -1,1091 +1,1093 @@
 # Configural -------------------------------------------------------------------
 # ---- FF ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = none, constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct output for constr_dy_meas = none, constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "FF",
+        lvname = "Sat",
+        constr_dy_meas = "none",
+        constr_dy_struct = "none"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5\nSat2=~NA*sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\nSatDy=~NA*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5+sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ 1*Sat1\nSat2 ~~ 1*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\nSatDy ~ 0*1"
+    )
+  }
+)
+test_that(
+  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = none, constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  expect_equal(
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-    scriptBifac(
+    # script configural invariance model w/ scaleset = FF
+    script <- scriptBifac(
       dvn,
       scaleset = "FF",
       lvname = "Sat",
       constr_dy_meas = "none",
       constr_dy_struct = "none"
-    ),
+    )
 
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5\nSat2=~NA*sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\nSatDy=~NA*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5+sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ 1*Sat1\nSat2 ~~ 1*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\nSatDy ~ 0*1"
-  )
+    # fit model
+    mod <- lavaan::cfa(script,
+      data = commitmentQ,
+      missing = "fiml" # lavaan::fitmeasures requires convergence
+    )
 
-}
+    # manually calculated free parameters (see LINK)
+    # my_param <- 45
+
+    lav_param <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "npar"
+      )
+    )
+
+    expect_equal(
+      lav_param,
+      45
+    )
+  }
 )
 test_that(
-  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = none, constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct df for constr_dy_meas = none, constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
+    # script configural invariance model w/ scaleset = FF
+    script <- scriptBifac(
+      dvn,
+      scaleset = "FF",
+      lvname = "Sat",
+      constr_dy_meas = "none",
+      constr_dy_struct = "none"
+    )
 
-  #script configural invariance model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = "none",
-    constr_dy_struct = "none"
-  )
+    # fit model
+    mod <- lavaan::cfa(
+      script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-  #fit model
-  mod <- lavaan::cfa(script, data = commitmentQ,
-                     missing = "fiml" #lavaan::fitmeasures requires convergence
-  )
+    # manually calculated free parameters (see LINK)
+    # my_param <- 45
 
-  #manually calculated free parameters (see LINK)
-  #my_param <- 45
+    # calculated df (should be 20)
+    # my_df <- knowns-my_param
 
-  lav_param <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "npar")
-  )
+    lav_df <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "df"
+      )
+    )
 
-  expect_equal(
-    lav_param,
-    45
-  )
-
-}
-)
-test_that(
-  "scriptBifac produces correct df for constr_dy_meas = none, constr_dy_struct = none, and scaleset = FF", {
-
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
-
-  #script configural invariance model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = "none",
-    constr_dy_struct = "none"
-  )
-
-  #fit model
-  mod <- lavaan::cfa(
-    script,
-    data = commitmentQ,
-    missing = "fiml" #for convergence
-  )
-
-  #manually calculated free parameters (see LINK)
-  #my_param <- 45
-
-  #calculated df (should be 20)
-  #my_df <- knowns-my_param
-
-  lav_df <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "df")
-  )
-
-  expect_equal(
-    lav_df,
-    20
-  )
-
-}
+    expect_equal(
+      lav_df,
+      20
+    )
+  }
 )
 
 # ---- MV ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = none, constr_dy_struct = none, and scaleset = MV", {
+  "scriptBifac produces correct output for constr_dy_meas = none, constr_dy_struct = none, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  expect_equal(
-
-    scriptBifac(
-      dvn,
-      scaleset = "MV",
-      lvname = "Sat",
-      constr_dy_meas = "none",
-      constr_dy_struct = "none"
-    ),
-
-    "#Measurement Model\n\n#Loadings\nSat1=~1*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5\nSat2=~1*sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\nSatDy=~1*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5+sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 0*1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ NA*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
-  )
-
-}
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "MV",
+        lvname = "Sat",
+        constr_dy_meas = "none",
+        constr_dy_struct = "none"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~1*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5\nSat2=~1*sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\nSatDy=~1*sat.g.1_1+sat.g.1_2+sat.g.1_3+sat.g.1_4+sat.g.1_5+sat.g.2_1+sat.g.2_2+sat.g.2_3+sat.g.2_4+sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 0*1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ NA*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
+    )
+  }
 )
 
 # ---- FF vs. MV ----
-test_that(#failure
-  "scriptBifac produces same df for constr_dy_meas = none, constr_dy_struct = none when scaleset= FF, and scaleset = MV", {
-
-  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
-                        x_delim2="_", distinguish_1="1", distinguish_2="2")
-
-
-  #Script configural invariance model and scaleset = FF
-  script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "none", constr_dy_struct = "none", scaleset = "FF")
-
-  #Fit model w FF
-  mod_ff <- lavaan::cfa(
-    script_ff,
-    data = commitmentQ,
-    missing = "fiml"
+test_that( # failure
+  "scriptBifac produces same df for constr_dy_meas = none, constr_dy_struct = none when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
     )
 
-  #get its df
-  df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
 
-  #Script configural invariance model and scaleset = MV
-  script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "none", constr_dy_struct = "none", scaleset = "MV")
+    # Script configural invariance model and scaleset = FF
+    script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "none", constr_dy_struct = "none", scaleset = "FF")
 
-  #Fit model w MV
-  mod_mv <- lavaan::cfa(
-    script_mv,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # Fit model w FF
+    mod_ff <- lavaan::cfa(
+      script_ff,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #get its df
-  df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
+    # get its df
+    df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
 
-  #scale setting should have no impact on df
-  expect_equal(df_ff,
-               df_mv
-  )
-}
+    # Script configural invariance model and scaleset = MV
+    script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "none", constr_dy_struct = "none", scaleset = "MV")
+
+    # Fit model w MV
+    mod_mv <- lavaan::cfa(
+      script_mv,
+      data = commitmentQ,
+      missing = "fiml"
+    )
+
+    # get its df
+    df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
+
+    # scale setting should have no impact on df
+    expect_equal(
+      df_ff,
+      df_mv
+    )
+  }
 )
-test_that(#pass (but fails in `equal_identical()`)
-  "scriptBifac produces same chisq for constr_dy_meas = none, constr_dy_struct = none when scaleset= FF, and scaleset = MV", {
+test_that( # pass (but fails in `equal_identical()`)
+  "scriptBifac produces same chisq for constr_dy_meas = none, constr_dy_struct = none when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
-                        x_delim2="_", distinguish_1="1", distinguish_2="2")
 
+    # Script configural invariance model and scaleset = FF
+    script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "none", constr_dy_struct = "none", scaleset = "FF")
 
-  #Script configural invariance model and scaleset = FF
-  script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "none", constr_dy_struct = "none", scaleset = "FF")
+    # Fit model w FF
+    mod_ff <- lavaan::cfa(
+      script_ff,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w FF
-  mod_ff <- lavaan::cfa(
-    script_ff,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its df
+    chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
 
-  #get its df
-  chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+    # Script configural invariance model and scaleset = MV
+    script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "none", constr_dy_struct = "none", scaleset = "MV")
 
-  #Script configural invariance model and scaleset = MV
-  script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "none", constr_dy_struct = "none", scaleset = "MV")
+    # Fit model w MV
+    mod_mv <- lavaan::cfa(
+      script_mv,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w MV
-  mod_mv <- lavaan::cfa(
-    script_mv,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its df
+    chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
 
-  #get its df
-  chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
-
-  #scale setting should have no impact on chisq
-  expect_equal(chisq_ff,
-               chisq_mv
-  )
-}
+    # scale setting should have no impact on chisq
+    expect_equal(
+      chisq_ff,
+      chisq_mv
+    )
+  }
 )
 
 # Loading  ---------------------------------------------------------------------
 # ---- FF ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = loadings, constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct output for constr_dy_meas = loadings, constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "FF",
+        lvname = "Sat",
+        constr_dy_meas = "loadings",
+        constr_dy_struct = "none"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\nSatDy ~ 0*1"
+    )
+  }
+)
+test_that(
+  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = loadings, constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  expect_equal(
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-    scriptBifac(
+    # script loading invariance model w/ scaleset = FF
+    script <- scriptBifac(
       dvn,
       scaleset = "FF",
       lvname = "Sat",
       constr_dy_meas = "loadings",
       constr_dy_struct = "none"
-    ),
+    )
 
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\nSatDy ~ 0*1"
-  )
+    # fit model
+    mod <- lavaan::cfa(script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-}
+    # manually calculated free parameters (see LINK)
+    # my_param <- 37
+
+    lav_param <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "npar"
+      )
+    )
+
+    expect_equal(
+      lav_param,
+      37
+    )
+  }
 )
 test_that(
-  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = loadings, constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct df for constr_dy_meas = loadings, constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
+    # script loading invariance model w/ scaleset = FF
+    script <- scriptBifac(
+      dvn,
+      scaleset = "FF",
+      lvname = "Sat",
+      constr_dy_meas = "loadings",
+      constr_dy_struct = "none"
+    )
 
-  #script loading invariance model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = "loadings",
-    constr_dy_struct = "none"
-  )
+    # fit model
+    mod <- lavaan::cfa(
+      script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-  #fit model
-  mod <- lavaan::cfa(script, data = commitmentQ,
-                     missing = "fiml" #for convergence
-  )
+    # manually calculated free parameters (see LINK)
+    # my_param <- 37
 
-  #manually calculated free parameters (see LINK)
-  #my_param <- 37
+    # calculated df (should be 28)
+    # my_df <- knowns-my_param
 
-  lav_param <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "npar")
-  )
+    lav_df <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "df"
+      )
+    )
 
-  expect_equal(
-    lav_param,
-    37
-  )
-
-}
-)
-test_that(
-  "scriptBifac produces correct df for constr_dy_meas = loadings, constr_dy_struct = none, and scaleset = FF", {
-
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
-
-  #script loading invariance model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = "loadings",
-    constr_dy_struct = "none"
-  )
-
-  #fit model
-  mod <- lavaan::cfa(
-    script,
-    data = commitmentQ,
-    missing = "fiml" #for convergence
-  )
-
-  #manually calculated free parameters (see LINK)
-  #my_param <- 37
-
-  #calculated df (should be 28)
-  #my_df <- knowns-my_param
-
-  lav_df <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "df")
-  )
-
-  expect_equal(
-    lav_df,
-    28
-  )
-
-}
+    expect_equal(
+      lav_df,
+      28
+    )
+  }
 )
 
 # ---- MV ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = loadings, constr_dy_struct = none, and scaleset = MV", {
+  "scriptBifac produces correct output for constr_dy_meas = loadings, constr_dy_struct = none, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  expect_equal(
-
-    scriptBifac(
-      dvn,
-      scaleset = "MV",
-      lvname = "Sat",
-      constr_dy_meas = "loadings",
-      constr_dy_struct = "none"
-    ),
-
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~1*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 0*1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ NA*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
-  )
-
-}
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "MV",
+        lvname = "Sat",
+        constr_dy_meas = "loadings",
+        constr_dy_struct = "none"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~1*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 0*1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ NA*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
+    )
+  }
 )
 
 # ---- FF vs. MV ----
 test_that(
-  "scriptBifac produces same df for constr_dy_meas = loadings, constr_dy_struct = none when scaleset= FF, and scaleset = MV", {
+  "scriptBifac produces same df for constr_dy_meas = loadings, constr_dy_struct = none when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
-                        x_delim2="_", distinguish_1="1", distinguish_2="2")
 
+    # Script loading invariance model and scaleset = FF
+    script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "loadings", constr_dy_struct = "none", scaleset = "FF")
 
-  #Script loading invariance model and scaleset = FF
-  script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "loadings", constr_dy_struct = "none", scaleset = "FF")
+    # Fit model w FF
+    mod_ff <- lavaan::cfa(
+      script_ff,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w FF
-  mod_ff <- lavaan::cfa(
-    script_ff,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its df
+    df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
 
-  #get its df
-  df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
+    # Script loading invariance and scaleset = MV
+    script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "loadings", constr_dy_struct = "none", scaleset = "MV")
 
-  #Script loading invariance and scaleset = MV
-  script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "loadings", constr_dy_struct = "none", scaleset = "MV")
+    # Fit model w MV
+    mod_mv <- lavaan::cfa(
+      script_mv,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w MV
-  mod_mv <- lavaan::cfa(
-    script_mv,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its df
+    df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
 
-  #get its df
-  df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
-
-  #scale setting should have no impact on df
-  expect_equal(df_ff,
-               df_mv
-  )
-}
+    # scale setting should have no impact on df
+    expect_equal(
+      df_ff,
+      df_mv
+    )
+  }
 )
 test_that(
-  "scriptBifac produces same chisq for constr_dy_meas = loadings, constr_dy_struct = none when scaleset= FF, and scaleset = MV", {
+  "scriptBifac produces same chisq for constr_dy_meas = loadings, constr_dy_struct = none when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
-                        x_delim2="_", distinguish_1="1", distinguish_2="2")
 
+    # Script model w/ constr_dy_meas = "loadings" and scaleset = FF
+    script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "loadings", constr_dy_struct = "none", scaleset = "FF")
 
-  #Script model w/ constr_dy_meas = "loadings" and scaleset = FF
-  script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "loadings", constr_dy_struct = "none", scaleset = "FF")
+    # Fit model w FF
+    mod_ff <- lavaan::cfa(
+      script_ff,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w FF
-  mod_ff <- lavaan::cfa(
-    script_ff,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its chisq
+    chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
 
-  #get its chisq
-  chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+    # Script model w/ constr_dy_meas = "loadings" and scaleset = MV
+    script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "loadings", constr_dy_struct = "none", scaleset = "MV")
 
-  #Script model w/ constr_dy_meas = "loadings" and scaleset = MV
-  script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = "loadings", constr_dy_struct = "none", scaleset = "MV")
+    # Fit model w MV
+    mod_mv <- lavaan::cfa(
+      script_mv,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w MV
-  mod_mv <- lavaan::cfa(
-    script_mv,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its chisq
+    chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
 
-  #get its chisq
-  chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
-
-  #scale setting should have no impact on chisq
-  expect_equal(chisq_ff,
-               chisq_mv
-  )
-}
+    # scale setting should have no impact on chisq
+    expect_equal(
+      chisq_ff,
+      chisq_mv
+    )
+  }
 )
 
 # Intercept --------------------------------------------------------------------
 # ---- FF ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "FF",
+        lvname = "Sat",
+        constr_dy_meas = c("loadings", "intercepts"),
+        constr_dy_struct = "none"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
+    )
+  }
+)
+test_that(
+  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = c(loadings, intercepts), constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  expect_equal(
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-    scriptBifac(
+    # script intercept invariance model w/ scaleset = FF
+    script <- scriptBifac(
       dvn,
       scaleset = "FF",
       lvname = "Sat",
       constr_dy_meas = c("loadings", "intercepts"),
       constr_dy_struct = "none"
-    ),
+    )
 
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
-  )
+    # fit model
+    mod <- lavaan::cfa(script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-}
+    # manually calculated free parameters (see LINK)
+    # my_param <- 34
+
+    lav_param <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "npar"
+      )
+    )
+
+    expect_equal(
+      lav_param,
+      34
+    )
+  }
 )
 test_that(
-  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = c(loadings, intercepts), constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct df for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
+    # script intercept invariance model w/ scaleset = FF
+    script <- scriptBifac(
+      dvn,
+      scaleset = "FF",
+      lvname = "Sat",
+      constr_dy_meas = c("loadings", "intercepts"),
+      constr_dy_struct = "none"
+    )
 
-  #script intercept invariance model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = c("loadings", "intercepts"),
-    constr_dy_struct = "none"
-  )
+    # fit model
+    mod <- lavaan::cfa(
+      script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-  #fit model
-  mod <- lavaan::cfa(script, data = commitmentQ,
-                     missing = "fiml" #for convergence
-  )
+    # manually calculated free parameters (see LINK)
+    # my_param <- 37
 
-  #manually calculated free parameters (see LINK)
-  #my_param <- 34
+    # calculated df (should be 31)
+    # my_df <- knowns-my_param
 
-  lav_param <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "npar")
-  )
+    lav_df <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "df"
+      )
+    )
 
-  expect_equal(
-    lav_param,
-    34
-  )
-
-}
-)
-test_that(
-  "scriptBifac produces correct df for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none, and scaleset = FF", {
-
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
-
-  #script intercept invariance model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = c("loadings", "intercepts"),
-    constr_dy_struct = "none"
-  )
-
-  #fit model
-  mod <- lavaan::cfa(
-    script,
-    data = commitmentQ,
-    missing = "fiml" #for convergence
-  )
-
-  #manually calculated free parameters (see LINK)
-  #my_param <- 37
-
-  #calculated df (should be 31)
-  #my_df <- knowns-my_param
-
-  lav_df <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "df")
-  )
-
-  expect_equal(
-    lav_df,
-    31
-  )
-
-}
+    expect_equal(
+      lav_df,
+      31
+    )
+  }
 )
 
 # ---- MV ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none, and scaleset = MV", {
+  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  expect_equal(
-
-    scriptBifac(
-      dvn,
-      scaleset = "MV",
-      lvname = "Sat",
-      constr_dy_meas = c("loadings", "intercepts"),
-      constr_dy_struct = "none"
-    ),
-
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~1*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1 + tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ NA*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ NA*1"
-  )
-
-}
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "MV",
+        lvname = "Sat",
+        constr_dy_meas = c("loadings", "intercepts"),
+        constr_dy_struct = "none"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~1*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1 + tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ NA*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ NA*1"
+    )
+  }
 )
 
 # ---- FF vs. MV ----
-test_that(#failure
-  "scriptBifac produces same df for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none when scaleset= FF, and scaleset = MV", {
+test_that( # failure
+  "scriptBifac produces same df for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
-                        x_delim2="_", distinguish_1="1", distinguish_2="2")
 
+    # Script model w/ constr_dy_meas = c("loadings", "intercepts") and scaleset = FF
+    script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none", scaleset = "FF")
 
-  #Script model w/ constr_dy_meas = c("loadings", "intercepts") and scaleset = FF
-  script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none", scaleset = "FF")
+    # Fit model w FF
+    mod_ff <- lavaan::cfa(
+      script_ff,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w FF
-  mod_ff <- lavaan::cfa(
-    script_ff,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its df
+    df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
 
-  #get its df
-  df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
+    # Script model w/ constr_dy_meas = c("loadings", "intercepts") and scaleset = MV
+    script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none", scaleset = "MV")
 
-  #Script model w/ constr_dy_meas = c("loadings", "intercepts") and scaleset = MV
-  script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none", scaleset = "MV")
+    # Fit model w MV
+    mod_mv <- lavaan::cfa(
+      script_mv,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w MV
-  mod_mv <- lavaan::cfa(
-    script_mv,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its df
+    df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
 
-  #get its df
-  df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
-
-  #scale setting should have no impact on df
-  expect_equal(df_ff,
-               df_mv
-  )
-}
+    # scale setting should have no impact on df
+    expect_equal(
+      df_ff,
+      df_mv
+    )
+  }
 )
-test_that(#pass (but fails in `equal_identical()`)
-  "scriptBifac produces same chisq for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none when scaleset= FF, and scaleset = MV", {
+test_that( # pass (but fails in `equal_identical()`)
+  "scriptBifac produces same chisq for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = none when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
-                        x_delim2="_", distinguish_1="1", distinguish_2="2")
 
+    # Script intercept invariance model and scaleset = FF
+    script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none", scaleset = "FF")
 
-  #Script intercept invariance model and scaleset = FF
-  script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none", scaleset = "FF")
+    # Fit model w FF
+    mod_ff <- lavaan::cfa(
+      script_ff,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w FF
-  mod_ff <- lavaan::cfa(
-    script_ff,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its chisq
+    chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
 
-  #get its chisq
-  chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+    # Script intercept invariance model and scaleset = MV
+    script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none", scaleset = "MV")
 
-  #Script intercept invariance model and scaleset = MV
-  script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none", scaleset = "MV")
+    # Fit model w MV
+    mod_mv <- lavaan::cfa(
+      script_mv,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w MV
-  mod_mv <- lavaan::cfa(
-    script_mv,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its chisq
+    chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
 
-  #get its chisq
-  chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
-
-  #scale setting should have no impact on chisq
-  expect_equal(chisq_ff,
-               chisq_mv
-  )
-}
+    # scale setting should have no impact on chisq
+    expect_equal(
+      chisq_ff,
+      chisq_mv
+    )
+  }
 )
 
 # Residual ----------------------------------------------------------------
 # ---- FF ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "FF",
+        lvname = "Sat",
+        constr_dy_meas = c("loadings", "intercepts", "residuals"),
+        constr_dy_struct = "none"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ thx1*sat.g.1_1\nsat.g.1_2 ~~ thx2*sat.g.1_2\nsat.g.1_3 ~~ thx3*sat.g.1_3\nsat.g.1_4 ~~ thx4*sat.g.1_4\nsat.g.1_5 ~~ thx5*sat.g.1_5\n\nsat.g.2_1 ~~ thx1*sat.g.2_1\nsat.g.2_2 ~~ thx2*sat.g.2_2\nsat.g.2_3 ~~ thx3*sat.g.2_3\nsat.g.2_4 ~~ thx4*sat.g.2_4\nsat.g.2_5 ~~ thx5*sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
+    )
+  }
+)
+test_that(
+  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  expect_equal(
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-    scriptBifac(
+    # script residual invariance model w/ scaleset = FF
+    script <- scriptBifac(
       dvn,
       scaleset = "FF",
       lvname = "Sat",
       constr_dy_meas = c("loadings", "intercepts", "residuals"),
       constr_dy_struct = "none"
-    ),
+    )
 
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ thx1*sat.g.1_1\nsat.g.1_2 ~~ thx2*sat.g.1_2\nsat.g.1_3 ~~ thx3*sat.g.1_3\nsat.g.1_4 ~~ thx4*sat.g.1_4\nsat.g.1_5 ~~ thx5*sat.g.1_5\n\nsat.g.2_1 ~~ thx1*sat.g.2_1\nsat.g.2_2 ~~ thx2*sat.g.2_2\nsat.g.2_3 ~~ thx3*sat.g.2_3\nsat.g.2_4 ~~ thx4*sat.g.2_4\nsat.g.2_5 ~~ thx5*sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
-  )
+    # fit model
+    mod <- lavaan::cfa(script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-}
+    # manually calculated free parameters (see LINK)
+    # my_param <- 29
+
+    lav_param <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "npar"
+      )
+    )
+
+    expect_equal(
+      lav_param,
+      29
+    )
+  }
 )
 test_that(
-  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct df for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
+    # script residual invariance model w/ scaleset = FF
+    script <- scriptBifac(
+      dvn,
+      scaleset = "FF",
+      lvname = "Sat",
+      constr_dy_meas = c("loadings", "intercepts", "residuals"),
+      constr_dy_struct = "none"
+    )
 
-  #script residual invariance model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = c("loadings", "intercepts", "residuals"),
-    constr_dy_struct = "none"
-  )
+    # fit model
+    mod <- lavaan::cfa(
+      script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-  #fit model
-  mod <- lavaan::cfa(script, data = commitmentQ,
-                     missing = "fiml" #for convergence
-  )
+    # manually calculated free parameters (see LINK)
+    # my_param <- 29
 
-  #manually calculated free parameters (see LINK)
-  #my_param <- 29
+    # calculated df (should be 36)
+    # my_df <- knowns-my_param
 
-  lav_param <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "npar")
-  )
+    lav_df <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "df"
+      )
+    )
 
-  expect_equal(
-    lav_param,
-    29
-  )
-
-}
-)
-test_that(
-  "scriptBifac produces correct df for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none, and scaleset = FF", {
-
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
-
-  #script residual invariance model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = c("loadings", "intercepts", "residuals"),
-    constr_dy_struct = "none"
-  )
-
-  #fit model
-  mod <- lavaan::cfa(
-    script,
-    data = commitmentQ,
-    missing = "fiml" #for convergence
-  )
-
-  #manually calculated free parameters (see LINK)
-  #my_param <- 29
-
-  #calculated df (should be 36)
-  #my_df <- knowns-my_param
-
-  lav_df <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "df")
-  )
-
-  expect_equal(
-    lav_df,
-    36
-  )
-
-}
+    expect_equal(
+      lav_df,
+      36
+    )
+  }
 )
 
 # ---- MV ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none, and scaleset = MV", {
+  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  expect_equal(
-
-    scriptBifac(
-      dvn,
-      scaleset = "MV",
-      lvname = "Sat",
-      constr_dy_meas = c("loadings", "intercepts", "residuals"),
-      constr_dy_struct = "none"
-    ),
-
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~1*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1 + tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ thx1*sat.g.1_1\nsat.g.1_2 ~~ thx2*sat.g.1_2\nsat.g.1_3 ~~ thx3*sat.g.1_3\nsat.g.1_4 ~~ thx4*sat.g.1_4\nsat.g.1_5 ~~ thx5*sat.g.1_5\n\nsat.g.2_1 ~~ thx1*sat.g.2_1\nsat.g.2_2 ~~ thx2*sat.g.2_2\nsat.g.2_3 ~~ thx3*sat.g.2_3\nsat.g.2_4 ~~ thx4*sat.g.2_4\nsat.g.2_5 ~~ thx5*sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ NA*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ NA*1"
-  )
-
-}
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "MV",
+        lvname = "Sat",
+        constr_dy_meas = c("loadings", "intercepts", "residuals"),
+        constr_dy_struct = "none"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~1*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1 + tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ thx1*sat.g.1_1\nsat.g.1_2 ~~ thx2*sat.g.1_2\nsat.g.1_3 ~~ thx3*sat.g.1_3\nsat.g.1_4 ~~ thx4*sat.g.1_4\nsat.g.1_5 ~~ thx5*sat.g.1_5\n\nsat.g.2_1 ~~ thx1*sat.g.2_1\nsat.g.2_2 ~~ thx2*sat.g.2_2\nsat.g.2_3 ~~ thx3*sat.g.2_3\nsat.g.2_4 ~~ thx4*sat.g.2_4\nsat.g.2_5 ~~ thx5*sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ NA*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ NA*1"
+    )
+  }
 )
 
 # ---- FF vs. MV ----
-test_that(#failure
-  "scriptBifac produces same df for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none when scaleset= FF, and scaleset = MV", {
+test_that( # failure
+  "scriptBifac produces same df for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
-                        x_delim2="_", distinguish_1="1", distinguish_2="2")
 
+    # Script residual invariance model and scaleset = FF
+    script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none", scaleset = "FF")
 
-  #Script residual invariance model and scaleset = FF
-  script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none", scaleset = "FF")
+    # Fit model w FF
+    mod_ff <- lavaan::cfa(
+      script_ff,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w FF
-  mod_ff <- lavaan::cfa(
-    script_ff,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its df
+    df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
 
-  #get its df
-  df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
+    # Script residual invariance and scaleset = MV
+    script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none", scaleset = "MV")
 
-  #Script residual invariance and scaleset = MV
-  script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none", scaleset = "MV")
+    # Fit model w MV
+    mod_mv <- lavaan::cfa(
+      script_mv,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w MV
-  mod_mv <- lavaan::cfa(
-    script_mv,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its df
+    df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
 
-  #get its df
-  df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
-
-  #scale setting should have no impact on df
-  expect_equal(df_ff,
-               df_mv
-  )
-}
+    # scale setting should have no impact on df
+    expect_equal(
+      df_ff,
+      df_mv
+    )
+  }
 )
-test_that(#pass (but fails in `equal_identical()`)
-  "scriptBifac produces same chisq for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none when scaleset= FF, and scaleset = MV", {
+test_that( # pass (but fails in `equal_identical()`)
+  "scriptBifac produces same chisq for constr_dy_meas = c(loadings, intercepts, residuals), constr_dy_struct = none when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "com", x_delim1 = ".",
-                        x_delim2="_", distinguish_1="1", distinguish_2="2")
 
+    # Script residual invariance model and scaleset = FF
+    script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none", scaleset = "FF")
 
-  #Script residual invariance model and scaleset = FF
-  script_ff <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none", scaleset = "FF")
+    # Fit model w FF
+    mod_ff <- lavaan::cfa(
+      script_ff,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w FF
-  mod_ff <- lavaan::cfa(
-    script_ff,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its chisq
+    chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
 
-  #get its chisq
-  chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+    # Script residual invariance model and scaleset = MV
+    script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none", scaleset = "MV")
 
-  #Script residual invariance model and scaleset = MV
-  script_mv <- scriptBifac(dvn, lvname = "Com", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none", scaleset = "MV")
+    # Fit model w MV
+    mod_mv <- lavaan::cfa(
+      script_mv,
+      data = commitmentQ,
+      missing = "fiml"
+    )
 
-  #Fit model w MV
-  mod_mv <- lavaan::cfa(
-    script_mv,
-    data = commitmentQ,
-    missing = "fiml"
-  )
+    # get its chisq
+    chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
 
-  #get its chisq
-  chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
-
-  #scale setting should have no impact on chisq
-  expect_equal(chisq_ff,
-               chisq_mv
-  )
-}
+    # scale setting should have no impact on chisq
+    expect_equal(
+      chisq_ff,
+      chisq_mv
+    )
+  }
 )
 
 # Loadings: Source --------------------------------------------------------
 # ---- FF ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = loadings_source, constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct output for constr_dy_meas = loadings_source, constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "FF",
+        lvname = "Sat",
+        constr_dy_meas = "loadings_source",
+        constr_dy_struct = "none"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx6*sat.g.2_1+lx7*sat.g.2_2+lx8*sat.g.2_3+lx9*sat.g.2_4+lx10*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5+lx6*sat.g.2_1+lx7*sat.g.2_2+lx8*sat.g.2_3+lx9*sat.g.2_4+lx10*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ 1*Sat1\nSat2 ~~ 1*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\nSatDy ~ 0*1"
+    )
+  }
+)
+test_that(
+  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = loadings_source, constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  expect_equal(
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-    scriptBifac(
+    # script source model w/ scaleset = FF
+    script <- scriptBifac(
       dvn,
       scaleset = "FF",
       lvname = "Sat",
       constr_dy_meas = "loadings_source",
       constr_dy_struct = "none"
-    ),
+    )
 
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx6*sat.g.2_1+lx7*sat.g.2_2+lx8*sat.g.2_3+lx9*sat.g.2_4+lx10*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5+lx6*sat.g.2_1+lx7*sat.g.2_2+lx8*sat.g.2_3+lx9*sat.g.2_4+lx10*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ 1*Sat1\nSat2 ~~ 1*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\nSatDy ~ 0*1"
-  )
+    # fit model
+    mod <- lavaan::cfa(script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-}
+    # manually calculated free parameters (see LINK)
+    # my_param <- 35
+
+    lav_param <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "npar"
+      )
+    )
+
+    expect_equal(
+      lav_param,
+      35
+    )
+  }
 )
 test_that(
-  "scriptBifac produces correct number of parameter estimates for consrt_dy_meas = loadings_source, constr_dy_struct = none, and scaleset = FF", {
+  "scriptBifac produces correct df for constr_dy_meas = loadings_source, constr_dy_struct = none, and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
+    # script source model w/ scaleset = FF
+    script <- scriptBifac(
+      dvn,
+      scaleset = "FF",
+      lvname = "Sat",
+      constr_dy_meas = "loadings_source",
+      constr_dy_struct = "none"
+    )
 
-  #script source model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = "loadings_source",
-    constr_dy_struct = "none"
-  )
+    # fit model
+    mod <- lavaan::cfa(
+      script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-  #fit model
-  mod <- lavaan::cfa(script, data = commitmentQ,
-                     missing = "fiml" #for convergence
-  )
+    # manually calculated free parameters (see LINK)
+    # my_param <- 35
 
-  #manually calculated free parameters (see LINK)
-  #my_param <- 35
+    # calculated df (should be 30)
+    # my_df <- knowns-my_param
 
-  lav_param <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "npar")
-  )
+    lav_df <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "df"
+      )
+    )
 
-  expect_equal(
-    lav_param,
-    35
-  )
-
-}
-)
-test_that(
-  "scriptBifac produces correct df for constr_dy_meas = loadings_source, constr_dy_struct = none, and scaleset = FF", {
-
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
-
-  #script source model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = "loadings_source",
-    constr_dy_struct = "none"
-  )
-
-  #fit model
-  mod <- lavaan::cfa(
-    script,
-    data = commitmentQ,
-    missing = "fiml" #for convergence
-  )
-
-  #manually calculated free parameters (see LINK)
-  #my_param <- 35
-
-  #calculated df (should be 30)
-  #my_df <- knowns-my_param
-
-  lav_df <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "df")
-  )
-
-  expect_equal(
-    lav_df,
-    30
-  )
-
-}
+    expect_equal(
+      lav_df,
+      30
+    )
+  }
 )
 
 # ---- MV ----
@@ -1102,223 +1104,224 @@ test_that(
 # Latent Variances --------------------------------------------------------
 # ---- FF ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = loadings, constr_dy_struct = variances and scaleset = FF", {
+  "scriptBifac produces correct output for constr_dy_meas = loadings, constr_dy_struct = variances and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "FF",
+        lvname = "Sat",
+        constr_dy_meas = "loadings",
+        constr_dy_struct = "variances"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ psix*Sat1\nSat2 ~~ psix*Sat2\nSatDy ~~ NA*SatDy + psix*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\nSatDy ~ 0*1"
+    )
+  }
+)
+test_that(
+  "scriptBifac produces correct number of parameter estimates for constr_dy_meas = loadings, constr_dy_struct = variances and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  expect_equal(
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-    scriptBifac(
+    # script latent variance equality model w/ scaleset = FF
+    script <- scriptBifac(
       dvn,
       scaleset = "FF",
       lvname = "Sat",
       constr_dy_meas = "loadings",
       constr_dy_struct = "variances"
-    ),
+    )
 
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ psix*Sat1\nSat2 ~~ psix*Sat2\nSatDy ~~ NA*SatDy + psix*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ 0*1\nSat2 ~ 0*1\nSatDy ~ 0*1"
-  )
+    # fit model
+    mod <- lavaan::cfa(script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-}
+    # manually calculated free parameters (see LINK)
+    # my_param <- 36
+
+    lav_param <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "npar"
+      )
+    )
+
+    expect_equal(
+      lav_param,
+      36
+    )
+  }
 )
 test_that(
-  "scriptBifac produces correct number of parameter estimates for constr_dy_meas = loadings, constr_dy_struct = variances and scaleset = FF", {
+  "scriptBifac produces correct df for constr_dy_meas = loadings, constr_dy_struct = variances and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
+    # script latent variance equality model w/ scaleset = FF
+    script <- scriptBifac(
+      dvn,
+      scaleset = "FF",
+      lvname = "Sat",
+      constr_dy_meas = "loadings",
+      constr_dy_struct = "variances"
+    )
 
-  #script latent variance equality model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = "loadings",
-    constr_dy_struct = "variances"
-  )
+    # fit model
+    mod <- lavaan::cfa(
+      script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-  #fit model
-  mod <- lavaan::cfa(script, data = commitmentQ,
-                     missing = "fiml" #for convergence
-  )
+    # manually calculated free parameters (see LINK)
+    # my_param <- 36
 
-  #manually calculated free parameters (see LINK)
-  #my_param <- 36
+    # calculated df (should be 29)
+    # my_df <- knowns-my_param
 
-  lav_param <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "npar")
-  )
+    lav_df <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "df"
+      )
+    )
 
-  expect_equal(
-    lav_param,
-    36
-  )
-
-}
-)
-test_that(
-  "scriptBifac produces correct df for constr_dy_meas = loadings, constr_dy_struct = variances and scaleset = FF", {
-
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
-
-  #script latent variance equality model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = "loadings",
-    constr_dy_struct = "variances"
-  )
-
-  #fit model
-  mod <- lavaan::cfa(
-    script,
-    data = commitmentQ,
-    missing = "fiml" #for convergence
-  )
-
-  #manually calculated free parameters (see LINK)
-  #my_param <- 36
-
-  #calculated df (should be 29)
-  #my_df <- knowns-my_param
-
-  lav_df <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "df")
-  )
-
-  expect_equal(
-    lav_df,
-    29
-  )
-
-}
+    expect_equal(
+      lav_df,
+      29
+    )
+  }
 )
 
 # ---- MV ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = loadings, constr_dy_struct = variances, and scaleset = MV", {
+  "scriptBifac produces correct output for constr_dy_meas = loadings, constr_dy_struct = variances, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  expect_equal(
-
-    scriptBifac(
-      dvn,
-      scaleset = "MV",
-      lvname = "Sat",
-      constr_dy_meas = "loadings",
-      constr_dy_struct = "variances"
-    ),
-
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 0*1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ psix*Sat1\nSat2 ~~ psix*Sat2\nSatDy ~~ psix*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
-  )
-
-}
-)
-
-# ---- FF vs. MV ----
-test_that(#failure
-  "scriptBifac produces same df for constr_dy_meas = loadings, constr_dy_struct = variances when scaleset= FF, and scaleset = MV", {
-
-    dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-                          x_delim2="_", distinguish_1="1", distinguish_2="2")
-
-
-    #Script lvars equality model and scaleset = FF
-    script_ff <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = "loadings", constr_dy_struct = "variances", scaleset = "FF")
-
-    #Fit model w FF
-    mod_ff <- suppressWarnings(lavaan::cfa(script_ff, data = commitmentQ))
-
-    #get its df
-    df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
-
-    #Script lvars equality model and scaleset = MV
-    script_mv <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = "loadings", constr_dy_struct = "variances", scaleset = "MV")
-
-    #Fit model w MV
-    mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
-
-    #get its df
-    df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
-
-    #scale setting should have no impact on df
-    expect_equal(df_ff,
-                 df_mv
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "MV",
+        lvname = "Sat",
+        constr_dy_meas = "loadings",
+        constr_dy_struct = "variances"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1\nsat.g.1_2 ~ 1\nsat.g.1_3 ~ 1\nsat.g.1_4 ~ 1\nsat.g.1_5 ~ 1\n\nsat.g.2_1 ~ 0*1\nsat.g.2_2 ~ 1\nsat.g.2_3 ~ 1\nsat.g.2_4 ~ 1\nsat.g.2_5 ~ 1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ psix*Sat1\nSat2 ~~ psix*Sat2\nSatDy ~~ psix*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ NA*1\nSat2 ~ NA*1\nSatDy ~ 0*1"
     )
   }
 )
-test_that(#failure
-  "scriptBifac produces same chisq for constr_dy_meas = loadings, constr_dy_struct = variances when scaleset= FF, and scaleset = MV", {
 
-    dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-                          x_delim2="_", distinguish_1="1", distinguish_2="2")
+# ---- FF vs. MV ----
+test_that( # failure
+  "scriptBifac produces same df for constr_dy_meas = loadings, constr_dy_struct = variances when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
 
-    #Script lvars equality model and scaleset = FF
+    # Script lvars equality model and scaleset = FF
     script_ff <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = "loadings", constr_dy_struct = "variances", scaleset = "FF")
 
-    #Fit model w FF
+    # Fit model w FF
     mod_ff <- suppressWarnings(lavaan::cfa(script_ff, data = commitmentQ))
 
-    #get its chisq
-    chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+    # get its df
+    df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
 
-    #Script lvars equality model and scaleset = MV
+    # Script lvars equality model and scaleset = MV
     script_mv <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = "loadings", constr_dy_struct = "variances", scaleset = "MV")
 
-    #Fit model w MV
+    # Fit model w MV
     mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
 
-    #get its chisq
+    # get its df
+    df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
+
+    # scale setting should have no impact on df
+    expect_equal(
+      df_ff,
+      df_mv
+    )
+  }
+)
+test_that( # failure
+  "scriptBifac produces same chisq for constr_dy_meas = loadings, constr_dy_struct = variances when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
+
+
+    # Script lvars equality model and scaleset = FF
+    script_ff <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = "loadings", constr_dy_struct = "variances", scaleset = "FF")
+
+    # Fit model w FF
+    mod_ff <- suppressWarnings(lavaan::cfa(script_ff, data = commitmentQ))
+
+    # get its chisq
+    chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
+
+    # Script lvars equality model and scaleset = MV
+    script_mv <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = "loadings", constr_dy_struct = "variances", scaleset = "MV")
+
+    # Fit model w MV
+    mod_mv <- lavaan::cfa(script_mv, data = commitmentQ)
+
+    # get its chisq
     chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
 
-    #scale setting should have no impact on chisq
-    expect_equal(chisq_ff,
-                 chisq_mv
+    # scale setting should have no impact on chisq
+    expect_equal(
+      chisq_ff,
+      chisq_mv
     )
   }
 )
@@ -1326,152 +1329,148 @@ test_that(#failure
 # Latent Means --------------------------------------------------------
 # ---- FF ----
 test_that(
-  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means and scaleset = FF", {
+  "scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    expect_equal(
+      scriptBifac(
+        dvn,
+        scaleset = "FF",
+        lvname = "Sat",
+        constr_dy_meas = c("loadings", "intercepts"),
+        constr_dy_struct = "means"
+      ),
+      "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ alphax*1\nSat2 ~ alphax*1\nSatDy ~ 0*1 + alphax*1"
+    )
+  }
+)
 
-  expect_equal(
 
-    scriptBifac(
+test_that( # failure
+  "scriptBifac produces correct number of parameter estimates for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
+
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
+
+    # script latent means equality model w/ scaleset = FF
+    script <- scriptBifac(
       dvn,
       scaleset = "FF",
       lvname = "Sat",
       constr_dy_meas = c("loadings", "intercepts"),
       constr_dy_struct = "means"
-    ),
+    )
 
-    "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~NA*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ 1*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ alphax*1\nSat2 ~ alphax*1\nSatDy ~ 0*1 + alphax*1"
-  )
+    # fit model
+    mod <- lavaan::cfa(script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-}
+    # manually calculated free parameters (see LINK)
+    # my_param <- 32
+
+    lav_param <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "npar"
+      )
+    )
+
+    expect_equal(
+      lav_param,
+      32
+    )
+  }
 )
 
 
-test_that(#failure
-  "scriptBifac produces correct number of parameter estimates for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means and scaleset = FF", {
+test_that( # failure
+  "scriptBifac produces correct df for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means and scaleset = FF",
+  {
+    dvn <- scrapeVarCross(
+      commitmentQ,
+      x_order = "spi",
+      x_stem = "sat.g",
+      x_delim1 = ".",
+      x_delim2 = "_",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    )
 
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
+    # knowns for model w/ estimated mean structure:
+    # var_num <- 10
+    # knowns <- (var_num*(var_num+1)/2)+var_num
 
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
+    # script latent means equality model w/ scaleset = FF
+    script <- scriptBifac(
+      dvn,
+      scaleset = "FF",
+      lvname = "Sat",
+      constr_dy_meas = c("loadings", "intercepts"),
+      constr_dy_struct = "means"
+    )
 
-  #script latent means equality model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = c("loadings", "intercepts"),
-    constr_dy_struct = "means"
-  )
+    # fit model
+    mod <- lavaan::cfa(
+      script,
+      data = commitmentQ,
+      missing = "fiml" # for convergence
+    )
 
-  #fit model
-  mod <- lavaan::cfa(script, data = commitmentQ,
-                     missing = "fiml" #for convergence
-  )
+    # manually calculated free parameters (see LINK)
+    # my_param <- 32
 
-  #manually calculated free parameters (see LINK)
-  #my_param <- 32
+    # calculated df (should be 33)
+    # my_df <- knowns-my_param
 
-  lav_param <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "npar")
-  )
+    lav_df <- as.double(
+      lavaan::fitmeasures(
+        mod,
+        "df"
+      )
+    )
 
-  expect_equal(
-    lav_param,
-    32
-  )
-
-}
-)
-
-
-test_that(#failure
-  "scriptBifac produces correct df for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means and scaleset = FF", {
-
-  dvn <- scrapeVarCross(
-    commitmentQ,
-    x_order = "spi",
-    x_stem = "sat.g",
-    x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
-  )
-
-  #knowns for model w/ estimated mean structure:
-  #var_num <- 10
-  #knowns <- (var_num*(var_num+1)/2)+var_num
-
-  #script latent means equality model w/ scaleset = FF
-  script <- scriptBifac(
-    dvn,
-    scaleset = "FF",
-    lvname = "Sat",
-    constr_dy_meas = c("loadings", "intercepts"),
-    constr_dy_struct = "means"
-  )
-
-  #fit model
-  mod <- lavaan::cfa(
-    script,
-    data = commitmentQ,
-    missing = "fiml" #for convergence
-  )
-
-  #manually calculated free parameters (see LINK)
-  #my_param <- 32
-
-  #calculated df (should be 33)
-  #my_df <- knowns-my_param
-
-  lav_df <- as.double(
-    lavaan::fitmeasures(
-      mod,
-      "df")
-  )
-
-  expect_equal(
-    lav_df,
-    33
-  )
-
-}
+    expect_equal(
+      lav_df,
+      33
+    )
+  }
 )
 
 # ---- MV ----
 test_that("scriptBifac produces correct output for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means, and scaleset = MV", {
-
   dvn <- scrapeVarCross(
     commitmentQ,
     x_order = "spi",
     x_stem = "sat.g",
     x_delim1 = ".",
-    x_delim2="_",
-    distinguish_1="1",
-    distinguish_2="2"
+    x_delim2 = "_",
+    distinguish_1 = "1",
+    distinguish_2 = "2"
   )
 
   expect_equal(
-
     scriptBifac(
       dvn,
       scaleset = "MV",
@@ -1479,73 +1478,155 @@ test_that("scriptBifac produces correct output for constr_dy_meas = c(loadings, 
       constr_dy_meas = c("loadings", "intercepts"),
       constr_dy_struct = "means"
     ),
-
     "#Measurement Model\n\n#Loadings\nSat1=~NA*sat.g.1_1+lx1*sat.g.1_1+lx2*sat.g.1_2+lx3*sat.g.1_3+lx4*sat.g.1_4+lx5*sat.g.1_5\nSat2=~NA*sat.g.2_1+lx1*sat.g.2_1+lx2*sat.g.2_2+lx3*sat.g.2_3+lx4*sat.g.2_4+lx5*sat.g.2_5\nSatDy=~1*sat.g.1_1+lxg1*sat.g.1_1+lxg2*sat.g.1_2+lxg3*sat.g.1_3+lxg4*sat.g.1_4+lxg5*sat.g.1_5+lxg1*sat.g.2_1+lxg2*sat.g.2_2+lxg3*sat.g.2_3+lxg4*sat.g.2_4+lxg5*sat.g.2_5\n\n#Intercepts\nsat.g.1_1 ~ 0*1 + tx1*1\nsat.g.1_2 ~ tx2*1\nsat.g.1_3 ~ tx3*1\nsat.g.1_4 ~ tx4*1\nsat.g.1_5 ~ tx5*1\n\nsat.g.2_1 ~ tx1*1\nsat.g.2_2 ~ tx2*1\nsat.g.2_3 ~ tx3*1\nsat.g.2_4 ~ tx4*1\nsat.g.2_5 ~ tx5*1\n\n#Residual Variances\nsat.g.1_1 ~~ sat.g.1_1\nsat.g.1_2 ~~ sat.g.1_2\nsat.g.1_3 ~~ sat.g.1_3\nsat.g.1_4 ~~ sat.g.1_4\nsat.g.1_5 ~~ sat.g.1_5\n\nsat.g.2_1 ~~ sat.g.2_1\nsat.g.2_2 ~~ sat.g.2_2\nsat.g.2_3 ~~ sat.g.2_3\nsat.g.2_4 ~~ sat.g.2_4\nsat.g.2_5 ~~ sat.g.2_5\n\n#Residual Covariances\nsat.g.1_1 ~~ sat.g.2_1\nsat.g.1_2 ~~ sat.g.2_2\nsat.g.1_3 ~~ sat.g.2_3\nsat.g.1_4 ~~ sat.g.2_4\nsat.g.1_5 ~~ sat.g.2_5\n\n#Structural Model\n\n#Latent (Co)Variances (Orthogonal Structure)\nSat1 ~~ NA*Sat1\nSat2 ~~ NA*Sat2\nSatDy ~~ NA*SatDy\n\nSatDy ~~ 0*Sat1\nSatDy ~~ 0*Sat2\nSat1 ~~ 0*Sat2\n\n#Latent Means\nSat1 ~ alphax*1\nSat2 ~ alphax*1\nSatDy ~ alphax*1"
   )
-
-}
-)
+})
 
 # ---- FF vs. MV ----
-test_that(#failure
-  "scriptBifac produces same df for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means when scaleset= FF, and scaleset = MV", {
+test_that( # failure
+  "scriptBifac produces same df for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
-    dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-                          x_delim2="_", distinguish_1="1", distinguish_2="2")
 
-
-    #Script lmeans equality model and scaleset = FF
+    # Script lmeans equality model and scaleset = FF
     script_ff <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "means", scaleset = "FF")
 
-    #Fit model w FF
+    # Fit model w FF
     mod_ff <- suppressWarnings(lavaan::cfa(script_ff, data = commitmentQ))
 
-    #get its df
+    # get its df
     df_ff <- as.double(lavaan::fitmeasures(mod_ff, "df"))
 
-    #Script lmeans equality model and scaleset = MV
+    # Script lmeans equality model and scaleset = MV
     script_mv <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "means", scaleset = "MV")
 
-    #Fit model w MV
+    # Fit model w MV
     mod_mv <- suppressWarnings(lavaan::cfa(script_mv, data = commitmentQ))
 
-    #get its df
+    # get its df
     df_mv <- as.double(lavaan::fitmeasures(mod_mv, "df"))
 
-    #scale setting should have no impact on df
-    expect_equal(df_ff,
-                 df_mv
+    # scale setting should have no impact on df
+    expect_equal(
+      df_ff,
+      df_mv
     )
   }
 )
-test_that(#pass (but fails in `equal_identical()`)
-  "scriptBifac produces same chisq for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means when scaleset= FF, and scaleset = MV", {
+test_that( # pass (but fails in `equal_identical()`)
+  "scriptBifac produces same chisq for constr_dy_meas = c(loadings, intercepts), constr_dy_struct = means when scaleset= FF, and scaleset = MV",
+  {
+    dvn <- scrapeVarCross(
+      dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+      x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+    )
 
-    dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-                          x_delim2="_", distinguish_1="1", distinguish_2="2")
 
-
-    #Script lmeans equality model and scaleset = FF
+    # Script lmeans equality model and scaleset = FF
     script_ff <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "means", scaleset = "FF")
 
-    #Fit model w FF
+    # Fit model w FF
     mod_ff <- suppressWarnings(lavaan::cfa(script_ff, data = commitmentQ))
 
-    #get its chisq
+    # get its chisq
     chisq_ff <- as.double(lavaan::fitmeasures(mod_ff, "chisq"))
 
-    #Script lmeans equality model and scaleset = MV
+    # Script lmeans equality model and scaleset = MV
     script_mv <- scriptBifac(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "means", scaleset = "MV")
 
-    #Fit model w MV
+    # Fit model w MV
     mod_mv <- suppressWarnings(lavaan::cfa(script_mv, data = commitmentQ))
 
-    #get its chisq
+    # get its chisq
     chisq_mv <- as.double(lavaan::fitmeasures(mod_mv, "chisq"))
 
-    #scale setting should have no impact on chisq
-    expect_equal(chisq_ff,
-                 chisq_mv
+    # scale setting should have no impact on chisq
+    expect_equal(
+      chisq_ff,
+      chisq_mv
     )
   }
 )
+
+#### Error Handling Tests for scriptBifac ####
+# ==============================================
+# These tests verify that scriptBifac properly handles invalid inputs,
+# missing required arguments, invalid parameter combinations, and malformed dvn objects.
+
+#### Group 1: Invalid Input Types ####
+test_that("scriptBifac rejects non-list dvn argument", {
+  expect_error(
+    scriptBifac(dvn = "not_a_list", lvname = "Sat"),
+    "The `dvn` argument must be a list object."
+  )
+})
+
+test_that("scriptBifac rejects non-character lvname argument", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
+    x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+  )
+  expect_error(
+    scriptBifac(dvn = dvn, lvname = 123),
+    "The `lvname` argument must be a character string."
+  )
+})
+
+#### Group 2: Missing Required Arguments ####
+test_that("scriptBifac requires dvn argument", {
+  expect_error(
+    scriptBifac(lvname = "Sat"),
+    "The `dvn` argument is required and cannot be NULL."
+  )
+})
+
+#### Group 3: Invalid Parameter Combinations ####
+test_that("scriptBifac rejects invalid constr_dy_meas values", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
+    x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+  )
+  expect_error(
+    scriptBifac(dvn = dvn, lvname = "Sat", constr_dy_meas = "invalid_option"),
+    "constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'"
+  )
+})
+
+test_that("scriptBifac rejects invalid scaleset value", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
+    x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+  )
+  expect_error(
+    scriptBifac(dvn = dvn, lvname = "Sat", scaleset = "invalid"),
+    "scaleset must be either 'FF' \\(fixed-factor\\) or 'MV' \\(marker variable\\)"
+  )
+})
+
+#### Group 4: Malformed dvn Objects ####
+test_that("scriptBifac rejects dvn object with wrong length", {
+  dvn_xy <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
+    x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+    y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
+  )
+  expect_error(
+    scriptBifac(dvn = dvn_xy, lvname = "Sat"),
+    "You must supply a dvn object containing information for only X"
+  )
+})
+
+test_that("scriptBifac rejects dvn object with missing required elements", {
+  dvn_malformed <- list(
+    p1xvarnames = c("var1", "var2"),
+    p2xvarnames = c("var3", "var4")
+  )
+  expect_error(
+    scriptBifac(dvn = dvn_malformed, lvname = "Sat"),
+    "You must supply a dvn object containing information for only X"
+  )
+})
