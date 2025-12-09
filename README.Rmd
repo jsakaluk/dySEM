@@ -28,6 +28,18 @@ knitr::opts_chunk$set(
 
 The `dySEM` helps automate the process of scripting, fitting, and reporting on latent models of dyadic data via [`lavaan`](https://lavaan.ugent.be). The package was initially developed and used in the course of the research described in Sakaluk, Fisher, and  Kilshaw (2021), and has since undergone considerable expansion.
 
+```{r package-stats, echo = FALSE, message = FALSE, warning = FALSE, results = 'hide'}
+# Source helper functions to count package statistics
+source("package_summary.R")
+
+# Calculate statistics (suppress print output)
+n_total_funcs <- count_total_functions()
+n_exported_funcs <- count_exported_functions()
+n_test_cases <- count_test_cases()
+```
+
+`dySEM` currently contains `r n_total_funcs` functions (total), of which `r n_exported_funcs` are user-facing (exported), which are covered by `r n_test_cases` unit tests (test case total).
+
 The `dySEM` logo was designed by Lowell Deranleau (for logo design inquiries, email: agangofwolves@gmail.com).
 
 ## Installation

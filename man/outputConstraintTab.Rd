@@ -47,17 +47,25 @@ invariance equality constraint between partners in a given dyadic SEM model.
 }
 }
 \examples{
-dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
-x_delim2="_", distinguish_1="f", distinguish_2="m")
+dvn <- scrapeVarCross(
+  dat = commitmentM, x_order = "sip", x_stem = "sat.g",
+  x_delim2 = "_", distinguish_1 = "f", distinguish_2 = "m"
+)
 
-sat.resids.script <- scriptCor(dvn, lvname = "Sat",
-constr_dy_meas = c("loadings", "intercepts", "residuals"),
-constr_dy_struct = "none")
+sat.resids.script <- scriptCor(dvn,
+  lvname = "Sat",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = "none"
+)
 
-sat.resids.mod <- lavaan::cfa(sat.resids.script, data = commitmentM, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = TRUE)
+sat.resids.mod <- lavaan::cfa(sat.resids.script,
+  data = commitmentM, std.lv = FALSE,
+  auto.fix.first = FALSE, meanstructure = TRUE
+)
 
-outputConstraintTab(sat.resids.mod, filterSig = FALSE,
-gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Residual")
+outputConstraintTab(sat.resids.mod,
+  filterSig = FALSE,
+  gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Residual"
+)
 
 }

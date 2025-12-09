@@ -70,16 +70,16 @@ dvn <- scrapeVarCross(
   x_order = "spi",
   x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_",
-  distinguish_1="1",
-  distinguish_2="2"
-  )
+  x_delim2 = "_",
+  distinguish_1 = "1",
+  distinguish_2 = "2"
+)
 
 sat.indist.script <- scriptBifac(
   dvn,
   scaleset = "FF",
   lvname = "Sat"
-  )
+)
 
 sat.lvars.script <- scriptBifac(
   dvn,
@@ -87,7 +87,7 @@ sat.lvars.script <- scriptBifac(
   lvname = "Sat",
   constr_dy_meas = "loadings",
   constr_dy_struct = "variances"
-  )
+)
 
 sat.resids.script <- scriptBifac(
   dvn,
@@ -97,7 +97,7 @@ sat.resids.script <- scriptBifac(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dBiFac_residual"
-  )
+)
 
 sat.ints.script <- scriptBifac(
   dvn,
@@ -107,7 +107,7 @@ sat.ints.script <- scriptBifac(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dBiFac_intercept"
-  )
+)
 
 sat.loads.script <- scriptBifac(
   dvn,
@@ -117,7 +117,7 @@ sat.loads.script <- scriptBifac(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dBiFac_loading"
-  )
+)
 
 sat.config.script <- scriptBifac(
   dvn,
@@ -127,7 +127,7 @@ sat.config.script <- scriptBifac(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dBiFac_configural"
-  )
+)
 
 sat.source.script <- scriptBifac(
   dvn,
@@ -137,7 +137,7 @@ sat.source.script <- scriptBifac(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dBiFac_source"
-  )
+)
 }
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on.

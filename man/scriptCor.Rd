@@ -70,16 +70,16 @@ dvn <- scrapeVarCross(
   x_order = "spi",
   x_stem = "sat.g",
   x_delim1 = ".",
-  x_delim2="_",
-  distinguish_1="1",
-  distinguish_2="2"
-  )
+  x_delim2 = "_",
+  distinguish_1 = "1",
+  distinguish_2 = "2"
+)
 
 sat.indist.script <- scriptCor(
   dvn,
   scaleset = "FF",
   lvname = "Sat"
-  )
+)
 
 sat.lvars.script <- scriptCor(
   dvn,
@@ -87,7 +87,7 @@ sat.lvars.script <- scriptCor(
   lvname = "Sat",
   constr_dy_meas = "loadings",
   constr_dy_struct = "variances"
-  )
+)
 
 sat.resids.script <- scriptCor(
   dvn,
@@ -97,7 +97,7 @@ sat.resids.script <- scriptCor(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dCor_residual"
-  )
+)
 
 sat.ints.script <- scriptCor(
   dvn,
@@ -107,7 +107,7 @@ sat.ints.script <- scriptCor(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dCor_intercept"
-  )
+)
 
 sat.loads.script <- scriptCor(
   dvn,
@@ -117,7 +117,7 @@ sat.loads.script <- scriptCor(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dCor_loading"
-  )
+)
 
 sat.config.script <- scriptCor(
   dvn,
@@ -127,7 +127,7 @@ sat.config.script <- scriptCor(
   constr_dy_struct = "none",
   writeTo = tempdir(),
   fileName = "dCor_configural"
-  )
+)
 }
 \seealso{
 \code{\link{scrapeVarCross}} which this function relies on.

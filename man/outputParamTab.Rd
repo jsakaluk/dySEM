@@ -57,27 +57,41 @@ creates tables of expected output and/or exports them as \code{.rtf}s.
 }
 }
 \examples{
-dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2")
+dvnx <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+)
 
-sat.config.script <- scriptCor(dvnx, lvname = "Sat", constr_dy_meas = "none",
-constr_dy_struct = "none")
+sat.config.script <- scriptCor(dvnx,
+  lvname = "Sat", constr_dy_meas = "none",
+  constr_dy_struct = "none"
+)
 
-sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = TRUE)
+sat.config.mod <- lavaan::cfa(sat.config.script,
+  data = commitmentQ, std.lv = FALSE,
+  auto.fix.first = FALSE, meanstructure = TRUE
+)
 
-outputParamTab(dvnx, model = "cfa", sat.config.mod, tabletype = "measurement",
-writeTo = tempdir(), fileName = "dCFA_configural")
+outputParamTab(dvnx,
+  model = "cfa", sat.config.mod, tabletype = "measurement",
+  writeTo = tempdir(), fileName = "dCFA_configural"
+)
 
-dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2",
-y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+dvnxy <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+  y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
+)
 
-apim.indist.script <-  scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
+apim.indist.script <- scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
 
-apim.indist.mod <- lavaan::cfa(apim.indist.script, data = commitmentQ, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = TRUE)
+apim.indist.mod <- lavaan::cfa(apim.indist.script,
+  data = commitmentQ, std.lv = FALSE,
+  auto.fix.first = FALSE, meanstructure = TRUE
+)
 
-outputParamTab(dvnxy, model = "cfa", sat.config.mod, tabletype = "measurement",
-writeTo = tempdir(), fileName = "APIM_indist")
+outputParamTab(dvnxy,
+  model = "cfa", sat.config.mod, tabletype = "measurement",
+  writeTo = tempdir(), fileName = "APIM_indist"
+)
 }
