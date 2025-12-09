@@ -63,8 +63,10 @@ simultaneously exported as a `.png` file to the specified directory.
 ## Examples
 
 ``` r
-dvnx <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2")
+dvnx <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
@@ -72,19 +74,27 @@ x_delim2="_", distinguish_1="1", distinguish_2="2")
 #> ℹ sat.g: 5 indicators for P1 (1), 5 indicators for P2 (2)
 #> ℹ Total indicators: 10
 
-sat.config.script <- scriptCor(dvnx, lvname = "Sat", constr_dy_meas = "none",
-constr_dy_struct = "none")
+sat.config.script <- scriptCor(dvnx,
+  lvname = "Sat", constr_dy_meas = "none",
+  constr_dy_struct = "none"
+)
 
-sat.config.mod <- lavaan::cfa(sat.config.script, data = commitmentQ, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = TRUE)
+sat.config.mod <- lavaan::cfa(sat.config.script,
+  data = commitmentQ, std.lv = FALSE,
+  auto.fix.first = FALSE, meanstructure = TRUE
+)
 
-outputParamFig(sat.config.mod, figtype = "standardized",
-writeTo = tempdir(), fileName = "dCFA_configural")
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpAu6CmA/dCFA_configural std.png
+outputParamFig(sat.config.mod,
+  figtype = "standardized",
+  writeTo = tempdir(), fileName = "dCFA_configural"
+)
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpEa4tcV/dCFA_configural std.png
 
-dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2",
-y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+dvnxy <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+  y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
@@ -93,12 +103,16 @@ y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 #> ℹ com: 5 indicators for P1 (1), 5 indicators for P2 (2)
 #> ℹ Total indicators: 20
 
-apim.indist.script <-  scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
+apim.indist.script <- scriptAPIM(dvnxy, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
 
-apim.indist.mod <- lavaan::cfa(apim.indist.script, data = commitmentQ, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = TRUE)
+apim.indist.mod <- lavaan::cfa(apim.indist.script,
+  data = commitmentQ, std.lv = FALSE,
+  auto.fix.first = FALSE, meanstructure = TRUE
+)
 
-outputParamFig(apim.indist.mod, figtype = "standardized",
-writeTo = tempdir(), fileName = "APIM_indist")
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpAu6CmA/APIM_indist std.png
+outputParamFig(apim.indist.mod,
+  figtype = "standardized",
+  writeTo = tempdir(), fileName = "APIM_indist"
+)
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpEa4tcV/APIM_indist std.png
 ```

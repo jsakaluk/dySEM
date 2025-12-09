@@ -96,17 +96,20 @@ Other multi-construct script-writing functions:
 ## Examples
 
 ``` r
-#When different factor use distinct stems:
-imsList <- list(lvnames = c("Sat", "Q_Alt", "Invest", "Comm"),
-stem = c("sat.g", "qalt.g", "invest.g", "com"),
-delim1 = c("", "", "", ""),
-delim2 = c("_", "_", "_", "_"))
+# When different factor use distinct stems:
+imsList <- list(
+  lvnames = c("Sat", "Q_Alt", "Invest", "Comm"),
+  stem = c("sat.g", "qalt.g", "invest.g", "com"),
+  delim1 = c("", "", "", ""),
+  delim2 = c("_", "_", "_", "_")
+)
 
-dvnIMS<- scrapeVarCross(imsM,
-var_list = imsList,
-var_list_order = "sip",
-distinguish_1 = "f",
-distinguish_2 = "m")
+dvnIMS <- scrapeVarCross(imsM,
+  var_list = imsList,
+  var_list_order = "sip",
+  distinguish_1 = "f",
+  distinguish_2 = "m"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
@@ -117,40 +120,53 @@ distinguish_2 = "m")
 #> ℹ Comm: 5 indicators for P1 (f), 5 indicators for P2 (m)
 #> ℹ Total indicators: 40
 
-script.ims.config <-  scriptCFA(dvnIMS, scaleset = "FF",
-constr_dy_meas = "none",
-constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_config")
+script.ims.config <- scriptCFA(dvnIMS,
+  scaleset = "FF",
+  constr_dy_meas = "none",
+  constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_config"
+)
 
-script.ims.load <-  scriptCFA(dvnIMS, scaleset = "FF",
-constr_dy_meas = c("loadings"),
-constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_load")
+script.ims.load <- scriptCFA(dvnIMS,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings"),
+  constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_load"
+)
 
-script.ims.int <-  scriptCFA(dvnIMS, scaleset = "FF",
-constr_dy_meas = c("loadings", "intercepts"),
-constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_int")
+script.ims.int <- scriptCFA(dvnIMS,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings", "intercepts"),
+  constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_int"
+)
 
-script.ims.res <-  scriptCFA(dvnIMS, scaleset = "FF",
-constr_dy_meas = c("loadings", "intercepts", "residuals"),
-constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_res")
+script.ims.res <- scriptCFA(dvnIMS,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = "none", writeTo = tempdir(), fileName = "ims_res"
+)
 
-script.ims.indist <-  scriptCFA(dvnIMS, scaleset = "FF",
-constr_dy_meas = c("loadings", "intercepts", "residuals"),
-constr_dy_struct = c("variances", "means"), writeTo = tempdir(), fileName = "ims_indist")
+script.ims.indist <- scriptCFA(dvnIMS,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = c("variances", "means"), writeTo = tempdir(), fileName = "ims_indist"
+)
 
-#When different factor use the same stem and muse be detected through numeric position
+# When different factor use the same stem and muse be detected through numeric position
 
-prqcList <- list(lvnames = c("Sat", "Comm", "Intim", "Trust", "Pass", "Love"),
-stem = c("prqc", "prqc", "prqc", "prqc", "prqc", "prqc"),
-delim1 = c(".", ".", ".", ".", ".", "."),
-delim2 = c("_", "_", "_", "_", "_", "_"),
-min_num = c(1, 4, 7, 10, 13, 16),
-max_num = c(3, 6, 9, 12, 15, 18))
+prqcList <- list(
+  lvnames = c("Sat", "Comm", "Intim", "Trust", "Pass", "Love"),
+  stem = c("prqc", "prqc", "prqc", "prqc", "prqc", "prqc"),
+  delim1 = c(".", ".", ".", ".", ".", "."),
+  delim2 = c("_", "_", "_", "_", "_", "_"),
+  min_num = c(1, 4, 7, 10, 13, 16),
+  max_num = c(3, 6, 9, 12, 15, 18)
+)
 
-dvnPRQC<- scrapeVarCross(prqcQ,
-var_list = prqcList,
-var_list_order = "spi",
-distinguish_1 = "1",
-distinguish_2 = "2")
+dvnPRQC <- scrapeVarCross(prqcQ,
+  var_list = prqcList,
+  var_list_order = "spi",
+  distinguish_1 = "1",
+  distinguish_2 = "2"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
@@ -163,23 +179,33 @@ distinguish_2 = "2")
 #> ℹ Love: 3 indicators for P1 (1), 3 indicators for P2 (2)
 #> ℹ Total indicators: 36
 
-script.prqc.config <-  scriptCFA(dvnPRQC, scaleset = "FF",
-constr_dy_meas = "none",
-constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_config")
+script.prqc.config <- scriptCFA(dvnPRQC,
+  scaleset = "FF",
+  constr_dy_meas = "none",
+  constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_config"
+)
 
-script.prqc.load <-  scriptCFA(dvnPRQC, scaleset = "FF",
-constr_dy_meas = c("loadings"),
-constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_load")
+script.prqc.load <- scriptCFA(dvnPRQC,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings"),
+  constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_load"
+)
 
-script.prqc.int <-  scriptCFA(dvnPRQC, scaleset = "FF",
-constr_dy_meas = c("loadings", "intercepts"),
-constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_int")
+script.prqc.int <- scriptCFA(dvnPRQC,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings", "intercepts"),
+  constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_int"
+)
 
-script.prqc.res <-  scriptCFA(dvnPRQC, scaleset = "FF",
-constr_dy_meas = c("loadings", "intercepts", "residuals"),
-constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_res")
+script.prqc.res <- scriptCFA(dvnPRQC,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = "none", writeTo = tempdir(), fileName = "prqc_res"
+)
 
-script.prqc.indist <-  scriptCFA(dvnPRQC, scaleset = "FF",
-constr_dy_meas = c("loadings", "intercepts", "residuals"),
-constr_dy_struct = c("variances", "means"), writeTo = tempdir(), fileName = "prqc_indist")
+script.prqc.indist <- scriptCFA(dvnPRQC,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = c("variances", "means"), writeTo = tempdir(), fileName = "prqc_indist"
+)
 ```

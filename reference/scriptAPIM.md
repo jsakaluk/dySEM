@@ -149,9 +149,11 @@ Other bi-construct script-writing functions:
 ## Examples
 
 ``` r
-dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2",
-y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
+dvn <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+  y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
@@ -159,7 +161,9 @@ y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
 #> ℹ sat.g: 5 indicators for P1 (1), 5 indicators for P2 (2)
 #> ℹ com: 5 indicators for P1 (1), 5 indicators for P2 (2)
 #> ℹ Total indicators: 20
-apim.script.indist <-  scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE,
-writeTo = tempdir(),
-fileName = "latAPIM_indist")
+apim.script.indist <- scriptAPIM(dvn,
+  lvxname = "Sat", lvyname = "Com", est_k = TRUE,
+  writeTo = tempdir(),
+  fileName = "latAPIM_indist"
+)
 ```

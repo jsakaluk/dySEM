@@ -80,8 +80,10 @@ worsens model fit.
 ## Examples
 
 ``` r
-dvn <- scrapeVarCross(dat = commitmentM, x_order = "sip", x_stem = "sat.g",
-x_delim2="_", distinguish_1="f", distinguish_2="m")
+dvn <- scrapeVarCross(
+  dat = commitmentM, x_order = "sip", x_stem = "sat.g",
+  x_delim2 = "_", distinguish_1 = "f", distinguish_2 = "m"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
@@ -89,16 +91,22 @@ x_delim2="_", distinguish_1="f", distinguish_2="m")
 #> ℹ sat.g: 5 indicators for P1 (f), 5 indicators for P2 (m)
 #> ℹ Total indicators: 10
 
-sat.resids.script <- scriptCor(dvn, lvname = "Sat",
-constr_dy_meas = c("loadings", "intercepts", "residuals"),
-constr_dy_struct = "none")
+sat.resids.script <- scriptCor(dvn,
+  lvname = "Sat",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = "none"
+)
 
-sat.resids.mod <- lavaan::cfa(sat.resids.script, data = commitmentM, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = TRUE)
+sat.resids.mod <- lavaan::cfa(sat.resids.script,
+  data = commitmentM, std.lv = FALSE,
+  auto.fix.first = FALSE, meanstructure = TRUE
+)
 
-outputConstraintTab(sat.resids.mod, filterSig = FALSE,
-gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Residual")
-#> Output stored in: /tmp/RtmpAu6CmA/dCFA_Residual.rtf
+outputConstraintTab(sat.resids.mod,
+  filterSig = FALSE,
+  gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Residual"
+)
+#> Output stored in: /tmp/RtmpEa4tcV/dCFA_Residual.rtf
 
 
   
