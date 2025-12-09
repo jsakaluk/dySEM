@@ -27,9 +27,8 @@ reporting on latent models of dyadic data via
 and used in the course of the research described in Sakaluk, Fisher, and
 Kilshaw (2021), and has since undergone considerable expansion.
 
-`dySEM` currently contains 68 functions (total), of which 25 are
-user-facing (exported), which are covered by 468 unit tests (test case
-total).
+`dySEM` currently contains 68 functions, of which 25 are user-facing,
+which are covered by 468 unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
@@ -148,7 +147,7 @@ each member of the dyad. For example:
 
 ``` r
 DRES
-#> # A tibble: 121 x 18
+#> # A tibble: 121 × 18
 #>    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_7.1 PRQC_8.1
 #>       <int>    <int>    <int>    <int>    <int>    <int>    <int>    <int>
 #>  1        7        7        7        7        7        7        7        5
@@ -161,8 +160,8 @@ DRES
 #>  8        6        7        7        7        7        6        5        6
 #>  9        7        7        7        7        7        6        6        6
 #> 10        6        6        6        7        7        7        4        4
-#> # i 111 more rows
-#> # i 10 more variables: PRQC_9.1 <int>, PRQC_1.2 <int>, PRQC_2.2 <int>,
+#> # ℹ 111 more rows
+#> # ℹ 10 more variables: PRQC_9.1 <int>, PRQC_1.2 <int>, PRQC_2.2 <int>,
 #> #   PRQC_3.2 <int>, PRQC_4.2 <int>, PRQC_5.2 <int>, PRQC_6.2 <int>,
 #> #   PRQC_7.2 <int>, PRQC_8.2 <int>, PRQC_9.2 <int>
 ```
@@ -179,11 +178,11 @@ what order the elements of variable names are ordered.
 ``` r
 dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_delim2=".",  distinguish_1="1", distinguish_2="2")
 #> 
-#> -- Variable Scraping Summary --
+#> ── Variable Scraping Summary ──
 #> 
-#> v Successfully scraped 1 latent variable: PRQC
-#> i PRQC: 9 indicators for P1 (1), 9 indicators for P2 (2)
-#> i Total indicators: 18
+#> ✔ Successfully scraped 1 latent variable: PRQC
+#> ℹ PRQC: 9 indicators for P1 (1), 9 indicators for P2 (2)
+#> ℹ Total indicators: 18
 ```
 
 ### 3. **Script** your preferred model

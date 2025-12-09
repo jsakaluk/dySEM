@@ -38,7 +38,7 @@ n_exported_funcs <- count_exported_functions()
 n_test_cases <- count_test_cases()
 ```
 
-`dySEM` currently contains `r n_total_funcs` functions (total), of which `r n_exported_funcs` are user-facing (exported), which are covered by `r n_test_cases` unit tests (test case total).
+`dySEM` currently contains `r n_total_funcs` functions, of which `r n_exported_funcs` are user-facing, which are covered by `r n_test_cases` unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design inquiries, email: agangofwolves@gmail.com).
 
