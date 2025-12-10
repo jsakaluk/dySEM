@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - uses: actions/checkout@v3
@@ -28,13 +29,36 @@ jobs:
 
       - name: Test coverage
         run: |
-          # For public repos with Codecov GitHub App installed, no token needed
-          # The GitHub App provides authentication automatically
-          covr::codecov(
-            quiet = FALSE,
-            clean = FALSE,
-            install_path = file.path(Sys.getenv("RUNNER_TEMP"), "package")
-          )
+          # Use CODECOV_TOKEN if provided, otherwise rely on GitHub App
+          # Get token from environment (will be empty string if not set)
+          token <- Sys.getenv("CODECOV_TOKEN", unset = "")
+          if (token == "") {
+            token <- NULL
+            cat("ℹ No CODECOV_TOKEN found, using GitHub App authentication\n")
+          } else {
+            cat("ℹ Using CODECOV_TOKEN for authentication\n")
+          }
+          
+          result <- tryCatch({
+            covr::codecov(
+              quiet = FALSE,
+              clean = FALSE,
+              token = token,
+              install_path = file.path(Sys.getenv("RUNNER_TEMP"), "package")
+            )
+            cat("✓ Coverage uploaded successfully to Codecov\n")
+          }, error = function(e) {
+            cat("✗ Error uploading coverage to Codecov:\n")
+            cat("  ", e$message, "\n")
+            cat("\nTroubleshooting:\n")
+            if (is.null(token)) {
+              cat("  1. Add CODECOV_TOKEN as a GitHub secret, OR\n")
+              cat("  2. Install Codecov GitHub App: https://github.com/apps/codecov\n")
+            }
+            cat("  3. Verify repository connection: https://app.codecov.io/gh/jsakaluk/dySEM/settings\n")
+            cat("  4. Get your token from: https://app.codecov.io/gh/jsakaluk/dySEM/settings\n")
+            stop("Coverage upload failed", call. = FALSE)
+          })
         shell: Rscript {0}
 
       - name: Show testthat output
