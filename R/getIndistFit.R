@@ -39,32 +39,41 @@
 getIndistFit <- function(indmodel, isatmod, inullmod) {
   # Extract and transpose indistinguishable model fit indexes
   # Check if models converged before extracting fit measures
+  if (!lavaan::lavInspect(indmodel, "converged")) {
+    stop("Cannot extract fit measures from the indistinguishable model: model did not converge. Please check your model specification and data.")
+  }
   mod.fit <- tryCatch(
     {
       data.frame(lavaan::fitMeasures(indmodel))
     },
     error = function(e) {
-      stop("Failed to extract fit measures from the indistinguishable model. The model may not have converged. Error: ", e$message)
+      stop("Failed to extract fit measures from the indistinguishable model. Error: ", e$message)
     }
   )
   mod.fit <- data.frame(t(mod.fit))
   # Extract and transpose ISAT model fit indexes
+  if (!lavaan::lavInspect(isatmod, "converged")) {
+    stop("Cannot extract fit measures from the ISAT model: model did not converge. Please check your model specification and data.")
+  }
   isat.fit <- tryCatch(
     {
       data.frame(lavaan::fitMeasures(isatmod))
     },
     error = function(e) {
-      stop("Failed to extract fit measures from the ISAT model. The model may not have converged. Error: ", e$message)
+      stop("Failed to extract fit measures from the ISAT model. Error: ", e$message)
     }
   )
   isat.fit <- data.frame(t(isat.fit))
   # Extract and transpose INILL model fit indexes
+  if (!lavaan::lavInspect(inullmod, "converged")) {
+    stop("Cannot extract fit measures from the INULL model: model did not converge. Please check your model specification and data.")
+  }
   inull.fit <- tryCatch(
     {
       data.frame(lavaan::fitMeasures(inullmod))
     },
     error = function(e) {
-      stop("Failed to extract fit measures from the INULL model. The model may not have converged. Error: ", e$message)
+      stop("Failed to extract fit measures from the INULL model. Error: ", e$message)
     }
   )
   inull.fit <- data.frame(t(inull.fit))

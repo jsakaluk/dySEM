@@ -61,22 +61,28 @@ getInvarCompTable <- function(mods) {
 
   # Check if models converged before extracting fit measures
   # This prevents errors on platforms where models may fail to converge
+  if (!lavaan::lavInspect(mods[[1]], "converged")) {
+    stop("Cannot extract fit measures from the first model: model did not converge. Please check your model specification and data.")
+  }
   modfit <- tryCatch(
     {
       t(as.data.frame(lavaan::fitmeasures(mods[[1]])))
     },
     error = function(e) {
-      stop("Failed to extract fit measures from the first model. The model may not have converged. Error: ", e$message)
+      stop("Failed to extract fit measures from the first model. Error: ", e$message)
     }
   )
 
   for (i in 2:length(mods)) {
+    if (!lavaan::lavInspect(mods[[i]], "converged")) {
+      stop("Cannot extract fit measures from model ", i, ": model did not converge. Please check your model specification and data.")
+    }
     modfit_iter <- tryCatch(
       {
         t(as.data.frame(lavaan::fitmeasures(mods[[i]])))
       },
       error = function(e) {
-        stop("Failed to extract fit measures from model ", i, ". The model may not have converged. Error: ", e$message)
+        stop("Failed to extract fit measures from model ", i, ". Error: ", e$message)
       }
     )
     modfit <- rbind(modfit, modfit_iter)

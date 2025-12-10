@@ -193,6 +193,10 @@ indexExtractor <- function(
   model_indexes <- lapply(
     models,
     function(model) {
+      # Check if model converged before extracting fit measures
+      if (!lavaan::lavInspect(model, "converged")) {
+        stop("Cannot extract fit measures: model did not converge. Please check your model specification and data.")
+      }
       tryCatch(
         {
           model %>%
@@ -203,7 +207,7 @@ indexExtractor <- function(
             tibble::as_tibble()
         },
         error = function(e) {
-          stop("Failed to extract fit measures from a model. The model may not have converged. Error: ", e$message)
+          stop("Failed to extract fit measures from a model. Error: ", e$message)
         }
       )
     }
