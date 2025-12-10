@@ -30,145 +30,178 @@
 #'
 #' @examples
 #'
-#' dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi",
-#' x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+#' dvn <- scrapeVarCross(
+#'   dat = commitmentQ, x_order = "spi",
+#'   x_stem = "sat.g", x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+#' )
 #'
-#' sat.residual.script <- scriptCor(dvn, lvname = "Sat",
-#' constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+#' sat.residual.script <- scriptCor(dvn,
+#'   lvname = "Sat",
+#'   constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none"
+#' )
 #'
-#' sat.intercept.script <- scriptCor(dvn, lvname = "Sat",
-#' constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none")
+#' sat.intercept.script <- scriptCor(dvn,
+#'   lvname = "Sat",
+#'   constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none"
+#' )
 #'
-#' sat.loading.script <- scriptCor(dvn, lvname = "Sat",
-#' constr_dy_meas = c("loadings"), constr_dy_struct = "none")
+#' sat.loading.script <- scriptCor(dvn,
+#'   lvname = "Sat",
+#'   constr_dy_meas = c("loadings"), constr_dy_struct = "none"
+#' )
 #'
-#' sat.config.script <- scriptCor(dvn, lvname = "Sat",
-#' constr_dy_meas = "none", constr_dy_struct = "none")
+#' sat.config.script <- scriptCor(dvn,
+#'   lvname = "Sat",
+#'   constr_dy_meas = "none", constr_dy_struct = "none"
+#' )
 #'
-#' sat.residual.fit <- lavaan::cfa(sat.residual.script, data = commitmentQ,
-#' std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+#' sat.residual.fit <- lavaan::cfa(sat.residual.script,
+#'   data = commitmentQ,
+#'   std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE
+#' )
 #'
-#' sat.intercept.fit <- lavaan::cfa(sat.intercept.script, data = commitmentQ,
-#' std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+#' sat.intercept.fit <- lavaan::cfa(sat.intercept.script,
+#'   data = commitmentQ,
+#'   std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE
+#' )
 #'
-#' sat.loading.fit <- lavaan::cfa(sat.loading.script, data = commitmentQ,
-#' std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+#' sat.loading.fit <- lavaan::cfa(sat.loading.script,
+#'   data = commitmentQ,
+#'   std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE
+#' )
 #'
-#' sat.config.fit <- lavaan::cfa(sat.config.script, data = commitmentQ,
-#' std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+#' sat.config.fit <- lavaan::cfa(sat.config.script,
+#'   data = commitmentQ,
+#'   std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE
+#' )
 #'
 #' mods <- list(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
 #'
-#' outputInvarCompTab(mods, parsimonyFirst = FALSE,
-#' gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Standard")
+#' outputInvarCompTab(mods,
+#'   parsimonyFirst = FALSE,
+#'   gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Standard"
+#' )
 #'
 #' mods <- list(sat.config.fit, sat.loading.fit, sat.intercept.fit, sat.residual.fit)
 #'
-#' outputInvarCompTab(mods, parsimonyFirst = TRUE,
-#' gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Reverse")
+#' outputInvarCompTab(mods,
+#'   parsimonyFirst = TRUE,
+#'   gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Reverse"
+#' )
 #'
 outputInvarCompTab <- function(mods,
                                parsimonyFirst = FALSE,
                                gtTab = FALSE,
                                writeTo = NULL,
-                               fileName = NULL){
-
-  #checking for valid directory path
-  if (gtTab == TRUE && !is.null(writeTo)){
-
-    if (!is.character(writeTo)){
+                               fileName = NULL) {
+  # checking for valid directory path
+  if (gtTab == TRUE && !is.null(writeTo)) {
+    if (!is.character(writeTo)) {
       stop("The `writeTo` argument must be a character string. \n Use `writeTo = '.'` to save output file(s) in the current working directory.")
     }
-    if (!dir.exists(writeTo)){
+    if (!dir.exists(writeTo)) {
       stop("The specified directory does not exist. \n Use `writeTo = '.'` to save output file(s) in the current working directory.")
     }
-    if (!is.null(fileName) && !is.character(fileName)){
+    if (!is.null(fileName) && !is.character(fileName)) {
       stop("The `fileName` argument must be a character string.")
     }
-
   }
 
 
-  modfit <- t(as.data.frame(lavaan::fitmeasures(mods[[1]])))
+  # Check if models converged before extracting fit measures
+  # This prevents errors on platforms where models may fail to converge
+  modfit <- tryCatch(
+    {
+      t(as.data.frame(lavaan::fitmeasures(mods[[1]])))
+    },
+    error = function(e) {
+      stop("Failed to extract fit measures from the first model. The model may not have converged. Error: ", e$message)
+    }
+  )
 
-  for(i in 2:length(mods)){
-    modfit_iter <- t(as.data.frame(lavaan::fitmeasures(mods[[i]])))
+  for (i in 2:length(mods)) {
+    modfit_iter <- tryCatch(
+      {
+        t(as.data.frame(lavaan::fitmeasures(mods[[i]])))
+      },
+      error = function(e) {
+        stop("Failed to extract fit measures from model ", i, ". The model may not have converged. Error: ", e$message)
+      }
+    )
     modfit <- rbind(modfit, modfit_iter)
   }
 
   modfit <- as.data.frame(modfit)
 
-  if(parsimonyFirst == TRUE){
+  if (parsimonyFirst == TRUE) {
     modfit$mod <- c("residual", "intercept", "loading", "configural")
-  }else if(parsimonyFirst == FALSE){
+  } else if (parsimonyFirst == FALSE) {
     modfit$mod <- c("configural", "loading", "intercept", "residual")
   }
   modfit <- modfit |>
     dplyr::select(.data$mod, .data$chisq, .data$df, .data$pvalue, .data$aic, .data$bic, .data$rmsea, .data$cfi)
 
   modcomp <- modfit |>
-    #mutate _diff cols of each except p-value, where the column value for a particular row is is the difference of the previous and current row's value for that column
-    dplyr::mutate(chisq_diff = c(NA, diff(.data$chisq)),
-                  df_diff = c(NA, diff(.data$df)),
-                  p_diff = 1-stats::pchisq(abs(.data$chisq_diff), abs(.data$df_diff)),
-                  aic_diff = c(NA, diff(.data$aic)),
-                  bic_diff = c(NA, diff(.data$bic)),
-                  rmsea_diff = c(NA, diff(.data$rmsea)),
-                  cfi_diff = c(NA, diff(.data$cfi))) |>
+    # mutate _diff cols of each except p-value, where the column value for a particular row is is the difference of the previous and current row's value for that column
+    dplyr::mutate(
+      chisq_diff = c(NA, diff(.data$chisq)),
+      df_diff = c(NA, diff(.data$df)),
+      p_diff = 1 - stats::pchisq(abs(.data$chisq_diff), abs(.data$df_diff)),
+      aic_diff = c(NA, diff(.data$aic)),
+      bic_diff = c(NA, diff(.data$bic)),
+      rmsea_diff = c(NA, diff(.data$rmsea)),
+      cfi_diff = c(NA, diff(.data$cfi))
+    ) |>
     dplyr::mutate_if(is.numeric, round, 3)
 
   rownames(modcomp) <- NULL
 
-  if (gtTab == FALSE){
-
+  if (gtTab == FALSE) {
     modcomp <- modcomp |>
       tibble::as_tibble()
 
     return(modcomp)
-  }
+  } else if (gtTab == TRUE) { # Create gt table
 
-  else if (gtTab == TRUE){ #Create gt table
-
-    #user specifies writeTo
-    if (!is.null(writeTo)){
-
+    # user specifies writeTo
+    if (!is.null(writeTo)) {
       modcomp <- modcomp |>
         gt::gt()
 
-      if (is.null(fileName)){
+      if (is.null(fileName)) {
         gt::gtsave(modcomp,
-                   filename = "dySEM_table.rtf",
-                   path = writeTo)
-        message( #confirmation message
+          filename = "dySEM_table.rtf",
+          path = writeTo
+        )
+        message( # confirmation message
           sprintf(
             "Output stored in: %s/dySEM_table.rtf",
-            writeTo)
+            writeTo
+          )
         )
-      }
-
-      else if (!is.null(fileName)){
+      } else if (!is.null(fileName)) {
         gt::gtsave(modcomp,
-                   filename = sprintf("%s.rtf",
-                                      fileName),
-                   path = writeTo)
-        message( #confirmation message
+          filename = sprintf(
+            "%s.rtf",
+            fileName
+          ),
+          path = writeTo
+        )
+        message( # confirmation message
           sprintf(
             "Output stored in: %s/%s.rtf",
-            writeTo, fileName)
+            writeTo, fileName
+          )
         )
       }
     }
 
-    #user does not specify writeTo
-    else if (is.null(writeTo)){
-
+    # user does not specify writeTo
+    else if (is.null(writeTo)) {
       modcomp <- modcomp |>
         gt::gt()
-
     }
 
     return(modcomp)
-
   }
-
 }

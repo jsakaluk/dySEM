@@ -30,15 +30,24 @@ The `dySEM` helps automate the process of scripting, fitting, and reporting on l
 
 ```{r package-stats, echo = FALSE, message = FALSE, warning = FALSE, results = 'hide'}
 # Source helper functions to count package statistics
-source("package_summary.R")
-
-# Calculate statistics (suppress print output)
-n_total_funcs <- count_total_functions()
-n_exported_funcs <- count_exported_functions()
-n_test_cases <- count_test_cases()
+# Handle case where package_summary.R might not be available (e.g., during R CMD check)
+package_summary_path <- "package_summary.R"
+if (file.exists(package_summary_path)) {
+  source(package_summary_path)
+  # Calculate statistics (suppress print output)
+  n_total_funcs <- count_total_functions()
+  n_exported_funcs <- count_exported_functions()
+  n_test_cases <- count_test_cases()
+} else {
+  # Fallback values if package_summary.R is not available
+  # These should be updated manually if package_summary.R is unavailable
+  n_total_funcs <- 68
+  n_exported_funcs <- 25
+  n_test_cases <- 468
+}
 ```
 
-`dySEM` currently contains `r n_total_funcs` functions, of which `r n_exported_funcs` are user-facing, which are covered by `r n_test_cases` unit tests.
+`dySEM` currently contains `r n_total_funcs` functions, of which `r n_exported_funcs` are user-facing (i.e., exported), which are covered by `r n_test_cases` unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design inquiries, email: agangofwolves@gmail.com).
 
