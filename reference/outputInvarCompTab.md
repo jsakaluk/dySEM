@@ -83,8 +83,10 @@ difference in fit statistics between each model and the previous model
 ## Examples
 
 ``` r
-dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi",
-x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2="2")
+dvn <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi",
+  x_stem = "sat.g", x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
@@ -92,35 +94,53 @@ x_stem = "sat.g", x_delim1 = ".", x_delim2="_", distinguish_1="1", distinguish_2
 #> ℹ sat.g: 5 indicators for P1 (1), 5 indicators for P2 (2)
 #> ℹ Total indicators: 10
 
-sat.residual.script <- scriptCor(dvn, lvname = "Sat",
-constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+sat.residual.script <- scriptCor(dvn,
+  lvname = "Sat",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none"
+)
 
-sat.intercept.script <- scriptCor(dvn, lvname = "Sat",
-constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none")
+sat.intercept.script <- scriptCor(dvn,
+  lvname = "Sat",
+  constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none"
+)
 
-sat.loading.script <- scriptCor(dvn, lvname = "Sat",
-constr_dy_meas = c("loadings"), constr_dy_struct = "none")
+sat.loading.script <- scriptCor(dvn,
+  lvname = "Sat",
+  constr_dy_meas = c("loadings"), constr_dy_struct = "none"
+)
 
-sat.config.script <- scriptCor(dvn, lvname = "Sat",
-constr_dy_meas = "none", constr_dy_struct = "none")
+sat.config.script <- scriptCor(dvn,
+  lvname = "Sat",
+  constr_dy_meas = "none", constr_dy_struct = "none"
+)
 
-sat.residual.fit <- lavaan::cfa(sat.residual.script, data = commitmentQ,
-std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+sat.residual.fit <- lavaan::cfa(sat.residual.script,
+  data = commitmentQ,
+  std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE
+)
 
-sat.intercept.fit <- lavaan::cfa(sat.intercept.script, data = commitmentQ,
-std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+sat.intercept.fit <- lavaan::cfa(sat.intercept.script,
+  data = commitmentQ,
+  std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE
+)
 
-sat.loading.fit <- lavaan::cfa(sat.loading.script, data = commitmentQ,
-std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+sat.loading.fit <- lavaan::cfa(sat.loading.script,
+  data = commitmentQ,
+  std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE
+)
 
-sat.config.fit <- lavaan::cfa(sat.config.script, data = commitmentQ,
-std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
+sat.config.fit <- lavaan::cfa(sat.config.script,
+  data = commitmentQ,
+  std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE
+)
 
 mods <- list(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
 
-outputInvarCompTab(mods, parsimonyFirst = FALSE,
-gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Standard")
-#> Output stored in: /tmp/RtmpSFfohI/dCFA_Invar_Standard.rtf
+outputInvarCompTab(mods,
+  parsimonyFirst = FALSE,
+  gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Standard"
+)
+#> Output stored in: /tmp/RtmpG5FAiV/dCFA_Invar_Standard.rtf
 
 
   
@@ -280,8 +300,8 @@ mods \<- [list](https://rdrr.io/r/base/list.html)(sat.config.fit,
 sat.loading.fit, sat.intercept.fit, sat.residual.fit)
 outputInvarCompTab(mods, parsimonyFirst = TRUE, gtTab = TRUE, writeTo =
 [tempdir](https://rdrr.io/r/base/tempfile.html)(), fileName =
-"dCFA_Invar_Reverse") \#\> Output stored in:
-/tmp/RtmpSFfohI/dCFA_Invar_Reverse.rtf
+"dCFA_Invar_Reverse" ) \#\> Output stored in:
+/tmp/RtmpG5FAiV/dCFA_Invar_Reverse.rtf
 
 | mod        |  chisq |  df | pvalue |      aic |      bic | rmsea |   cfi | chisq_diff | df_diff | p_diff | aic_diff | bic_diff | rmsea_diff | cfi_diff |
 |:-----------|-------:|----:|-------:|---------:|---------:|------:|------:|-----------:|--------:|-------:|---------:|---------:|-----------:|---------:|

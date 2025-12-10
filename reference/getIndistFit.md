@@ -39,8 +39,10 @@ Other supplemental model calculators:
 ## Examples
 
 ``` r
-dvn <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
-x_delim2="_", distinguish_1="1", distinguish_2="2")
+dvn <- scrapeVarCross(
+  dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
+  x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"
+)
 #> 
 #> ── Variable Scraping Summary ──
 #> 
@@ -48,17 +50,23 @@ x_delim2="_", distinguish_1="1", distinguish_2="2")
 #> ℹ sat.g: 5 indicators for P1 (1), 5 indicators for P2 (2)
 #> ℹ Total indicators: 10
 
-sat.indist.script <-  scriptCor(dvn, lvname = "Sat")
-sat.indist.mod <- lavaan::cfa(sat.indist.script, data = commitmentQ, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = TRUE)
+sat.indist.script <- scriptCor(dvn, lvname = "Sat")
+sat.indist.mod <- lavaan::cfa(sat.indist.script,
+  data = commitmentQ, std.lv = FALSE,
+  auto.fix.first = FALSE, meanstructure = TRUE
+)
 
 sat.isat.script <- scriptISAT(dvn, lvxname = "Sat")
-sat.isat.mod <- lavaan::cfa(sat.isat.script, data = commitmentQ, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = FALSE)
+sat.isat.mod <- lavaan::cfa(sat.isat.script,
+  data = commitmentQ, std.lv = FALSE,
+  auto.fix.first = FALSE, meanstructure = FALSE
+)
 
 sat.inull.script <- scriptINULL(dvn, lvxname = "Sat")
-sat.inull.mod <- lavaan::cfa(sat.inull.script, data = commitmentQ, std.lv = FALSE,
-auto.fix.first= FALSE, meanstructure = FALSE)
+sat.inull.mod <- lavaan::cfa(sat.inull.script,
+  data = commitmentQ, std.lv = FALSE,
+  auto.fix.first = FALSE, meanstructure = FALSE
+)
 
 getIndistFit(sat.indist.mod, sat.isat.mod, sat.inull.mod)
 #>   chi2_orig df_orig p_orig rmsea_orig tli_orig chi2_adj df_adj  p_adj rmsea_adj
