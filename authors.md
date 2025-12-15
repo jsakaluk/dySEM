@@ -5,7 +5,12 @@
 - **John Sakaluk**. Author, maintainer, copyright holder.
   [](https://orcid.org/0000-0002-2515-9822)
 
-- **Omar Camanto**. Author.
+- **Omar Camanto**. Author. [](https://orcid.org/0009-0009-4012-9777)
+
+- **Christopher Quinn-Nilas**. Contributor.
+  [](https://orcid.org/0000-0002-8056-2008)
+
+- **Merissa Prine**. Contributor.
 
 - **Robyn Kilshaw**. Contributor.
 

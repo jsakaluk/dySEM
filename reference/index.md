@@ -41,6 +41,9 @@
 - [`outputUniConstructComp()`](https://jsakaluk.github.io/dySEM/reference/outputUniConstructComp.md)
   : A Function That Fits and Compares Competing Dyadic Uni-construct
   Models
+- [`pnrqM`](https://jsakaluk.github.io/dySEM/reference/pnrqM.md) :
+  Ratings on items from the Positive-Negative Relationship Quality Scale
+  (PNRQ; Rogge et al., 2017) from 219 (M)ixed-sex couples
 - [`prqcQ`](https://jsakaluk.github.io/dySEM/reference/prqcQ.md) :
   Ratings on items from the Perceived Relationship Quality Components
   (PRQC) Inventory from 118 (Q)ueer couples
