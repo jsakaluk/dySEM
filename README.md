@@ -91,6 +91,8 @@ Additional features currently include:
 - Functions to calculate supplemental statistical information (e.g.,
   omega reliability, noninvariance effect sizes, corrected model fit
   indexes)
+- Multiple open-access datasets for learning, practicing, and teaching
+  about dyadic SEM
 
 ## Future Functionality
 

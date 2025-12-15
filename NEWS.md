@@ -1,5 +1,8 @@
 # dySEM 1.4.1
 
+* Much more extensive unit testing coverage
+* New pnrqM dataset for use in vignettes and examples (multi-construct dyadic data) courtesy of @mprine and @TheGlazedDonut
+
 # dySEM 1.4.0
 
 * outputParamTab() can now generate df of correlation matrix of latent variables in the model

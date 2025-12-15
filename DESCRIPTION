@@ -4,17 +4,17 @@ Version: 1.4.1
 Authors@R: c(
     person("John", "Sakaluk", , "jksakaluk@gmail.com", role = c("aut","cre", "cph"),
            comment = c(ORCID = "0000-0002-2515-9822")),
-    person("Omar", "Camanto", , "ocamanto@uwo.ca", role = "aut"),       
+    person("Omar", "Camanto", , "ocamanto@uwo.ca", role = "aut",
+           comment = c(ORCID = "0009-0009-4012-9777")),
+    person("Christopher", "Quinn-Nilas", , "cquinnnilas@mun.ca", role = "ctb",
+           comment = c(ORCID = "0000-0002-8056-2008")),
+    person("Merissa", "Prine", , "mprine@uoguelph.ca", role = "ctb"),
     person("Robyn", "Kilshaw", , "robyn.bates@gmail.com", role = "ctb"),
     person("Alexandra", "Fisher", , "anfisher@uvic.ca", role = "ctb")
   )
 Description: Scripting of structural equation models via 'lavaan' for
     Dyadic Data Analysis, and helper functions for supplemental
-    calculations, tabling, and model visualization.  Current models
-    supported include Dyadic Confirmatory Factor Analysis, the Actor–Partner 
-    Interdependence Model (observed and latent), the Common Fate Model
-    (observed and latent), Mutual Influence Model (latent), and the Bifactor
-    Dyadic Model (latent).
+    calculations, tabling, and model visualization.  
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

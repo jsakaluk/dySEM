@@ -100,6 +100,7 @@ Additional features currently include:
 * Wrapper-function to provide variable-and-parameter specific tests of noninvariance
 * Functions to assist with reproducible creation of path diagrams and tables of statistical output
 * Functions to calculate supplemental statistical information (e.g., omega reliability, noninvariance effect sizes, corrected model fit indexes)
+* Multiple open-access datasets for learning, practicing, and teaching about dyadic SEM
 
 ## Future Functionality
   
