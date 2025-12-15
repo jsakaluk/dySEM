@@ -134,6 +134,14 @@ test_that("scrapeVarCross rejects non-character x_order argument", {
   )
 })
 
+test_that("scrapeVarCross rejects non-character y_order argument when provided", {
+  # Test that y_order must be a character string when provided
+  expect_error(
+    scrapeVarCross(dat = commitmentQ, x_stem = "sat.g", y_order = 123, y_stem = "com"),
+    "The `y_order` argument must be a character string."
+  )
+})
+
 test_that("scrapeVarCross rejects non-character distinguish_1 argument", {
   # Test that distinguish_1 must be a character string
   expect_error(
@@ -204,6 +212,45 @@ test_that("scrapeVarCross rejects empty x_stem", {
   )
 })
 
+test_that("scrapeVarCross validates x_stem even when var_list is provided", {
+  # When var_list is supplied, x_stem is optional but must still be valid if provided
+  dat_dummy <- data.frame(
+    sat_1.1 = 1:5,
+    sat_1.2 = 1:5
+  )
+
+  var_list <- list(
+    lvnames = c("Sat"),
+    stem = c("sat"),
+    delim1 = c("_"),
+    delim2 = c(".")
+  )
+
+  expect_error(
+    scrapeVarCross(
+      dat = dat_dummy,
+      x_stem = 123,
+      var_list = var_list,
+      var_list_order = "sip",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    ),
+    "The `x_stem` argument must be a character string."
+  )
+
+  expect_error(
+    scrapeVarCross(
+      dat = dat_dummy,
+      x_stem = "",
+      var_list = var_list,
+      var_list_order = "sip",
+      distinguish_1 = "1",
+      distinguish_2 = "2"
+    ),
+    "The `x_stem` argument cannot be an empty string."
+  )
+})
+
 test_that("scrapeVarCross handles data with unequal items per partner", {
   # Create a test dataset with unequal items
   # This tests the existing error handling for mismatched partner variable counts
@@ -245,4 +292,297 @@ test_that("scrapeVarCross handles data with no matching variables gracefully", {
   expect_equal(result$indnum, 0)
   expect_equal(length(result$p1xvarnames), 0)
   expect_equal(length(result$p2xvarnames), 0)
+})
+
+#### Group 5: Multi-LV var_list behaviour ####
+# --------------------------------------------
+
+test_that("scrapeVarCross correctly handles multi-LV var_list with sip order", {
+  dat_multi <- data.frame(
+    sat_1.1 = 1:5,
+    sat_2.1 = 1:5,
+    sat_1.2 = 1:5,
+    sat_2.2 = 1:5,
+    com_1.1 = 1:5,
+    com_2.1 = 1:5,
+    com_1.2 = 1:5,
+    com_2.2 = 1:5
+  )
+
+  var_list <- list(
+    lvnames = c("Sat", "Comm"),
+    stem = c("sat", "com"),
+    delim1 = c("_", "_"),
+    delim2 = c(".", ".")
+  )
+
+  dvn <- scrapeVarCross(
+    dat = dat_multi,
+    x_stem = "sat",
+    var_list = var_list,
+    var_list_order = "sip",
+    distinguish_1 = "1",
+    distinguish_2 = "2",
+    verbose = FALSE
+  )
+
+  expect_equal(names(dvn$p1xvarnames), c("Sat", "Comm"))
+  expect_equal(names(dvn$p2xvarnames), c("Sat", "Comm"))
+  expect_equal(dvn$p1xvarnames$Sat, c("sat_1.1", "sat_2.1"))
+  expect_equal(dvn$p2xvarnames$Sat, c("sat_1.2", "sat_2.2"))
+  expect_equal(dvn$p1xvarnames$Comm, c("com_1.1", "com_2.1"))
+  expect_equal(dvn$p2xvarnames$Comm, c("com_1.2", "com_2.2"))
+  expect_equal(dvn$xindper, 4L)
+  expect_equal(dvn$indnum, 8L)
+})
+
+test_that("scrapeVarCross respects min_num and max_num in var_list", {
+  dat_multi <- data.frame(
+    sat_1.1 = 1:5,
+    sat_2.1 = 1:5,
+    sat_3.1 = 1:5,
+    sat_1.2 = 1:5,
+    sat_2.2 = 1:5,
+    sat_3.2 = 1:5,
+    com_1.1 = 1:5,
+    com_2.1 = 1:5,
+    com_3.1 = 1:5,
+    com_1.2 = 1:5,
+    com_2.2 = 1:5,
+    com_3.2 = 1:5
+  )
+
+  var_list <- list(
+    lvnames = c("Sat", "Comm"),
+    stem = c("sat", "com"),
+    delim1 = c("_", "_"),
+    delim2 = c(".", "."),
+    min_num = c(1L, 2L),
+    max_num = c(2L, 3L)
+  )
+
+  dvn <- scrapeVarCross(
+    dat = dat_multi,
+    x_stem = "sat",
+    var_list = var_list,
+    var_list_order = "sip",
+    distinguish_1 = "1",
+    distinguish_2 = "2",
+    verbose = FALSE
+  )
+
+  # Sat keeps items 1-2; Comm keeps items 2-3
+  expect_equal(dvn$p1xvarnames$Sat, c("sat_1.1", "sat_2.1"))
+  expect_equal(dvn$p2xvarnames$Sat, c("sat_1.2", "sat_2.2"))
+  expect_equal(dvn$p1xvarnames$Comm, c("com_2.1", "com_3.1"))
+  expect_equal(dvn$p2xvarnames$Comm, c("com_2.2", "com_3.2"))
+  expect_equal(dvn$xindper, 4L)
+  expect_equal(dvn$indnum, 8L)
+})
+
+test_that("scrapeVarCross errors when var_list leads to unequal items per partner", {
+  dat_multi <- data.frame(
+    sat_1.1 = 1:5,
+    sat_2.1 = 1:5,
+    sat_1.2 = 1:5,
+    # sat_2.2 missing -> unequal counts
+    com_1.1 = 1:5,
+    com_2.1 = 1:5,
+    com_1.2 = 1:5,
+    com_2.2 = 1:5
+  )
+
+  var_list <- list(
+    lvnames = c("Sat", "Comm"),
+    stem = c("sat", "com"),
+    delim1 = c("_", "_"),
+    delim2 = c(".", ".")
+  )
+
+  expect_error(
+    scrapeVarCross(
+      dat = dat_multi,
+      x_stem = "sat",
+      var_list = var_list,
+      var_list_order = "sip",
+      distinguish_1 = "1",
+      distinguish_2 = "2",
+      verbose = FALSE
+    ),
+    "scrapeVarCross\\(\\) cannot detect a similar number of"
+  )
+})
+
+test_that("scrapeVarCross correctly handles multi-LV var_list with spi order", {
+  dat_multi_spi <- data.frame(
+    sat.1_1 = 1:5,
+    sat.1_2 = 1:5,
+    sat.2_1 = 1:5,
+    sat.2_2 = 1:5,
+    com.1_1 = 1:5,
+    com.1_2 = 1:5,
+    com.2_1 = 1:5,
+    com.2_2 = 1:5
+  )
+
+  var_list_spi <- list(
+    lvnames = c("Sat", "Comm"),
+    stem = c("sat", "com"),
+    delim1 = c(".", "."),
+    delim2 = c("_", "_")
+  )
+
+  dvn_spi <- scrapeVarCross(
+    dat = dat_multi_spi,
+    x_stem = "sat",
+    var_list = var_list_spi,
+    var_list_order = "spi",
+    distinguish_1 = "1",
+    distinguish_2 = "2",
+    verbose = FALSE
+  )
+
+  expect_equal(names(dvn_spi$p1xvarnames), c("Sat", "Comm"))
+  expect_equal(names(dvn_spi$p2xvarnames), c("Sat", "Comm"))
+  expect_equal(dvn_spi$p1xvarnames$Sat, c("sat.1_1", "sat.1_2"))
+  expect_equal(dvn_spi$p2xvarnames$Sat, c("sat.2_1", "sat.2_2"))
+  expect_equal(dvn_spi$p1xvarnames$Comm, c("com.1_1", "com.1_2"))
+  expect_equal(dvn_spi$p2xvarnames$Comm, c("com.2_1", "com.2_2"))
+  expect_equal(dvn_spi$xindper, 4L)
+  expect_equal(dvn_spi$indnum, 8L)
+})
+
+test_that("scrapeVarCross respects min_num and max_num in var_list for spi order", {
+  dat_multi_spi <- data.frame(
+    sat.1_1 = 1:5,
+    sat.1_2 = 1:5,
+    sat.1_3 = 1:5,
+    sat.2_1 = 1:5,
+    sat.2_2 = 1:5,
+    sat.2_3 = 1:5,
+    com.1_1 = 1:5,
+    com.1_2 = 1:5,
+    com.1_3 = 1:5,
+    com.2_1 = 1:5,
+    com.2_2 = 1:5,
+    com.2_3 = 1:5
+  )
+
+  var_list_spi <- list(
+    lvnames = c("Sat", "Comm"),
+    stem = c("sat", "com"),
+    delim1 = c(".", "."),
+    delim2 = c("_", "_"),
+    min_num = c(1L, 2L),
+    max_num = c(2L, 3L)
+  )
+
+  dvn_spi <- scrapeVarCross(
+    dat = dat_multi_spi,
+    x_stem = "sat",
+    var_list = var_list_spi,
+    var_list_order = "spi",
+    distinguish_1 = "1",
+    distinguish_2 = "2",
+    verbose = FALSE
+  )
+
+  # Sat keeps items 1-2; Comm keeps items 2-3
+  expect_equal(dvn_spi$p1xvarnames$Sat, c("sat.1_1", "sat.1_2"))
+  expect_equal(dvn_spi$p2xvarnames$Sat, c("sat.2_1", "sat.2_2"))
+  expect_equal(dvn_spi$p1xvarnames$Comm, c("com.1_2", "com.1_3"))
+  expect_equal(dvn_spi$p2xvarnames$Comm, c("com.2_2", "com.2_3"))
+  expect_equal(dvn_spi$xindper, 4L)
+  expect_equal(dvn_spi$indnum, 8L)
+})
+
+test_that("scrapeVarCross correctly handles multi-LV var_list with psi order", {
+  dat_multi_psi <- data.frame(
+    `1_sat_1` = 1:5,
+    `1_sat_2` = 1:5,
+    `2_sat_1` = 1:5,
+    `2_sat_2` = 1:5,
+    `1_com_1` = 1:5,
+    `1_com_2` = 1:5,
+    `2_com_1` = 1:5,
+    `2_com_2` = 1:5,
+    check.names = FALSE
+  )
+
+  var_list_psi <- list(
+    lvnames = c("Sat", "Comm"),
+    stem = c("sat", "com"),
+    delim1 = c("_", "_"),
+    delim2 = c("_", "_")
+  )
+
+  dvn_psi <- scrapeVarCross(
+    dat = dat_multi_psi,
+    x_stem = "sat",
+    var_list = var_list_psi,
+    var_list_order = "psi",
+    distinguish_1 = "1",
+    distinguish_2 = "2",
+    verbose = FALSE
+  )
+
+  expect_equal(names(dvn_psi$p1xvarnames), c("Sat", "Comm"))
+  expect_equal(names(dvn_psi$p2xvarnames), c("Sat", "Comm"))
+  expect_equal(dvn_psi$p1xvarnames$Sat, c("1_sat_1", "1_sat_2"))
+  expect_equal(dvn_psi$p2xvarnames$Sat, c("2_sat_1", "2_sat_2"))
+  expect_equal(dvn_psi$p1xvarnames$Comm, c("1_com_1", "1_com_2"))
+  expect_equal(dvn_psi$p2xvarnames$Comm, c("2_com_1", "2_com_2"))
+  expect_equal(dvn_psi$xindper, 4L)
+  expect_equal(dvn_psi$indnum, 8L)
+})
+
+#### Group 6: Verbose argument behaviour ####
+# ------------------------------------------
+
+test_that("scrapeVarCross returns a dvn object when verbose = TRUE (single LV)", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ,
+    x_order = "spi",
+    x_stem = "sat.g",
+    x_delim1 = ".",
+    x_delim2 = "_",
+    distinguish_1 = "1",
+    distinguish_2 = "2",
+    verbose = TRUE
+  )
+  expect_true(is.list(dvn))
+  expect_equal(dvn$indnum, 10L)
+})
+
+test_that("scrapeVarCross returns a dvn object when verbose = TRUE (multi-LV var_list)", {
+  dat_multi <- data.frame(
+    sat_1.1 = 1:5,
+    sat_2.1 = 1:5,
+    sat_1.2 = 1:5,
+    sat_2.2 = 1:5,
+    com_1.1 = 1:5,
+    com_2.1 = 1:5,
+    com_1.2 = 1:5,
+    com_2.2 = 1:5
+  )
+
+  var_list <- list(
+    lvnames = c("Sat", "Comm"),
+    stem = c("sat", "com"),
+    delim1 = c("_", "_"),
+    delim2 = c(".", ".")
+  )
+
+  dvn <- scrapeVarCross(
+    dat = dat_multi,
+    x_stem = "sat",
+    var_list = var_list,
+    var_list_order = "sip",
+    distinguish_1 = "1",
+    distinguish_2 = "2",
+    verbose = TRUE
+  )
+
+  expect_true(is.list(dvn))
+  expect_equal(names(dvn$p1xvarnames), c("Sat", "Comm"))
 })

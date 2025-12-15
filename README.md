@@ -28,7 +28,7 @@ and used in the course of the research described in Sakaluk, Fisher, and
 Kilshaw (2021), and has since undergone considerable expansion.
 
 `dySEM` currently contains 68 functions, of which 25 are user-facing
-(i.e., exported), which are covered by 468 unit tests.
+(i.e., exported), which are covered by 498 unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
@@ -96,8 +96,9 @@ Additional features currently include:
 
 Shorter-term development goals include:
 
-1.  Covariate scripting and optionality
-2.  Improved ease of item selection in scraper functions
+1.  Improving test coverage
+2.  Covariate scripting and optionality
+3.  Improved ease of item selection in scraper functions
 
 Longer-term goals, meanwhile, include:
 

@@ -262,6 +262,76 @@ test_that("outputParamTab creates RTF files for MIM both tabletype", {
   expect_true(file.exists(struct_file))
 })
 
+test_that("outputParamTab creates RTF file for MIM measurement table with custom fileName", {
+  models <- setup_mim_model()
+  test_dir <- tempfile()
+  dir.create(test_dir)
+  on.exit(unlink(test_dir, recursive = TRUE), add = TRUE)
+
+  suppressMessages(
+    outputParamTab(
+      dvn = models$dvn, fit = models$fit, model = "mim",
+      tabletype = "measurement", gtTab = TRUE, writeTo = test_dir, fileName = "test_mim_meas"
+    )
+  )
+
+  expected_file <- file.path(test_dir, "test_mim_meas.rtf")
+  expect_true(file.exists(expected_file))
+  expect_equal(tools::file_ext(expected_file), "rtf")
+})
+
+test_that("outputParamTab creates RTF file for MIM measurement table with default fileName", {
+  models <- setup_mim_model()
+  test_dir <- tempfile()
+  dir.create(test_dir)
+  on.exit(unlink(test_dir, recursive = TRUE), add = TRUE)
+
+  suppressMessages(
+    outputParamTab(
+      dvn = models$dvn, fit = models$fit, model = "mim",
+      tabletype = "measurement", gtTab = TRUE, writeTo = test_dir, fileName = NULL
+    )
+  )
+
+  expected_file <- file.path(test_dir, "dySEM_table.rtf")
+  expect_true(file.exists(expected_file))
+})
+
+test_that("outputParamTab creates RTF file for MIM structural table with custom fileName", {
+  models <- setup_mim_model()
+  test_dir <- tempfile()
+  dir.create(test_dir)
+  on.exit(unlink(test_dir, recursive = TRUE), add = TRUE)
+
+  suppressMessages(
+    outputParamTab(
+      dvn = models$dvn, fit = models$fit, model = "mim",
+      tabletype = "structural", gtTab = TRUE, writeTo = test_dir, fileName = "test_mim_struct"
+    )
+  )
+
+  expected_file <- file.path(test_dir, "test_mim_struct.rtf")
+  expect_true(file.exists(expected_file))
+  expect_equal(tools::file_ext(expected_file), "rtf")
+})
+
+test_that("outputParamTab creates RTF file for MIM structural table with default fileName", {
+  models <- setup_mim_model()
+  test_dir <- tempfile()
+  dir.create(test_dir)
+  on.exit(unlink(test_dir, recursive = TRUE), add = TRUE)
+
+  suppressMessages(
+    outputParamTab(
+      dvn = models$dvn, fit = models$fit, model = "mim",
+      tabletype = "structural", gtTab = TRUE, writeTo = test_dir, fileName = NULL
+    )
+  )
+
+  expected_file <- file.path(test_dir, "dySEM_table.rtf")
+  expect_true(file.exists(expected_file))
+})
+
 #### CFM Model Tests ####
 test_that("outputParamTab creates RTF files for CFM both tabletype", {
   models <- setup_cfm_model()

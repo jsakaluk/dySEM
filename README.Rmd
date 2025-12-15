@@ -105,6 +105,7 @@ Additional features currently include:
   
 Shorter-term development goals include: 
 
+1. Improving test coverage
 1. Covariate scripting and optionality
 1. Improved ease of item selection in scraper functions
 

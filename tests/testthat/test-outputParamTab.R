@@ -337,3 +337,99 @@ test_that("outputParamTab handles dvn object with wrong structure", {
 })
 
 #### output from APIM ####
+
+#### output from MIM ####
+
+test_that("outputParamTab returns tibble for MIM measurement table when gtTab = FALSE", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
+    x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+    y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_",
+    verbose = FALSE
+  )
+  script <- scriptMIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF")
+  fit <- lavaan::cfa(script, data = commitmentQ, std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE)
+
+  result <- outputParamTab(
+    dvn = dvn,
+    fit = fit,
+    model = "mim",
+    tabletype = "measurement",
+    gtTab = FALSE
+  )
+
+  expect_s3_class(result, "tbl_df")
+})
+
+test_that("outputParamTab returns tibble for MIM structural table when gtTab = FALSE", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
+    x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+    y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_",
+    verbose = FALSE
+  )
+  script <- scriptMIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF")
+  fit <- lavaan::cfa(script, data = commitmentQ, std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE)
+
+  result <- outputParamTab(
+    dvn = dvn,
+    fit = fit,
+    model = "mim",
+    tabletype = "structural",
+    gtTab = FALSE
+  )
+
+  expect_s3_class(result, "tbl_df")
+})
+
+test_that("outputParamTab returns gt table for MIM measurement table when gtTab = TRUE and writeTo is NULL", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
+    x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+    y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_",
+    verbose = FALSE
+  )
+  script <- scriptMIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF")
+  fit <- lavaan::cfa(script, data = commitmentQ, std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE)
+
+  result <- suppressMessages(
+    outputParamTab(
+      dvn = dvn,
+      fit = fit,
+      model = "mim",
+      tabletype = "measurement",
+      gtTab = TRUE,
+      writeTo = NULL,
+      fileName = "mim_meas_no_write"
+    )
+  )
+
+  expect_s3_class(result, "gt_tbl")
+  expect_true("_data" %in% names(result))
+})
+
+test_that("outputParamTab returns gt table for MIM structural table when gtTab = TRUE and writeTo is NULL", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g",
+    x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
+    y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_",
+    verbose = FALSE
+  )
+  script <- scriptMIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF")
+  fit <- lavaan::cfa(script, data = commitmentQ, std.lv = FALSE, auto.fix.first = FALSE, meanstructure = TRUE)
+
+  result <- suppressMessages(
+    outputParamTab(
+      dvn = dvn,
+      fit = fit,
+      model = "mim",
+      tabletype = "structural",
+      gtTab = TRUE,
+      writeTo = NULL,
+      fileName = "mim_struct_no_write"
+    )
+  )
+
+  expect_s3_class(result, "gt_tbl")
+  expect_true("_data" %in% names(result))
+})
