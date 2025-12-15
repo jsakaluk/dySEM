@@ -1,5 +1,7 @@
 # Changelog
 
+## dySEM 1.4.1
+
 ## dySEM 1.4.0
 
 - outputParamTab() can now generate df of correlation matrix of latent
