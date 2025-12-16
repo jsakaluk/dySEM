@@ -10,7 +10,7 @@
 #' @param tabletype A character input of what type of table(s) is(are) desired.
 #'  Options are "measurement" (i.e., loadings, intercepts, etc.),
 #'  "structural" (i.e., latent slopes, such as actor/partner effects, k parameters),
-#'  or "both" (i.e., both measurement and structural tables).
+#'   "both" (i.e., both measurement and structural tables), or "correlation" (for a table of factor correlations).
 #' @param gtTab A logical input indicating whether to generate the table(s) in `gt::gt()` table object format (`TRUE`).
 #'  By default (`FALSE`), the table(s) are generated in `tibble::tibble()` format.
 #'  Users can also apply the `writeTo` argument if they wish to export the `gt:gt()` table object(s).

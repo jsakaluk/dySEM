@@ -25,7 +25,7 @@ outputParamTab(
 \item{tabletype}{A character input of what type of table(s) is(are) desired.
 Options are "measurement" (i.e., loadings, intercepts, etc.),
 "structural" (i.e., latent slopes, such as actor/partner effects, k parameters),
-or "both" (i.e., both measurement and structural tables).}
+"both" (i.e., both measurement and structural tables), or "correlation" (for a table of factor correlations).}
 
 \item{gtTab}{A logical input indicating whether to generate the table(s) in \code{gt::gt()} table object format (\code{TRUE}).
 By default (\code{FALSE}), the table(s) are generated in \code{tibble::tibble()} format.

@@ -11,27 +11,27 @@
 #'
 #' @usage data(pnrqM)
 #'
-#' @format A data frame with 219 rows and 16 variables:
+#' @format A data frame with 219 rows and 16 variables. Participants responded--on a six-point scale (1 = "Not at all true", 6 = "Completely true")--to the prompt, "My relationship is...":
 #' \describe{
-#'  \item{sat.pnrq1_w}{Satisfaction item 1 for partner 1}
-#'  \item{sat.pnrq2_w}{Satisfaction item 2 for partner 1}
-#'  \item{sat.pnrq3_w}{Satisfaction item 3 for partner 1}
-#'  \item{sat.pnrq4_w}{Commitment item 1 for partner 1}
-#'  \item{dsat.pnrq1_w}{Commitment item 2 for partner 1}
-#'  \item{dsat.pnrq2_w}{Commitment item 3 for partner 1}
-#'  \item{dsat.pnrq3_w}{Intimacy item 1 for partner 1}
-#'  \item{dsat.pnrq4_w}{Intimacy item 2 for partner 1}
-#'  \item{sat.pnrq1_m}{Intimacy item 3 for partner 1}
-#'  \item{sat.pnrq2_m}{Trust item 1 for partner 1}
-#'  \item{sat.pnrq3_m}{Trust item 2 for partner 1}
-#'  \item{sat.pnrq4_m}{Trust item 3 for partner 1}
-#'  \item{dsat.pnrq1_m}{Passion item 1 for partner 1}
-#'  \item{dsat.pnrq2_m}{Passion item 2 for partner 1}
-#'  \item{dsat.pnrq3_m}{Passion item 3 for partner 1}
-#'  \item{dsat.pnrq4_m}{Love item 1 for partner 1}
+#'  \item{sat.pnrq1_w}{Enjoyable for partner w}
+#'  \item{sat.pnrq2_w}{Pleasant for partner w}
+#'  \item{sat.pnrq3_w}{Strong for partner w}
+#'  \item{sat.pnrq4_w}{Alive for partner w}
+#'  \item{dsat.pnrq1_w}{Miserable for partner w}
+#'  \item{dsat.pnrq2_w}{Bad for partner w}
+#'  \item{dsat.pnrq3_w}{Empty for partner w}
+#'  \item{dsat.pnrq4_w}{Lifeless for partner w}
+#'  \item{sat.pnrq1_m}{Enjoyable for partner m}
+#'  \item{sat.pnrq2_m}{Pleasant for partner m}
+#'  \item{sat.pnrq3_m}{Strong for partner m}
+#'  \item{sat.pnrq4_m}{Alive for partner m}
+#'  \item{dsat.pnrq1_m}{Miserable for partner m}
+#'  \item{dsat.pnrq2_m}{Bad for partner m}
+#'  \item{dsat.pnrq3_m}{Empty for partner m}
+#'  \item{dsat.pnrq4_m}{Lifeless for partner m}
 #'
 #' }
 #'
-#'@references Prine, M., Sakaluk, J. K., Camanto, O. J., & Quinn-Nilas, C. (Under Review).  .#'
+#'@references Prine, M., Sakaluk, J. K., Camanto, O. J., & Quinn-Nilas, C. (Under Review).
 #'
 "pnrqM"
