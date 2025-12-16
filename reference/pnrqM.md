@@ -15,73 +15,75 @@ data(pnrqM)
 
 ## Format
 
-A data frame with 219 rows and 16 variables:
+A data frame with 219 rows and 16 variables. Participants responded–on a
+six-point scale (1 = "Not at all true", 6 = "Completely true")–to the
+prompt, "My relationship is...":
 
 - sat.pnrq1_w:
 
-  Satisfaction item 1 for partner 1
+  Enjoyable for partner w
 
 - sat.pnrq2_w:
 
-  Satisfaction item 2 for partner 1
+  Pleasant for partner w
 
 - sat.pnrq3_w:
 
-  Satisfaction item 3 for partner 1
+  Strong for partner w
 
 - sat.pnrq4_w:
 
-  Commitment item 1 for partner 1
+  Alive for partner w
 
 - dsat.pnrq1_w:
 
-  Commitment item 2 for partner 1
+  Miserable for partner w
 
 - dsat.pnrq2_w:
 
-  Commitment item 3 for partner 1
+  Bad for partner w
 
 - dsat.pnrq3_w:
 
-  Intimacy item 1 for partner 1
+  Empty for partner w
 
 - dsat.pnrq4_w:
 
-  Intimacy item 2 for partner 1
+  Lifeless for partner w
 
 - sat.pnrq1_m:
 
-  Intimacy item 3 for partner 1
+  Enjoyable for partner m
 
 - sat.pnrq2_m:
 
-  Trust item 1 for partner 1
+  Pleasant for partner m
 
 - sat.pnrq3_m:
 
-  Trust item 2 for partner 1
+  Strong for partner m
 
 - sat.pnrq4_m:
 
-  Trust item 3 for partner 1
+  Alive for partner m
 
 - dsat.pnrq1_m:
 
-  Passion item 1 for partner 1
+  Miserable for partner m
 
 - dsat.pnrq2_m:
 
-  Passion item 2 for partner 1
+  Bad for partner m
 
 - dsat.pnrq3_m:
 
-  Passion item 3 for partner 1
+  Empty for partner m
 
 - dsat.pnrq4_m:
 
-  Love item 1 for partner 1
+  Lifeless for partner m
 
 ## References
 
 Prine, M., Sakaluk, J. K., Camanto, O. J., & Quinn-Nilas, C. (Under
-Review). .#'
+Review).

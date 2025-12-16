@@ -37,8 +37,9 @@ outputParamTab(
 
   A character input of what type of table(s) is(are) desired. Options
   are "measurement" (i.e., loadings, intercepts, etc.), "structural"
-  (i.e., latent slopes, such as actor/partner effects, k parameters), or
-  "both" (i.e., both measurement and structural tables).
+  (i.e., latent slopes, such as actor/partner effects, k parameters),
+  "both" (i.e., both measurement and structural tables), or
+  "correlation" (for a table of factor correlations).
 
 - gtTab:
 
