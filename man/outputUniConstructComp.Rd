@@ -89,31 +89,41 @@ it will be overwritten.
 }
 \examples{
 dvn <- scrapeVarCross(
-  commitmentQ,
-  x_order = "spi",
-  x_stem = "sat.g",
-  x_delim1 = ".",
-  x_delim2 = "_",
-  distinguish_1 = "1",
-  distinguish_2 = "2"
+commitmentM,
+x_order = "sip",
+x_stem = "sat.g",
+x_delim1 = "",
+x_delim2 = "_",
+distinguish_1 = "f",
+distinguish_2 = "m"
 )
 
+# Quick example for CRAN checks
 outputUniConstructComp(
   dvn,
-  commitmentQ,
+  commitmentM,
+  indexes = c("df", "bic"),
+  missing = "listwise"
+)
+
+\donttest{
+# More comprehensive examples (slower due to FIML estimation)
+outputUniConstructComp(
+  dvn,
+  commitmentM,
   missing = "fiml"
 )
 
 outputUniConstructComp(
   dvn,
-  commitmentQ,
+  commitmentM,
   indexes = c("df", "bic"),
   missing = "fiml"
 )
 
 outputUniConstructComp(
   dvn,
-  commitmentQ,
+  commitmentM,
   indexes = c("df", "bic"),
   estimator = "ml",
   missing = "fiml"
@@ -121,12 +131,13 @@ outputUniConstructComp(
 
 outputUniConstructComp(
   dvn,
-  commitmentQ,
+  commitmentM,
   indexes = c("df", "bic"),
   missing = "fiml",
   gtTab = TRUE,
   writeTo = tempdir(),
   fileName = "uni-construct-dyad-models"
 )
+}
 
 }
