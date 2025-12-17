@@ -176,7 +176,7 @@ scriptCFA <- function(dvn, scaleset = "FF",
       x1loads <- multifac_loads(dvn, partner = "1", type = "equated")
       x2loads <- multifac_loads(dvn, partner = "2", type = "equated")
     } else if (scaleset == "MV") {
-      xloads1 <- multifac_loads(dvn, partner = "1", type = "fixed")
+      x1loads <- multifac_loads(dvn, partner = "1", type = "fixed")
       x2loads <- multifac_loads(dvn, partner = "2", type = "equated")
     }
   } else {
