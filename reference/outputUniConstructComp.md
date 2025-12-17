@@ -132,37 +132,54 @@ A `list` containing up to two components:
 
 ``` r
 dvn <- scrapeVarCross(
-  commitmentQ,
-  x_order = "spi",
-  x_stem = "sat.g",
-  x_delim1 = ".",
-  x_delim2 = "_",
-  distinguish_1 = "1",
-  distinguish_2 = "2"
+commitmentM,
+x_order = "sip",
+x_stem = "sat.g",
+x_delim1 = "",
+x_delim2 = "_",
+distinguish_1 = "f",
+distinguish_2 = "m"
 )
 #> 
 #> ── Variable Scraping Summary ──
 #> 
 #> ✔ Successfully scraped 1 latent variable: sat.g
-#> ℹ sat.g: 5 indicators for P1 (1), 5 indicators for P2 (2)
+#> ℹ sat.g: 5 indicators for P1 (f), 5 indicators for P2 (m)
 #> ℹ Total indicators: 10
 
+# Quick example for CRAN checks
 outputUniConstructComp(
   dvn,
-  commitmentQ,
+  commitmentM,
+  indexes = c("df", "bic"),
+  missing = "listwise"
+)
+#> # A tibble: 4 × 6
+#>   Model              Type            df   bic df_diff bic_diff
+#>   <chr>              <chr>        <dbl> <dbl>   <dbl>    <dbl>
+#> 1 Bifactor           Higher Order    20 8374.      NA     NA  
+#> 2 Hierarchical       Higher Order    29 8336.       9    -38.2
+#> 3 Correlated Factors Lower Order     29 8336.      NA     NA  
+#> 4 Unidimensional     Lower Order     30 9316.       1    980. 
+
+# \donttest{
+# More comprehensive examples (slower due to FIML estimation)
+outputUniConstructComp(
+  dvn,
+  commitmentM,
   missing = "fiml"
 )
-#> According to GenTEFI (-15.173),
+#> According to GenTEFI (-15.564),
 #>           higher-order models (e.g., bifactor or hierarchical) fit the data better than lower-order models (e.g., correlated factors),
-#>           as the higher-order TEFI (-9.419) is smaller than the lower-order TEFI (-5.754).
+#>           as the higher-order TEFI (-9.606) is smaller than the lower-order TEFI (-5.959).
 #> $Indexes
 #> # A tibble: 4 × 14
-#>   Model          Type  genTEFI    df chisq   cfi  rmsea   bic df_diff chisq_diff
-#>   <chr>          <chr> <chr>   <dbl> <dbl> <dbl>  <dbl> <dbl>   <dbl>      <dbl>
-#> 1 Bifactor       High… Yes        20  41.3 0.983 0.0951 4077.      NA      NA   
-#> 2 Hierarchical   High… Yes        29  49.1 0.984 0.0767 4042.       9       7.78
-#> 3 Correlated Fa… Lowe… No         29  49.1 0.984 0.0767 4042.      NA      NA   
-#> 4 Unidimensional Lowe… No         30 235.  0.839 0.240  4223.       1     186.  
+#>   Model         Type  genTEFI    df  chisq   cfi  rmsea   bic df_diff chisq_diff
+#>   <chr>         <chr> <chr>   <dbl>  <dbl> <dbl>  <dbl> <dbl>   <dbl>      <dbl>
+#> 1 Bifactor      High… Yes        20   44.8 0.994 0.0663 8512.      NA       NA  
+#> 2 Hierarchical  High… Yes        29   56.8 0.993 0.0583 8474.       9       12.0
+#> 3 Correlated F… Lowe… No         29   56.8 0.993 0.0583 8474.      NA       NA  
+#> 4 Unidimension… Lowe… No         30 1048.  0.743 0.347  9459.       1      991. 
 #> # ℹ 4 more variables: chisq_diff_test_p <dbl>, cfi_diff <dbl>,
 #> #   rmsea_diff <dbl>, bic_diff <dbl>
 #> 
@@ -170,26 +187,26 @@ outputUniConstructComp(
 #> # A tibble: 1 × 3
 #>   VN.Entropy.Fit Level_1_VN Level_2_VN
 #>            <dbl>      <dbl>      <dbl>
-#> 1          -15.2      -5.75      -9.42
+#> 1          -15.6      -5.96      -9.61
 #> 
 
 outputUniConstructComp(
   dvn,
-  commitmentQ,
+  commitmentM,
   indexes = c("df", "bic"),
   missing = "fiml"
 )
 #> # A tibble: 4 × 6
 #>   Model              Type            df   bic df_diff bic_diff
 #>   <chr>              <chr>        <dbl> <dbl>   <dbl>    <dbl>
-#> 1 Bifactor           Higher Order    20 4077.      NA     NA  
-#> 2 Hierarchical       Higher Order    29 4042.       9    -35.2
-#> 3 Correlated Factors Lower Order     29 4042.      NA     NA  
-#> 4 Unidimensional     Lower Order     30 4223.       1    181. 
+#> 1 Bifactor           Higher Order    20 8512.      NA     NA  
+#> 2 Hierarchical       Higher Order    29 8474.       9    -38.8
+#> 3 Correlated Factors Lower Order     29 8474.      NA     NA  
+#> 4 Unidimensional     Lower Order     30 9459.       1    985. 
 
 outputUniConstructComp(
   dvn,
-  commitmentQ,
+  commitmentM,
   indexes = c("df", "bic"),
   estimator = "ml",
   missing = "fiml"
@@ -197,21 +214,21 @@ outputUniConstructComp(
 #> # A tibble: 4 × 6
 #>   Model              Type            df   bic df_diff bic_diff
 #>   <chr>              <chr>        <dbl> <dbl>   <dbl>    <dbl>
-#> 1 Bifactor           Higher Order    20 4077.      NA     NA  
-#> 2 Hierarchical       Higher Order    29 4042.       9    -35.2
-#> 3 Correlated Factors Lower Order     29 4042.      NA     NA  
-#> 4 Unidimensional     Lower Order     30 4223.       1    181. 
+#> 1 Bifactor           Higher Order    20 8512.      NA     NA  
+#> 2 Hierarchical       Higher Order    29 8474.       9    -38.8
+#> 3 Correlated Factors Lower Order     29 8474.      NA     NA  
+#> 4 Unidimensional     Lower Order     30 9459.       1    985. 
 
 outputUniConstructComp(
   dvn,
-  commitmentQ,
+  commitmentM,
   indexes = c("df", "bic"),
   missing = "fiml",
   gtTab = TRUE,
   writeTo = tempdir(),
   fileName = "uni-construct-dyad-models"
 )
-#> Output stored in: /tmp/RtmpphzdC4/uni-construct-dyad-models.rtf
+#> Output stored in: /tmp/RtmpdAO9IC/uni-construct-dyad-models.rtf
 
 
   
@@ -235,7 +252,7 @@ Higher Order
 
 20
 
-4077.220
+8512.446
 
 NA
 
@@ -247,11 +264,11 @@ Higher Order
 
 29
 
-4042.068
+8473.677
 
 9
 
--35.1525
+-38.76866
 
 Correlated Factors
 
@@ -259,7 +276,7 @@ Lower Order
 
 29
 
-4042.068
+8473.677
 
 NA
 
@@ -271,8 +288,10 @@ Lower Order
 
 30
 
-4222.850
+9459.109
 
 1
 
-180.7826
+985.43122
+
+\# }
