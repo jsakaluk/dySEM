@@ -363,3 +363,4 @@ test_that("scriptCFM handles MV scaleset with no constraints", {
   expect_type(script, "character")
   expect_true(nchar(script) > 0)
 })
+
