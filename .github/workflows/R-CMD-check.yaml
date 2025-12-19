@@ -139,6 +139,18 @@ jobs:
             }
           "
 
+      - name: Ensure rcmdcheck is installed
+        run: |
+          Rscript -e "
+            if (!requireNamespace('rcmdcheck', quietly = TRUE)) {
+              if (requireNamespace('pak', quietly = TRUE)) {
+                pak::pkg_install('rcmdcheck', ask = FALSE)
+              } else {
+                install.packages('rcmdcheck', repos = 'https://cloud.r-project.org')
+              }
+            }
+          "
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
