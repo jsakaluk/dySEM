@@ -38,11 +38,55 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
     return(tab)
   }
   else if(length(dvn) == 6 & model == "cfa" & tabletype == "correlation"){
-
-    tab <- lavaan::lavInspect(fit, "cor.lv") |>
+    
+    #get lv correlation matrix (rs)
+    rs <- lavaan::lavInspect(fit, "cor.lv") 
+    
+    #extract lv names from the generated lv matrix
+    lv_names <- rownames(rs)
+    
+    #get p-values
+    params <- lavaan::parameterEstimates(fit) |>
+      dplyr::filter(
+        .data$op == "~~",
+        .data$lhs %in% lv_names,
+        .data$rhs %in% lv_names,
+        .data$lhs != .data$rhs
+      )
+    
+    #set up significance stars (ss)
+    star_strings <- ifelse(is.na(params$pvalue), "",
+                           ifelse(params$pvalue < .001, "***",
+                                  ifelse(params$pvalue < .01,  "**",
+                                         ifelse(params$pvalue < .05,  "*", ""))))
+    
+    ss <- matrix(
+      "", 
+      nrow = length(lv_names), 
+      ncol = length(lv_names),
+      dimnames = list(lv_names, lv_names)
+      )
+    
+    ss[cbind(match(params$lhs, lv_names), match(params$rhs, lv_names))] <- star_strings
+    ss[cbind(match(params$rhs, lv_names), match(params$lhs, lv_names))] <- star_strings
+    
+    #create table
+    tab <- rs |> 
+      formatC(format = "f", digits = 3) |> 
+      matrix(
+        nrow = nrow(rs),
+        ncol = ncol(rs),
+        dimnames = dimnames(rs)
+      ) 
+    tab[] <- tab |> paste0(ss)
+    
+    #finalize table
+    tab[upper.tri(tab)] <- "\u2014" #filler for upper triangle
+    diag(tab) <- "\u2014" #filler for diagonal
+    tab <- tab|>
       as.data.frame()|>
-      dplyr::mutate_if(is.numeric, round, digits = 3) |>
-      tibble::rownames_to_column(var = " ")
+      tibble::rownames_to_column(var = " ") |> 
+      tibble::as_tibble()
 
     if(gtTab == TRUE){
       tab <- gt::gt(tab)
