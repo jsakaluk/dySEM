@@ -106,7 +106,7 @@ outputConstraintTab(sat.resids.mod,
   filterSig = FALSE,
   gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Residual"
 )
-#> Output stored in: /tmp/Rtmp30beOB/dCFA_Residual.rtf
+#> Output stored in: /tmp/Rtmpuicj4W/dCFA_Residual.rtf
 
 
   
