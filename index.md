@@ -8,8 +8,8 @@ reporting on latent models of dyadic data via
 and used in the course of the research described in Sakaluk, Fisher, and
 Kilshaw (2021), and has since undergone considerable expansion.
 
-`dySEM` currently contains 68 functions, of which 25 are user-facing
-(i.e., exported), which are covered by 498 unit tests.
+`dySEM` currently contains **68** functions, of which **25** are
+user-facing (i.e., exported), which are covered by **536** unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
