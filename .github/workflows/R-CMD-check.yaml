@@ -41,15 +41,17 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - name: Clear pak cache
+      - name: Clear any existing pak cache directories
+        if: matrix.config.os == 'macos-latest'
         run: |
-          Rscript -e "if (requireNamespace('pak', quietly = TRUE)) pak::cache_clean()"
+          rm -rf ~/.cache/R-pak || true
+          rm -rf ~/Library/Caches/org.r-lib.pak || true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
           needs: check
-          cache-version: 2
+          cache-version: 20250127
 
       - uses: r-lib/actions/check-r-package@v2
         with:
