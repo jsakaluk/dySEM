@@ -2,6 +2,8 @@
 
 ## dySEM 1.4.1
 
+CRAN release: 2025-12-22
+
 - Much more extensive unit testing coverage
 - New pnrqM dataset for use in vignettes and examples (multi-construct
   dyadic data) courtesy of [@mprine](https://github.com/mprine) and
