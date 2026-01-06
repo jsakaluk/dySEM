@@ -6,8 +6,6 @@ on:
       - 'paper/paper.bib'
       - 'paper/images/**'
       - '.github/workflows/draft-pdf.yml'
-    paths-ignore:
-      - 'paper/paper.pdf'
 
 jobs:
   paper:
