@@ -264,7 +264,7 @@ Since its initial release on GitHub in 2021, `dySEM` has been accepted to CRAN (
 
 # AI Usage Disclosure
 
-`dySEM`'s development began in 2019, well before the advent of mainstream AI tools, and the bulk of the package's current design, functionality, and roadmap have been developed without AI assistance. Our development team now uses AI tools (e.g., Copilot autocompletion within RStudio; increasing use of Cursor as an AI-boosted IDE), though primarily to assist with rote and/or repetitious tasks (e.g., to increase testing coverage of various input or output requirements; to increase consistency of documentation across related functions, etc.). A critical mass of new functionality and its more substantive testing remains done "by hand",  and this manuscript was written almost exclusively without AI assistance (save for spotting/resolving an error with the Markdown table formatting). 
+`dySEM`'s development began in 2019, well before the advent of mainstream AI tools, and the bulk of the package's current design, functionality, and roadmap have been developed without AI assistance. Our development team now uses AI tools (e.g., Copilot autocompletion within RStudio; increasing use of Cursor as an AI-boosted IDE), though primarily to assist with rote and/or repetitious tasks (e.g., to increase testing coverage of various input or output requirements; to increase consistency of documentation across related functions, etc.). A critical mass of new functionality and its more substantive testing remains done "by hand",  and this manuscript was written and submitted with limited AI assistance (i.e., table formatting; proper implementation of the Open Journals PDF Generator GitHub action). 
 
 # Acknowledgements
 

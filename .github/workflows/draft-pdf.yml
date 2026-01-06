@@ -7,7 +7,7 @@ on:
       - 'paper/images/**'
       - '.github/workflows/draft-pdf.yml'
     paths-ignore:
-      - 'paper/paper.pdf'  # Explicitly ignore PDF changes
+      - 'paper/paper.pdf'
 
 jobs:
   paper:
