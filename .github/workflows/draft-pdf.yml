@@ -2,8 +2,12 @@ name: Draft PDF
 on:
   push:
     paths:
-      - paper/**
-      - .github/workflows/draft-pdf.yml
+      - 'paper/paper.md'
+      - 'paper/paper.bib'
+      - 'paper/images/**'
+      - '.github/workflows/draft-pdf.yml'
+    paths-ignore:
+      - 'paper/paper.pdf'  # Explicitly ignore PDF changes
 
 jobs:
   paper:
@@ -13,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PDF_COMMIT_TOKEN }}  # Use PAT for checkout
+          token: ${{ secrets.PDF_COMMIT_TOKEN }}
       - name: Build draft PDF
         uses: openjournals/openjournals-draft-action@master
         with:
@@ -27,6 +31,6 @@ jobs:
       - name: Commit PDF to repository
         uses: EndBug/add-and-commit@v9
         with:
-          message: '(auto) Paper PDF Draft'
+          message: '[skip ci] (auto) Paper PDF Draft'
           add: 'paper/paper.pdf'
-          token: ${{ secrets.PDF_COMMIT_TOKEN }}  # Use PAT for commit
+          token: ${{ secrets.PDF_COMMIT_TOKEN }}
