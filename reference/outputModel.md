@@ -104,7 +104,7 @@ tabletype = "measurement", figure = "TRUE", figtype = "standardized",
 writeTo = tempdir(), fileName = "dCFA_configural")
 #> Warning: `outputModel()` was deprecated in dySEM 1.1.0.
 #> ℹ Please use `dySEM::outputParamTab` and/or `dySEM::outputParamFig` instead.
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpoEeteX/dCFA_configural std.png
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpjDWcL3/dCFA_configural std.png
 dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
@@ -124,5 +124,5 @@ auto.fix.first= FALSE, meanstructure = TRUE)
 outputModel(dvnxy, model = "apim", fit = apim.indist.mod, table = TRUE,
 tabletype = "measurement", figure = "TRUE", figtype = "standardized",
 writeTo = tempdir(), fileName = "APIM_indist")
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpoEeteX/APIM_indist std.png
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpjDWcL3/APIM_indist std.png
 ```
