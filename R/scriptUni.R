@@ -98,13 +98,14 @@
 #' )
 #'
 scriptUni <- function(
-    dvn,
-    scaleset = "FF",
-    lvname = "X",
-    constr_dy_meas = c("loadings", "intercepts", "residuals"),
-    constr_dy_struct = "none", # Users do not need to modify `constr_dy_struct` when using `scriptUni()`.
-    writeTo = NULL,
-    fileName = NULL) {
+  dvn,
+  scaleset = "FF",
+  lvname = "X",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = "none", # Users do not need to modify `constr_dy_struct` when using `scriptUni()`.
+  writeTo = NULL,
+  fileName = NULL
+) {
   # Input validation
   # Validate dvn argument
   if (missing(dvn) || is.null(dvn)) {
