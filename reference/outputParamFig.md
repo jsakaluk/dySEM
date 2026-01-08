@@ -28,18 +28,21 @@ outputParamFig(fit, figtype = NULL, writeTo = NULL, fileName = NULL)
 - writeTo:
 
   A character string specifying a directory path to where the output
-  file of the path diagram should be saved. If set to “.”, the file will
-  be written to the current working directory. The default is `NULL`
-  (which will throw an error), and examples use a temporary directory
-  created by [`tempdir()`](https://rdrr.io/r/base/tempfile.html).
+  file(s) should be saved. If set to `"."`, the file(s) will be written
+  to the current working directory. The default is `NULL`, and examples
+  use a temporary directory created by
+  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). When dealing with
+  tabular output, `writeTo` is only relevant if `gtTab = TRUE`.
 
 - fileName:
 
   A character string specifying a desired base name for the output file.
-  If a `fileName` not provided (i.e., fileName = `NULL`), then a default
-  will be used depending on the specified `figtype` (e.g., "dySEM_figure
-  unstd", "dySEM_figure std", or "dySEM_figure lab"). The specified name
-  will automatically be appended with the `.png` file extension.
+  The default is `NULL`. The specified name will be automatically
+  appended with the appropriate file extension (e.g., `.txt` for
+  `lavaan` scripts, `.rtf` for tabular output when `gtTab = TRUE`, or
+  other extensions as appropriate for the output type). If a file with
+  the same name already exists in the user's chosen directory, it will
+  be overwritten.
 
 ## Value
 
@@ -88,7 +91,7 @@ outputParamFig(sat.config.mod,
   figtype = "standardized",
   writeTo = tempdir(), fileName = "dCFA_configural"
 )
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/Rtmpt4vS8X/dCFA_configural std.png
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpIVCISQ/dCFA_configural std.png
 
 dvnxy <- scrapeVarCross(
   dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
@@ -114,5 +117,5 @@ outputParamFig(apim.indist.mod,
   figtype = "standardized",
   writeTo = tempdir(), fileName = "APIM_indist"
 )
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/Rtmpt4vS8X/APIM_indist std.png
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpIVCISQ/APIM_indist std.png
 ```

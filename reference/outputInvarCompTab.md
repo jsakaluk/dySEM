@@ -33,31 +33,32 @@ outputInvarCompTab(
 
 - gtTab:
 
-  A logical input indicating whether to generate the output in
+  A logical input indicating whether to generate the table(s) in
   [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) table object
-  format (`TRUE`). By default (`FALSE`), the output is generated in
+  format (`TRUE`). By default (`FALSE`), the table(s) are generated in
   [`tibble::tibble()`](https://tibble.tidyverse.org/reference/tibble.html)
   format. Users can also apply the `writeTo` argument if they wish to
-  export the `gt:gt()` table object.
+  export the [`gt::gt()`](https://gt.rstudio.com/reference/gt.html)
+  table object(s).
 
 - writeTo:
 
-  A character string specifying a directory path to where the
-  [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) table object
-  should be saved. If set to ".", the file will be written to the
-  current working directory. The default is `NULL`, and examples use a
-  temporary directory created by
-  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). `writeTo` is only
-  relevant if `gtTab = TRUE`.
+  A character string specifying a directory path to where the output
+  file(s) should be saved. If set to `"."`, the file(s) will be written
+  to the current working directory. The default is `NULL`, and examples
+  use a temporary directory created by
+  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). When dealing with
+  tabular output, `writeTo` is only relevant if `gtTab = TRUE`.
 
 - fileName:
 
-  A character string specifying a desired base name for the output
-  [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) file. If a
-  `fileName` is not provided (i.e., `fileName = NULL`), then a default
-  will be used (i.e., "dySEM_table"). The resulting base name will
-  automatically be appended with a `.rtf` file extension. `fileName` is
-  only relevant if `gtTab = TRUE` and `writeTo` is specified.
+  A character string specifying a desired base name for the output file.
+  The default is `NULL`. The specified name will be automatically
+  appended with the appropriate file extension (e.g., `.txt` for
+  `lavaan` scripts, `.rtf` for tabular output when `gtTab = TRUE`, or
+  other extensions as appropriate for the output type). If a file with
+  the same name already exists in the user's chosen directory, it will
+  be overwritten.
 
 ## Value
 
@@ -140,7 +141,7 @@ outputInvarCompTab(mods,
   parsimonyFirst = FALSE,
   gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Standard"
 )
-#> Output stored in: /tmp/Rtmpt4vS8X/dCFA_Invar_Standard.rtf
+#> Output stored in: /tmp/RtmpIVCISQ/dCFA_Invar_Standard.rtf
 
 
   
@@ -301,7 +302,7 @@ sat.loading.fit, sat.intercept.fit, sat.residual.fit)
 outputInvarCompTab(mods, parsimonyFirst = TRUE, gtTab = TRUE, writeTo =
 [tempdir](https://rdrr.io/r/base/tempfile.html)(), fileName =
 "dCFA_Invar_Reverse" ) \#\> Output stored in:
-/tmp/Rtmpt4vS8X/dCFA_Invar_Reverse.rtf
+/tmp/RtmpIVCISQ/dCFA_Invar_Reverse.rtf
 
 | mod        |  chisq |  df | pvalue |      aic |      bic | rmsea |   cfi | chisq_diff | df_diff | p_diff | aic_diff | bic_diff | rmsea_diff | cfi_diff |
 |:-----------|-------:|----:|-------:|---------:|---------:|------:|------:|-----------:|--------:|-------:|---------:|---------:|-----------:|---------:|

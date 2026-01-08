@@ -48,28 +48,27 @@ outputParamTab(
   format (`TRUE`). By default (`FALSE`), the table(s) are generated in
   [`tibble::tibble()`](https://tibble.tidyverse.org/reference/tibble.html)
   format. Users can also apply the `writeTo` argument if they wish to
-  export the `gt:gt()` table object(s).
+  export the [`gt::gt()`](https://gt.rstudio.com/reference/gt.html)
+  table object(s).
 
 - writeTo:
 
-  A character string specifying a directory path to where the
-  [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) table object(s)
-  should be saved. If set to ".", the file(s) will be written to the
-  current working directory. The default is `NULL`, and examples use a
-  temporary directory created by
-  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). `writeTo` is only
-  relevant if `gtTab = TRUE`.
+  A character string specifying a directory path to where the output
+  file(s) should be saved. If set to `"."`, the file(s) will be written
+  to the current working directory. The default is `NULL`, and examples
+  use a temporary directory created by
+  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). When dealing with
+  tabular output, `writeTo` is only relevant if `gtTab = TRUE`.
 
 - fileName:
 
-  A character string specifying a desired base name for the output
-  [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) file(s). If a
-  `fileName` is not provided (i.e., `fileName = NULL`), then defaults
-  will be used (e.g., "dySEM_table", "dySEM_table_measurement", or
-  "dySEM_table_structural) based on the `tabletype` argument. The
-  resulting base name will automatically be appended with a `.rtf` file
-  extension. `fileName` is only relevant if `gtTab = TRUE` and `writeTo`
-  is specified.
+  A character string specifying a desired base name for the output file.
+  The default is `NULL`. The specified name will be automatically
+  appended with the appropriate file extension (e.g., `.txt` for
+  `lavaan` scripts, `.rtf` for tabular output when `gtTab = TRUE`, or
+  other extensions as appropriate for the output type). If a file with
+  the same name already exists in the user's chosen directory, it will
+  be overwritten.
 
 ## Value
 

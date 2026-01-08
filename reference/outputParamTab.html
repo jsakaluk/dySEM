@@ -5,11 +5,11 @@ creates tables of expected output and/or exports them as .rtfs."><meta property=
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,24 +90,27 @@ Options are "measurement" (i.e., loadings, intercepts, etc.),
 
 
 <dt id="arg-gttab">gtTab<a class="anchor" aria-label="anchor" href="#arg-gttab"></a></dt>
-<dd><p>A logical input indicating whether to generate the table(s) in <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> table object format (<code>TRUE</code>).
-By default (<code>FALSE</code>), the table(s) are generated in <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble()</a></code> format.
-Users can also apply the <code>writeTo</code> argument if they wish to export the <code>gt:gt()</code> table object(s).</p></dd>
+<dd><p>A logical input indicating whether to generate the table(s) in
+<code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> table object format (<code>TRUE</code>). By default (<code>FALSE</code>), the table(s)
+are generated in <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble()</a></code> format. Users can also apply the
+<code>writeTo</code> argument if they wish to export the <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> table object(s).</p></dd>
 
 
 <dt id="arg-writeto">writeTo<a class="anchor" aria-label="anchor" href="#arg-writeto"></a></dt>
-<dd><p>A character string specifying a directory path to where the <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> table object(s) should be saved.
-If set to ".", the file(s) will be written to the current working directory.
-The default is <code>NULL</code>, and examples use a temporary directory created by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.
+<dd><p>A character string specifying a directory path to where the
+output file(s) should be saved. If set to <code>"."</code>, the file(s) will be written
+to the current working directory. The default is <code>NULL</code>, and examples use a
+temporary directory created by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>. When dealing with tabular output,
 <code>writeTo</code> is only relevant if <code>gtTab = TRUE</code>.</p></dd>
 
 
 <dt id="arg-filename">fileName<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>A character string specifying a desired base name for the output <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> file(s).
-If a <code>fileName</code> is not provided (i.e., <code>fileName = NULL</code>), then defaults will be used
-(e.g., "dySEM_table", "dySEM_table_measurement", or "dySEM_table_structural) based on the <code>tabletype</code> argument.
-The resulting base name will automatically be appended with a <code>.rtf</code> file extension.
-<code>fileName</code> is only relevant if <code>gtTab = TRUE</code> and <code>writeTo</code> is specified.</p></dd>
+<dd><p>A character string specifying a desired base name for the
+output file. The default is <code>NULL</code>. The specified name will be automatically
+appended with the appropriate file extension (e.g., <code>.txt</code> for <code>lavaan</code>
+scripts, <code>.rtf</code> for tabular output when <code>gtTab = TRUE</code>, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.</p></dd>
 
 </dl></div>
     <div class="section level2">

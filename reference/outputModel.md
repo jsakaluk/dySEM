@@ -55,20 +55,22 @@ outputModel(
 
 - writeTo:
 
-  A character string specifying a directory path to where the file(s)
-  should be saved. If set to “.”, the file(s) will be written to the
-  current working directory. The default is NULL (which will throw an
-  error), and examples use a temporary directory created by tempdir().
+  A character string specifying a directory path to where the output
+  file(s) should be saved. If set to `"."`, the file(s) will be written
+  to the current working directory. The default is `NULL`, and examples
+  use a temporary directory created by
+  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). When dealing with
+  tabular output, `writeTo` is only relevant if `gtTab = TRUE`.
 
 - fileName:
 
-  A character string specifying a desired base name for the output
-  file(s). If a `fileName` not provided (i.e., default fileName = NULL),
-  then defaults will be used (e.g.,
-  "dySEM_table"/"dySEM_table_Measurement"/"dySEM_table_Structural for
-  tables; "dySEM_figure" for figures). The specified name will be
-  automatically appended with the appropriate file extension (i.e., .rtf
-  for tables; .png for figures).
+  A character string specifying a desired base name for the output file.
+  The default is `NULL`. The specified name will be automatically
+  appended with the appropriate file extension (e.g., `.txt` for
+  `lavaan` scripts, `.rtf` for tabular output when `gtTab = TRUE`, or
+  other extensions as appropriate for the output type). If a file with
+  the same name already exists in the user's chosen directory, it will
+  be overwritten.
 
 ## Value
 
@@ -104,7 +106,7 @@ tabletype = "measurement", figure = "TRUE", figtype = "standardized",
 writeTo = tempdir(), fileName = "dCFA_configural")
 #> Warning: `outputModel()` was deprecated in dySEM 1.1.0.
 #> ℹ Please use `dySEM::outputParamTab` and/or `dySEM::outputParamFig` instead.
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/Rtmpt4vS8X/dCFA_configural std.png
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpIVCISQ/dCFA_configural std.png
 dvnxy <- scrapeVarCross(dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".",
 x_delim2="_", distinguish_1="1", distinguish_2="2",
 y_order="spi", y_stem="com", y_delim1 = ".", y_delim2="_")
@@ -124,5 +126,5 @@ auto.fix.first= FALSE, meanstructure = TRUE)
 outputModel(dvnxy, model = "apim", fit = apim.indist.mod, table = TRUE,
 tabletype = "measurement", figure = "TRUE", figtype = "standardized",
 writeTo = tempdir(), fileName = "APIM_indist")
-#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/Rtmpt4vS8X/APIM_indist std.png
+#> Output stored in /home/runner/work/dySEM/dySEM/docs/reference//tmp/RtmpIVCISQ/APIM_indist std.png
 ```

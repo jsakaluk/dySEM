@@ -5,11 +5,11 @@ invariance equality constraint between partners in a given dyadic SEM model."><m
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,23 +76,27 @@ invariance equality constraint between partners in a given dyadic SEM model.</p>
 
 
 <dt id="arg-gttab">gtTab<a class="anchor" aria-label="anchor" href="#arg-gttab"></a></dt>
-<dd><p>A logical input indicating whether to generate the output in <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> table object format (<code>TRUE</code>).
-By default (<code>FALSE</code>), the output is generated in <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble()</a></code> format.
-Users can also apply the <code>writeTo</code> argument if they wish to export the <code>gt:gt()</code> table object.</p></dd>
+<dd><p>A logical input indicating whether to generate the table(s) in
+<code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> table object format (<code>TRUE</code>). By default (<code>FALSE</code>), the table(s)
+are generated in <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble()</a></code> format. Users can also apply the
+<code>writeTo</code> argument if they wish to export the <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> table object(s).</p></dd>
 
 
 <dt id="arg-writeto">writeTo<a class="anchor" aria-label="anchor" href="#arg-writeto"></a></dt>
-<dd><p>A character string specifying a directory path to where the <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> table object should be saved.
-If set to ".", the file will be written to the current working directory.
-The default is <code>NULL</code>, and examples use a temporary directory created by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.
+<dd><p>A character string specifying a directory path to where the
+output file(s) should be saved. If set to <code>"."</code>, the file(s) will be written
+to the current working directory. The default is <code>NULL</code>, and examples use a
+temporary directory created by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>. When dealing with tabular output,
 <code>writeTo</code> is only relevant if <code>gtTab = TRUE</code>.</p></dd>
 
 
 <dt id="arg-filename">fileName<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>A character string specifying a desired base name for the output <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> file.
-If a <code>fileName</code> is not provided (i.e., <code>fileName = NULL</code>), then a default will be used (i.e., "dySEM_table").
-The resulting base name will automatically be appended with a <code>.rtf</code> file extension.
-<code>fileName</code> is only relevant if <code>gtTab = TRUE</code> and <code>writeTo</code> is specified.</p></dd>
+<dd><p>A character string specifying a desired base name for the
+output file. The default is <code>NULL</code>. The specified name will be automatically
+appended with the appropriate file extension (e.g., <code>.txt</code> for <code>lavaan</code>
+scripts, <code>.rtf</code> for tabular output when <code>gtTab = TRUE</code>, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -136,7 +140,7 @@ rows of equality constraints (now with readable <code>param</code> labels) and t
 <span class="r-in"><span>  filterSig <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  gtTab <span class="op">=</span> <span class="cn">TRUE</span>, writeTo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, fileName <span class="op">=</span> <span class="st">"dCFA_Residual"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Output stored in: /tmp/Rtmpt4vS8X/dCFA_Residual.rtf</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Output stored in: /tmp/RtmpIVCISQ/dCFA_Residual.rtf</span>
 <div class="gt-table"><div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 
   <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false" style="-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 16px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3;" bgcolor="#FFFFFF"><thead style="border-style: none;"><tr class="gt_col_headings" style="border-style: none; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3;"><th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="param1" style="border-style: none; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 6px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; text-align: left;" bgcolor="#FFFFFF" valign="bottom" align="left">param1</th>

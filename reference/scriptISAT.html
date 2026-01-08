@@ -7,11 +7,11 @@ for the I-SAT model described in Olsen &amp;amp; Kenny (2006)"><meta property="o
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,15 +77,20 @@ for the I-SAT model described in Olsen &amp; Kenny (2006)</p>
 
 
 <dt id="arg-writeto">writeTo<a class="anchor" aria-label="anchor" href="#arg-writeto"></a></dt>
-<dd><p>A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
-If set to “.”, the .txt file will be written to the current working directory.
-The default is NULL, and examples use a temporary directory created by tempdir().</p></dd>
+<dd><p>A character string specifying a directory path to where the
+output file(s) should be saved. If set to <code>"."</code>, the file(s) will be written
+to the current working directory. The default is <code>NULL</code>, and examples use a
+temporary directory created by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>. When dealing with tabular output,
+<code>writeTo</code> is only relevant if <code>gtTab = TRUE</code>.</p></dd>
 
 
 <dt id="arg-filename">fileName<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>A character string specifying a desired base name for the .txt output file.
-The default is NULL. The specified name will be automatically appended with the .txt file extension.
-If a file with the same name already exists in the user's chosen directory, it will be overwritten.</p></dd>
+<dd><p>A character string specifying a desired base name for the
+output file. The default is <code>NULL</code>. The specified name will be automatically
+appended with the appropriate file extension (e.g., <code>.txt</code> for <code>lavaan</code>
+scripts, <code>.rtf</code> for tabular output when <code>gtTab = TRUE</code>, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.</p></dd>
 
 </dl></div>
     <div class="section level2">

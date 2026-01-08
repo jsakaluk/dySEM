@@ -3,11 +3,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,14 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h2>
 
 
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="data-sets-of-dyadic-data-for-use-with-dysem-">Data sets of dyadic data for use with <em>dySEM</em><a class="anchor" aria-label="anchor" href="#data-sets-of-dyadic-data-for-use-with-dysem-"></a></h3>
+      <div class="section-desc"><p>These data sets come from a variety of sources, and are used to facilitate the exemplar deployment of <em>dySEM</em> functionality; they may be useful to you for learning, teaching, and/or development.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -54,13 +59,6 @@
 
 
       <dl><dt>
-
-          <code><a href="DRES.html">DRES</a></code>
-
-        </dt>
-        <dd>Relationship quality and sexual satisfaction of 121 couples</dd>
-
-        <dt>
 
           <code><a href="commitmentM.html">commitmentM</a></code>
 
@@ -76,12 +74,244 @@
 
         <dt>
 
-          <code><a href="getConstraintTests.html">getConstraintTests()</a></code>
+          <code><a href="DRES.html">DRES</a></code>
 
         </dt>
-        <dd>A function that performs a score test for relaxing each invariance equality constraint between partners in a given dyadic SEM model.</dd>
+        <dd>Relationship quality and sexual satisfaction of 121 couples</dd>
 
         <dt>
+
+          <code><a href="imsM.html">imsM</a></code>
+
+        </dt>
+        <dd>Ratings on the full Investment Model Scale (IMS) from 282 (M)ixed-sex couples</dd>
+
+        <dt>
+
+          <code><a href="pnrqM.html">pnrqM</a></code>
+
+        </dt>
+        <dd>Ratings on items from the Positive-Negative Relationship Quality Scale (PNRQ; Rogge et al., 2017) from 219 (M)ixed-sex couples</dd>
+
+        <dt>
+
+          <code><a href="prqcQ.html">prqcQ</a></code>
+
+        </dt>
+        <dd>Ratings on items from the Perceived Relationship Quality Components (PRQC) Inventory from 118 (Q)ueer couples</dd>
+      </dl></div><div class="section level2">
+      <h2 id="scrapers">Scrapers<a class="anchor" aria-label="anchor" href="#scrapers"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="scrape-variable-information-from-a-dyadic-data-set">Scrape variable information from a dyadic data set<a class="anchor" aria-label="anchor" href="#scrape-variable-information-from-a-dyadic-data-set"></a></h3>
+      <div class="section-desc"><p>These functions are used to extract variable names and other information from dyadic data sets, to facilitate the specification of <em>dySEM</em> models.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="scrapeVarCross.html">scrapeVarCross()</a></code>
+
+        </dt>
+        <dd>A Variable Name-Scraping and Indexing Function for cross-sectional data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="scripters">Scripters<a class="anchor" aria-label="anchor" href="#scripters"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="uni-construct-scripters">Uni-construct Scripters<a class="anchor" aria-label="anchor" href="#uni-construct-scripters"></a></h3>
+      <div class="section-desc"><p>These functions are used to generate lavaan syntax corresponding to models representing one construct within a dyadic data set</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="scriptUni.html">scriptUni()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Unidimensional Dyadic Factor Models</dd>
+
+        <dt>
+
+          <code><a href="scriptCor.html">scriptCor()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Correlated Dyadic Factor Models</dd>
+
+        <dt>
+
+          <code><a href="scriptHier.html">scriptHier()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Hierarchical Dyadic Factor Models</dd>
+
+        <dt>
+
+          <code><a href="scriptBifac.html">scriptBifac()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Bifactor Dyadic Models</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="bi-construct-scripters">Bi-construct Scripters<a class="anchor" aria-label="anchor" href="#bi-construct-scripters"></a></h3>
+      <div class="section-desc"><p>These functions are used to generate lavaan syntax corresponding to models representing two constructs within a dyadic data set</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="scriptAPIM.html">scriptAPIM()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Latent Actor-Partner Interdependence Models (APIMs)</dd>
+
+        <dt>
+
+          <code><a href="scriptObsAPIM.html">scriptObsAPIM()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Observed Actor-Partner Interdependence Models</dd>
+
+        <dt>
+
+          <code><a href="scriptCFM.html">scriptCFM()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Latent Common Fate Models (CFMs)</dd>
+
+        <dt>
+
+          <code><a href="scriptMIM.html">scriptMIM()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Latent Mutual influence Model</dd>
+
+        <dt>
+
+          <code><a href="scriptBiDy.html">scriptBiDy()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Bifactor Dyadic (BiDy) models</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="multi-construct-scripters">Multi-construct Scripters<a class="anchor" aria-label="anchor" href="#multi-construct-scripters"></a></h3>
+      <div class="section-desc"><p>These functions are used to generate lavaan syntax corresponding to models representing more than two constructs within a dyadic data set</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="scriptCFA.html">scriptCFA()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Latent Dyadic Confirmatory Factor Analysis (CFA) Models with Multiple Factors</dd>
+
+        <dt>
+
+          <code><a href="scriptDyEFA.html">scriptDyEFA()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Dyadic Exploratory Factor Analysis (DEFA) Models</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="specialized-indistinguishability-related-scripters">Specialized Indistinguishability-Related Scripters<a class="anchor" aria-label="anchor" href="#specialized-indistinguishability-related-scripters"></a></h3>
+      <div class="section-desc"><p>These functions are used to generate lavaan syntax corresponding to models that are used to make corrections to model fit indexes when fitting indistinguishable models</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="scriptISAT.html">scriptISAT()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting the I-SAT model for indistinguishable dyads</dd>
+
+        <dt>
+
+          <code><a href="scriptINULL.html">scriptINULL()</a></code>
+
+        </dt>
+        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting the I-NULL model for indistinguishable dyads</dd>
+      </dl></div><div class="section level2">
+      <h2 id="outputters-and-calculators">Outputters and Calculators<a class="anchor" aria-label="anchor" href="#outputters-and-calculators"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="outputters">Outputters<a class="anchor" aria-label="anchor" href="#outputters"></a></h3>
+      <div class="section-desc"><p>These functions are used to extract and present information from fitted lavaan models in tabular or path diagram form</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="outputParamTab.html">outputParamTab()</a></code>
+
+        </dt>
+        <dd>A Function That Exports Tables based on dySEM models</dd>
+
+        <dt>
+
+          <code><a href="outputParamFig.html">outputParamFig()</a></code>
+
+        </dt>
+        <dd>A function That Exports SEM diagrams based on dySEM models</dd>
+
+        <dt>
+
+          <code><a href="outputInvarCompTab.html">outputInvarCompTab()</a></code>
+
+        </dt>
+        <dd>Compare Model Fit of Nested Dyadic Invariance Models</dd>
+
+        <dt>
+
+          <code><a href="outputConstraintTab.html">outputConstraintTab()</a></code>
+
+        </dt>
+        <dd>Evaluate Invariance Equality Constraints in a specified Dyadic Invariance Model</dd>
+
+        <dt>
+
+          <code><a href="outputUniConstructComp.html">outputUniConstructComp()</a></code>
+
+        </dt>
+        <dd>A Function That Fits and Compares Competing Dyadic Uni-construct Models</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="calculators">Calculators<a class="anchor" aria-label="anchor" href="#calculators"></a></h3>
+      <div class="section-desc"><p>These functions are used to calculate various auxiliary metrics relevant to dyadic SEM</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="getDyReliability.html">getDyReliability()</a></code>
 
@@ -101,6 +331,22 @@
 
         </dt>
         <dd>A Function that Computes Corrected Fit Indexes According to the ISAT and INULL Models of Olsen &amp; Kenny (2006)</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="deprecated-functions">Deprecated functions<a class="anchor" aria-label="anchor" href="#deprecated-functions"></a></h3>
+      <div class="section-desc"><p>These functions are deprecated and will be removed in future versions of <em>dySEM</em></p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="getConstraintTests.html">getConstraintTests()</a></code>
+
+        </dt>
+        <dd>A function that performs a score test for relaxing each invariance equality constraint between partners in a given dyadic SEM model.</dd>
 
         <dt>
 
@@ -111,166 +357,13 @@
 
         <dt>
 
-          <code><a href="imsM.html">imsM</a></code>
-
-        </dt>
-        <dd>Ratings on the full Investment Model Scale (IMS) from 282 (M)ixed-sex couples</dd>
-
-        <dt>
-
-          <code><a href="outputConstraintTab.html">outputConstraintTab()</a></code>
-
-        </dt>
-        <dd>Evaluate Invariance Equality Constraints in a specified Dyadic Invariance Model</dd>
-
-        <dt>
-
-          <code><a href="outputInvarCompTab.html">outputInvarCompTab()</a></code>
-
-        </dt>
-        <dd>Compare Model Fit of Nested Dyadic Invariance Models</dd>
-
-        <dt>
-
           <code><a href="outputModel.html">outputModel()</a></code>
 
         </dt>
         <dd>A Function That Exports Tables and/or SEM Diagrams based on dySEM models</dd>
-
-        <dt>
-
-          <code><a href="outputParamFig.html">outputParamFig()</a></code>
-
-        </dt>
-        <dd>A function That Exports SEM diagrams based on dySEM models</dd>
-
-        <dt>
-
-          <code><a href="outputParamTab.html">outputParamTab()</a></code>
-
-        </dt>
-        <dd>A Function That Exports Tables based on dySEM models</dd>
-
-        <dt>
-
-          <code><a href="outputUniConstructComp.html">outputUniConstructComp()</a></code>
-
-        </dt>
-        <dd>A Function That Fits and Compares Competing Dyadic Uni-construct Models</dd>
-
-        <dt>
-
-          <code><a href="pnrqM.html">pnrqM</a></code>
-
-        </dt>
-        <dd>Ratings on items from the Positive-Negative Relationship Quality Scale (PNRQ; Rogge et al., 2017) from 219 (M)ixed-sex couples</dd>
-
-        <dt>
-
-          <code><a href="prqcQ.html">prqcQ</a></code>
-
-        </dt>
-        <dd>Ratings on items from the Perceived Relationship Quality Components (PRQC) Inventory from 118 (Q)ueer couples</dd>
-
-        <dt>
-
-          <code><a href="scrapeVarCross.html">scrapeVarCross()</a></code>
-
-        </dt>
-        <dd>A Variable Name-Scraping and Indexing Function for cross-sectional data</dd>
-
-        <dt>
-
-          <code><a href="scriptAPIM.html">scriptAPIM()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Latent Actor-Partner Interdependence Models (APIMs)</dd>
-
-        <dt>
-
-          <code><a href="scriptBiDy.html">scriptBiDy()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Bifactor Dyadic (BiDy) models</dd>
-
-        <dt>
-
-          <code><a href="scriptBifac.html">scriptBifac()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Bifactor Dyadic Models</dd>
-
-        <dt>
-
-          <code><a href="scriptCFA.html">scriptCFA()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Latent Dyadic Confirmatory Factor Analysis (CFA) Models with Multiple Factors</dd>
-
-        <dt>
-
-          <code><a href="scriptCFM.html">scriptCFM()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Latent Common Fate Models (CFMs)</dd>
-
-        <dt>
-
-          <code><a href="scriptCor.html">scriptCor()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Correlated Dyadic Factor Models</dd>
-
-        <dt>
-
-          <code><a href="scriptDyEFA.html">scriptDyEFA()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Dyadic Exploratory Factor Analysis (DEFA) Models</dd>
-
-        <dt>
-
-          <code><a href="scriptHier.html">scriptHier()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Hierarchical Dyadic Factor Models</dd>
-
-        <dt>
-
-          <code><a href="scriptINULL.html">scriptINULL()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting the I-NULL model for indistinguishable dyads</dd>
-
-        <dt>
-
-          <code><a href="scriptISAT.html">scriptISAT()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting the I-SAT model for indistinguishable dyads</dd>
-
-        <dt>
-
-          <code><a href="scriptMIM.html">scriptMIM()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Latent Mutual influence Model</dd>
-
-        <dt>
-
-          <code><a href="scriptObsAPIM.html">scriptObsAPIM()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Observed Actor-Partner Interdependence Models</dd>
-
-        <dt>
-
-          <code><a href="scriptUni.html">scriptUni()</a></code>
-
-        </dt>
-        <dd>A Function That Writes, Saves, and Exports Syntax for Fitting Unidimensional Dyadic Factor Models</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

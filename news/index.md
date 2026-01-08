@@ -1,5 +1,7 @@
 # Changelog
 
+## dySEM 1.5.0
+
 ## dySEM 1.4.1
 
 CRAN release: 2025-12-22
