@@ -34,14 +34,18 @@ options are "measurement" (i.e,, loadings, intercepts,),
 
 \item{figtype}{character input of what type of figure is desired}
 
-\item{writeTo}{A character string specifying a directory path to where the file(s) should be saved.
-If set to “.”, the file(s) will be written to the current working directory.
-The default is NULL (which will throw an error), and examples use a temporary directory created by tempdir().}
+\item{writeTo}{A character string specifying a directory path to where the
+output file(s) should be saved. If set to \code{"."}, the file(s) will be written
+to the current working directory. The default is \code{NULL}, and examples use a
+temporary directory created by \code{tempdir()}. When dealing with tabular output,
+\code{writeTo} is only relevant if \code{gtTab = TRUE}.}
 
-\item{fileName}{A character string specifying a desired base name for the output file(s).
-If a \code{fileName} not provided (i.e., default fileName = NULL), then defaults will be used
-(e.g., "dySEM_table"/"dySEM_table_Measurement"/"dySEM_table_Structural for tables; "dySEM_figure" for figures).
-The specified name will be automatically appended with the appropriate file extension (i.e., .rtf for tables; .png for figures).}
+\item{fileName}{A character string specifying a desired base name for the
+output file. The default is \code{NULL}. The specified name will be automatically
+appended with the appropriate file extension (e.g., \code{.txt} for \code{lavaan}
+scripts, \code{.rtf} for tabular output when \code{gtTab = TRUE}, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 Ignore console (prints unnecessary semPlot::semPaths details). More importantly,

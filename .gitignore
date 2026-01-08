@@ -39,3 +39,6 @@ CRAN-SUBMISSION
 .vscode
 longitudinal workflow.R
 DATA2025.xlsx
+..Rcheck
+/doc/
+/Meta/

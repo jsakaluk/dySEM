@@ -1,6 +1,86 @@
 url: https://jsakaluk.github.io/dySEM/
+
 template:
   bootstrap: 5
+  bslib:
+    bootswatch: superhero
+    pkgdown-nav-height: 100px
+
+reference:
+- title: Data
+
+- subtitle: Data sets of dyadic data for use with *dySEM*
+  desc: These data sets come from a variety of sources, and are used to facilitate the exemplar deployment of *dySEM* functionality; they may be useful to you for learning, teaching, and/or development.
+  contents:
+  - commitmentM
+  - commitmentQ
+  - DRES
+  - imsM
+  - pnrqM
+  - prqcQ
+
+- title: Scrapers
+
+- subtitle: Scrape variable information from a dyadic data set
+  desc: These functions are used to extract variable names and other information from dyadic data sets, to facilitate the specification of *dySEM* models.
+  contents:
+  - scrapeVarCross
+
+- title: Scripters
+
+- subtitle: Uni-construct Scripters
+  desc: These functions are used to generate lavaan syntax corresponding to models representing one construct within a dyadic data set
+  contents:
+  - scriptUni
+  - scriptCor
+  - scriptHier
+  - scriptBifac
+
+- subtitle: Bi-construct Scripters
+  desc: These functions are used to generate lavaan syntax corresponding to models representing two constructs within a dyadic data set
+  contents:
+  - scriptAPIM
+  - scriptObsAPIM
+  - scriptCFM
+  - scriptMIM
+  - scriptBiDy
+
+- subtitle: Multi-construct Scripters
+  desc: These functions are used to generate lavaan syntax corresponding to models representing more than two constructs within a dyadic data set
+  contents:
+  - scriptCFA
+  - scriptDyEFA
+
+- subtitle: Specialized Indistinguishability-Related Scripters
+  desc: These functions are used to generate lavaan syntax corresponding to models that are used to make corrections to model fit indexes when fitting indistinguishable models
+  contents:
+  - scriptISAT
+  - scriptINULL
+
+- title: Outputters and Calculators
+
+- subtitle: Outputters
+  desc: These functions are used to extract and present information from fitted lavaan models in tabular or path diagram form
+  contents:
+  - outputParamTab
+  - outputParamFig
+  - outputInvarCompTab
+  - outputConstraintTab
+  - outputUniConstructComp
+
+- subtitle: Calculators
+  desc: These functions are used to calculate various auxiliary metrics relevant to dyadic SEM
+  contents:
+  - getDyReliability
+  - getDydmacs
+  - getIndistFit
+
+- subtitle: Deprecated functions
+  desc: These functions are deprecated and will be removed in future versions of *dySEM*
+  contents:
+  - getConstraintTests
+  - getInvarCompTable
+  - outputModel
 
 articles:
 - title: The Big Picture of Using dySEM

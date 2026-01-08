@@ -17,19 +17,23 @@ outputConstraintTab(
 
 \item{filterSig}{A logical indicating whether to filter for significant constraints (default is \code{FALSE})}
 
-\item{gtTab}{A logical input indicating whether to generate the output in \code{gt::gt()} table object format (\code{TRUE}).
-By default (\code{FALSE}), the output is generated in \code{tibble::tibble()} format.
-Users can also apply the \code{writeTo} argument if they wish to export the \code{gt:gt()} table object.}
+\item{gtTab}{A logical input indicating whether to generate the table(s) in
+\code{gt::gt()} table object format (\code{TRUE}). By default (\code{FALSE}), the table(s)
+are generated in \code{tibble::tibble()} format. Users can also apply the
+\code{writeTo} argument if they wish to export the \code{gt::gt()} table object(s).}
 
-\item{writeTo}{A character string specifying a directory path to where the \code{gt::gt()} table object should be saved.
-If set to ".", the file will be written to the current working directory.
-The default is \code{NULL}, and examples use a temporary directory created by \code{tempdir()}.
+\item{writeTo}{A character string specifying a directory path to where the
+output file(s) should be saved. If set to \code{"."}, the file(s) will be written
+to the current working directory. The default is \code{NULL}, and examples use a
+temporary directory created by \code{tempdir()}. When dealing with tabular output,
 \code{writeTo} is only relevant if \code{gtTab = TRUE}.}
 
-\item{fileName}{A character string specifying a desired base name for the output \code{gt::gt()} file.
-If a \code{fileName} is not provided (i.e., \code{fileName = NULL}), then a default will be used (i.e., "dySEM_table").
-The resulting base name will automatically be appended with a \code{.rtf} file extension.
-\code{fileName} is only relevant if \code{gtTab = TRUE} and \code{writeTo} is specified.}
+\item{fileName}{A character string specifying a desired base name for the
+output file. The default is \code{NULL}. The specified name will be automatically
+appended with the appropriate file extension (e.g., \code{.txt} for \code{lavaan}
+scripts, \code{.rtf} for tabular output when \code{gtTab = TRUE}, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 A \code{tibble::tibble()} if \code{gtTab = FALSE} (default), or \code{gt::gt()} object if \code{gtTab = TRUE}, with

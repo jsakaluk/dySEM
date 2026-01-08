@@ -8,12 +8,9 @@
 #' @param model type of fitted dyadic model (i.e., "apim", "bidyc", "bidys","cfa", "cfm", "mim")
 #' @param tabletype kind of parameter estimates requested (i.e. from "measurement" or "structural" model, or "correlation" table for latent variables)
 #' @param type input character for sempaths to indicate whether parameters "free" or "equated" in estimation
-#' @param writeTo A character string specifying a directory path to where the file(s) should be saved.
-#' The default is NULL, and examples use a temporary directory created by tempdir().
-#' @param fileName A character string specifying a desired base name for the output file(s).
-#' If a `fileName` not provided (i.e., "fileName = NULL"), then defaults will be used
-#' The specified name will be automatically appended with the appropriate file extension (i.e., .png for figures).
-#' @param gtTab A logical input indicating whether to generate the table(s) in `gt::gt()` table object format (`TRUE`).
+#' @template writeTo
+#' @template fileName
+#' @template gtTab
 #' @family helpers
 #' @noRd
 
@@ -38,13 +35,13 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
     return(tab)
   }
   else if(length(dvn) == 6 & model == "cfa" & tabletype == "correlation"){
-    
+
     #get lv correlation matrix (rs)
-    rs <- lavaan::lavInspect(fit, "cor.lv") 
-    
+    rs <- lavaan::lavInspect(fit, "cor.lv")
+
     #extract lv names from the generated lv matrix
     lv_names <- rownames(rs)
-    
+
     #get p-values
     params <- lavaan::parameterEstimates(fit) |>
       dplyr::filter(
@@ -53,39 +50,39 @@ makeTable <- function(dvn, fit, model, tabletype, gtTab = TRUE){
         .data$rhs %in% lv_names,
         .data$lhs != .data$rhs
       )
-    
+
     #set up significance stars (ss)
     star_strings <- ifelse(is.na(params$pvalue), "",
                            ifelse(params$pvalue < .001, "***",
                                   ifelse(params$pvalue < .01,  "**",
                                          ifelse(params$pvalue < .05,  "*", ""))))
-    
+
     ss <- matrix(
-      "", 
-      nrow = length(lv_names), 
+      "",
+      nrow = length(lv_names),
       ncol = length(lv_names),
       dimnames = list(lv_names, lv_names)
       )
-    
+
     ss[cbind(match(params$lhs, lv_names), match(params$rhs, lv_names))] <- star_strings
     ss[cbind(match(params$rhs, lv_names), match(params$lhs, lv_names))] <- star_strings
-    
+
     #create table
-    tab <- rs |> 
-      formatC(format = "f", digits = 3) |> 
+    tab <- rs |>
+      formatC(format = "f", digits = 3) |>
       matrix(
         nrow = nrow(rs),
         ncol = ncol(rs),
         dimnames = dimnames(rs)
-      ) 
+      )
     tab[] <- tab |> paste0(ss)
-    
+
     #finalize table
     tab[upper.tri(tab)] <- "\u2014" #filler for upper triangle
     diag(tab) <- "\u2014" #filler for diagonal
     tab <- tab|>
       as.data.frame()|>
-      tibble::rownames_to_column(var = " ") |> 
+      tibble::rownames_to_column(var = " ") |>
       tibble::as_tibble()
 
     if(gtTab == TRUE){

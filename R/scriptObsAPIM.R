@@ -8,12 +8,8 @@
 #' @param equate character of what parameter(s) to constrain ("actor", "partner", "all"); default is "none" (all freely estimated)
 #' @param k input logical for whether Kenny & Ledermann's (2010) k parameter should be
 #' calculated to characterize the dyadic pattern in the APIM. Default to FALSE
-#' @param writeTo A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
-#' If set to “.”, the .txt file will be written to the current working directory.
-#' The default is NULL, and examples use a temporary directory created by tempdir().
-#' @param fileName A character string specifying a desired base name for the .txt output file.
-#' The default is NULL. The specified name will be automatically appended with the .txt file extension.
-#' If a file with the same name already exists in the user's chosen directory, it will be overwritten.
+#' @template writeTo
+#' @template fileName
 #'
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions.

@@ -61,13 +61,18 @@ constr_dy_x_struct/constr_dy_y_struct instead, for making constraints to the mea
 are constrained to equivalency between partners. Users should rely upon constr_dy_xy_struct for making
 constraints to the structural portion of the model for associative relationship between latent x and y.}
 
-\item{writeTo}{A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
-If set to “.”, the .txt file will be written to the current working directory.
-The default is NULL, and examples use a temporary directory created by tempdir().}
+\item{writeTo}{A character string specifying a directory path to where the
+output file(s) should be saved. If set to \code{"."}, the file(s) will be written
+to the current working directory. The default is \code{NULL}, and examples use a
+temporary directory created by \code{tempdir()}. When dealing with tabular output,
+\code{writeTo} is only relevant if \code{gtTab = TRUE}.}
 
-\item{fileName}{A character string specifying a desired base name for the .txt output file.
-The default is NULL. The specified name will be automatically appended with the .txt file extension.
-If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
+\item{fileName}{A character string specifying a desired base name for the
+output file. The default is \code{NULL}. The specified name will be automatically
+appended with the appropriate file extension (e.g., \code{.txt} for \code{lavaan}
+scripts, \code{.rtf} for tabular output when \code{gtTab = TRUE}, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 character object of lavaan script that can be passed immediately to

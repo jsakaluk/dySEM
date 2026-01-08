@@ -7,8 +7,7 @@
 #' also invoke configural, loading, and/or intercept invariant
 #' measurement models, and particular types of structural comparisons.
 #' @param dvn input dvn list from scrapeVarCross
-#' @param scaleset input character to specify how to set the scale of the latent variable(s). Default is
-#' "FF" (fixed-factor; see Details for rationale), but user can specify "MV" (Marker Variable)
+#' @template scaleset
 #' @param lvxname input character to (arbitrarily) name LV X in lavaan syntax
 #' @param lvyname input character to (arbitrarily) name LV Y in lavaan syntax
 #' @param constr_dy_x_meas input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
@@ -36,12 +35,8 @@
 #' @param est_k input logical for whether Kenny & Ledermann's (2010) k parameter should be
 #' calculated to characterize the dyadic pattern in the APIM. Defaults FALSE, and requires at least
 #' a loading-invariant model to be specified, otherwise a warning is returned.
-#' @param writeTo A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
-#' If set to “.”, the .txt file will be written to the current working directory.
-#' The default is NULL, and examples use a temporary directory created by tempdir().
-#' @param fileName A character string specifying a desired base name for the .txt output file.
-#' The default is NULL. The specified name will be automatically appended with the .txt file extension.
-#' If a file with the same name already exists in the user's chosen directory, it will be overwritten.
+#' @template writeTo
+#' @template fileName
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions. Users will receive message if structural comparisons are specified
 #' when the recommended level of invariance is not also specified. If user supplies dvn
