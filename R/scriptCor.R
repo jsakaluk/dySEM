@@ -14,14 +14,15 @@
 #' @param constr_dy_struct Input character vector detailing which structural model parameters to constrain across dyad members.
 #' Default is `c("variances", "means")`(in combination with defaults for `constr_dy_meas`, an indistinguishable correlated dyadic factors model),
 #' but user can specify any combination of `"variances"` and `"means"`, or `"none"`.
-#' @param writeTo A character string specifying a directory path to where a `.txt` file of the resulting `lavaan` script should be written.
-#'  If set to `“.”`, the `.txt` file will be written to the current working directory.
-#'  The default is `NULL`, and examples use a temporary directory created by `tempdir()`.
-#' @param fileName A character string specifying a desired base name for the `.txt` output file.
-#'  The default is `NULL`. The specified name will be automatically appended with the `.txt` file extension.
-#'  If a file with the same name already exists in the user's chosen directory, it will be overwritten.
+#' @template writeTo
+#' @template fileName
+#' @param outputType Character string specifying the type of output to return.
+#'  Options are `"lavaan script"` (default) to return a character object of
+#'  `lavaan` syntax that can be passed immediately to `lavaan` functions, or
+#'  `"syntax components"` to return a structured list of model components.
 #' @return Character object of `lavaan` script that can be passed immediately to
-#'  `lavaan` functions.
+#'  `lavaan` functions (when `outputType = "lavaan script"`), or a structured list
+#'  of model components (when `outputType = "syntax components"`).
 #'
 #' @details
 #' * By default, many `dySEM::` functions (including `scriptCor()`) default to
@@ -113,7 +114,8 @@ scriptCor <- function(
     constr_dy_meas = c("loadings", "intercepts", "residuals"),
     constr_dy_struct = c("variances", "means"),
     writeTo = NULL,
-    fileName = NULL) {
+    fileName = NULL,
+    outputType = "lavaan script") {
   # Input validation
   # Validate dvn argument
   if (missing(dvn) || is.null(dvn)) {
@@ -143,6 +145,11 @@ scriptCor <- function(
 
   if (!scaleset %in% c("FF", "MV")) {
     stop("scaleset must be either 'FF' (fixed-factor) or 'MV' (marker variable)")
+  }
+
+  # Validate outputType argument
+  if (!outputType %in% c("lavaan script", "syntax components")) {
+    stop("outputType must be either 'lavaan script' or 'syntax components'")
   }
 
   # loadings
@@ -245,6 +252,26 @@ scriptCor <- function(
       xmean1 <- lmeans(dvn, lvar = "X", lvname, partner = "1", type = "free")
       xmean2 <- lmeans(dvn, lvar = "X", lvname, partner = "2", type = "free")
     }
+  }
+
+  # Return syntax components if requested
+  if (outputType == "syntax components") {
+    return(list(
+      measurement = list(
+        loadings = c(xloads1, xloads2),
+        intercepts = c(xints1, xints2),
+        residuals = c(xres1, xres2),
+        coresids = xcoresids
+      ),
+      structural = list(
+        variances = c(xvar1, xvar2),
+        covariances = xcovar,
+        means = c(xmean1, xmean2)
+      ),
+      form = "Cor",
+      lvname = lvname,
+      partner_types = c("1", "2")
+    ))
   }
 
   # Script Creation Syntax
