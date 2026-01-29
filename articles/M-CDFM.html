@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,14 +83,16 @@
 </h2>
 <p>This tutorial is a supplemental material from the following
 article:</p>
-<p>Sakaluk, J. K., &amp; Camanto, O. J. (2025). <em>Dyadic Data Analysis
-via Structural Equation Modeling with Latent Variables: A Tutorial with
-the dySEM package for R</em>.</p>
+<p>Prine-Munroe, M., Sakaluk, J. K., Camanto, O., &amp; Quinn-Nilas, C.
+(2025). <em>Evaluating Multi-Factor Dyadic Invariance in Couples’
+Relationship Satisfaction Using dySEM</em>.</p>
 <p>This article is intended to serve as the primary citation of record
-for the <code>dySEM</code> package’s functionality for the techniques
-described in this tutorial. <strong>If this tutorial has informed your
-modeling strategy (including but not limited to your use of
-<code>dySEM</code>), please cite this article</strong>.</p>
+for the <code>dySEM</code> package’s functionality for fitting and
+interpreting the the Multiple Correlated Dyadic Factors Model with the
+help of the <code><a href="../reference/scriptCFA.html">scriptCFA()</a></code> function (and others) in
+<code>dySEM</code>. <strong>If this tutorial has informed your modeling
+strategy (including but not limited to your use of <code>dySEM</code>),
+please cite this article</strong>.</p>
 <p>The citation of research software aiding in analyses—like the use of
 <code>dySEM</code>—is a required practice, according to the Journal
 Article Reporting Standards (JARS) for Quantitative Research in
@@ -157,40 +159,39 @@ packages.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jsakaluk/dySEM" class="external-link">dySEM</a></span><span class="op">)</span> <span class="co">#for dyadic SEM scripting and outputting</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span> <span class="co">#for fitting dyadic SEMs</span></span></code></pre></div>
 <p>For this exemplar, we use two built-in datasets from
-<code>dySEM</code> (focusing more on one). Of primary interest, the <a href="https://jsakaluk.github.io/dySEM/reference/imsM.html"><code>imsM</code></a>
-dataset corresponds to data from the “global” items from 282 mixed-sex
-couples responding to the full Rusbult et al. (1998) Investment Model
-Scale (IMS) (including 5 items each for satisfaction, quality of
-alternatives, investment, and commitment). More information about this
-data set can be found in <a href="https://doi.org/10.1111/pere.12341" class="external-link">Sakaluk et al. (2021)</a>.</p>
+<code>dySEM</code> (focusing more on one). Of primary interest, the <a href="https://jsakaluk.github.io/dySEM/reference/pnrqM.html"><code>pnrqM</code></a>
+dataset corresponds to data from a short-form of the Positive-Negative
+Relationship Quality Scale (PNRQ; Rogge et al., 2017) from 219
+(M)ixed-sex couples (including 4 items each for positive and negative).
+More information about this data set can be found in Prine et al. (under
+review).</p>
 <p>All variables in this data frame follow a <a href="(https://jsakaluk.github.io/dySEM/articles/varnames.html)">“sip”
-naming pattern</a>:</p>
+naming pattern</a>, with a delimiting “_” between the item number and
+distinguishing partner character:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">imsM_dat</span> <span class="op">&lt;-</span> <span class="va">imsM</span></span>
+<span><span class="va">pnrqM_dat</span> <span class="op">&lt;-</span> <span class="va">pnrqM</span></span>
 <span></span>
-<span><span class="va">imsM_dat</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">pnrqM_dat</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 282 × 40</span></span></span>
-<span><span class="co">#&gt;    sat.g1_f sat.g2_f sat.g3_f sat.g4_f sat.g5_f qalt.g1_f qalt.g2_f qalt.g3_f</span></span>
-<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>        2        1        1        2        1         3         1         5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>        9        9        9        9        9         5         1         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>        6        5        7        5        7         5         3         5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>        9        5        9        9        9         8         9         9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>        1        7        1        2        2         9         7         8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>        8        8        8        8        8         1         1         5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>        9        9        9        9        9         1         1         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>        1        1        1        1        1         1         1         1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>        6        5        4        6        6         7         5         7</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>        9        9        9        9        9         1         1         1</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 272 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 32 more variables: qalt.g4_f &lt;int&gt;, qalt.g5_f &lt;int&gt;, invest.g1_f &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   invest.g2_f &lt;int&gt;, invest.g3_f &lt;int&gt;, invest.g4_f &lt;int&gt;, invest.g5_f &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   com1_f &lt;int&gt;, com2_f &lt;int&gt;, com3_f &lt;int&gt;, com4_f &lt;int&gt;, com5_f &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   sat.g1_m &lt;int&gt;, sat.g2_m &lt;int&gt;, sat.g3_m &lt;int&gt;, sat.g4_m &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   sat.g5_m &lt;int&gt;, qalt.g1_m &lt;int&gt;, qalt.g2_m &lt;int&gt;, qalt.g3_m &lt;int&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   qalt.g4_m &lt;int&gt;, qalt.g5_m &lt;int&gt;, invest.g1_m &lt;int&gt;, invest.g2_m &lt;int&gt;, …</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 219 × 16</span></span></span>
+<span><span class="co">#&gt;    sat.pnrq1_w sat.pnrq2_w sat.pnrq3_w sat.pnrq4_w dsat.pnrq1_w dsat.pnrq2_w</span></span>
+<span><span class="co">#&gt;          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>           5           5           5           5            1            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>           6           6           6           6            1            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>           5           5           4           6            3            5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>           5           5           6           5            1            2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>           4           4           5           4            1            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>           4           4           4           3            1            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>           5           5           5           5            1            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>           5           5           5           5            1            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>           5           6           6           6            1            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>           3           3           4           4            1            1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 209 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 10 more variables: dsat.pnrq3_w &lt;dbl&gt;, dsat.pnrq4_w &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   sat.pnrq1_m &lt;dbl&gt;, sat.pnrq2_m &lt;dbl&gt;, sat.pnrq3_m &lt;dbl&gt;, sat.pnrq4_m &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   dsat.pnrq1_m &lt;dbl&gt;, dsat.pnrq2_m &lt;dbl&gt;, dsat.pnrq3_m &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   dsat.pnrq4_m &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>We will also use data from the <a href="https://jsakaluk.github.io/dySEM/reference/prqcQ.html"><code>prqcQ</code></a>
 dataset, which contains data from 118 queer couples responding to the
 Perceived Relationship Quality Components Inventory (Fletcher et al.,
@@ -198,7 +199,7 @@ Perceived Relationship Quality Components Inventory (Fletcher et al.,
 trust, passion, and love). While substantive analyses of this data set
 have not yet been reported, the data collection took place in parallel
 to the analyses reported in <a href="https://doi.org/10.1111/pere.12341" class="external-link">Sakaluk et al. (2021)</a>.</p>
-<p>In contrast to <code>imsM</code>, variable names in the
+<p>In contrast to <code>pnrqM</code>, variable names in the
 <code>prqcQ</code> data frame follow the <a href="https://jsakaluk.github.io/dySEM/articles/varnames.html">“spi”
 naming pattern</a>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -231,11 +232,11 @@ naming pattern</a>:</p>
 <div class="section level2">
 <h2 id="scraping-the-variables">1. Scraping the Variables<a class="anchor" aria-label="anchor" href="#scraping-the-variables"></a>
 </h2>
-<p>Users will take note that the <code>imsM</code> dataset contains
-variables for items for which there are distinctive stems for each
-subscale (e.g., “sat”, “invest”, “com”), whereas the <code>prqcQ</code>
-dataset contains a repetitive uninformative stem (“prqc”), despite the
-presence of multidimensionality. Rest assured, <a href="https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html"><code>scrapeVarCross()</code></a>
+<p>Users will take note that the <code>pnrqM</code> dataset contains
+variables for items for which there are distinctive stems for the
+positive and negative subscales (i.e., “sat.pnrq”, “dsat.pnrq”), whereas
+the <code>prqcQ</code> dataset contains a repetitive uninformative stem
+(“prqc”), despite the presence of multidimensionality. Rest assured, <a href="https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html"><code>scrapeVarCross()</code></a>
 has been developed with functionality to scrape variable information
 from both kinds of stems from multidimensional instruments. Further,
 scraping variable information remains relatively straightforward (and
@@ -245,14 +246,14 @@ uni-construct or bi-construct models: the creation of a <em>named
 list</em> spelling out the naming ’formula’ for each set of
 indicators.</p>
 <div class="section level3">
-<h3 id="distinctive-indicator-stems">Distinctive Indicator Stems<a class="anchor" aria-label="anchor" href="#distinctive-indicator-stems"></a>
+<h3 id="distinctive-indicator-stems-with-pnrqm">Distinctive Indicator Stems (with <code>pnrqM</code>)<a class="anchor" aria-label="anchor" href="#distinctive-indicator-stems-with-pnrqm"></a>
 </h3>
 <p>The case when indicators have distinctive stems—usually indicating
 the putative factor onto which they load (e.g., “sat”, “com”)—is the
 most straightforward to scrape with <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code>.</p>
 <p>In this case, users will need to provide the names of the latent
 variables, the stem for each set of indicators, and the delimiters used
-in the variable names. In the case of the <code>imsM</code> exemplar
+in the variable names. In the case of the <code>pnrqM</code> exemplar
 (i.e., when stems are distinct), the named list must contain the
 following four elements/vectors (and the names of these elements/vectors
 must follow what is shown below):</p>
@@ -263,19 +264,18 @@ will be used for the latent variables in the <code>lavaan</code>
 script</li>
 <li>
 <strong>stem</strong>: a vector containing each distinctive stem for
-each set of indicators (e.g., “sat.g”, “qalt.g”, “invest.g”, “com”)—
+each set of indicators (in this case: “sat” and “dsat”)—
 <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> will use these to search for indicators
 with matching stems</li>
 <li>
 <strong>delim1</strong>: a vector containing the first delimiter
-used in the variable names (e.g., ““,”“,”“,”“)—
+used in the variable names (e.g., “.”, “_“)—
 <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> will use these to search for indicators
 with matching patterns of delimination</li>
 <li>
 <strong>delim2</strong>: a vector containing the second delimiter
-used in the variable names (e.g., “<em>”, ”</em>”, “<em>”, ”</em>”)—
-<code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> will use these to search for indicators
-with matching patterns of delimination</li>
+used in the variable names— <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> will use these
+to search for indicators with matching patterns of delimination</li>
 </ul>
 <p>Each of these elements/vectors must be of the same length, and the
 order of the elements in each vector must correspond to the order of the
@@ -285,12 +285,12 @@ its own object:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">#When different factor use distinct stems:</span></span>
-<span><span class="va">imsList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>lvnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sat"</span>, <span class="st">"Q_Alt"</span>, <span class="st">"Invest"</span>, <span class="st">"Comm"</span><span class="op">)</span>,</span>
-<span>stem <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sat.g"</span>, <span class="st">"qalt.g"</span>, <span class="st">"invest.g"</span>, <span class="st">"com"</span><span class="op">)</span>,</span>
-<span>delim1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">""</span>, <span class="st">""</span>, <span class="st">""</span><span class="op">)</span>,</span>
-<span>delim2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="st">"_"</span>, <span class="st">"_"</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pnrqMList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>lvnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sat"</span>, <span class="st">"Dsat"</span><span class="op">)</span>,</span>
+<span>stem <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sat.pnrq"</span>, <span class="st">"dsat.pnrq"</span><span class="op">)</span>,</span>
+<span>delim1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">""</span><span class="op">)</span>,<span class="co">#no delimeter between stem and item number</span></span>
+<span>delim2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This list can then be passed to <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code> to
-scrape the variable names from the <code>imsM</code> data frame, using
+scrape the variable names from the <code>pnrqM</code> data frame, using
 the <code>var_list</code> argument. The <code>var_list_order</code>
 argument must then be set to indicate that the variables follow the <a href="https://jsakaluk.github.io/dySEM/articles/varnames.html">“sip”
 naming pattern</a>, and distinguishing characters must also be specified
@@ -303,20 +303,18 @@ that most users already follow this kind of variable naming
 convention)&lt;/p&gt;'><sup>1</sup></a>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">dvnIMS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span><span class="va">imsM</span>,</span>
-<span>var_list <span class="op">=</span> <span class="va">imsList</span>,</span>
+<span><span class="va">dvnPNRQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scrapeVarCross.html">scrapeVarCross</a></span><span class="op">(</span><span class="va">pnrqM</span>,</span>
+<span>var_list <span class="op">=</span> <span class="va">pnrqMList</span>,</span>
 <span>var_list_order <span class="op">=</span> <span class="st">"sip"</span>,</span>
-<span>distinguish_1 <span class="op">=</span> <span class="st">"f"</span>,</span>
+<span>distinguish_1 <span class="op">=</span> <span class="st">"w"</span>,</span>
 <span>distinguish_2 <span class="op">=</span> <span class="st">"m"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Variable Scraping Summary</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Successfully scraped 4 latent variables</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">Sat</span>: 5 indicators for P1 (f), 5 indicators for P2 (m)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">Q_Alt</span>: 5 indicators for P1 (f), 5 indicators for P2 (m)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">Invest</span>: 5 indicators for P1 (f), 5 indicators for P2 (m)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">Comm</span>: 5 indicators for P1 (f), 5 indicators for P2 (m)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total indicators: 40</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Successfully scraped 2 latent variables</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">Sat</span>: 4 indicators for P1 (w), 4 indicators for P2 (m)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">Dsat</span>: 4 indicators for P1 (w), 4 indicators for P2 (m)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total indicators: 16</span></span></code></pre></div>
 <p>The resulting <em>dvn</em> remains as unremarkable as ever, but
 continues to serve as the foundation for unlocking the functionality of
 multi-construct scripters in <code>dySEM</code>. The only difference
@@ -326,49 +324,37 @@ contain a nested set of vectors of variable names (as opposed to only
 set of variable names):</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">dvnIMS</span></span>
+<span><span class="va">dvnPNRQ</span></span>
 <span><span class="co">#&gt; $p1xvarnames</span></span>
 <span><span class="co">#&gt; $p1xvarnames$Sat</span></span>
-<span><span class="co">#&gt; [1] "sat.g1_f" "sat.g2_f" "sat.g3_f" "sat.g4_f" "sat.g5_f"</span></span>
+<span><span class="co">#&gt; [1] "sat.pnrq1_w" "sat.pnrq2_w" "sat.pnrq3_w" "sat.pnrq4_w"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p1xvarnames$Q_Alt</span></span>
-<span><span class="co">#&gt; [1] "qalt.g1_f" "qalt.g2_f" "qalt.g3_f" "qalt.g4_f" "qalt.g5_f"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p1xvarnames$Invest</span></span>
-<span><span class="co">#&gt; [1] "invest.g1_f" "invest.g2_f" "invest.g3_f" "invest.g4_f" "invest.g5_f"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p1xvarnames$Comm</span></span>
-<span><span class="co">#&gt; [1] "com1_f" "com2_f" "com3_f" "com4_f" "com5_f"</span></span>
+<span><span class="co">#&gt; $p1xvarnames$Dsat</span></span>
+<span><span class="co">#&gt; [1] "dsat.pnrq1_w" "dsat.pnrq2_w" "dsat.pnrq3_w" "dsat.pnrq4_w"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $p2xvarnames</span></span>
 <span><span class="co">#&gt; $p2xvarnames$Sat</span></span>
-<span><span class="co">#&gt; [1] "sat.g1_m" "sat.g2_m" "sat.g3_m" "sat.g4_m" "sat.g5_m"</span></span>
+<span><span class="co">#&gt; [1] "sat.pnrq1_m" "sat.pnrq2_m" "sat.pnrq3_m" "sat.pnrq4_m"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p2xvarnames$Q_Alt</span></span>
-<span><span class="co">#&gt; [1] "qalt.g1_m" "qalt.g2_m" "qalt.g3_m" "qalt.g4_m" "qalt.g5_m"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p2xvarnames$Invest</span></span>
-<span><span class="co">#&gt; [1] "invest.g1_m" "invest.g2_m" "invest.g3_m" "invest.g4_m" "invest.g5_m"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p2xvarnames$Comm</span></span>
-<span><span class="co">#&gt; [1] "com1_m" "com2_m" "com3_m" "com4_m" "com5_m"</span></span>
+<span><span class="co">#&gt; $p2xvarnames$Dsat</span></span>
+<span><span class="co">#&gt; [1] "dsat.pnrq1_m" "dsat.pnrq2_m" "dsat.pnrq3_m" "dsat.pnrq4_m"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $xindper</span></span>
-<span><span class="co">#&gt; [1] 20</span></span>
+<span><span class="co">#&gt; [1] 8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $dist1</span></span>
-<span><span class="co">#&gt; [1] "f"</span></span>
+<span><span class="co">#&gt; [1] "w"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $dist2</span></span>
 <span><span class="co">#&gt; [1] "m"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $indnum</span></span>
-<span><span class="co">#&gt; [1] 40</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 16</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="non-distinctive-indicator-stems">Non-Distinctive Indicator Stems<a class="anchor" aria-label="anchor" href="#non-distinctive-indicator-stems"></a>
+<h3 id="non-distinctive-indicator-stems-with-prqcq">Non-Distinctive Indicator Stems (with <code>prqcQ</code>)<a class="anchor" aria-label="anchor" href="#non-distinctive-indicator-stems-with-prqcq"></a>
 </h3>
 <p>The case when indicators have non-distinctive stems only requires
 that your named list—that you later supply to
@@ -489,7 +475,7 @@ straightforward) for both kinds of indicators.</p>
 <div class="section level2">
 <h2 id="scripting-the-models">2. Scripting the Model(s)<a class="anchor" aria-label="anchor" href="#scripting-the-models"></a>
 </h2>
-<p>Continuing with the <code>imsM</code> exemplar for this rest of this
+<p>Continuing with the <code>pnrqM</code> exemplar for this rest of this
 vignette, we can now quickly script a series of M-CDFMs using the <a href="https://jsakaluk.github.io/dySEM/reference/scriptCFA.html"><code>scriptCFA()</code></a>
 function (so named given that most imagine a M-CDFM model when
 conducting “dyadic CFA”), and incrementally layer on more dyadic
@@ -505,20 +491,20 @@ strongly recommend making this argument explicit (despite its implicit
 default to “FF”):</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">script.ims.config</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>, constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="va">script.pnrq.config</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnPNRQ</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>, constr_dy_meas <span class="op">=</span> <span class="st">"none"</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">script.ims.load</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="va">script.pnrq.load</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnPNRQ</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">script.ims.int</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>,constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="va">script.pnrq.int</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnPNRQ</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>, constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span><span class="op">)</span>,constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">script.ims.res</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnIMS</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">script.pnrq.res</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/scriptCFA.html">scriptCFA</a></span><span class="op">(</span><span class="va">dvnPNRQ</span>, scaleset <span class="op">=</span> <span class="st">"FF"</span>,constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>, constr_dy_struct <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p>You can concatenate these scripts, if you wish, using the base
 <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> function, to make them more human-readable in your
 console, but beware: the amount of <code>lavaan</code> scripting is
 considerable (and therefore we do not show what it returns here):</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">script.ims.config</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">script.pnrq.config</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="fitting-the-models">3. Fitting the Model(s)<a class="anchor" aria-label="anchor" href="#fitting-the-models"></a>
@@ -529,13 +515,13 @@ estimator, missing data treatment, etc.); our demonstration uses default
 specifications for <code><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa()</a></code>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">ims.config.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">script.ims.config</span>, data <span class="op">=</span> <span class="va">imsM_dat</span><span class="op">)</span></span>
+<span><span class="va">pnrq.config.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">script.pnrq.config</span>, data <span class="op">=</span> <span class="va">pnrqM_dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ims.load.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">script.ims.load</span>, data <span class="op">=</span> <span class="va">imsM_dat</span><span class="op">)</span></span>
+<span><span class="va">pnrq.load.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">script.pnrq.load</span>, data <span class="op">=</span> <span class="va">pnrqM_dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ims.int.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">script.ims.int</span>, data <span class="op">=</span> <span class="va">imsM_dat</span><span class="op">)</span></span>
+<span><span class="va">pnrq.int.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">script.pnrq.int</span>, data <span class="op">=</span> <span class="va">pnrqM_dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ims.res.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">script.ims.res</span>, data <span class="op">=</span> <span class="va">imsM_dat</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pnrq.res.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">script.pnrq.res</span>, data <span class="op">=</span> <span class="va">pnrqM_dat</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="outputting-and-interpreting-the-models">4. Outputting and Interpreting the Model(s)<a class="anchor" aria-label="anchor" href="#outputting-and-interpreting-the-models"></a>
@@ -546,20 +532,20 @@ larger measure—can be compared with the base <code><a href="https://rdrr.io/r/
 function:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">ims.config.mod</span>, <span class="va">ims.load.mod</span>, <span class="va">ims.int.mod</span>, <span class="va">ims.res.mod</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">pnrq.config.mod</span>, <span class="va">pnrq.load.mod</span>, <span class="va">pnrq.int.mod</span>, <span class="va">pnrq.res.mod</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Chi-Squared Difference Test</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                 Df   AIC   BIC  Chisq Chisq diff    RMSEA Df diff Pr(&gt;Chisq)</span></span>
-<span><span class="co">#&gt; ims.config.mod 692 36038 36633 1494.0                                       </span></span>
-<span><span class="co">#&gt; ims.load.mod   708 36050 36588 1538.2     44.181 0.083109      16  0.0001851</span></span>
-<span><span class="co">#&gt; ims.int.mod    724 36043 36524 1563.0     24.784 0.046399      16  0.0737307</span></span>
-<span><span class="co">#&gt; ims.res.mod    744 36105 36515 1664.9    101.906 0.126728      20  5.733e-13</span></span>
-<span><span class="co">#&gt;                   </span></span>
-<span><span class="co">#&gt; ims.config.mod    </span></span>
-<span><span class="co">#&gt; ims.load.mod   ***</span></span>
-<span><span class="co">#&gt; ims.int.mod    .  </span></span>
-<span><span class="co">#&gt; ims.res.mod    ***</span></span>
+<span><span class="co">#&gt;                  Df    AIC    BIC  Chisq Chisq diff   RMSEA Df diff Pr(&gt;Chisq)</span></span>
+<span><span class="co">#&gt; pnrq.config.mod  90 5777.9 5985.4 371.34                                      </span></span>
+<span><span class="co">#&gt; pnrq.load.mod    96 5788.8 5976.2 394.24     22.904 0.11582       6  0.0008294</span></span>
+<span><span class="co">#&gt; pnrq.int.mod    102 5781.1 5948.5 398.57      4.325 0.00000       6  0.6327806</span></span>
+<span><span class="co">#&gt; pnrq.res.mod    110 5816.9 5957.4 450.33     51.759 0.16139       8  1.874e-08</span></span>
+<span><span class="co">#&gt;                    </span></span>
+<span><span class="co">#&gt; pnrq.config.mod    </span></span>
+<span><span class="co">#&gt; pnrq.load.mod   ***</span></span>
+<span><span class="co">#&gt; pnrq.int.mod       </span></span>
+<span><span class="co">#&gt; pnrq.res.mod    ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
 <p>Or, for a more reproducible-reporting-friendly option,
@@ -570,7 +556,7 @@ an <code>.rtf</code> if the user makes use of the <code>writeTo</code>
 and <code>fileName</code> arguments:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ims.config.mod</span>, <span class="va">ims.load.mod</span>, <span class="va">ims.int.mod</span>, <span class="va">ims.res.mod</span><span class="op">)</span></span>
+<span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pnrq.config.mod</span>, <span class="va">pnrq.load.mod</span>, <span class="va">pnrq.int.mod</span>, <span class="va">pnrq.res.mod</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/outputInvarCompTab.html">outputInvarCompTab</a></span><span class="op">(</span><span class="va">mods</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -1044,13 +1030,13 @@ and <code>fileName</code> arguments:</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="mod" class="gt_row gt_left">configural</td>
-<td headers="chisq" class="gt_row gt_right">1494.001</td>
-<td headers="df" class="gt_row gt_right">692</td>
+<td headers="chisq" class="gt_row gt_right">371.338</td>
+<td headers="df" class="gt_row gt_right">90</td>
 <td headers="pvalue" class="gt_row gt_right">0</td>
-<td headers="aic" class="gt_row gt_right">36037.69</td>
-<td headers="bic" class="gt_row gt_right">36632.63</td>
-<td headers="rmsea" class="gt_row gt_right">0.067</td>
-<td headers="cfi" class="gt_row gt_right">0.920</td>
+<td headers="aic" class="gt_row gt_right">5777.881</td>
+<td headers="bic" class="gt_row gt_right">5985.401</td>
+<td headers="rmsea" class="gt_row gt_right">0.122</td>
+<td headers="cfi" class="gt_row gt_right">0.942</td>
 <td headers="chisq_diff" class="gt_row gt_right">NA</td>
 <td headers="df_diff" class="gt_row gt_right">NA</td>
 <td headers="p_diff" class="gt_row gt_right">NA</td>
@@ -1061,63 +1047,63 @@ and <code>fileName</code> arguments:</p>
 </tr>
 <tr>
 <td headers="mod" class="gt_row gt_left">loading</td>
-<td headers="chisq" class="gt_row gt_right">1538.182</td>
-<td headers="df" class="gt_row gt_right">708</td>
+<td headers="chisq" class="gt_row gt_right">394.241</td>
+<td headers="df" class="gt_row gt_right">96</td>
 <td headers="pvalue" class="gt_row gt_right">0</td>
-<td headers="aic" class="gt_row gt_right">36049.88</td>
-<td headers="bic" class="gt_row gt_right">36588.15</td>
-<td headers="rmsea" class="gt_row gt_right">0.068</td>
-<td headers="cfi" class="gt_row gt_right">0.918</td>
-<td headers="chisq_diff" class="gt_row gt_right">44.181</td>
-<td headers="df_diff" class="gt_row gt_right">16</td>
-<td headers="p_diff" class="gt_row gt_right">0.000</td>
-<td headers="aic_diff" class="gt_row gt_right">12.181</td>
-<td headers="bic_diff" class="gt_row gt_right">-44.479</td>
+<td headers="aic" class="gt_row gt_right">5788.784</td>
+<td headers="bic" class="gt_row gt_right">5976.222</td>
+<td headers="rmsea" class="gt_row gt_right">0.122</td>
+<td headers="cfi" class="gt_row gt_right">0.939</td>
+<td headers="chisq_diff" class="gt_row gt_right">22.904</td>
+<td headers="df_diff" class="gt_row gt_right">6</td>
+<td headers="p_diff" class="gt_row gt_right">0.001</td>
+<td headers="aic_diff" class="gt_row gt_right">10.904</td>
+<td headers="bic_diff" class="gt_row gt_right">-9.179</td>
 <td headers="rmsea_diff" class="gt_row gt_right">0.000</td>
 <td headers="cfi_diff" class="gt_row gt_right">-0.003</td>
 </tr>
 <tr>
 <td headers="mod" class="gt_row gt_left">intercept</td>
-<td headers="chisq" class="gt_row gt_right">1562.966</td>
-<td headers="df" class="gt_row gt_right">724</td>
+<td headers="chisq" class="gt_row gt_right">398.566</td>
+<td headers="df" class="gt_row gt_right">102</td>
 <td headers="pvalue" class="gt_row gt_right">0</td>
-<td headers="aic" class="gt_row gt_right">36042.66</td>
-<td headers="bic" class="gt_row gt_right">36524.27</td>
-<td headers="rmsea" class="gt_row gt_right">0.067</td>
-<td headers="cfi" class="gt_row gt_right">0.917</td>
-<td headers="chisq_diff" class="gt_row gt_right">24.784</td>
-<td headers="df_diff" class="gt_row gt_right">16</td>
-<td headers="p_diff" class="gt_row gt_right">0.074</td>
-<td headers="aic_diff" class="gt_row gt_right">-7.216</td>
-<td headers="bic_diff" class="gt_row gt_right">-63.877</td>
-<td headers="rmsea_diff" class="gt_row gt_right">0.000</td>
-<td headers="cfi_diff" class="gt_row gt_right">-0.001</td>
+<td headers="aic" class="gt_row gt_right">5781.109</td>
+<td headers="bic" class="gt_row gt_right">5948.465</td>
+<td headers="rmsea" class="gt_row gt_right">0.118</td>
+<td headers="cfi" class="gt_row gt_right">0.939</td>
+<td headers="chisq_diff" class="gt_row gt_right">4.325</td>
+<td headers="df_diff" class="gt_row gt_right">6</td>
+<td headers="p_diff" class="gt_row gt_right">0.633</td>
+<td headers="aic_diff" class="gt_row gt_right">-7.675</td>
+<td headers="bic_diff" class="gt_row gt_right">-27.758</td>
+<td headers="rmsea_diff" class="gt_row gt_right">-0.004</td>
+<td headers="cfi_diff" class="gt_row gt_right">0.000</td>
 </tr>
 <tr>
 <td headers="mod" class="gt_row gt_left">residual</td>
-<td headers="chisq" class="gt_row gt_right">1664.873</td>
-<td headers="df" class="gt_row gt_right">744</td>
+<td headers="chisq" class="gt_row gt_right">450.325</td>
+<td headers="df" class="gt_row gt_right">110</td>
 <td headers="pvalue" class="gt_row gt_right">0</td>
-<td headers="aic" class="gt_row gt_right">36104.57</td>
-<td headers="bic" class="gt_row gt_right">36515.35</td>
-<td headers="rmsea" class="gt_row gt_right">0.070</td>
-<td headers="cfi" class="gt_row gt_right">0.909</td>
-<td headers="chisq_diff" class="gt_row gt_right">101.906</td>
-<td headers="df_diff" class="gt_row gt_right">20</td>
+<td headers="aic" class="gt_row gt_right">5816.868</td>
+<td headers="bic" class="gt_row gt_right">5957.447</td>
+<td headers="rmsea" class="gt_row gt_right">0.121</td>
+<td headers="cfi" class="gt_row gt_right">0.930</td>
+<td headers="chisq_diff" class="gt_row gt_right">51.759</td>
+<td headers="df_diff" class="gt_row gt_right">8</td>
 <td headers="p_diff" class="gt_row gt_right">0.000</td>
-<td headers="aic_diff" class="gt_row gt_right">61.906</td>
-<td headers="bic_diff" class="gt_row gt_right">-8.919</td>
-<td headers="rmsea_diff" class="gt_row gt_right">0.002</td>
-<td headers="cfi_diff" class="gt_row gt_right">-0.008</td>
+<td headers="aic_diff" class="gt_row gt_right">35.759</td>
+<td headers="bic_diff" class="gt_row gt_right">8.982</td>
+<td headers="rmsea_diff" class="gt_row gt_right">0.004</td>
+<td headers="cfi_diff" class="gt_row gt_right">-0.009</td>
 </tr>
 </tbody>
 </table>
 </div>
 <p>Were one strictly to follow only the likelihood ratio test statistic
 as a guide, they would reject the possibility of the relatively low bar
-of loading invariance for the IMS,
+of loading invariance for the PNRQ,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>χ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\chi^2</annotation></semantics></math>
-(16) = 44.18, <em>p</em> &lt;.001. Of course, other methods of model
+(6) = 22.9, <em>p</em> &lt;.001. Of course, other methods of model
 comparison and selection (and their respective thresholds) are
 available, and whatever method is chosen probably ought to be
 preregistered.</p>
@@ -1128,7 +1114,7 @@ items) than the CDFM, we recommend tabling (vs. visualizing) model
 output:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/outputParamTab.html">outputParamTab</a></span><span class="op">(</span>dvn <span class="op">=</span> <span class="va">dvnIMS</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">ims.config.mod</span>,</span>
+<span><span class="fu"><a href="../reference/outputParamTab.html">outputParamTab</a></span><span class="op">(</span>dvn <span class="op">=</span> <span class="va">dvnPNRQ</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">pnrq.config.mod</span>,</span>
 <span>               tabletype <span class="op">=</span> <span class="st">"measurement"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -1594,403 +1580,163 @@ output:</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="Latent Factor" class="gt_row gt_left">Sat1</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g1_f</td>
-<td headers="Loading" class="gt_row gt_right">1.953</td>
-<td headers="SE" class="gt_row gt_right">0.094</td>
-<td headers="Z" class="gt_row gt_right">20.767</td>
+<td headers="Indicator" class="gt_row gt_left">sat.pnrq1_w</td>
+<td headers="Loading" class="gt_row gt_right">1.333</td>
+<td headers="SE" class="gt_row gt_right">0.069</td>
+<td headers="Z" class="gt_row gt_right">19.304</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.959</td>
-<td headers="Intercept" class="gt_row gt_right">7.459</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.971</td>
+<td headers="Intercept" class="gt_row gt_right">4.619</td>
 </tr>
 <tr>
 <td headers="Latent Factor" class="gt_row gt_left">Sat1</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g2_f</td>
-<td headers="Loading" class="gt_row gt_right">1.683</td>
-<td headers="SE" class="gt_row gt_right">0.102</td>
-<td headers="Z" class="gt_row gt_right">16.485</td>
+<td headers="Indicator" class="gt_row gt_left">sat.pnrq2_w</td>
+<td headers="Loading" class="gt_row gt_right">1.353</td>
+<td headers="SE" class="gt_row gt_right">0.070</td>
+<td headers="Z" class="gt_row gt_right">19.347</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.814</td>
-<td headers="Intercept" class="gt_row gt_right">7.169</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.972</td>
+<td headers="Intercept" class="gt_row gt_right">4.667</td>
 </tr>
 <tr>
 <td headers="Latent Factor" class="gt_row gt_left">Sat1</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g3_f</td>
-<td headers="Loading" class="gt_row gt_right">2.057</td>
-<td headers="SE" class="gt_row gt_right">0.104</td>
-<td headers="Z" class="gt_row gt_right">19.767</td>
+<td headers="Indicator" class="gt_row gt_left">sat.pnrq3_w</td>
+<td headers="Loading" class="gt_row gt_right">1.308</td>
+<td headers="SE" class="gt_row gt_right">0.075</td>
+<td headers="Z" class="gt_row gt_right">17.520</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.932</td>
-<td headers="Intercept" class="gt_row gt_right">6.996</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.920</td>
+<td headers="Intercept" class="gt_row gt_right">4.814</td>
 </tr>
 <tr>
 <td headers="Latent Factor" class="gt_row gt_left">Sat1</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g4_f</td>
-<td headers="Loading" class="gt_row gt_right">2.002</td>
-<td headers="SE" class="gt_row gt_right">0.095</td>
-<td headers="Z" class="gt_row gt_right">21.146</td>
+<td headers="Indicator" class="gt_row gt_left">sat.pnrq4_w</td>
+<td headers="Loading" class="gt_row gt_right">1.338</td>
+<td headers="SE" class="gt_row gt_right">0.076</td>
+<td headers="Z" class="gt_row gt_right">17.530</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.968</td>
-<td headers="Intercept" class="gt_row gt_right">7.459</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.920</td>
+<td headers="Intercept" class="gt_row gt_right">4.571</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Sat1</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g5_f</td>
-<td headers="Loading" class="gt_row gt_right">2.023</td>
-<td headers="SE" class="gt_row gt_right">0.102</td>
-<td headers="Z" class="gt_row gt_right">19.919</td>
+<td headers="Latent Factor" class="gt_row gt_left">Dsat1</td>
+<td headers="Indicator" class="gt_row gt_left">dsat.pnrq1_w</td>
+<td headers="Loading" class="gt_row gt_right">0.749</td>
+<td headers="SE" class="gt_row gt_right">0.048</td>
+<td headers="Z" class="gt_row gt_right">15.608</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.937</td>
-<td headers="Intercept" class="gt_row gt_right">7.227</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.858</td>
+<td headers="Intercept" class="gt_row gt_right">1.367</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt1</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g1_f</td>
-<td headers="Loading" class="gt_row gt_right">2.186</td>
-<td headers="SE" class="gt_row gt_right">0.128</td>
-<td headers="Z" class="gt_row gt_right">17.110</td>
+<td headers="Latent Factor" class="gt_row gt_left">Dsat1</td>
+<td headers="Indicator" class="gt_row gt_left">dsat.pnrq2_w</td>
+<td headers="Loading" class="gt_row gt_right">0.688</td>
+<td headers="SE" class="gt_row gt_right">0.048</td>
+<td headers="Z" class="gt_row gt_right">14.226</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.867</td>
-<td headers="Intercept" class="gt_row gt_right">2.965</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.811</td>
+<td headers="Intercept" class="gt_row gt_right">1.310</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt1</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g2_f</td>
-<td headers="Loading" class="gt_row gt_right">1.909</td>
-<td headers="SE" class="gt_row gt_right">0.145</td>
-<td headers="Z" class="gt_row gt_right">13.119</td>
+<td headers="Latent Factor" class="gt_row gt_left">Dsat1</td>
+<td headers="Indicator" class="gt_row gt_left">dsat.pnrq3_w</td>
+<td headers="Loading" class="gt_row gt_right">1.002</td>
+<td headers="SE" class="gt_row gt_right">0.053</td>
+<td headers="Z" class="gt_row gt_right">19.009</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.724</td>
-<td headers="Intercept" class="gt_row gt_right">3.510</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.964</td>
+<td headers="Intercept" class="gt_row gt_right">1.490</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt1</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g3_f</td>
-<td headers="Loading" class="gt_row gt_right">1.839</td>
-<td headers="SE" class="gt_row gt_right">0.136</td>
-<td headers="Z" class="gt_row gt_right">13.478</td>
+<td headers="Latent Factor" class="gt_row gt_left">Dsat1</td>
+<td headers="Indicator" class="gt_row gt_left">dsat.pnrq4_w</td>
+<td headers="Loading" class="gt_row gt_right">0.997</td>
+<td headers="SE" class="gt_row gt_right">0.053</td>
+<td headers="Z" class="gt_row gt_right">18.845</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.717</td>
-<td headers="Intercept" class="gt_row gt_right">3.639</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.961</td>
+<td headers="Intercept" class="gt_row gt_right">1.443</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt1</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g4_f</td>
-<td headers="Loading" class="gt_row gt_right">2.013</td>
-<td headers="SE" class="gt_row gt_right">0.126</td>
-<td headers="Z" class="gt_row gt_right">15.936</td>
+<td headers="Latent Factor" class="gt_row gt_left">Sat2</td>
+<td headers="Indicator" class="gt_row gt_left">sat.pnrq1_m</td>
+<td headers="Loading" class="gt_row gt_right">1.202</td>
+<td headers="SE" class="gt_row gt_right">0.065</td>
+<td headers="Z" class="gt_row gt_right">18.374</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.832</td>
-<td headers="Intercept" class="gt_row gt_right">3.141</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.947</td>
+<td headers="Intercept" class="gt_row gt_right">4.667</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt1</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g5_f</td>
-<td headers="Loading" class="gt_row gt_right">2.162</td>
-<td headers="SE" class="gt_row gt_right">0.127</td>
-<td headers="Z" class="gt_row gt_right">16.996</td>
+<td headers="Latent Factor" class="gt_row gt_left">Sat2</td>
+<td headers="Indicator" class="gt_row gt_left">sat.pnrq2_m</td>
+<td headers="Loading" class="gt_row gt_right">1.212</td>
+<td headers="SE" class="gt_row gt_right">0.064</td>
+<td headers="Z" class="gt_row gt_right">18.866</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.867</td>
-<td headers="Intercept" class="gt_row gt_right">2.961</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.961</td>
+<td headers="Intercept" class="gt_row gt_right">4.743</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest1</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g1_f</td>
-<td headers="Loading" class="gt_row gt_right">1.530</td>
-<td headers="SE" class="gt_row gt_right">0.106</td>
-<td headers="Z" class="gt_row gt_right">14.445</td>
+<td headers="Latent Factor" class="gt_row gt_left">Sat2</td>
+<td headers="Indicator" class="gt_row gt_left">sat.pnrq3_m</td>
+<td headers="Loading" class="gt_row gt_right">1.146</td>
+<td headers="SE" class="gt_row gt_right">0.068</td>
+<td headers="Z" class="gt_row gt_right">16.739</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.778</td>
-<td headers="Intercept" class="gt_row gt_right">7.631</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.897</td>
+<td headers="Intercept" class="gt_row gt_right">4.886</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest1</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g2_f</td>
-<td headers="Loading" class="gt_row gt_right">1.670</td>
-<td headers="SE" class="gt_row gt_right">0.126</td>
-<td headers="Z" class="gt_row gt_right">13.251</td>
+<td headers="Latent Factor" class="gt_row gt_left">Sat2</td>
+<td headers="Indicator" class="gt_row gt_left">sat.pnrq4_m</td>
+<td headers="Loading" class="gt_row gt_right">1.233</td>
+<td headers="SE" class="gt_row gt_right">0.073</td>
+<td headers="Z" class="gt_row gt_right">16.832</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.720</td>
-<td headers="Intercept" class="gt_row gt_right">7.075</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.899</td>
+<td headers="Intercept" class="gt_row gt_right">4.676</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest1</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g3_f</td>
-<td headers="Loading" class="gt_row gt_right">1.671</td>
-<td headers="SE" class="gt_row gt_right">0.094</td>
-<td headers="Z" class="gt_row gt_right">17.820</td>
+<td headers="Latent Factor" class="gt_row gt_left">Dsat2</td>
+<td headers="Indicator" class="gt_row gt_left">dsat.pnrq1_m</td>
+<td headers="Loading" class="gt_row gt_right">0.803</td>
+<td headers="SE" class="gt_row gt_right">0.045</td>
+<td headers="Z" class="gt_row gt_right">17.945</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.892</td>
-<td headers="Intercept" class="gt_row gt_right">7.675</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.933</td>
+<td headers="Intercept" class="gt_row gt_right">1.357</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest1</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g4_f</td>
-<td headers="Loading" class="gt_row gt_right">1.209</td>
-<td headers="SE" class="gt_row gt_right">0.159</td>
-<td headers="Z" class="gt_row gt_right">7.611</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.443</td>
-<td headers="Intercept" class="gt_row gt_right">6.059</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest1</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g5_f</td>
-<td headers="Loading" class="gt_row gt_right">1.493</td>
-<td headers="SE" class="gt_row gt_right">0.097</td>
-<td headers="Z" class="gt_row gt_right">15.384</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.810</td>
-<td headers="Intercept" class="gt_row gt_right">7.588</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm1</td>
-<td headers="Indicator" class="gt_row gt_left">com1_f</td>
-<td headers="Loading" class="gt_row gt_right">1.405</td>
-<td headers="SE" class="gt_row gt_right">0.080</td>
-<td headers="Z" class="gt_row gt_right">17.617</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.877</td>
-<td headers="Intercept" class="gt_row gt_right">8.247</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm1</td>
-<td headers="Indicator" class="gt_row gt_left">com2_f</td>
-<td headers="Loading" class="gt_row gt_right">1.655</td>
-<td headers="SE" class="gt_row gt_right">0.083</td>
-<td headers="Z" class="gt_row gt_right">19.885</td>
+<td headers="Latent Factor" class="gt_row gt_left">Dsat2</td>
+<td headers="Indicator" class="gt_row gt_left">dsat.pnrq2_m</td>
+<td headers="Loading" class="gt_row gt_right">0.776</td>
+<td headers="SE" class="gt_row gt_right">0.043</td>
+<td headers="Z" class="gt_row gt_right">18.267</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
 <td headers="Std. Loading" class="gt_row gt_right">0.944</td>
-<td headers="Intercept" class="gt_row gt_right">8.106</td>
+<td headers="Intercept" class="gt_row gt_right">1.286</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm1</td>
-<td headers="Indicator" class="gt_row gt_left">com3_f</td>
-<td headers="Loading" class="gt_row gt_right">-0.555</td>
-<td headers="SE" class="gt_row gt_right">0.191</td>
-<td headers="Z" class="gt_row gt_right">-2.903</td>
-<td headers="p-value" class="gt_row gt_left">0.004</td>
-<td headers="Std. Loading" class="gt_row gt_right">-0.178</td>
-<td headers="Intercept" class="gt_row gt_right">3.173</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm1</td>
-<td headers="Indicator" class="gt_row gt_left">com4_f</td>
-<td headers="Loading" class="gt_row gt_right">-0.754</td>
-<td headers="SE" class="gt_row gt_right">0.150</td>
-<td headers="Z" class="gt_row gt_right">-5.030</td>
+<td headers="Latent Factor" class="gt_row gt_left">Dsat2</td>
+<td headers="Indicator" class="gt_row gt_left">dsat.pnrq3_m</td>
+<td headers="Loading" class="gt_row gt_right">0.933</td>
+<td headers="SE" class="gt_row gt_right">0.051</td>
+<td headers="Z" class="gt_row gt_right">18.435</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">-0.310</td>
-<td headers="Intercept" class="gt_row gt_right">2.184</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.948</td>
+<td headers="Intercept" class="gt_row gt_right">1.400</td>
 </tr>
 <tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm1</td>
-<td headers="Indicator" class="gt_row gt_left">com5_f</td>
-<td headers="Loading" class="gt_row gt_right">1.694</td>
-<td headers="SE" class="gt_row gt_right">0.098</td>
-<td headers="Z" class="gt_row gt_right">17.359</td>
+<td headers="Latent Factor" class="gt_row gt_left">Dsat2</td>
+<td headers="Indicator" class="gt_row gt_left">dsat.pnrq4_m</td>
+<td headers="Loading" class="gt_row gt_right">0.872</td>
+<td headers="SE" class="gt_row gt_right">0.050</td>
+<td headers="Z" class="gt_row gt_right">17.447</td>
 <td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.868</td>
-<td headers="Intercept" class="gt_row gt_right">7.812</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Sat2</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g1_m</td>
-<td headers="Loading" class="gt_row gt_right">1.866</td>
-<td headers="SE" class="gt_row gt_right">0.099</td>
-<td headers="Z" class="gt_row gt_right">18.820</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.908</td>
-<td headers="Intercept" class="gt_row gt_right">7.463</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Sat2</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g2_m</td>
-<td headers="Loading" class="gt_row gt_right">1.755</td>
-<td headers="SE" class="gt_row gt_right">0.104</td>
-<td headers="Z" class="gt_row gt_right">16.933</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.830</td>
-<td headers="Intercept" class="gt_row gt_right">7.239</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Sat2</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g3_m</td>
-<td headers="Loading" class="gt_row gt_right">2.075</td>
-<td headers="SE" class="gt_row gt_right">0.105</td>
-<td headers="Z" class="gt_row gt_right">19.813</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.934</td>
-<td headers="Intercept" class="gt_row gt_right">7.039</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Sat2</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g4_m</td>
-<td headers="Loading" class="gt_row gt_right">1.962</td>
-<td headers="SE" class="gt_row gt_right">0.094</td>
-<td headers="Z" class="gt_row gt_right">20.858</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.962</td>
-<td headers="Intercept" class="gt_row gt_right">7.494</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Sat2</td>
-<td headers="Indicator" class="gt_row gt_left">sat.g5_m</td>
-<td headers="Loading" class="gt_row gt_right">2.118</td>
-<td headers="SE" class="gt_row gt_right">0.114</td>
-<td headers="Z" class="gt_row gt_right">18.614</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.902</td>
-<td headers="Intercept" class="gt_row gt_right">7.157</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt2</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g1_m</td>
-<td headers="Loading" class="gt_row gt_right">2.173</td>
-<td headers="SE" class="gt_row gt_right">0.125</td>
-<td headers="Z" class="gt_row gt_right">17.426</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.870</td>
-<td headers="Intercept" class="gt_row gt_right">3.129</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt2</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g2_m</td>
-<td headers="Loading" class="gt_row gt_right">2.089</td>
-<td headers="SE" class="gt_row gt_right">0.132</td>
-<td headers="Z" class="gt_row gt_right">15.875</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.820</td>
-<td headers="Intercept" class="gt_row gt_right">3.329</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt2</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g3_m</td>
-<td headers="Loading" class="gt_row gt_right">2.017</td>
-<td headers="SE" class="gt_row gt_right">0.138</td>
-<td headers="Z" class="gt_row gt_right">14.583</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.755</td>
-<td headers="Intercept" class="gt_row gt_right">3.710</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt2</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g4_m</td>
-<td headers="Loading" class="gt_row gt_right">2.276</td>
-<td headers="SE" class="gt_row gt_right">0.122</td>
-<td headers="Z" class="gt_row gt_right">18.604</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.907</td>
-<td headers="Intercept" class="gt_row gt_right">3.137</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Q_Alt2</td>
-<td headers="Indicator" class="gt_row gt_left">qalt.g5_m</td>
-<td headers="Loading" class="gt_row gt_right">2.394</td>
-<td headers="SE" class="gt_row gt_right">0.128</td>
-<td headers="Z" class="gt_row gt_right">18.655</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.909</td>
-<td headers="Intercept" class="gt_row gt_right">3.216</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest2</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g1_m</td>
-<td headers="Loading" class="gt_row gt_right">1.472</td>
-<td headers="SE" class="gt_row gt_right">0.098</td>
-<td headers="Z" class="gt_row gt_right">14.993</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.800</td>
-<td headers="Intercept" class="gt_row gt_right">7.757</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest2</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g2_m</td>
-<td headers="Loading" class="gt_row gt_right">1.575</td>
-<td headers="SE" class="gt_row gt_right">0.120</td>
-<td headers="Z" class="gt_row gt_right">13.145</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.717</td>
-<td headers="Intercept" class="gt_row gt_right">7.290</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest2</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g3_m</td>
-<td headers="Loading" class="gt_row gt_right">1.503</td>
-<td headers="SE" class="gt_row gt_right">0.087</td>
-<td headers="Z" class="gt_row gt_right">17.188</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.875</td>
-<td headers="Intercept" class="gt_row gt_right">7.875</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest2</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g4_m</td>
-<td headers="Loading" class="gt_row gt_right">1.304</td>
-<td headers="SE" class="gt_row gt_right">0.149</td>
-<td headers="Z" class="gt_row gt_right">8.736</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.502</td>
-<td headers="Intercept" class="gt_row gt_right">6.439</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Invest2</td>
-<td headers="Indicator" class="gt_row gt_left">invest.g5_m</td>
-<td headers="Loading" class="gt_row gt_right">1.425</td>
-<td headers="SE" class="gt_row gt_right">0.095</td>
-<td headers="Z" class="gt_row gt_right">14.996</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.798</td>
-<td headers="Intercept" class="gt_row gt_right">7.796</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm2</td>
-<td headers="Indicator" class="gt_row gt_left">com1_m</td>
-<td headers="Loading" class="gt_row gt_right">1.675</td>
-<td headers="SE" class="gt_row gt_right">0.081</td>
-<td headers="Z" class="gt_row gt_right">20.788</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.962</td>
-<td headers="Intercept" class="gt_row gt_right">8.102</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm2</td>
-<td headers="Indicator" class="gt_row gt_left">com2_m</td>
-<td headers="Loading" class="gt_row gt_right">1.634</td>
-<td headers="SE" class="gt_row gt_right">0.080</td>
-<td headers="Z" class="gt_row gt_right">20.436</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.954</td>
-<td headers="Intercept" class="gt_row gt_right">8.125</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm2</td>
-<td headers="Indicator" class="gt_row gt_left">com3_m</td>
-<td headers="Loading" class="gt_row gt_right">-0.788</td>
-<td headers="SE" class="gt_row gt_right">0.197</td>
-<td headers="Z" class="gt_row gt_right">-3.999</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">-0.242</td>
-<td headers="Intercept" class="gt_row gt_right">3.482</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm2</td>
-<td headers="Indicator" class="gt_row gt_left">com4_m</td>
-<td headers="Loading" class="gt_row gt_right">-1.201</td>
-<td headers="SE" class="gt_row gt_right">0.133</td>
-<td headers="Z" class="gt_row gt_right">-9.037</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">-0.525</td>
-<td headers="Intercept" class="gt_row gt_right">2.149</td>
-</tr>
-<tr>
-<td headers="Latent Factor" class="gt_row gt_left">Comm2</td>
-<td headers="Indicator" class="gt_row gt_left">com5_m</td>
-<td headers="Loading" class="gt_row gt_right">1.482</td>
-<td headers="SE" class="gt_row gt_right">0.094</td>
-<td headers="Z" class="gt_row gt_right">15.797</td>
-<td headers="p-value" class="gt_row gt_left">&lt; .001</td>
-<td headers="Std. Loading" class="gt_row gt_right">0.813</td>
-<td headers="Intercept" class="gt_row gt_right">7.929</td>
+<td headers="Std. Loading" class="gt_row gt_right">0.920</td>
+<td headers="Intercept" class="gt_row gt_right">1.395</td>
 </tr>
 </tbody>
 </table>
@@ -2001,7 +1747,7 @@ on the intraclass, intrapartner, and interpartner correlations, from
 larger multi-construct models:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/outputParamTab.html">outputParamTab</a></span><span class="op">(</span>dvn <span class="op">=</span> <span class="va">dvnIMS</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">ims.config.mod</span>,</span>
+<span><span class="fu"><a href="../reference/outputParamTab.html">outputParamTab</a></span><span class="op">(</span>dvn <span class="op">=</span> <span class="va">dvnPNRQ</span>, model <span class="op">=</span> <span class="st">"cfa"</span>, fit <span class="op">=</span> <span class="va">pnrq.config.mod</span>,</span>
 <span>               tabletype <span class="op">=</span> <span class="st">"correlation"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="ulbfdpbcyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -2457,102 +2203,38 @@ larger multi-construct models:</p>
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="a-"> </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Sat1">Sat1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Q_Alt1">Q_Alt1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Invest1">Invest1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Comm1">Comm1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Dsat1">Dsat1</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Sat2">Sat2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Q_Alt2">Q_Alt2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Invest2">Invest2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Comm2">Comm2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Dsat2">Dsat2</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
 <td headers=" " class="gt_row gt_left">Sat1</td>
 <td headers="Sat1" class="gt_row gt_left">—</td>
-<td headers="Q_Alt1" class="gt_row gt_left">—</td>
-<td headers="Invest1" class="gt_row gt_left">—</td>
-<td headers="Comm1" class="gt_row gt_left">—</td>
+<td headers="Dsat1" class="gt_row gt_left">—</td>
 <td headers="Sat2" class="gt_row gt_left">—</td>
-<td headers="Q_Alt2" class="gt_row gt_left">—</td>
-<td headers="Invest2" class="gt_row gt_left">—</td>
-<td headers="Comm2" class="gt_row gt_left">—</td>
+<td headers="Dsat2" class="gt_row gt_left">—</td>
 </tr>
 <tr>
-<td headers=" " class="gt_row gt_left">Q_Alt1</td>
-<td headers="Sat1" class="gt_row gt_left">-0.253***</td>
-<td headers="Q_Alt1" class="gt_row gt_left">—</td>
-<td headers="Invest1" class="gt_row gt_left">—</td>
-<td headers="Comm1" class="gt_row gt_left">—</td>
+<td headers=" " class="gt_row gt_left">Dsat1</td>
+<td headers="Sat1" class="gt_row gt_left">-0.666***</td>
+<td headers="Dsat1" class="gt_row gt_left">—</td>
 <td headers="Sat2" class="gt_row gt_left">—</td>
-<td headers="Q_Alt2" class="gt_row gt_left">—</td>
-<td headers="Invest2" class="gt_row gt_left">—</td>
-<td headers="Comm2" class="gt_row gt_left">—</td>
-</tr>
-<tr>
-<td headers=" " class="gt_row gt_left">Invest1</td>
-<td headers="Sat1" class="gt_row gt_left">0.723***</td>
-<td headers="Q_Alt1" class="gt_row gt_left">-0.177**</td>
-<td headers="Invest1" class="gt_row gt_left">—</td>
-<td headers="Comm1" class="gt_row gt_left">—</td>
-<td headers="Sat2" class="gt_row gt_left">—</td>
-<td headers="Q_Alt2" class="gt_row gt_left">—</td>
-<td headers="Invest2" class="gt_row gt_left">—</td>
-<td headers="Comm2" class="gt_row gt_left">—</td>
-</tr>
-<tr>
-<td headers=" " class="gt_row gt_left">Comm1</td>
-<td headers="Sat1" class="gt_row gt_left">0.749***</td>
-<td headers="Q_Alt1" class="gt_row gt_left">-0.303***</td>
-<td headers="Invest1" class="gt_row gt_left">0.819***</td>
-<td headers="Comm1" class="gt_row gt_left">—</td>
-<td headers="Sat2" class="gt_row gt_left">—</td>
-<td headers="Q_Alt2" class="gt_row gt_left">—</td>
-<td headers="Invest2" class="gt_row gt_left">—</td>
-<td headers="Comm2" class="gt_row gt_left">—</td>
+<td headers="Dsat2" class="gt_row gt_left">—</td>
 </tr>
 <tr>
 <td headers=" " class="gt_row gt_left">Sat2</td>
-<td headers="Sat1" class="gt_row gt_left">0.762***</td>
-<td headers="Q_Alt1" class="gt_row gt_left">-0.192**</td>
-<td headers="Invest1" class="gt_row gt_left">0.694***</td>
-<td headers="Comm1" class="gt_row gt_left">0.669***</td>
+<td headers="Sat1" class="gt_row gt_left">0.829***</td>
+<td headers="Dsat1" class="gt_row gt_left">-0.515***</td>
 <td headers="Sat2" class="gt_row gt_left">—</td>
-<td headers="Q_Alt2" class="gt_row gt_left">—</td>
-<td headers="Invest2" class="gt_row gt_left">—</td>
-<td headers="Comm2" class="gt_row gt_left">—</td>
+<td headers="Dsat2" class="gt_row gt_left">—</td>
 </tr>
 <tr>
-<td headers=" " class="gt_row gt_left">Q_Alt2</td>
-<td headers="Sat1" class="gt_row gt_left">-0.317***</td>
-<td headers="Q_Alt1" class="gt_row gt_left">0.612***</td>
-<td headers="Invest1" class="gt_row gt_left">-0.358***</td>
-<td headers="Comm1" class="gt_row gt_left">-0.389***</td>
-<td headers="Sat2" class="gt_row gt_left">-0.445***</td>
-<td headers="Q_Alt2" class="gt_row gt_left">—</td>
-<td headers="Invest2" class="gt_row gt_left">—</td>
-<td headers="Comm2" class="gt_row gt_left">—</td>
-</tr>
-<tr>
-<td headers=" " class="gt_row gt_left">Invest2</td>
-<td headers="Sat1" class="gt_row gt_left">0.591***</td>
-<td headers="Q_Alt1" class="gt_row gt_left">-0.186**</td>
-<td headers="Invest1" class="gt_row gt_left">0.751***</td>
-<td headers="Comm1" class="gt_row gt_left">0.649***</td>
-<td headers="Sat2" class="gt_row gt_left">0.725***</td>
-<td headers="Q_Alt2" class="gt_row gt_left">-0.467***</td>
-<td headers="Invest2" class="gt_row gt_left">—</td>
-<td headers="Comm2" class="gt_row gt_left">—</td>
-</tr>
-<tr>
-<td headers=" " class="gt_row gt_left">Comm2</td>
-<td headers="Sat1" class="gt_row gt_left">0.553***</td>
-<td headers="Q_Alt1" class="gt_row gt_left">-0.205**</td>
-<td headers="Invest1" class="gt_row gt_left">0.615***</td>
-<td headers="Comm1" class="gt_row gt_left">0.696***</td>
-<td headers="Sat2" class="gt_row gt_left">0.709***</td>
-<td headers="Q_Alt2" class="gt_row gt_left">-0.472***</td>
-<td headers="Invest2" class="gt_row gt_left">0.753***</td>
-<td headers="Comm2" class="gt_row gt_left">—</td>
+<td headers=" " class="gt_row gt_left">Dsat2</td>
+<td headers="Sat1" class="gt_row gt_left">-0.473***</td>
+<td headers="Dsat1" class="gt_row gt_left">0.642***</td>
+<td headers="Sat2" class="gt_row gt_left">-0.504***</td>
+<td headers="Dsat2" class="gt_row gt_left">—</td>
 </tr>
 </tbody>
 </table>
@@ -2568,7 +2250,7 @@ identify for which items and measurement model parameters there is
 significant noninvariance:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/outputConstraintTab.html">outputConstraintTab</a></span><span class="op">(</span><span class="va">ims.load.mod</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="fu"><a href="../reference/outputConstraintTab.html">outputConstraintTab</a></span><span class="op">(</span><span class="va">pnrq.load.mod</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="kgufivjubq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#kgufivjubq table {
@@ -3031,191 +2713,899 @@ significant noninvariance:</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.g1_f</td>
+<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.pnrq1_w</td>
 <td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.g1_m</td>
-<td headers="chi2" class="gt_row gt_right">2.027</td>
+<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.pnrq1_m</td>
+<td headers="chi2" class="gt_row gt_right">0.021</td>
 <td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.154</td>
+<td headers="pvalue" class="gt_row gt_right">0.885</td>
 <td headers="sig" class="gt_row gt_right">NA</td>
 </tr>
 <tr>
-<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.g2_f</td>
+<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.pnrq2_w</td>
 <td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.g2_m</td>
-<td headers="chi2" class="gt_row gt_right">1.209</td>
+<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.pnrq2_m</td>
+<td headers="chi2" class="gt_row gt_right">0.028</td>
 <td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.271</td>
+<td headers="pvalue" class="gt_row gt_right">0.867</td>
 <td headers="sig" class="gt_row gt_right">NA</td>
 </tr>
 <tr>
-<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.g3_f</td>
+<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.pnrq3_w</td>
 <td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.g3_m</td>
-<td headers="chi2" class="gt_row gt_right">0.112</td>
+<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.pnrq3_m</td>
+<td headers="chi2" class="gt_row gt_right">0.476</td>
 <td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.738</td>
+<td headers="pvalue" class="gt_row gt_right">0.490</td>
 <td headers="sig" class="gt_row gt_right">NA</td>
 </tr>
 <tr>
-<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.g4_f</td>
+<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.pnrq4_w</td>
 <td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.g4_m</td>
-<td headers="chi2" class="gt_row gt_right">0.913</td>
+<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.pnrq4_m</td>
+<td headers="chi2" class="gt_row gt_right">0.504</td>
 <td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.339</td>
+<td headers="pvalue" class="gt_row gt_right">0.478</td>
 <td headers="sig" class="gt_row gt_right">NA</td>
 </tr>
 <tr>
-<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.g5_f</td>
+<td headers="param1" class="gt_row gt_left">Dsat1 =~ dsat.pnrq1_w</td>
 <td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.g5_m</td>
-<td headers="chi2" class="gt_row gt_right">1.940</td>
+<td headers="param2" class="gt_row gt_left">Dsat2 =~ dsat.pnrq1_m</td>
+<td headers="chi2" class="gt_row gt_right">6.039</td>
 <td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.164</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Q_Alt1 =~ qalt.g1_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Q_Alt2 =~ qalt.g1_m</td>
-<td headers="chi2" class="gt_row gt_right">3.382</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.066</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Q_Alt1 =~ qalt.g2_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Q_Alt2 =~ qalt.g2_m</td>
-<td headers="chi2" class="gt_row gt_right">0.019</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.891</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Q_Alt1 =~ qalt.g3_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Q_Alt2 =~ qalt.g3_m</td>
-<td headers="chi2" class="gt_row gt_right">0.064</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.801</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Q_Alt1 =~ qalt.g4_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Q_Alt2 =~ qalt.g4_m</td>
-<td headers="chi2" class="gt_row gt_right">0.868</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.352</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Q_Alt1 =~ qalt.g5_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Q_Alt2 =~ qalt.g5_m</td>
-<td headers="chi2" class="gt_row gt_right">0.379</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.538</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Invest1 =~ invest.g1_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Invest2 =~ invest.g1_m</td>
-<td headers="chi2" class="gt_row gt_right">0.079</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.778</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Invest1 =~ invest.g2_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Invest2 =~ invest.g2_m</td>
-<td headers="chi2" class="gt_row gt_right">0.002</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.960</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Invest1 =~ invest.g3_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Invest2 =~ invest.g3_m</td>
-<td headers="chi2" class="gt_row gt_right">1.040</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.308</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Invest1 =~ invest.g4_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Invest2 =~ invest.g4_m</td>
-<td headers="chi2" class="gt_row gt_right">1.265</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.261</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Invest1 =~ invest.g5_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Invest2 =~ invest.g5_m</td>
-<td headers="chi2" class="gt_row gt_right">0.083</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.773</td>
-<td headers="sig" class="gt_row gt_right">NA</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Comm1 =~ com1_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Comm2 =~ com1_m</td>
-<td headers="chi2" class="gt_row gt_right">20.009</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.000</td>
-<td headers="sig" class="gt_row gt_right">***</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Comm1 =~ com2_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Comm2 =~ com2_m</td>
-<td headers="chi2" class="gt_row gt_right">5.970</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.015</td>
+<td headers="pvalue" class="gt_row gt_right">0.014</td>
 <td headers="sig" class="gt_row gt_right">*</td>
 </tr>
 <tr>
-<td headers="param1" class="gt_row gt_left">Comm1 =~ com3_f</td>
+<td headers="param1" class="gt_row gt_left">Dsat1 =~ dsat.pnrq2_w</td>
 <td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Comm2 =~ com3_m</td>
-<td headers="chi2" class="gt_row gt_right">0.624</td>
+<td headers="param2" class="gt_row gt_left">Dsat2 =~ dsat.pnrq2_m</td>
+<td headers="chi2" class="gt_row gt_right">9.322</td>
 <td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.430</td>
+<td headers="pvalue" class="gt_row gt_right">0.002</td>
+<td headers="sig" class="gt_row gt_right">**</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">Dsat1 =~ dsat.pnrq3_w</td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">Dsat2 =~ dsat.pnrq3_m</td>
+<td headers="chi2" class="gt_row gt_right">1.701</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.192</td>
 <td headers="sig" class="gt_row gt_right">NA</td>
 </tr>
 <tr>
-<td headers="param1" class="gt_row gt_left">Comm1 =~ com4_f</td>
+<td headers="param1" class="gt_row gt_left">Dsat1 =~ dsat.pnrq4_w</td>
 <td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Comm2 =~ com4_m</td>
-<td headers="chi2" class="gt_row gt_right">4.835</td>
+<td headers="param2" class="gt_row gt_left">Dsat2 =~ dsat.pnrq4_m</td>
+<td headers="chi2" class="gt_row gt_right">8.564</td>
 <td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.028</td>
-<td headers="sig" class="gt_row gt_right">*</td>
-</tr>
-<tr>
-<td headers="param1" class="gt_row gt_left">Comm1 =~ com5_f</td>
-<td headers="constraint" class="gt_row gt_left">==</td>
-<td headers="param2" class="gt_row gt_left">Comm2 =~ com5_m</td>
-<td headers="chi2" class="gt_row gt_right">12.220</td>
-<td headers="df" class="gt_row gt_right">1</td>
-<td headers="pvalue" class="gt_row gt_right">0.000</td>
-<td headers="sig" class="gt_row gt_right">***</td>
+<td headers="pvalue" class="gt_row gt_right">0.003</td>
+<td headers="sig" class="gt_row gt_right">**</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>In this particular example, significant noninvariance is present in
-all but the third item of the <em>Commitment</em> factor the the
-IMS.</p>
+<p>In this particular example, significant noninvariance is present for
+the loadings of most of the negative items (all but the third).</p>
+<p>If we to compute effect sizes to quantify the magnitude of
+noninvariance in the PNRQ, we need to generate a “partial invariance”
+model, in which noninvariant measurement parameters are free to vary
+between partners, while others remain constrained. For these effect
+sizes to be accurate, <strong>it is crucial</strong> that the model
+contains one or more “anchor items”–items that are free of
+noninvariance.</p>
+<p>To begin this process, we will use <code><a href="../reference/outputConstraintTab.html">outputConstraintTab()</a></code>
+to identify which loadings <em>and</em> intercepts are noninvariant:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/outputConstraintTab.html">outputConstraintTab</a></span><span class="op">(</span><span class="va">pnrq.int.mod</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="txvafbsnay" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#txvafbsnay table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#txvafbsnay thead, #txvafbsnay tbody, #txvafbsnay tfoot, #txvafbsnay tr, #txvafbsnay td, #txvafbsnay th {
+  border-style: none;
+}
+
+#txvafbsnay p {
+  margin: 0;
+  padding: 0;
+}
+
+#txvafbsnay .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#txvafbsnay .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#txvafbsnay .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#txvafbsnay .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#txvafbsnay .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#txvafbsnay .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#txvafbsnay .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#txvafbsnay .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#txvafbsnay .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#txvafbsnay .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#txvafbsnay .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#txvafbsnay .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#txvafbsnay .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#txvafbsnay .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#txvafbsnay .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#txvafbsnay .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#txvafbsnay .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#txvafbsnay .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#txvafbsnay .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#txvafbsnay .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_left {
+  text-align: left;
+}
+
+#txvafbsnay .gt_center {
+  text-align: center;
+}
+
+#txvafbsnay .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#txvafbsnay .gt_font_normal {
+  font-weight: normal;
+}
+
+#txvafbsnay .gt_font_bold {
+  font-weight: bold;
+}
+
+#txvafbsnay .gt_font_italic {
+  font-style: italic;
+}
+
+#txvafbsnay .gt_super {
+  font-size: 65%;
+}
+
+#txvafbsnay .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#txvafbsnay .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#txvafbsnay .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#txvafbsnay .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#txvafbsnay .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#txvafbsnay .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#txvafbsnay .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#txvafbsnay .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#txvafbsnay div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="param1">param1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="constraint">constraint</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="param2">param2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="chi2">chi2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="df">df</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="pvalue">pvalue</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="sig">sig</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.pnrq1_w</td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.pnrq1_m</td>
+<td headers="chi2" class="gt_row gt_right">0.013</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.909</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.pnrq2_w</td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.pnrq2_m</td>
+<td headers="chi2" class="gt_row gt_right">0.026</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.873</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.pnrq3_w</td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.pnrq3_m</td>
+<td headers="chi2" class="gt_row gt_right">0.472</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.492</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">Sat1 =~ sat.pnrq4_w</td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">Sat2 =~ sat.pnrq4_m</td>
+<td headers="chi2" class="gt_row gt_right">0.540</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.462</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">Dsat1 =~ dsat.pnrq1_w</td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">Dsat2 =~ dsat.pnrq1_m</td>
+<td headers="chi2" class="gt_row gt_right">5.840</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.016</td>
+<td headers="sig" class="gt_row gt_right">*</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">Dsat1 =~ dsat.pnrq2_w</td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">Dsat2 =~ dsat.pnrq2_m</td>
+<td headers="chi2" class="gt_row gt_right">9.218</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.002</td>
+<td headers="sig" class="gt_row gt_right">**</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">Dsat1 =~ dsat.pnrq3_w</td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">Dsat2 =~ dsat.pnrq3_m</td>
+<td headers="chi2" class="gt_row gt_right">1.540</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.215</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">Dsat1 =~ dsat.pnrq4_w</td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">Dsat2 =~ dsat.pnrq4_m</td>
+<td headers="chi2" class="gt_row gt_right">8.679</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.003</td>
+<td headers="sig" class="gt_row gt_right">**</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">sat.pnrq1_w ~1 </td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">sat.pnrq1_m ~1 </td>
+<td headers="chi2" class="gt_row gt_right">0.638</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.425</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">sat.pnrq2_w ~1 </td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">sat.pnrq2_m ~1 </td>
+<td headers="chi2" class="gt_row gt_right">0.023</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.878</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">sat.pnrq3_w ~1 </td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">sat.pnrq3_m ~1 </td>
+<td headers="chi2" class="gt_row gt_right">0.003</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.959</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">sat.pnrq4_w ~1 </td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">sat.pnrq4_m ~1 </td>
+<td headers="chi2" class="gt_row gt_right">0.540</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.462</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">dsat.pnrq1_w ~1 </td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">dsat.pnrq1_m ~1 </td>
+<td headers="chi2" class="gt_row gt_right">1.624</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.203</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">dsat.pnrq2_w ~1 </td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">dsat.pnrq2_m ~1 </td>
+<td headers="chi2" class="gt_row gt_right">0.396</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.529</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">dsat.pnrq3_w ~1 </td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">dsat.pnrq3_m ~1 </td>
+<td headers="chi2" class="gt_row gt_right">2.867</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.090</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+<tr>
+<td headers="param1" class="gt_row gt_left">dsat.pnrq4_w ~1 </td>
+<td headers="constraint" class="gt_row gt_left">==</td>
+<td headers="param2" class="gt_row gt_left">dsat.pnrq4_m ~1 </td>
+<td headers="chi2" class="gt_row gt_right">0.134</td>
+<td headers="df" class="gt_row gt_right">1</td>
+<td headers="pvalue" class="gt_row gt_right">0.714</td>
+<td headers="sig" class="gt_row gt_right">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This output corroborates what we saw before: there isn’t intercept
+noninvariance to worry about (though now we have the added peace of mind
+that this is true for each intercept, individually, not just as a
+“family” of parameters).</p>
+<p>While <code>dySEM</code> does not yet automate the production of
+partial-invariance model syntax, we can use the model syntax from the
+intercept invariance model and make some light adjustments:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">script.pnrq.int</span><span class="op">)</span></span>
+<span><span class="co">#&gt; #Measurement Model</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; #Loadings</span></span>
+<span><span class="co">#&gt; Sat1 =~ NA*sat.pnrq1_w + lx1*sat.pnrq1_w + lx2*sat.pnrq2_w + lx3*sat.pnrq3_w + lx4*sat.pnrq4_w</span></span>
+<span><span class="co">#&gt; Dsat1 =~ NA*dsat.pnrq1_w + lx5*dsat.pnrq1_w + lx6*dsat.pnrq2_w + lx7*dsat.pnrq3_w + lx8*dsat.pnrq4_w</span></span>
+<span><span class="co">#&gt; Sat2 =~ NA*sat.pnrq1_m + lx1*sat.pnrq1_m + lx2*sat.pnrq2_m + lx3*sat.pnrq3_m + lx4*sat.pnrq4_m</span></span>
+<span><span class="co">#&gt; Dsat2 =~ NA*dsat.pnrq1_m + lx5*dsat.pnrq1_m + lx6*dsat.pnrq2_m + lx7*dsat.pnrq3_m + lx8*dsat.pnrq4_m</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; #Intercepts</span></span>
+<span><span class="co">#&gt; sat.pnrq1_w ~ t1*1</span></span>
+<span><span class="co">#&gt; sat.pnrq2_w ~ t2*1</span></span>
+<span><span class="co">#&gt; sat.pnrq3_w ~ t3*1</span></span>
+<span><span class="co">#&gt; sat.pnrq4_w ~ t4*1</span></span>
+<span><span class="co">#&gt; dsat.pnrq1_w ~ t5*1</span></span>
+<span><span class="co">#&gt; dsat.pnrq2_w ~ t6*1</span></span>
+<span><span class="co">#&gt; dsat.pnrq3_w ~ t7*1</span></span>
+<span><span class="co">#&gt; dsat.pnrq4_w ~ t8*1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; sat.pnrq1_m ~ t1*1</span></span>
+<span><span class="co">#&gt; sat.pnrq2_m ~ t2*1</span></span>
+<span><span class="co">#&gt; sat.pnrq3_m ~ t3*1</span></span>
+<span><span class="co">#&gt; sat.pnrq4_m ~ t4*1</span></span>
+<span><span class="co">#&gt; dsat.pnrq1_m ~ t5*1</span></span>
+<span><span class="co">#&gt; dsat.pnrq2_m ~ t6*1</span></span>
+<span><span class="co">#&gt; dsat.pnrq3_m ~ t7*1</span></span>
+<span><span class="co">#&gt; dsat.pnrq4_m ~ t8*1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; #Residual Variances</span></span>
+<span><span class="co">#&gt; sat.pnrq1_w ~~ th1*sat.pnrq1_w</span></span>
+<span><span class="co">#&gt; sat.pnrq2_w ~~ th2*sat.pnrq2_w</span></span>
+<span><span class="co">#&gt; sat.pnrq3_w ~~ th3*sat.pnrq3_w</span></span>
+<span><span class="co">#&gt; sat.pnrq4_w ~~ th4*sat.pnrq4_w</span></span>
+<span><span class="co">#&gt; dsat.pnrq1_w ~~ th5*dsat.pnrq1_w</span></span>
+<span><span class="co">#&gt; dsat.pnrq2_w ~~ th6*dsat.pnrq2_w</span></span>
+<span><span class="co">#&gt; dsat.pnrq3_w ~~ th7*dsat.pnrq3_w</span></span>
+<span><span class="co">#&gt; dsat.pnrq4_w ~~ th8*dsat.pnrq4_w</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; sat.pnrq1_m ~~ th9*sat.pnrq1_m</span></span>
+<span><span class="co">#&gt; sat.pnrq2_m ~~ th10*sat.pnrq2_m</span></span>
+<span><span class="co">#&gt; sat.pnrq3_m ~~ th11*sat.pnrq3_m</span></span>
+<span><span class="co">#&gt; sat.pnrq4_m ~~ th12*sat.pnrq4_m</span></span>
+<span><span class="co">#&gt; dsat.pnrq1_m ~~ th13*dsat.pnrq1_m</span></span>
+<span><span class="co">#&gt; dsat.pnrq2_m ~~ th14*dsat.pnrq2_m</span></span>
+<span><span class="co">#&gt; dsat.pnrq3_m ~~ th15*dsat.pnrq3_m</span></span>
+<span><span class="co">#&gt; dsat.pnrq4_m ~~ th16*dsat.pnrq4_m</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; #Residual Covariances</span></span>
+<span><span class="co">#&gt; sat.pnrq1_w ~~ sat.pnrq1_m</span></span>
+<span><span class="co">#&gt; sat.pnrq2_w ~~ sat.pnrq2_m</span></span>
+<span><span class="co">#&gt; sat.pnrq3_w ~~ sat.pnrq3_m</span></span>
+<span><span class="co">#&gt; sat.pnrq4_w ~~ sat.pnrq4_m</span></span>
+<span><span class="co">#&gt; dsat.pnrq1_w ~~ dsat.pnrq1_m</span></span>
+<span><span class="co">#&gt; dsat.pnrq2_w ~~ dsat.pnrq2_m</span></span>
+<span><span class="co">#&gt; dsat.pnrq3_w ~~ dsat.pnrq3_m</span></span>
+<span><span class="co">#&gt; dsat.pnrq4_w ~~ dsat.pnrq4_m</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; #Structural Model</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; #Latent (Co)Variances</span></span>
+<span><span class="co">#&gt; Sat1 ~~ psv1*Sat1 + 1*Sat1</span></span>
+<span><span class="co">#&gt; Dsat1 ~~ psv2*Dsat1 + 1*Dsat1</span></span>
+<span><span class="co">#&gt; Sat2 ~~ psv3*Sat2 + NA*Sat2</span></span>
+<span><span class="co">#&gt; Dsat2 ~~ psv4*Dsat2 + NA*Dsat2</span></span>
+<span><span class="co">#&gt; Sat1 ~~ psi12*Dsat1</span></span>
+<span><span class="co">#&gt; Sat1 ~~ psi13*Sat2</span></span>
+<span><span class="co">#&gt; Sat1 ~~ psi14*Dsat2</span></span>
+<span><span class="co">#&gt; Dsat1 ~~ psi23*Sat2</span></span>
+<span><span class="co">#&gt; Dsat1 ~~ psi24*Dsat2</span></span>
+<span><span class="co">#&gt; Sat2 ~~ psi34*Dsat2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; #Latent Means</span></span>
+<span><span class="co">#&gt; Sat1 ~ a1*1 + 0*1</span></span>
+<span><span class="co">#&gt; Dsat1 ~ a2*1 + 0*1</span></span>
+<span><span class="co">#&gt; Sat2 ~ a3*1</span></span>
+<span><span class="co">#&gt; Dsat2 ~ a4*1</span></span></code></pre></div>
+<p>The output of <code><a href="../reference/outputConstraintTab.html">outputConstraintTab()</a></code> indicated that the
+loadings for items 1, 2, and 4 of the negative subscale were
+noninvariant, so we simply “free” these loadings by removing the
+equality constraints (i.e., the shared parameter labels) for them:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">script.pnrq.partial</span> <span class="op">&lt;-</span> <span class="st">'</span></span>
+<span><span class="st">#Measurement Model</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Loadings (remove l5*, l6*, and l8* for partial invariance</span></span>
+<span><span class="st"># in Dsat1 and Dsat2)</span></span>
+<span><span class="st">Sat1 =~ NA*sat.pnrq1_w + lx1*sat.pnrq1_w + lx2*sat.pnrq2_w + lx3*sat.pnrq3_w + lx4*sat.pnrq4_w</span></span>
+<span><span class="st">Dsat1 =~ NA*dsat.pnrq1_w + dsat.pnrq1_w + dsat.pnrq2_w + lx7*dsat.pnrq3_w + dsat.pnrq4_w</span></span>
+<span><span class="st">Sat2 =~ NA*sat.pnrq1_m + lx1*sat.pnrq1_m + lx2*sat.pnrq2_m + lx3*sat.pnrq3_m + lx4*sat.pnrq4_m</span></span>
+<span><span class="st">Dsat2 =~ NA*dsat.pnrq1_m + dsat.pnrq1_m + dsat.pnrq2_m + lx7*dsat.pnrq3_m + dsat.pnrq4_m</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Intercepts</span></span>
+<span><span class="st">sat.pnrq1_w ~ t1*1</span></span>
+<span><span class="st">sat.pnrq2_w ~ t2*1</span></span>
+<span><span class="st">sat.pnrq3_w ~ t3*1</span></span>
+<span><span class="st">sat.pnrq4_w ~ t4*1</span></span>
+<span><span class="st">dsat.pnrq1_w ~ t5*1</span></span>
+<span><span class="st">dsat.pnrq2_w ~ t6*1</span></span>
+<span><span class="st">dsat.pnrq3_w ~ t7*1</span></span>
+<span><span class="st">dsat.pnrq4_w ~ t8*1</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">sat.pnrq1_m ~ t1*1</span></span>
+<span><span class="st">sat.pnrq2_m ~ t2*1</span></span>
+<span><span class="st">sat.pnrq3_m ~ t3*1</span></span>
+<span><span class="st">sat.pnrq4_m ~ t4*1</span></span>
+<span><span class="st">dsat.pnrq1_m ~ t5*1</span></span>
+<span><span class="st">dsat.pnrq2_m ~ t6*1</span></span>
+<span><span class="st">dsat.pnrq3_m ~ t7*1</span></span>
+<span><span class="st">dsat.pnrq4_m ~ t8*1</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Residual Variances</span></span>
+<span><span class="st">sat.pnrq1_w ~~ th1*sat.pnrq1_w</span></span>
+<span><span class="st">sat.pnrq2_w ~~ th2*sat.pnrq2_w</span></span>
+<span><span class="st">sat.pnrq3_w ~~ th3*sat.pnrq3_w</span></span>
+<span><span class="st">sat.pnrq4_w ~~ th4*sat.pnrq4_w</span></span>
+<span><span class="st">dsat.pnrq1_w ~~ th5*dsat.pnrq1_w</span></span>
+<span><span class="st">dsat.pnrq2_w ~~ th6*dsat.pnrq2_w</span></span>
+<span><span class="st">dsat.pnrq3_w ~~ th7*dsat.pnrq3_w</span></span>
+<span><span class="st">dsat.pnrq4_w ~~ th8*dsat.pnrq4_w</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">sat.pnrq1_m ~~ th9*sat.pnrq1_m</span></span>
+<span><span class="st">sat.pnrq2_m ~~ th10*sat.pnrq2_m</span></span>
+<span><span class="st">sat.pnrq3_m ~~ th11*sat.pnrq3_m</span></span>
+<span><span class="st">sat.pnrq4_m ~~ th12*sat.pnrq4_m</span></span>
+<span><span class="st">dsat.pnrq1_m ~~ th13*dsat.pnrq1_m</span></span>
+<span><span class="st">dsat.pnrq2_m ~~ th14*dsat.pnrq2_m</span></span>
+<span><span class="st">dsat.pnrq3_m ~~ th15*dsat.pnrq3_m</span></span>
+<span><span class="st">dsat.pnrq4_m ~~ th16*dsat.pnrq4_m</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Residual Covariances</span></span>
+<span><span class="st">sat.pnrq1_w ~~ sat.pnrq1_m</span></span>
+<span><span class="st">sat.pnrq2_w ~~ sat.pnrq2_m</span></span>
+<span><span class="st">sat.pnrq3_w ~~ sat.pnrq3_m</span></span>
+<span><span class="st">sat.pnrq4_w ~~ sat.pnrq4_m</span></span>
+<span><span class="st">dsat.pnrq1_w ~~ dsat.pnrq1_m</span></span>
+<span><span class="st">dsat.pnrq2_w ~~ dsat.pnrq2_m</span></span>
+<span><span class="st">dsat.pnrq3_w ~~ dsat.pnrq3_m</span></span>
+<span><span class="st">dsat.pnrq4_w ~~ dsat.pnrq4_m</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Structural Model</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Latent (Co)Variances</span></span>
+<span><span class="st">Sat1 ~~ psi1*Sat1 + 1*Sat1</span></span>
+<span><span class="st">Dsat1 ~~ psi2*Dsat1 + 1*Dsat1</span></span>
+<span><span class="st">Sat2 ~~ psi3*Sat2 + NA*Sat2</span></span>
+<span><span class="st">Dsat2 ~~ psi4*Dsat2 + NA*Dsat2</span></span>
+<span><span class="st">Sat1 ~~ psi12*Dsat1</span></span>
+<span><span class="st">Sat1 ~~ psi13*Sat2</span></span>
+<span><span class="st">Sat1 ~~ psi14*Dsat2</span></span>
+<span><span class="st">Dsat1 ~~ psi23*Sat2</span></span>
+<span><span class="st">Dsat1 ~~ psi24*Dsat2</span></span>
+<span><span class="st">Sat2 ~~ psi34*Dsat2</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#Latent Means</span></span>
+<span><span class="st">Sat1 ~ a1*1 + 0*1</span></span>
+<span><span class="st">Dsat1 ~ a2*1 + 0*1</span></span>
+<span><span class="st">Sat2 ~ a3*1</span></span>
+<span><span class="st">Dsat2 ~ a4*1</span></span>
+<span><span class="st">'</span></span></code></pre></div>
+<p>Now we fit the partial invariance model:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">pnrq.partial.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">script.pnrq.partial</span>, data <span class="op">=</span> <span class="va">pnrqM_dat</span><span class="op">)</span></span></code></pre></div>
+<p>We can then supply this partially invariant model (with anchor items)
+to <code><a href="../reference/outputInvarItem.html">outputInvarItem()</a></code>, which identifies the noninvariant
+measurement parameters for each item in each factor, and (for those that
+are noninvariant) calculates a dyadic version of the dMACS noninvariance
+effect size metric first proposed by Nye and Drasgow (2011), and later
+reviewed and expanded upon by Gunn et al. (2020).</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">#Key arguments are data file, dvn, and fitted invariance model</span></span>
+<span><span class="fu"><a href="../reference/outputInvarItem.html">outputInvarItem</a></span><span class="op">(</span>dvn <span class="op">=</span> <span class="va">dvnPNRQ</span>, fit <span class="op">=</span> <span class="va">pnrq.partial.mod</span>, </span>
+<span>                partialScript <span class="op">=</span> <span class="va">script.pnrq.partial</span>, </span>
+<span>                dat <span class="op">=</span> <span class="va">pnrqM_dat</span>,</span>
+<span>                gtTab <span class="op">=</span> <span class="cn">FALSE</span>, writeTo <span class="op">=</span> <span class="cn">NULL</span>, fileName <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 5</span></span></span>
+<span><span class="co">#&gt;   LV    Item                  LoadingNoninvariance InterceptNoninvariance  dMACS</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Sat   sat.pnrq1_w / sat.pn… No                   No                     0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Sat   sat.pnrq2_w / sat.pn… No                   No                     0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Sat   sat.pnrq3_w / sat.pn… No                   No                     0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Sat   sat.pnrq4_w / sat.pn… No                   No                     0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Dsat  dsat.pnrq1_w / dsat.… Yes                  No                     0.12  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Dsat  dsat.pnrq2_w / dsat.… Yes                  No                     0.165 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> Dsat  dsat.pnrq3_w / dsat.… No                   No                     0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> Dsat  dsat.pnrq4_w / dsat.… Yes                  No                     0.056<span style="text-decoration: underline;">8</span></span></span></code></pre></div>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

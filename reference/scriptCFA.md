@@ -7,10 +7,24 @@ loading, and intercept invariant measurement models for either a group
 of latent variables (e.g., different sub-scales from a self-report
 measures).
 
+`scriptMultiCor()` is a thin wrapper around `scriptCFA()` provided as a
+synonym for users who think of these models as dyadic multi-factor
+correlated-factor models. It takes the same arguments as `scriptCFA()`
+and returns the identical lavaan syntax.
+
 ## Usage
 
 ``` r
 scriptCFA(
+  dvn,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = c("variances", "means"),
+  writeTo = NULL,
+  fileName = NULL
+)
+
+scriptMultiCor(
   dvn,
   scaleset = "FF",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -70,6 +84,9 @@ scriptCFA(
   be overwritten.
 
 ## Value
+
+character object of lavaan script that can be passed immediately to
+lavaan functions
 
 character object of lavaan script that can be passed immediately to
 lavaan functions

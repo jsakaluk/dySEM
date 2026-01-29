@@ -8,7 +8,7 @@ reporting on latent models of dyadic data via
 and used in the course of the research described in Sakaluk, Fisher, and
 Kilshaw (2021), and has since undergone considerable expansion.
 
-`dySEM` currently contains **68** functions, of which **25** are
+`dySEM` currently contains **70** functions, of which **27** are
 user-facing (i.e., exported), which are covered by **536** unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
@@ -27,7 +27,6 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-
 devtools::install_github("jsakaluk/dySEM")
 ```
 
@@ -119,10 +118,6 @@ There are additional optional functions, as well, that help users to
 calculate certain additional quantitative values (e.g., reliability,
 corrected model fit indexes in models with indistinguishable dyad
 members).
-
-``` R
-#> Warning: package 'ggplot2' was built under R version 4.4.3
-```
 
 ### 1. Import and wrangle **data**
 
@@ -329,6 +324,7 @@ These functions are used to generate lavaan syntax corresponding to
 models representing more than two constructs within a dyadic data set
 
 - [`scriptCFA()`](https://jsakaluk.github.io/dySEM/reference/scriptCFA.md)
+  [`scriptMultiCor()`](https://jsakaluk.github.io/dySEM/reference/scriptCFA.md)
   : A Function That Writes, Saves, and Exports Syntax for Fitting Latent
   Dyadic Confirmatory Factor Analysis (CFA) Models with Multiple Factors
 - [`scriptDyEFA()`](https://jsakaluk.github.io/dySEM/reference/scriptDyEFA.md)
@@ -361,6 +357,8 @@ lavaan models in tabular or path diagram form
   : A function That Exports SEM diagrams based on dySEM models
 - [`outputInvarCompTab()`](https://jsakaluk.github.io/dySEM/reference/outputInvarCompTab.md)
   : Compare Model Fit of Nested Dyadic Invariance Models
+- [`outputInvarItem()`](https://jsakaluk.github.io/dySEM/reference/outputInvarItem.md)
+  : Output Item-Level Invariance Summary Table
 - [`outputConstraintTab()`](https://jsakaluk.github.io/dySEM/reference/outputConstraintTab.md)
   : Evaluate Invariance Equality Constraints in a specified Dyadic
   Invariance Model

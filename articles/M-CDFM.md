@@ -4,15 +4,17 @@
 
 This tutorial is a supplemental material from the following article:
 
-Sakaluk, J. K., & Camanto, O. J. (2025). *Dyadic Data Analysis via
-Structural Equation Modeling with Latent Variables: A Tutorial with the
-dySEM package for R*.
+Prine-Munroe, M., Sakaluk, J. K., Camanto, O., & Quinn-Nilas, C. (2025).
+*Evaluating Multi-Factor Dyadic Invariance in Couples’ Relationship
+Satisfaction Using dySEM*.
 
 This article is intended to serve as the primary citation of record for
-the `dySEM` package’s functionality for the techniques described in this
-tutorial. **If this tutorial has informed your modeling strategy
-(including but not limited to your use of `dySEM`), please cite this
-article**.
+the `dySEM` package’s functionality for fitting and interpreting the the
+Multiple Correlated Dyadic Factors Model with the help of the
+[`scriptCFA()`](https://jsakaluk.github.io/dySEM/reference/scriptCFA.md)
+function (and others) in `dySEM`. **If this tutorial has informed your
+modeling strategy (including but not limited to your use of `dySEM`),
+please cite this article**.
 
 The citation of research software aiding in analyses—like the use of
 `dySEM`—is a required practice, according to the Journal Article
@@ -80,41 +82,41 @@ library(lavaan) #for fitting dyadic SEMs
 
 For this exemplar, we use two built-in datasets from `dySEM` (focusing
 more on one). Of primary interest, the
-[`imsM`](https://jsakaluk.github.io/dySEM/reference/imsM.html) dataset
-corresponds to data from the “global” items from 282 mixed-sex couples
-responding to the full Rusbult et al. (1998) Investment Model Scale
-(IMS) (including 5 items each for satisfaction, quality of alternatives,
-investment, and commitment). More information about this data set can be
-found in [Sakaluk et al. (2021)](https://doi.org/10.1111/pere.12341).
+[`pnrqM`](https://jsakaluk.github.io/dySEM/reference/pnrqM.html) dataset
+corresponds to data from a short-form of the Positive-Negative
+Relationship Quality Scale (PNRQ; Rogge et al., 2017) from 219
+(M)ixed-sex couples (including 4 items each for positive and negative).
+More information about this data set can be found in Prine et al. (under
+review).
 
-All variables in this data frame follow a [“sip” naming pattern](NA):
+All variables in this data frame follow a [“sip” naming pattern](NA),
+with a delimiting “\_” between the item number and distinguishing
+partner character:
 
 ``` r
 
-imsM_dat <- imsM
+pnrqM_dat <- pnrqM
 
-imsM_dat |> 
+pnrqM_dat |> 
   as_tibble()
-#> # A tibble: 282 × 40
-#>    sat.g1_f sat.g2_f sat.g3_f sat.g4_f sat.g5_f qalt.g1_f qalt.g2_f qalt.g3_f
-#>       <int>    <int>    <int>    <int>    <int>     <int>     <int>     <int>
-#>  1        2        1        1        2        1         3         1         5
-#>  2        9        9        9        9        9         5         1         1
-#>  3        6        5        7        5        7         5         3         5
-#>  4        9        5        9        9        9         8         9         9
-#>  5        1        7        1        2        2         9         7         8
-#>  6        8        8        8        8        8         1         1         5
-#>  7        9        9        9        9        9         1         1         1
-#>  8        1        1        1        1        1         1         1         1
-#>  9        6        5        4        6        6         7         5         7
-#> 10        9        9        9        9        9         1         1         1
-#> # ℹ 272 more rows
-#> # ℹ 32 more variables: qalt.g4_f <int>, qalt.g5_f <int>, invest.g1_f <int>,
-#> #   invest.g2_f <int>, invest.g3_f <int>, invest.g4_f <int>, invest.g5_f <int>,
-#> #   com1_f <int>, com2_f <int>, com3_f <int>, com4_f <int>, com5_f <int>,
-#> #   sat.g1_m <int>, sat.g2_m <int>, sat.g3_m <int>, sat.g4_m <int>,
-#> #   sat.g5_m <int>, qalt.g1_m <int>, qalt.g2_m <int>, qalt.g3_m <int>,
-#> #   qalt.g4_m <int>, qalt.g5_m <int>, invest.g1_m <int>, invest.g2_m <int>, …
+#> # A tibble: 219 × 16
+#>    sat.pnrq1_w sat.pnrq2_w sat.pnrq3_w sat.pnrq4_w dsat.pnrq1_w dsat.pnrq2_w
+#>          <dbl>       <dbl>       <dbl>       <dbl>        <dbl>        <dbl>
+#>  1           5           5           5           5            1            1
+#>  2           6           6           6           6            1            1
+#>  3           5           5           4           6            3            5
+#>  4           5           5           6           5            1            2
+#>  5           4           4           5           4            1            1
+#>  6           4           4           4           3            1            1
+#>  7           5           5           5           5            1            1
+#>  8           5           5           5           5            1            1
+#>  9           5           6           6           6            1            1
+#> 10           3           3           4           4            1            1
+#> # ℹ 209 more rows
+#> # ℹ 10 more variables: dsat.pnrq3_w <dbl>, dsat.pnrq4_w <dbl>,
+#> #   sat.pnrq1_m <dbl>, sat.pnrq2_m <dbl>, sat.pnrq3_m <dbl>, sat.pnrq4_m <dbl>,
+#> #   dsat.pnrq1_m <dbl>, dsat.pnrq2_m <dbl>, dsat.pnrq3_m <dbl>,
+#> #   dsat.pnrq4_m <dbl>
 ```
 
 We will also use data from the
@@ -127,7 +129,7 @@ have not yet been reported, the data collection took place in parallel
 to the analyses reported in [Sakaluk et
 al. (2021)](https://doi.org/10.1111/pere.12341).
 
-In contrast to `imsM`, variable names in the `prqcQ` data frame follow
+In contrast to `pnrqM`, variable names in the `prqcQ` data frame follow
 the [“spi” naming
 pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html):
 
@@ -161,11 +163,11 @@ prqc_dat |>
 
 ## 1. Scraping the Variables
 
-Users will take note that the `imsM` dataset contains variables for
-items for which there are distinctive stems for each subscale (e.g.,
-“sat”, “invest”, “com”), whereas the `prqcQ` dataset contains a
-repetitive uninformative stem (“prqc”), despite the presence of
-multidimensionality. Rest assured,
+Users will take note that the `pnrqM` dataset contains variables for
+items for which there are distinctive stems for the positive and
+negative subscales (i.e., “sat.pnrq”, “dsat.pnrq”), whereas the `prqcQ`
+dataset contains a repetitive uninformative stem (“prqc”), despite the
+presence of multidimensionality. Rest assured,
 [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html)
 has been developed with functionality to scrape variable information
 from both kinds of stems from multidimensional instruments. Further,
@@ -175,7 +177,7 @@ with just one added “twist” from the simpler case of uni-construct or
 bi-construct models: the creation of a *named list* spelling out the
 naming ’formula’ for each set of indicators.
 
-### Distinctive Indicator Stems
+### Distinctive Indicator Stems (with `pnrqM`)
 
 The case when indicators have distinctive stems—usually indicating the
 putative factor onto which they load (e.g., “sat”, “com”)—is the most
@@ -184,7 +186,7 @@ straightforward to scrape with
 
 In this case, users will need to provide the names of the latent
 variables, the stem for each set of indicators, and the delimiters used
-in the variable names. In the case of the `imsM` exemplar (i.e., when
+in the variable names. In the case of the `pnrqM` exemplar (i.e., when
 stems are distinct), the named list must contain the following four
 elements/vectors (and the names of these elements/vectors must follow
 what is shown below):
@@ -192,16 +194,16 @@ what is shown below):
 - **lvnames**: a vector of the (arbitrary) names that will be used for
   the latent variables in the `lavaan` script
 - **stem**: a vector containing each distinctive stem for each set of
-  indicators (e.g., “sat.g”, “qalt.g”, “invest.g”, “com”)—
+  indicators (in this case: “sat” and “dsat”)—
   [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.md)
   will use these to search for indicators with matching stems
 - **delim1**: a vector containing the first delimiter used in the
-  variable names (e.g., ““,”“,”“,”“)—
+  variable names (e.g., “.”, “\_“)—
   [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.md)
   will use these to search for indicators with matching patterns of
   delimination
 - **delim2**: a vector containing the second delimiter used in the
-  variable names (e.g., “*”, ”*”, “*”, ”*”)—
+  variable names—
   [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.md)
   will use these to search for indicators with matching patterns of
   delimination
@@ -215,15 +217,15 @@ own object:
 ``` r
 
 #When different factor use distinct stems:
-imsList <- list(lvnames = c("Sat", "Q_Alt", "Invest", "Comm"),
-stem = c("sat.g", "qalt.g", "invest.g", "com"),
-delim1 = c("", "", "", ""),
-delim2 = c("_", "_", "_", "_"))
+pnrqMList <- list(lvnames = c("Sat", "Dsat"),
+stem = c("sat.pnrq", "dsat.pnrq"),
+delim1 = c("", ""),#no delimeter between stem and item number
+delim2 = c("_", "_"))
 ```
 
 This list can then be passed to
 [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.md)
-to scrape the variable names from the `imsM` data frame, using the
+to scrape the variable names from the `pnrqM` data frame, using the
 `var_list` argument. The `var_list_order` argument must then be set to
 indicate that the variables follow the [“sip” naming
 pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html), and
@@ -232,20 +234,18 @@ distinguishing characters must also be specified with the
 
 ``` r
 
-dvnIMS <- scrapeVarCross(imsM,
-var_list = imsList,
+dvnPNRQ <- scrapeVarCross(pnrqM,
+var_list = pnrqMList,
 var_list_order = "sip",
-distinguish_1 = "f",
+distinguish_1 = "w",
 distinguish_2 = "m")
 #> 
 #> ── Variable Scraping Summary ──
 #> 
-#> ✔ Successfully scraped 4 latent variables
-#> ℹ Sat: 5 indicators for P1 (f), 5 indicators for P2 (m)
-#> ℹ Q_Alt: 5 indicators for P1 (f), 5 indicators for P2 (m)
-#> ℹ Invest: 5 indicators for P1 (f), 5 indicators for P2 (m)
-#> ℹ Comm: 5 indicators for P1 (f), 5 indicators for P2 (m)
-#> ℹ Total indicators: 40
+#> ✔ Successfully scraped 2 latent variables
+#> ℹ Sat: 4 indicators for P1 (w), 4 indicators for P2 (m)
+#> ℹ Dsat: 4 indicators for P1 (w), 4 indicators for P2 (m)
+#> ℹ Total indicators: 16
 ```
 
 The resulting *dvn* remains as unremarkable as ever, but continues to
@@ -259,49 +259,37 @@ variable names):
 
 ``` r
 
-dvnIMS
+dvnPNRQ
 #> $p1xvarnames
 #> $p1xvarnames$Sat
-#> [1] "sat.g1_f" "sat.g2_f" "sat.g3_f" "sat.g4_f" "sat.g5_f"
+#> [1] "sat.pnrq1_w" "sat.pnrq2_w" "sat.pnrq3_w" "sat.pnrq4_w"
 #> 
-#> $p1xvarnames$Q_Alt
-#> [1] "qalt.g1_f" "qalt.g2_f" "qalt.g3_f" "qalt.g4_f" "qalt.g5_f"
-#> 
-#> $p1xvarnames$Invest
-#> [1] "invest.g1_f" "invest.g2_f" "invest.g3_f" "invest.g4_f" "invest.g5_f"
-#> 
-#> $p1xvarnames$Comm
-#> [1] "com1_f" "com2_f" "com3_f" "com4_f" "com5_f"
+#> $p1xvarnames$Dsat
+#> [1] "dsat.pnrq1_w" "dsat.pnrq2_w" "dsat.pnrq3_w" "dsat.pnrq4_w"
 #> 
 #> 
 #> $p2xvarnames
 #> $p2xvarnames$Sat
-#> [1] "sat.g1_m" "sat.g2_m" "sat.g3_m" "sat.g4_m" "sat.g5_m"
+#> [1] "sat.pnrq1_m" "sat.pnrq2_m" "sat.pnrq3_m" "sat.pnrq4_m"
 #> 
-#> $p2xvarnames$Q_Alt
-#> [1] "qalt.g1_m" "qalt.g2_m" "qalt.g3_m" "qalt.g4_m" "qalt.g5_m"
-#> 
-#> $p2xvarnames$Invest
-#> [1] "invest.g1_m" "invest.g2_m" "invest.g3_m" "invest.g4_m" "invest.g5_m"
-#> 
-#> $p2xvarnames$Comm
-#> [1] "com1_m" "com2_m" "com3_m" "com4_m" "com5_m"
+#> $p2xvarnames$Dsat
+#> [1] "dsat.pnrq1_m" "dsat.pnrq2_m" "dsat.pnrq3_m" "dsat.pnrq4_m"
 #> 
 #> 
 #> $xindper
-#> [1] 20
+#> [1] 8
 #> 
 #> $dist1
-#> [1] "f"
+#> [1] "w"
 #> 
 #> $dist2
 #> [1] "m"
 #> 
 #> $indnum
-#> [1] 40
+#> [1] 16
 ```
 
-### Non-Distinctive Indicator Stems
+### Non-Distinctive Indicator Stems (with `prqcQ`)
 
 The case when indicators have non-distinctive stems only requires that
 your named list—that you later supply to
@@ -422,7 +410,7 @@ both kinds of indicators.
 
 ## 2. Scripting the Model(s)
 
-Continuing with the `imsM` exemplar for this rest of this vignette, we
+Continuing with the `pnrqM` exemplar for this rest of this vignette, we
 can now quickly script a series of M-CDFMs using the
 [`scriptCFA()`](https://jsakaluk.github.io/dySEM/reference/scriptCFA.html)
 function (so named given that most imagine a M-CDFM model when
@@ -440,13 +428,13 @@ default to “FF”):
 
 ``` r
 
-script.ims.config <-  scriptCFA(dvnIMS, scaleset = "FF", constr_dy_meas = "none", constr_dy_struct = "none")
+script.pnrq.config <-  scriptCFA(dvnPNRQ, scaleset = "FF", constr_dy_meas = "none", constr_dy_struct = "none")
 
-script.ims.load <-  scriptCFA(dvnIMS, scaleset = "FF", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
+script.pnrq.load <-  scriptCFA(dvnPNRQ, scaleset = "FF", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
 
-script.ims.int <-  scriptCFA(dvnIMS, scaleset = "FF", constr_dy_meas = c("loadings", "intercepts"),constr_dy_struct = "none")
+script.pnrq.int <-  scriptCFA(dvnPNRQ, scaleset = "FF", constr_dy_meas = c("loadings", "intercepts"),constr_dy_struct = "none")
 
-script.ims.res <-  scriptCFA(dvnIMS, scaleset = "FF",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+script.pnrq.res <-  scriptCFA(dvnPNRQ, scaleset = "FF",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
 ```
 
 You can concatenate these scripts, if you wish, using the base
@@ -457,7 +445,7 @@ here):
 
 ``` r
 
-cat(script.ims.config)
+cat(script.pnrq.config)
 ```
 
 ## 3. Fitting the Model(s)
@@ -469,13 +457,13 @@ specifications for [`cfa()`](https://rdrr.io/pkg/lavaan/man/cfa.html):
 
 ``` r
 
-ims.config.mod <- cfa(script.ims.config, data = imsM_dat)
+pnrq.config.mod <- cfa(script.pnrq.config, data = pnrqM_dat)
 
-ims.load.mod <- cfa(script.ims.load, data = imsM_dat)
+pnrq.load.mod <- cfa(script.pnrq.load, data = pnrqM_dat)
 
-ims.int.mod <- cfa(script.ims.int, data = imsM_dat)
+pnrq.int.mod <- cfa(script.pnrq.int, data = pnrqM_dat)
 
-ims.res.mod <- cfa(script.ims.res, data = imsM_dat)
+pnrq.res.mod <- cfa(script.pnrq.res, data = pnrqM_dat)
 ```
 
 ## 4. Outputting and Interpreting the Model(s)
@@ -487,20 +475,20 @@ larger measure—can be compared with the base
 
 ``` r
 
-anova(ims.config.mod, ims.load.mod, ims.int.mod, ims.res.mod)
+anova(pnrq.config.mod, pnrq.load.mod, pnrq.int.mod, pnrq.res.mod)
 #> 
 #> Chi-Squared Difference Test
 #> 
-#>                 Df   AIC   BIC  Chisq Chisq diff    RMSEA Df diff Pr(>Chisq)
-#> ims.config.mod 692 36038 36633 1494.0                                       
-#> ims.load.mod   708 36050 36588 1538.2     44.181 0.083109      16  0.0001851
-#> ims.int.mod    724 36043 36524 1563.0     24.784 0.046399      16  0.0737307
-#> ims.res.mod    744 36105 36515 1664.9    101.906 0.126728      20  5.733e-13
-#>                   
-#> ims.config.mod    
-#> ims.load.mod   ***
-#> ims.int.mod    .  
-#> ims.res.mod    ***
+#>                  Df    AIC    BIC  Chisq Chisq diff   RMSEA Df diff Pr(>Chisq)
+#> pnrq.config.mod  90 5777.9 5985.4 371.34                                      
+#> pnrq.load.mod    96 5788.8 5976.2 394.24     22.904 0.11582       6  0.0008294
+#> pnrq.int.mod    102 5781.1 5948.5 398.57      4.325 0.00000       6  0.6327806
+#> pnrq.res.mod    110 5816.9 5957.4 450.33     51.759 0.16139       8  1.874e-08
+#>                    
+#> pnrq.config.mod    
+#> pnrq.load.mod   ***
+#> pnrq.int.mod       
+#> pnrq.res.mod    ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -514,22 +502,22 @@ the `writeTo` and `fileName` arguments:
 
 ``` r
 
-mods <- list(ims.config.mod, ims.load.mod, ims.int.mod, ims.res.mod)
+mods <- list(pnrq.config.mod, pnrq.load.mod, pnrq.int.mod, pnrq.res.mod)
 
 outputInvarCompTab(mods) |> 
   gt()
 ```
 
-| mod        | chisq    | df  | pvalue | aic      | bic      | rmsea | cfi   | chisq_diff | df_diff | p_diff | aic_diff | bic_diff | rmsea_diff | cfi_diff |
-|------------|----------|-----|--------|----------|----------|-------|-------|------------|---------|--------|----------|----------|------------|----------|
-| configural | 1494.001 | 692 | 0      | 36037.69 | 36632.63 | 0.067 | 0.920 | NA         | NA      | NA     | NA       | NA       | NA         | NA       |
-| loading    | 1538.182 | 708 | 0      | 36049.88 | 36588.15 | 0.068 | 0.918 | 44.181     | 16      | 0.000  | 12.181   | -44.479  | 0.000      | -0.003   |
-| intercept  | 1562.966 | 724 | 0      | 36042.66 | 36524.27 | 0.067 | 0.917 | 24.784     | 16      | 0.074  | -7.216   | -63.877  | 0.000      | -0.001   |
-| residual   | 1664.873 | 744 | 0      | 36104.57 | 36515.35 | 0.070 | 0.909 | 101.906    | 20      | 0.000  | 61.906   | -8.919   | 0.002      | -0.008   |
+| mod        | chisq   | df  | pvalue | aic      | bic      | rmsea | cfi   | chisq_diff | df_diff | p_diff | aic_diff | bic_diff | rmsea_diff | cfi_diff |
+|------------|---------|-----|--------|----------|----------|-------|-------|------------|---------|--------|----------|----------|------------|----------|
+| configural | 371.338 | 90  | 0      | 5777.881 | 5985.401 | 0.122 | 0.942 | NA         | NA      | NA     | NA       | NA       | NA         | NA       |
+| loading    | 394.241 | 96  | 0      | 5788.784 | 5976.222 | 0.122 | 0.939 | 22.904     | 6       | 0.001  | 10.904   | -9.179   | 0.000      | -0.003   |
+| intercept  | 398.566 | 102 | 0      | 5781.109 | 5948.465 | 0.118 | 0.939 | 4.325      | 6       | 0.633  | -7.675   | -27.758  | -0.004     | 0.000    |
+| residual   | 450.325 | 110 | 0      | 5816.868 | 5957.447 | 0.121 | 0.930 | 51.759     | 8       | 0.000  | 35.759   | 8.982    | 0.004      | -0.009   |
 
 Were one strictly to follow only the likelihood ratio test statistic as
 a guide, they would reject the possibility of the relatively low bar of
-loading invariance for the IMS, $\chi^{2}$ (16) = 44.18, *p* \<.001. Of
+loading invariance for the PNRQ, $\chi^{2}$ (6) = 22.9, *p* \<.001. Of
 course, other methods of model comparison and selection (and their
 respective thresholds) are available, and whatever method is chosen
 probably ought to be preregistered.
@@ -541,53 +529,29 @@ CDFM, we recommend tabling (vs. visualizing) model output:
 
 ``` r
 
-outputParamTab(dvn = dvnIMS, model = "cfa", fit = ims.config.mod,
+outputParamTab(dvn = dvnPNRQ, model = "cfa", fit = pnrq.config.mod,
                tabletype = "measurement") |> 
   gt()
 ```
 
-| Latent Factor | Indicator   | Loading | SE    | Z      | p-value | Std. Loading | Intercept |
-|---------------|-------------|---------|-------|--------|---------|--------------|-----------|
-| Sat1          | sat.g1_f    | 1.953   | 0.094 | 20.767 | \< .001 | 0.959        | 7.459     |
-| Sat1          | sat.g2_f    | 1.683   | 0.102 | 16.485 | \< .001 | 0.814        | 7.169     |
-| Sat1          | sat.g3_f    | 2.057   | 0.104 | 19.767 | \< .001 | 0.932        | 6.996     |
-| Sat1          | sat.g4_f    | 2.002   | 0.095 | 21.146 | \< .001 | 0.968        | 7.459     |
-| Sat1          | sat.g5_f    | 2.023   | 0.102 | 19.919 | \< .001 | 0.937        | 7.227     |
-| Q_Alt1        | qalt.g1_f   | 2.186   | 0.128 | 17.110 | \< .001 | 0.867        | 2.965     |
-| Q_Alt1        | qalt.g2_f   | 1.909   | 0.145 | 13.119 | \< .001 | 0.724        | 3.510     |
-| Q_Alt1        | qalt.g3_f   | 1.839   | 0.136 | 13.478 | \< .001 | 0.717        | 3.639     |
-| Q_Alt1        | qalt.g4_f   | 2.013   | 0.126 | 15.936 | \< .001 | 0.832        | 3.141     |
-| Q_Alt1        | qalt.g5_f   | 2.162   | 0.127 | 16.996 | \< .001 | 0.867        | 2.961     |
-| Invest1       | invest.g1_f | 1.530   | 0.106 | 14.445 | \< .001 | 0.778        | 7.631     |
-| Invest1       | invest.g2_f | 1.670   | 0.126 | 13.251 | \< .001 | 0.720        | 7.075     |
-| Invest1       | invest.g3_f | 1.671   | 0.094 | 17.820 | \< .001 | 0.892        | 7.675     |
-| Invest1       | invest.g4_f | 1.209   | 0.159 | 7.611  | \< .001 | 0.443        | 6.059     |
-| Invest1       | invest.g5_f | 1.493   | 0.097 | 15.384 | \< .001 | 0.810        | 7.588     |
-| Comm1         | com1_f      | 1.405   | 0.080 | 17.617 | \< .001 | 0.877        | 8.247     |
-| Comm1         | com2_f      | 1.655   | 0.083 | 19.885 | \< .001 | 0.944        | 8.106     |
-| Comm1         | com3_f      | -0.555  | 0.191 | -2.903 | 0.004   | -0.178       | 3.173     |
-| Comm1         | com4_f      | -0.754  | 0.150 | -5.030 | \< .001 | -0.310       | 2.184     |
-| Comm1         | com5_f      | 1.694   | 0.098 | 17.359 | \< .001 | 0.868        | 7.812     |
-| Sat2          | sat.g1_m    | 1.866   | 0.099 | 18.820 | \< .001 | 0.908        | 7.463     |
-| Sat2          | sat.g2_m    | 1.755   | 0.104 | 16.933 | \< .001 | 0.830        | 7.239     |
-| Sat2          | sat.g3_m    | 2.075   | 0.105 | 19.813 | \< .001 | 0.934        | 7.039     |
-| Sat2          | sat.g4_m    | 1.962   | 0.094 | 20.858 | \< .001 | 0.962        | 7.494     |
-| Sat2          | sat.g5_m    | 2.118   | 0.114 | 18.614 | \< .001 | 0.902        | 7.157     |
-| Q_Alt2        | qalt.g1_m   | 2.173   | 0.125 | 17.426 | \< .001 | 0.870        | 3.129     |
-| Q_Alt2        | qalt.g2_m   | 2.089   | 0.132 | 15.875 | \< .001 | 0.820        | 3.329     |
-| Q_Alt2        | qalt.g3_m   | 2.017   | 0.138 | 14.583 | \< .001 | 0.755        | 3.710     |
-| Q_Alt2        | qalt.g4_m   | 2.276   | 0.122 | 18.604 | \< .001 | 0.907        | 3.137     |
-| Q_Alt2        | qalt.g5_m   | 2.394   | 0.128 | 18.655 | \< .001 | 0.909        | 3.216     |
-| Invest2       | invest.g1_m | 1.472   | 0.098 | 14.993 | \< .001 | 0.800        | 7.757     |
-| Invest2       | invest.g2_m | 1.575   | 0.120 | 13.145 | \< .001 | 0.717        | 7.290     |
-| Invest2       | invest.g3_m | 1.503   | 0.087 | 17.188 | \< .001 | 0.875        | 7.875     |
-| Invest2       | invest.g4_m | 1.304   | 0.149 | 8.736  | \< .001 | 0.502        | 6.439     |
-| Invest2       | invest.g5_m | 1.425   | 0.095 | 14.996 | \< .001 | 0.798        | 7.796     |
-| Comm2         | com1_m      | 1.675   | 0.081 | 20.788 | \< .001 | 0.962        | 8.102     |
-| Comm2         | com2_m      | 1.634   | 0.080 | 20.436 | \< .001 | 0.954        | 8.125     |
-| Comm2         | com3_m      | -0.788  | 0.197 | -3.999 | \< .001 | -0.242       | 3.482     |
-| Comm2         | com4_m      | -1.201  | 0.133 | -9.037 | \< .001 | -0.525       | 2.149     |
-| Comm2         | com5_m      | 1.482   | 0.094 | 15.797 | \< .001 | 0.813        | 7.929     |
+| Latent Factor | Indicator    | Loading | SE    | Z      | p-value | Std. Loading | Intercept |
+|---------------|--------------|---------|-------|--------|---------|--------------|-----------|
+| Sat1          | sat.pnrq1_w  | 1.333   | 0.069 | 19.304 | \< .001 | 0.971        | 4.619     |
+| Sat1          | sat.pnrq2_w  | 1.353   | 0.070 | 19.347 | \< .001 | 0.972        | 4.667     |
+| Sat1          | sat.pnrq3_w  | 1.308   | 0.075 | 17.520 | \< .001 | 0.920        | 4.814     |
+| Sat1          | sat.pnrq4_w  | 1.338   | 0.076 | 17.530 | \< .001 | 0.920        | 4.571     |
+| Dsat1         | dsat.pnrq1_w | 0.749   | 0.048 | 15.608 | \< .001 | 0.858        | 1.367     |
+| Dsat1         | dsat.pnrq2_w | 0.688   | 0.048 | 14.226 | \< .001 | 0.811        | 1.310     |
+| Dsat1         | dsat.pnrq3_w | 1.002   | 0.053 | 19.009 | \< .001 | 0.964        | 1.490     |
+| Dsat1         | dsat.pnrq4_w | 0.997   | 0.053 | 18.845 | \< .001 | 0.961        | 1.443     |
+| Sat2          | sat.pnrq1_m  | 1.202   | 0.065 | 18.374 | \< .001 | 0.947        | 4.667     |
+| Sat2          | sat.pnrq2_m  | 1.212   | 0.064 | 18.866 | \< .001 | 0.961        | 4.743     |
+| Sat2          | sat.pnrq3_m  | 1.146   | 0.068 | 16.739 | \< .001 | 0.897        | 4.886     |
+| Sat2          | sat.pnrq4_m  | 1.233   | 0.073 | 16.832 | \< .001 | 0.899        | 4.676     |
+| Dsat2         | dsat.pnrq1_m | 0.803   | 0.045 | 17.945 | \< .001 | 0.933        | 1.357     |
+| Dsat2         | dsat.pnrq2_m | 0.776   | 0.043 | 18.267 | \< .001 | 0.944        | 1.286     |
+| Dsat2         | dsat.pnrq3_m | 0.933   | 0.051 | 18.435 | \< .001 | 0.948        | 1.400     |
+| Dsat2         | dsat.pnrq4_m | 0.872   | 0.050 | 17.447 | \< .001 | 0.920        | 1.395     |
 
 We have also provided a `tabletype = "correlation"` option to assist
 with providing reproducible correlation tables for reporting on the
@@ -596,21 +560,17 @@ multi-construct models:
 
 ``` r
 
-outputParamTab(dvn = dvnIMS, model = "cfa", fit = ims.config.mod,
+outputParamTab(dvn = dvnPNRQ, model = "cfa", fit = pnrq.config.mod,
                tabletype = "correlation") |> 
   gt()
 ```
 
-|         | Sat1         | Q_Alt1       | Invest1      | Comm1        | Sat2         | Q_Alt2       | Invest2     | Comm2 |
-|---------|--------------|--------------|--------------|--------------|--------------|--------------|-------------|-------|
-| Sat1    | —            | —            | —            | —            | —            | —            | —           | —     |
-| Q_Alt1  | -0.253\*\*\* | —            | —            | —            | —            | —            | —           | —     |
-| Invest1 | 0.723\*\*\*  | -0.177\*\*   | —            | —            | —            | —            | —           | —     |
-| Comm1   | 0.749\*\*\*  | -0.303\*\*\* | 0.819\*\*\*  | —            | —            | —            | —           | —     |
-| Sat2    | 0.762\*\*\*  | -0.192\*\*   | 0.694\*\*\*  | 0.669\*\*\*  | —            | —            | —           | —     |
-| Q_Alt2  | -0.317\*\*\* | 0.612\*\*\*  | -0.358\*\*\* | -0.389\*\*\* | -0.445\*\*\* | —            | —           | —     |
-| Invest2 | 0.591\*\*\*  | -0.186\*\*   | 0.751\*\*\*  | 0.649\*\*\*  | 0.725\*\*\*  | -0.467\*\*\* | —           | —     |
-| Comm2   | 0.553\*\*\*  | -0.205\*\*   | 0.615\*\*\*  | 0.696\*\*\*  | 0.709\*\*\*  | -0.472\*\*\* | 0.753\*\*\* | —     |
+|       | Sat1         | Dsat1        | Sat2         | Dsat2 |
+|-------|--------------|--------------|--------------|-------|
+| Sat1  | —            | —            | —            | —     |
+| Dsat1 | -0.666\*\*\* | —            | —            | —     |
+| Sat2  | 0.829\*\*\*  | -0.515\*\*\* | —            | —     |
+| Dsat2 | -0.473\*\*\* | 0.642\*\*\*  | -0.504\*\*\* | —     |
 
 ## 5. Optional Indexes and Output
 
@@ -621,35 +581,272 @@ measurement model parameters there is significant noninvariance:
 
 ``` r
 
-outputConstraintTab(ims.load.mod) |> 
+outputConstraintTab(pnrq.load.mod) |> 
   gt()
 ```
 
-| param1                 | constraint | param2                 | chi2   | df  | pvalue | sig    |
-|------------------------|------------|------------------------|--------|-----|--------|--------|
-| Sat1 =~ sat.g1_f       | ==         | Sat2 =~ sat.g1_m       | 2.027  | 1   | 0.154  | NA     |
-| Sat1 =~ sat.g2_f       | ==         | Sat2 =~ sat.g2_m       | 1.209  | 1   | 0.271  | NA     |
-| Sat1 =~ sat.g3_f       | ==         | Sat2 =~ sat.g3_m       | 0.112  | 1   | 0.738  | NA     |
-| Sat1 =~ sat.g4_f       | ==         | Sat2 =~ sat.g4_m       | 0.913  | 1   | 0.339  | NA     |
-| Sat1 =~ sat.g5_f       | ==         | Sat2 =~ sat.g5_m       | 1.940  | 1   | 0.164  | NA     |
-| Q_Alt1 =~ qalt.g1_f    | ==         | Q_Alt2 =~ qalt.g1_m    | 3.382  | 1   | 0.066  | NA     |
-| Q_Alt1 =~ qalt.g2_f    | ==         | Q_Alt2 =~ qalt.g2_m    | 0.019  | 1   | 0.891  | NA     |
-| Q_Alt1 =~ qalt.g3_f    | ==         | Q_Alt2 =~ qalt.g3_m    | 0.064  | 1   | 0.801  | NA     |
-| Q_Alt1 =~ qalt.g4_f    | ==         | Q_Alt2 =~ qalt.g4_m    | 0.868  | 1   | 0.352  | NA     |
-| Q_Alt1 =~ qalt.g5_f    | ==         | Q_Alt2 =~ qalt.g5_m    | 0.379  | 1   | 0.538  | NA     |
-| Invest1 =~ invest.g1_f | ==         | Invest2 =~ invest.g1_m | 0.079  | 1   | 0.778  | NA     |
-| Invest1 =~ invest.g2_f | ==         | Invest2 =~ invest.g2_m | 0.002  | 1   | 0.960  | NA     |
-| Invest1 =~ invest.g3_f | ==         | Invest2 =~ invest.g3_m | 1.040  | 1   | 0.308  | NA     |
-| Invest1 =~ invest.g4_f | ==         | Invest2 =~ invest.g4_m | 1.265  | 1   | 0.261  | NA     |
-| Invest1 =~ invest.g5_f | ==         | Invest2 =~ invest.g5_m | 0.083  | 1   | 0.773  | NA     |
-| Comm1 =~ com1_f        | ==         | Comm2 =~ com1_m        | 20.009 | 1   | 0.000  | \*\*\* |
-| Comm1 =~ com2_f        | ==         | Comm2 =~ com2_m        | 5.970  | 1   | 0.015  | \*     |
-| Comm1 =~ com3_f        | ==         | Comm2 =~ com3_m        | 0.624  | 1   | 0.430  | NA     |
-| Comm1 =~ com4_f        | ==         | Comm2 =~ com4_m        | 4.835  | 1   | 0.028  | \*     |
-| Comm1 =~ com5_f        | ==         | Comm2 =~ com5_m        | 12.220 | 1   | 0.000  | \*\*\* |
+| param1                | constraint | param2                | chi2  | df  | pvalue | sig  |
+|-----------------------|------------|-----------------------|-------|-----|--------|------|
+| Sat1 =~ sat.pnrq1_w   | ==         | Sat2 =~ sat.pnrq1_m   | 0.021 | 1   | 0.885  | NA   |
+| Sat1 =~ sat.pnrq2_w   | ==         | Sat2 =~ sat.pnrq2_m   | 0.028 | 1   | 0.867  | NA   |
+| Sat1 =~ sat.pnrq3_w   | ==         | Sat2 =~ sat.pnrq3_m   | 0.476 | 1   | 0.490  | NA   |
+| Sat1 =~ sat.pnrq4_w   | ==         | Sat2 =~ sat.pnrq4_m   | 0.504 | 1   | 0.478  | NA   |
+| Dsat1 =~ dsat.pnrq1_w | ==         | Dsat2 =~ dsat.pnrq1_m | 6.039 | 1   | 0.014  | \*   |
+| Dsat1 =~ dsat.pnrq2_w | ==         | Dsat2 =~ dsat.pnrq2_m | 9.322 | 1   | 0.002  | \*\* |
+| Dsat1 =~ dsat.pnrq3_w | ==         | Dsat2 =~ dsat.pnrq3_m | 1.701 | 1   | 0.192  | NA   |
+| Dsat1 =~ dsat.pnrq4_w | ==         | Dsat2 =~ dsat.pnrq4_m | 8.564 | 1   | 0.003  | \*\* |
 
-In this particular example, significant noninvariance is present in all
-but the third item of the *Commitment* factor the the IMS.
+In this particular example, significant noninvariance is present for the
+loadings of most of the negative items (all but the third).
+
+If we to compute effect sizes to quantify the magnitude of noninvariance
+in the PNRQ, we need to generate a “partial invariance” model, in which
+noninvariant measurement parameters are free to vary between partners,
+while others remain constrained. For these effect sizes to be accurate,
+**it is crucial** that the model contains one or more “anchor
+items”–items that are free of noninvariance.
+
+To begin this process, we will use
+[`outputConstraintTab()`](https://jsakaluk.github.io/dySEM/reference/outputConstraintTab.md)
+to identify which loadings *and* intercepts are noninvariant:
+
+``` r
+
+outputConstraintTab(pnrq.int.mod) |> 
+  gt()
+```
+
+| param1                | constraint | param2                | chi2  | df  | pvalue | sig  |
+|-----------------------|------------|-----------------------|-------|-----|--------|------|
+| Sat1 =~ sat.pnrq1_w   | ==         | Sat2 =~ sat.pnrq1_m   | 0.013 | 1   | 0.909  | NA   |
+| Sat1 =~ sat.pnrq2_w   | ==         | Sat2 =~ sat.pnrq2_m   | 0.026 | 1   | 0.873  | NA   |
+| Sat1 =~ sat.pnrq3_w   | ==         | Sat2 =~ sat.pnrq3_m   | 0.472 | 1   | 0.492  | NA   |
+| Sat1 =~ sat.pnrq4_w   | ==         | Sat2 =~ sat.pnrq4_m   | 0.540 | 1   | 0.462  | NA   |
+| Dsat1 =~ dsat.pnrq1_w | ==         | Dsat2 =~ dsat.pnrq1_m | 5.840 | 1   | 0.016  | \*   |
+| Dsat1 =~ dsat.pnrq2_w | ==         | Dsat2 =~ dsat.pnrq2_m | 9.218 | 1   | 0.002  | \*\* |
+| Dsat1 =~ dsat.pnrq3_w | ==         | Dsat2 =~ dsat.pnrq3_m | 1.540 | 1   | 0.215  | NA   |
+| Dsat1 =~ dsat.pnrq4_w | ==         | Dsat2 =~ dsat.pnrq4_m | 8.679 | 1   | 0.003  | \*\* |
+| sat.pnrq1_w ~1        | ==         | sat.pnrq1_m ~1        | 0.638 | 1   | 0.425  | NA   |
+| sat.pnrq2_w ~1        | ==         | sat.pnrq2_m ~1        | 0.023 | 1   | 0.878  | NA   |
+| sat.pnrq3_w ~1        | ==         | sat.pnrq3_m ~1        | 0.003 | 1   | 0.959  | NA   |
+| sat.pnrq4_w ~1        | ==         | sat.pnrq4_m ~1        | 0.540 | 1   | 0.462  | NA   |
+| dsat.pnrq1_w ~1       | ==         | dsat.pnrq1_m ~1       | 1.624 | 1   | 0.203  | NA   |
+| dsat.pnrq2_w ~1       | ==         | dsat.pnrq2_m ~1       | 0.396 | 1   | 0.529  | NA   |
+| dsat.pnrq3_w ~1       | ==         | dsat.pnrq3_m ~1       | 2.867 | 1   | 0.090  | NA   |
+| dsat.pnrq4_w ~1       | ==         | dsat.pnrq4_m ~1       | 0.134 | 1   | 0.714  | NA   |
+
+This output corroborates what we saw before: there isn’t intercept
+noninvariance to worry about (though now we have the added peace of mind
+that this is true for each intercept, individually, not just as a
+“family” of parameters).
+
+While `dySEM` does not yet automate the production of partial-invariance
+model syntax, we can use the model syntax from the intercept invariance
+model and make some light adjustments:
+
+``` r
+
+cat(script.pnrq.int)
+#> #Measurement Model
+#> 
+#> #Loadings
+#> Sat1 =~ NA*sat.pnrq1_w + lx1*sat.pnrq1_w + lx2*sat.pnrq2_w + lx3*sat.pnrq3_w + lx4*sat.pnrq4_w
+#> Dsat1 =~ NA*dsat.pnrq1_w + lx5*dsat.pnrq1_w + lx6*dsat.pnrq2_w + lx7*dsat.pnrq3_w + lx8*dsat.pnrq4_w
+#> Sat2 =~ NA*sat.pnrq1_m + lx1*sat.pnrq1_m + lx2*sat.pnrq2_m + lx3*sat.pnrq3_m + lx4*sat.pnrq4_m
+#> Dsat2 =~ NA*dsat.pnrq1_m + lx5*dsat.pnrq1_m + lx6*dsat.pnrq2_m + lx7*dsat.pnrq3_m + lx8*dsat.pnrq4_m
+#> 
+#> #Intercepts
+#> sat.pnrq1_w ~ t1*1
+#> sat.pnrq2_w ~ t2*1
+#> sat.pnrq3_w ~ t3*1
+#> sat.pnrq4_w ~ t4*1
+#> dsat.pnrq1_w ~ t5*1
+#> dsat.pnrq2_w ~ t6*1
+#> dsat.pnrq3_w ~ t7*1
+#> dsat.pnrq4_w ~ t8*1
+#> 
+#> sat.pnrq1_m ~ t1*1
+#> sat.pnrq2_m ~ t2*1
+#> sat.pnrq3_m ~ t3*1
+#> sat.pnrq4_m ~ t4*1
+#> dsat.pnrq1_m ~ t5*1
+#> dsat.pnrq2_m ~ t6*1
+#> dsat.pnrq3_m ~ t7*1
+#> dsat.pnrq4_m ~ t8*1
+#> 
+#> #Residual Variances
+#> sat.pnrq1_w ~~ th1*sat.pnrq1_w
+#> sat.pnrq2_w ~~ th2*sat.pnrq2_w
+#> sat.pnrq3_w ~~ th3*sat.pnrq3_w
+#> sat.pnrq4_w ~~ th4*sat.pnrq4_w
+#> dsat.pnrq1_w ~~ th5*dsat.pnrq1_w
+#> dsat.pnrq2_w ~~ th6*dsat.pnrq2_w
+#> dsat.pnrq3_w ~~ th7*dsat.pnrq3_w
+#> dsat.pnrq4_w ~~ th8*dsat.pnrq4_w
+#> 
+#> sat.pnrq1_m ~~ th9*sat.pnrq1_m
+#> sat.pnrq2_m ~~ th10*sat.pnrq2_m
+#> sat.pnrq3_m ~~ th11*sat.pnrq3_m
+#> sat.pnrq4_m ~~ th12*sat.pnrq4_m
+#> dsat.pnrq1_m ~~ th13*dsat.pnrq1_m
+#> dsat.pnrq2_m ~~ th14*dsat.pnrq2_m
+#> dsat.pnrq3_m ~~ th15*dsat.pnrq3_m
+#> dsat.pnrq4_m ~~ th16*dsat.pnrq4_m
+#> 
+#> #Residual Covariances
+#> sat.pnrq1_w ~~ sat.pnrq1_m
+#> sat.pnrq2_w ~~ sat.pnrq2_m
+#> sat.pnrq3_w ~~ sat.pnrq3_m
+#> sat.pnrq4_w ~~ sat.pnrq4_m
+#> dsat.pnrq1_w ~~ dsat.pnrq1_m
+#> dsat.pnrq2_w ~~ dsat.pnrq2_m
+#> dsat.pnrq3_w ~~ dsat.pnrq3_m
+#> dsat.pnrq4_w ~~ dsat.pnrq4_m
+#> 
+#> #Structural Model
+#> 
+#> #Latent (Co)Variances
+#> Sat1 ~~ psv1*Sat1 + 1*Sat1
+#> Dsat1 ~~ psv2*Dsat1 + 1*Dsat1
+#> Sat2 ~~ psv3*Sat2 + NA*Sat2
+#> Dsat2 ~~ psv4*Dsat2 + NA*Dsat2
+#> Sat1 ~~ psi12*Dsat1
+#> Sat1 ~~ psi13*Sat2
+#> Sat1 ~~ psi14*Dsat2
+#> Dsat1 ~~ psi23*Sat2
+#> Dsat1 ~~ psi24*Dsat2
+#> Sat2 ~~ psi34*Dsat2
+#> 
+#> #Latent Means
+#> Sat1 ~ a1*1 + 0*1
+#> Dsat1 ~ a2*1 + 0*1
+#> Sat2 ~ a3*1
+#> Dsat2 ~ a4*1
+```
+
+The output of
+[`outputConstraintTab()`](https://jsakaluk.github.io/dySEM/reference/outputConstraintTab.md)
+indicated that the loadings for items 1, 2, and 4 of the negative
+subscale were noninvariant, so we simply “free” these loadings by
+removing the equality constraints (i.e., the shared parameter labels)
+for them:
+
+``` r
+
+script.pnrq.partial <- '
+#Measurement Model
+
+#Loadings (remove l5*, l6*, and l8* for partial invariance
+# in Dsat1 and Dsat2)
+Sat1 =~ NA*sat.pnrq1_w + lx1*sat.pnrq1_w + lx2*sat.pnrq2_w + lx3*sat.pnrq3_w + lx4*sat.pnrq4_w
+Dsat1 =~ NA*dsat.pnrq1_w + dsat.pnrq1_w + dsat.pnrq2_w + lx7*dsat.pnrq3_w + dsat.pnrq4_w
+Sat2 =~ NA*sat.pnrq1_m + lx1*sat.pnrq1_m + lx2*sat.pnrq2_m + lx3*sat.pnrq3_m + lx4*sat.pnrq4_m
+Dsat2 =~ NA*dsat.pnrq1_m + dsat.pnrq1_m + dsat.pnrq2_m + lx7*dsat.pnrq3_m + dsat.pnrq4_m
+
+#Intercepts
+sat.pnrq1_w ~ t1*1
+sat.pnrq2_w ~ t2*1
+sat.pnrq3_w ~ t3*1
+sat.pnrq4_w ~ t4*1
+dsat.pnrq1_w ~ t5*1
+dsat.pnrq2_w ~ t6*1
+dsat.pnrq3_w ~ t7*1
+dsat.pnrq4_w ~ t8*1
+
+sat.pnrq1_m ~ t1*1
+sat.pnrq2_m ~ t2*1
+sat.pnrq3_m ~ t3*1
+sat.pnrq4_m ~ t4*1
+dsat.pnrq1_m ~ t5*1
+dsat.pnrq2_m ~ t6*1
+dsat.pnrq3_m ~ t7*1
+dsat.pnrq4_m ~ t8*1
+
+#Residual Variances
+sat.pnrq1_w ~~ th1*sat.pnrq1_w
+sat.pnrq2_w ~~ th2*sat.pnrq2_w
+sat.pnrq3_w ~~ th3*sat.pnrq3_w
+sat.pnrq4_w ~~ th4*sat.pnrq4_w
+dsat.pnrq1_w ~~ th5*dsat.pnrq1_w
+dsat.pnrq2_w ~~ th6*dsat.pnrq2_w
+dsat.pnrq3_w ~~ th7*dsat.pnrq3_w
+dsat.pnrq4_w ~~ th8*dsat.pnrq4_w
+
+sat.pnrq1_m ~~ th9*sat.pnrq1_m
+sat.pnrq2_m ~~ th10*sat.pnrq2_m
+sat.pnrq3_m ~~ th11*sat.pnrq3_m
+sat.pnrq4_m ~~ th12*sat.pnrq4_m
+dsat.pnrq1_m ~~ th13*dsat.pnrq1_m
+dsat.pnrq2_m ~~ th14*dsat.pnrq2_m
+dsat.pnrq3_m ~~ th15*dsat.pnrq3_m
+dsat.pnrq4_m ~~ th16*dsat.pnrq4_m
+
+#Residual Covariances
+sat.pnrq1_w ~~ sat.pnrq1_m
+sat.pnrq2_w ~~ sat.pnrq2_m
+sat.pnrq3_w ~~ sat.pnrq3_m
+sat.pnrq4_w ~~ sat.pnrq4_m
+dsat.pnrq1_w ~~ dsat.pnrq1_m
+dsat.pnrq2_w ~~ dsat.pnrq2_m
+dsat.pnrq3_w ~~ dsat.pnrq3_m
+dsat.pnrq4_w ~~ dsat.pnrq4_m
+
+#Structural Model
+
+#Latent (Co)Variances
+Sat1 ~~ psi1*Sat1 + 1*Sat1
+Dsat1 ~~ psi2*Dsat1 + 1*Dsat1
+Sat2 ~~ psi3*Sat2 + NA*Sat2
+Dsat2 ~~ psi4*Dsat2 + NA*Dsat2
+Sat1 ~~ psi12*Dsat1
+Sat1 ~~ psi13*Sat2
+Sat1 ~~ psi14*Dsat2
+Dsat1 ~~ psi23*Sat2
+Dsat1 ~~ psi24*Dsat2
+Sat2 ~~ psi34*Dsat2
+
+#Latent Means
+Sat1 ~ a1*1 + 0*1
+Dsat1 ~ a2*1 + 0*1
+Sat2 ~ a3*1
+Dsat2 ~ a4*1
+'
+```
+
+Now we fit the partial invariance model:
+
+``` r
+
+pnrq.partial.mod <- cfa(script.pnrq.partial, data = pnrqM_dat)
+```
+
+We can then supply this partially invariant model (with anchor items) to
+[`outputInvarItem()`](https://jsakaluk.github.io/dySEM/reference/outputInvarItem.md),
+which identifies the noninvariant measurement parameters for each item
+in each factor, and (for those that are noninvariant) calculates a
+dyadic version of the dMACS noninvariance effect size metric first
+proposed by Nye and Drasgow (2011), and later reviewed and expanded upon
+by Gunn et al. (2020).
+
+``` r
+
+#Key arguments are data file, dvn, and fitted invariance model
+outputInvarItem(dvn = dvnPNRQ, fit = pnrq.partial.mod, 
+                partialScript = script.pnrq.partial, 
+                dat = pnrqM_dat,
+                gtTab = FALSE, writeTo = NULL, fileName = NULL)
+#> # A tibble: 8 × 5
+#>   LV    Item                  LoadingNoninvariance InterceptNoninvariance  dMACS
+#>   <chr> <chr>                 <chr>                <chr>                   <dbl>
+#> 1 Sat   sat.pnrq1_w / sat.pn… No                   No                     0     
+#> 2 Sat   sat.pnrq2_w / sat.pn… No                   No                     0     
+#> 3 Sat   sat.pnrq3_w / sat.pn… No                   No                     0     
+#> 4 Sat   sat.pnrq4_w / sat.pn… No                   No                     0     
+#> 5 Dsat  dsat.pnrq1_w / dsat.… Yes                  No                     0.12  
+#> 6 Dsat  dsat.pnrq2_w / dsat.… Yes                  No                     0.165 
+#> 7 Dsat  dsat.pnrq3_w / dsat.… No                   No                     0     
+#> 8 Dsat  dsat.pnrq4_w / dsat.… Yes                  No                     0.0568
+```
 
 ------------------------------------------------------------------------
 

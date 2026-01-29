@@ -84,6 +84,7 @@ These functions are used to generate lavaan syntax corresponding to
 models representing more than two constructs within a dyadic data set
 
 - [`scriptCFA()`](https://jsakaluk.github.io/dySEM/reference/scriptCFA.md)
+  [`scriptMultiCor()`](https://jsakaluk.github.io/dySEM/reference/scriptCFA.md)
   : A Function That Writes, Saves, and Exports Syntax for Fitting Latent
   Dyadic Confirmatory Factor Analysis (CFA) Models with Multiple Factors
 - [`scriptDyEFA()`](https://jsakaluk.github.io/dySEM/reference/scriptDyEFA.md)
@@ -116,6 +117,8 @@ lavaan models in tabular or path diagram form
   : A function That Exports SEM diagrams based on dySEM models
 - [`outputInvarCompTab()`](https://jsakaluk.github.io/dySEM/reference/outputInvarCompTab.md)
   : Compare Model Fit of Nested Dyadic Invariance Models
+- [`outputInvarItem()`](https://jsakaluk.github.io/dySEM/reference/outputInvarItem.md)
+  : Output Item-Level Invariance Summary Table
 - [`outputConstraintTab()`](https://jsakaluk.github.io/dySEM/reference/outputConstraintTab.md)
   : Evaluate Invariance Equality Constraints in a specified Dyadic
   Invariance Model

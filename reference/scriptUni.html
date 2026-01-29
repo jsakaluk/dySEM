@@ -13,7 +13,7 @@ one-factor models."><meta property="og:image" content="https://jsakaluk.github.i
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,10 +64,12 @@ one-factor models.</p>
 <span>  <span class="va">dvn</span>,</span>
 <span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span>
 <span>  lvname <span class="op">=</span> <span class="st">"X"</span>,</span>
+<span>  lvar <span class="op">=</span> <span class="st">"X"</span>,</span>
 <span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
 <span>  constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  writeTo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  fileName <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  fileName <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  outputType <span class="op">=</span> <span class="st">"lavaan script"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -88,6 +90,12 @@ but user can specify <code>"MV"</code> (Marker Variable).</p></dd>
 <dt id="arg-lvname">lvname<a class="anchor" aria-label="anchor" href="#arg-lvname"></a></dt>
 <dd><p>Input character to (arbitrarily) name the latent variable in
 <code>lavaan</code> syntax.</p></dd>
+
+
+<dt id="arg-lvar">lvar<a class="anchor" aria-label="anchor" href="#arg-lvar"></a></dt>
+<dd><p>Input character to specify whether the latent variable represents
+"X" or "Y" in the model. Default is <code>"X"</code>. This argument controls parameter
+labeling (e.g., <code>lx</code> vs <code>ly</code> for loadings, <code>tx</code> vs <code>ty</code> for intercepts).</p></dd>
 
 
 <dt id="arg-constr-dy-meas">constr_dy_meas<a class="anchor" aria-label="anchor" href="#arg-constr-dy-meas"></a></dt>
@@ -122,11 +130,19 @@ scripts, <code>.rtf</code> for tabular output when <code>gtTab = TRUE</code>, or
 as appropriate for the output type). If a file with the same name already
 exists in the user's chosen directory, it will be overwritten.</p></dd>
 
+
+<dt id="arg-outputtype">outputType<a class="anchor" aria-label="anchor" href="#arg-outputtype"></a></dt>
+<dd><p>Character string specifying the type of output to return.
+Options are <code>"lavaan script"</code> (default) to return a character object of
+<code>lavaan</code> syntax that can be passed immediately to <code>lavaan</code> functions, or
+<code>"syntax components"</code> to return a structured list of model components.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Character object of <code>lavaan</code> script that can be passed immediately to
-<code>lavaan</code> functions.</p>
+<code>lavaan</code> functions (when <code>outputType = "lavaan script"</code>), or a structured list
+of model components (when <code>outputType = "syntax components"</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
