@@ -18,8 +18,9 @@ scriptBifac(
 \arguments{
 \item{dvn}{Input dvn list from \code{scrapeVarCross()}}
 
-\item{scaleset}{Input character to specify how to set the scale of the latent variable. Default is
-\code{"FF"} (fixed-factor; see Details for rationale), but user can specify \code{"MV"} (Marker Variable)}
+\item{scaleset}{Input character to specify how to set the scale of the latent
+variable(s). Default is \code{"FF"} (fixed-factor; see Details for rationale),
+but user can specify \code{"MV"} (Marker Variable).}
 
 \item{lvname}{Input character to (arbitrarily) name the latent variable in \code{lavaan} syntax}
 
@@ -29,13 +30,18 @@ scriptBifac(
 Default is \code{c("variances", "means")}(in combination with defaults for \code{constr_dy_meas}, an indistinguishable correlated dyadic factors model),
 but user can specify any combination of \code{"variances"} and \code{"means"}, or \code{"none"}.}
 
-\item{writeTo}{A character string specifying a directory path to where a \code{.txt} file of the resulting \code{lavaan} script should be written.
-If set to \verb{“.”}, the \code{.txt} file will be written to the current working directory.
-The default is \code{NULL}, and examples use a temporary directory created by \code{tempdir()}.}
+\item{writeTo}{A character string specifying a directory path to where the
+output file(s) should be saved. If set to \code{"."}, the file(s) will be written
+to the current working directory. The default is \code{NULL}, and examples use a
+temporary directory created by \code{tempdir()}. When dealing with tabular output,
+\code{writeTo} is only relevant if \code{gtTab = TRUE}.}
 
-\item{fileName}{A character string specifying a desired base name for the \code{.txt} output file.
-The default is \code{NULL}. The specified name will be automatically appended with the \code{.txt} file extension.
-If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
+\item{fileName}{A character string specifying a desired base name for the
+output file. The default is \code{NULL}. The specified name will be automatically
+appended with the appropriate file extension (e.g., \code{.txt} for \code{lavaan}
+scripts, \code{.rtf} for tabular output when \code{gtTab = TRUE}, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 Character object of \code{lavaan} script that can be passed immediately to

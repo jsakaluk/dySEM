@@ -103,16 +103,20 @@ options are "measurement" (i.e,, loadings, intercepts,),
 
 
 <dt id="arg-writeto">writeTo<a class="anchor" aria-label="anchor" href="#arg-writeto"></a></dt>
-<dd><p>A character string specifying a directory path to where the file(s) should be saved.
-If set to “.”, the file(s) will be written to the current working directory.
-The default is NULL (which will throw an error), and examples use a temporary directory created by tempdir().</p></dd>
+<dd><p>A character string specifying a directory path to where the
+output file(s) should be saved. If set to <code>"."</code>, the file(s) will be written
+to the current working directory. The default is <code>NULL</code>, and examples use a
+temporary directory created by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>. When dealing with tabular output,
+<code>writeTo</code> is only relevant if <code>gtTab = TRUE</code>.</p></dd>
 
 
 <dt id="arg-filename">fileName<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>A character string specifying a desired base name for the output file(s).
-If a <code>fileName</code> not provided (i.e., default fileName = NULL), then defaults will be used
-(e.g., "dySEM_table"/"dySEM_table_Measurement"/"dySEM_table_Structural for tables; "dySEM_figure" for figures).
-The specified name will be automatically appended with the appropriate file extension (i.e., .rtf for tables; .png for figures).</p></dd>
+<dd><p>A character string specifying a desired base name for the
+output file. The default is <code>NULL</code>. The specified name will be automatically
+appended with the appropriate file extension (e.g., <code>.txt</code> for <code>lavaan</code>
+scripts, <code>.rtf</code> for tabular output when <code>gtTab = TRUE</code>, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.</p></dd>
 
 </dl></div>
     <div class="section level2">

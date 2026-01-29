@@ -7,12 +7,8 @@
 #' @param dvn input dvn list from scrapeVarCross
 #' @param lvxname input character to (arbitrarily) name X LV in lavaan syntax
 #' @param lvyname (optional) input character to (arbitrarily) name Y LV in lavaan syntax
-#' @param writeTo A character string specifying a directory path to where a .txt file of the resulting lavaan script should be written.
-#' If set to “.”, the .txt file will be written to the current working directory.
-#' The default is NULL, and examples use a temporary directory created by tempdir().
-#' @param fileName A character string specifying a desired base name for the .txt output file.
-#' The default is NULL. The specified name will be automatically appended with the .txt file extension.
-#' If a file with the same name already exists in the user's chosen directory, it will be overwritten.
+#' @template writeTo
+#' @template fileName
 #' @return character object of lavaan script that can be passed immediately to
 #' lavaan functions
 #' @seealso \code{\link{scrapeVarCross}} which this function relies on

@@ -16,14 +16,18 @@ outputParamFig(fit, figtype = NULL, writeTo = NULL, fileName = NULL)
 \item "labels" for labelled parameters.
 }}
 
-\item{writeTo}{A character string specifying a directory path to where the output file of the path diagram should be saved.
-If set to “.”, the file will be written to the current working directory.
-The default is \code{NULL} (which will throw an error), and examples use a temporary directory created by \code{tempdir()}.}
+\item{writeTo}{A character string specifying a directory path to where the
+output file(s) should be saved. If set to \code{"."}, the file(s) will be written
+to the current working directory. The default is \code{NULL}, and examples use a
+temporary directory created by \code{tempdir()}. When dealing with tabular output,
+\code{writeTo} is only relevant if \code{gtTab = TRUE}.}
 
-\item{fileName}{A character string specifying a desired base name for the output file.
-If a \code{fileName} not provided (i.e., fileName = \code{NULL}), then a default will be used depending on the specified \code{figtype}
-(e.g., "dySEM_figure unstd", "dySEM_figure std", or "dySEM_figure lab").
-The specified name will automatically be appended with the \code{.png} file extension.}
+\item{fileName}{A character string specifying a desired base name for the
+output file. The default is \code{NULL}. The specified name will be automatically
+appended with the appropriate file extension (e.g., \code{.txt} for \code{lavaan}
+scripts, \code{.rtf} for tabular output when \code{gtTab = TRUE}, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 A \code{qgraph} object of the desired SEM path diagram, which is simultaneously exported as a \code{.png} file to the specified directory.

@@ -20,8 +20,9 @@ scriptCor(
 \arguments{
 \item{dvn}{Input dvn list from \code{scrapeVarCross()}}
 
-\item{scaleset}{Input character to specify how to set the scale of the latent variable. Default is
-\code{"FF"} (fixed-factor; see Details for rationale), but user can specify \code{"MV"} (Marker Variable)}
+\item{scaleset}{Input character to specify how to set the scale of the latent
+variable(s). Default is \code{"FF"} (fixed-factor; see Details for rationale),
+but user can specify \code{"MV"} (Marker Variable).}
 
 \item{lvname}{Input character to (arbitrarily) name the latent variable in \code{lavaan} syntax}
 

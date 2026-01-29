@@ -35,21 +35,23 @@ fit with maximum-likelihood estimation (\code{estimator = "ml"}) and missing
 data are handled via listwise deletion (\code{missing = "listwise"}), as per
 \code{lavaan::cfa()}'s default behaviour.}
 
-\item{gtTab}{A logical input indicating whether to generate the requested
-index(es) for each fitted model (requested via the \code{indexes} argument) in
-\code{gt::gt()} table object format (\code{TRUE}). Users can also apply the \code{writeTo}
-argument if they wish to export the \code{gt::gt()} table object.}
+\item{gtTab}{A logical input indicating whether to generate the table(s) in
+\code{gt::gt()} table object format (\code{TRUE}). By default (\code{FALSE}), the table(s)
+are generated in \code{tibble::tibble()} format. Users can also apply the
+\code{writeTo} argument if they wish to export the \code{gt::gt()} table object(s).}
 
-\item{writeTo}{A character vector string specifying a directory path to where
-the \code{gt::gt()} table object should be saved. If set to ".", the file will be
-written to the current working directory. The default is \code{NULL}, and examples
-use a temporary directory created by \code{tempdir()}. \code{writeTo} is only relevant
-if \code{gtTab = TRUE}.}
+\item{writeTo}{A character string specifying a directory path to where the
+output file(s) should be saved. If set to \code{"."}, the file(s) will be written
+to the current working directory. The default is \code{NULL}, and examples use a
+temporary directory created by \code{tempdir()}. When dealing with tabular output,
+\code{writeTo} is only relevant if \code{gtTab = TRUE}.}
 
-\item{fileName}{A character string specifying a desired base name for the output
-\code{gt::gt()} file. The resulting base name will automatically be appended with a
-\code{.rtf} file extension. \code{fileName} is only relevant if \code{gtTab = TRUE} and \code{writeTo}
-is specified.}
+\item{fileName}{A character string specifying a desired base name for the
+output file. The default is \code{NULL}. The specified name will be automatically
+appended with the appropriate file extension (e.g., \code{.txt} for \code{lavaan}
+scripts, \code{.rtf} for tabular output when \code{gtTab = TRUE}, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
 A \code{list} containing up to two components:

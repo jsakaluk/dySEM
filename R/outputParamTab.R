@@ -11,18 +11,9 @@
 #'  Options are "measurement" (i.e., loadings, intercepts, etc.),
 #'  "structural" (i.e., latent slopes, such as actor/partner effects, k parameters),
 #'   "both" (i.e., both measurement and structural tables), or "correlation" (for a table of factor correlations).
-#' @param gtTab A logical input indicating whether to generate the table(s) in `gt::gt()` table object format (`TRUE`).
-#'  By default (`FALSE`), the table(s) are generated in `tibble::tibble()` format.
-#'  Users can also apply the `writeTo` argument if they wish to export the `gt:gt()` table object(s).
-#' @param writeTo A character string specifying a directory path to where the `gt::gt()` table object(s) should be saved.
-#'  If set to ".", the file(s) will be written to the current working directory.
-#'  The default is `NULL`, and examples use a temporary directory created by `tempdir()`.
-#'  `writeTo` is only relevant if `gtTab = TRUE`.
-#' @param fileName A character string specifying a desired base name for the output `gt::gt()` file(s).
-#'  If a `fileName` is not provided (i.e., `fileName = NULL`), then defaults will be used
-#'  (e.g., "dySEM_table", "dySEM_table_measurement", or "dySEM_table_structural) based on the `tabletype` argument.
-#'  The resulting base name will automatically be appended with a `.rtf` file extension.
-#'  `fileName` is only relevant if `gtTab = TRUE` and `writeTo` is specified.
+#' @template gtTab
+#' @template writeTo
+#' @template fileName
 #'
 #' @return A `tibble::tibble()` if `gtTab = FALSE` (default), or `gt::gt()` object if `gtTab = TRUE`, of specified model parameter estimates and corresponding statistical tests.
 #'

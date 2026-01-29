@@ -7,13 +7,8 @@
 #'  * "unstandardized" for unstandardized path coefficients.
 #'  * "standardized" for standardized path coefficients.
 #'  * "labels" for labelled parameters.
-#' @param writeTo A character string specifying a directory path to where the output file of the path diagram should be saved.
-#' If set to “.”, the file will be written to the current working directory.
-#' The default is `NULL` (which will throw an error), and examples use a temporary directory created by `tempdir()`.
-#' @param fileName A character string specifying a desired base name for the output file.
-#' If a `fileName` not provided (i.e., fileName = `NULL`), then a default will be used depending on the specified `figtype`
-#' (e.g., "dySEM_figure unstd", "dySEM_figure std", or "dySEM_figure lab").
-#' The specified name will automatically be appended with the `.png` file extension.
+#' @template writeTo
+#' @template fileName
 #'
 #' @details
 #' * The function uses `semPlot::semPaths()` to create a `qgraph` object of the desired SEM path diagram.

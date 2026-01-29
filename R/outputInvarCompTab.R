@@ -7,17 +7,9 @@
 #' @param parsimonyFirst A logical input indicating whether to prioritize the residual dyadic invariance (i.e. most parsimonious measurement model)
 #' as the baseline model for nested comparisons, or to prioritize the configural dyadic invariance (i.e. least parsimonious measurement model).
 #' Defaults to FALSE (i.e., configural dyadic invariance is the baseline model).
-#' @param gtTab A logical input indicating whether to generate the output in `gt::gt()` table object format (`TRUE`).
-#'  By default (`FALSE`), the output is generated in `tibble::tibble()` format.
-#'  Users can also apply the `writeTo` argument if they wish to export the `gt:gt()` table object.
-#' @param writeTo A character string specifying a directory path to where the `gt::gt()` table object should be saved.
-#'  If set to ".", the file will be written to the current working directory.
-#'  The default is `NULL`, and examples use a temporary directory created by `tempdir()`.
-#'  `writeTo` is only relevant if `gtTab = TRUE`.
-#' @param fileName A character string specifying a desired base name for the output `gt::gt()` file.
-#'  If a `fileName` is not provided (i.e., `fileName = NULL`), then a default will be used (i.e., "dySEM_table").
-#'  The resulting base name will automatically be appended with a `.rtf` file extension.
-#'  `fileName` is only relevant if `gtTab = TRUE` and `writeTo` is specified.
+#' @template gtTab
+#' @template writeTo
+#' @template fileName
 #'
 #' @return A `tibble::tibble()` if `gtTab = FALSE` (default), or `gt::gt()` object if `gtTab = TRUE`, of model fit statistics for each model, as well as the difference in fit statistics between each model and the previous model
 #'

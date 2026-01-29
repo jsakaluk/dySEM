@@ -7,9 +7,7 @@
 #' one-factor models.
 #'
 #' @param dvn Input dvn list from `scrapeVarCross()`.
-#' @param scaleset Input character to specify how to set the scale of the latent
-#'  variable. Default is `"FF"` (fixed-factor; see Details for rationale), but
-#'  user can specify `"MV"` (Marker Variable).
+#' @template scaleset
 #' @param lvname Input character to (arbitrarily) name the latent variable in
 #' `lavaan` syntax.
 #' @param lvar Input character to specify whether the latent variable represents
