@@ -1,6 +1,6 @@
 Package: dySEM
 Title: Dyadic Structural Equation Modeling
-Version: 1.4.1
+Version: 1.5.2
 Authors@R: c(
     person("John", "Sakaluk", , "jksakaluk@gmail.com", role = c("aut","cre", "cph"),
            comment = c(ORCID = "0000-0002-2515-9822")),
@@ -18,7 +18,7 @@ Description: Scripting of structural equation models via 'lavaan' for
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 URL: https://github.com/jsakaluk/dySEM,
     https://jsakaluk.github.io/dySEM/
 BugReports: https://github.com/jsakaluk/dySEM/issues

@@ -12,50 +12,113 @@
 #'
 #' @noRd
 grouploads <- function(fit, dvn, source){
-  if(source == "1"){
-    loads <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[["p1xvarnames"]]) %>%
-      dplyr::select(.data$est)
-  }else if(source == "2"){
-    loads <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[["p2xvarnames"]]) %>%
-      dplyr::select(.data$est)
+  # Check if p1xvarnames is a list (multiple LVs) or character vector (single LV)
+  if (is.list(dvn[["p1xvarnames"]]) && !is.data.frame(dvn[["p1xvarnames"]])) {
+    # Multiple LVs case: return a list of data frames, one per LV
+    loads_list <- list()
+    if(source == "1"){
+      for (lv_name in names(dvn[["p1xvarnames"]])) {
+        loads_list[[lv_name]] <- lavaan::parameterEstimates(fit) %>%
+          dplyr::filter(.data$op == "=~" & .data$rhs %in% dvn[["p1xvarnames"]][[lv_name]]) %>%
+          dplyr::select(.data$est)
+      }
+    }else if(source == "2"){
+      for (lv_name in names(dvn[["p2xvarnames"]])) {
+        loads_list[[lv_name]] <- lavaan::parameterEstimates(fit) %>%
+          dplyr::filter(.data$op == "=~" & .data$rhs %in% dvn[["p2xvarnames"]][[lv_name]]) %>%
+          dplyr::select(.data$est)
+      }
+    }
+    return(loads_list)
+  } else {
+    # Single LV case: use original logic
+    if(source == "1"){
+      loads <- lavaan::parameterEstimates(fit) %>%
+        dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[["p1xvarnames"]]) %>%
+        dplyr::select(.data$est)
+    }else if(source == "2"){
+      loads <- lavaan::parameterEstimates(fit) %>%
+        dplyr::filter(.data$op == "=~" & .data$rhs %in% {{dvn}}[["p2xvarnames"]]) %>%
+        dplyr::select(.data$est)
+    }
+    return(loads)
   }
-  return(loads)
 }
 
 #' @rdname esHelpers
 #' @noRd
 
 groupints <- function(fit, dvn,source){
-  if(source == "1"){
-    ints <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[["p1xvarnames"]]) %>%
-      dplyr::select(.data$est)
-  }else if(source == "2"){
-    ints <- lavaan::parameterEstimates(fit) %>%
-      dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[["p2xvarnames"]]) %>%
-      dplyr::select(.data$est)
+  # Check if p1xvarnames is a list (multiple LVs) or character vector (single LV)
+  if (is.list(dvn[["p1xvarnames"]]) && !is.data.frame(dvn[["p1xvarnames"]])) {
+    # Multiple LVs case: return a list of data frames, one per LV
+    ints_list <- list()
+    if(source == "1"){
+      for (lv_name in names(dvn[["p1xvarnames"]])) {
+        ints_list[[lv_name]] <- lavaan::parameterEstimates(fit) %>%
+          dplyr::filter(.data$op == "~1" & .data$lhs %in% dvn[["p1xvarnames"]][[lv_name]]) %>%
+          dplyr::select(.data$est)
+      }
+    }else if(source == "2"){
+      for (lv_name in names(dvn[["p2xvarnames"]])) {
+        ints_list[[lv_name]] <- lavaan::parameterEstimates(fit) %>%
+          dplyr::filter(.data$op == "~1" & .data$lhs %in% dvn[["p2xvarnames"]][[lv_name]]) %>%
+          dplyr::select(.data$est)
+      }
+    }
+    return(ints_list)
+  } else {
+    # Single LV case: use original logic
+    if(source == "1"){
+      ints <- lavaan::parameterEstimates(fit) %>%
+        dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[["p1xvarnames"]]) %>%
+        dplyr::select(.data$est)
+    }else if(source == "2"){
+      ints <- lavaan::parameterEstimates(fit) %>%
+        dplyr::filter(.data$op == "~1" & .data$lhs %in% {{dvn}}[["p2xvarnames"]]) %>%
+        dplyr::select(.data$est)
+    }
+    return(ints)
   }
-  return(ints)
 }
 
 #' @rdname esHelpers
 #' @noRd
 
 groupindsds <- function(dat, dvn, source){
-
-  if(source == 1){
-    sds <- dat %>% dplyr::select(paste({{dvn}}[["p1xvarnames"]])) %>%
-      dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
-      as.numeric()
-  }else if(source == 2){
-    sds <- dat %>% dplyr::select(paste({{dvn}}[["p2xvarnames"]])) %>%
-      dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
-      as.numeric()
+  # Check if p1xvarnames is a list (multiple LVs) or character vector (single LV)
+  if (is.list(dvn[["p1xvarnames"]]) && !is.data.frame(dvn[["p1xvarnames"]])) {
+    # Multiple LVs case: return a list of numeric vectors, one per LV
+    sds_list <- list()
+    if(source == 1){
+      for (lv_name in names(dvn[["p1xvarnames"]])) {
+        sds_list[[lv_name]] <- dat %>% 
+          dplyr::select(dplyr::all_of(dvn[["p1xvarnames"]][[lv_name]])) %>%
+          dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
+          as.numeric()
+      }
+    }else if(source == 2){
+      for (lv_name in names(dvn[["p2xvarnames"]])) {
+        sds_list[[lv_name]] <- dat %>% 
+          dplyr::select(dplyr::all_of(dvn[["p2xvarnames"]][[lv_name]])) %>%
+          dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
+          as.numeric()
+      }
+    }
+    return(sds_list)
+  } else {
+    # Single LV case: use original logic
+    if(source == 1){
+      sds <- dat %>% dplyr::select(dplyr::all_of(dvn[["p1xvarnames"]])) %>%
+        dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
+        as.numeric()
+    }else if(source == 2){
+      sds <- dat %>% dplyr::select(dplyr::all_of(dvn[["p2xvarnames"]])) %>%
+        dplyr::summarise_all(stats::sd, na.rm = TRUE) %>%
+        as.numeric()
+    }
+    return(sds)
   }
-
-  return(sds)
 }
 
 #' @rdname esHelpers

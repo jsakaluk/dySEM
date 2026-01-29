@@ -9,10 +9,12 @@ scriptCor(
   dvn,
   scaleset = "FF",
   lvname = "X",
+  lvar = "X",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_struct = c("variances", "means"),
   writeTo = NULL,
-  fileName = NULL
+  fileName = NULL,
+  outputType = "lavaan script"
 )
 }
 \arguments{
@@ -23,23 +25,38 @@ scriptCor(
 
 \item{lvname}{Input character to (arbitrarily) name the latent variable in \code{lavaan} syntax}
 
+\item{lvar}{Input character to specify whether the latent variable represents
+"X" or "Y" in the model. Default is \code{"X"}. This argument controls parameter
+labeling (e.g., \code{lx} vs \code{ly} for loadings, \code{tx} vs \code{ty} for intercepts).}
+
 \item{constr_dy_meas}{Input character vector detailing which measurement model parameters to constrain across dyad members.}
 
 \item{constr_dy_struct}{Input character vector detailing which structural model parameters to constrain across dyad members.
 Default is \code{c("variances", "means")}(in combination with defaults for \code{constr_dy_meas}, an indistinguishable correlated dyadic factors model),
 but user can specify any combination of \code{"variances"} and \code{"means"}, or \code{"none"}.}
 
-\item{writeTo}{A character string specifying a directory path to where a \code{.txt} file of the resulting \code{lavaan} script should be written.
-If set to \verb{“.”}, the \code{.txt} file will be written to the current working directory.
-The default is \code{NULL}, and examples use a temporary directory created by \code{tempdir()}.}
+\item{writeTo}{A character string specifying a directory path to where the
+output file(s) should be saved. If set to \code{"."}, the file(s) will be written
+to the current working directory. The default is \code{NULL}, and examples use a
+temporary directory created by \code{tempdir()}. When dealing with tabular output,
+\code{writeTo} is only relevant if \code{gtTab = TRUE}.}
 
-\item{fileName}{A character string specifying a desired base name for the \code{.txt} output file.
-The default is \code{NULL}. The specified name will be automatically appended with the \code{.txt} file extension.
-If a file with the same name already exists in the user's chosen directory, it will be overwritten.}
+\item{fileName}{A character string specifying a desired base name for the
+output file. The default is \code{NULL}. The specified name will be automatically
+appended with the appropriate file extension (e.g., \code{.txt} for \code{lavaan}
+scripts, \code{.rtf} for tabular output when \code{gtTab = TRUE}, or other extensions
+as appropriate for the output type). If a file with the same name already
+exists in the user's chosen directory, it will be overwritten.}
+
+\item{outputType}{Character string specifying the type of output to return.
+Options are \code{"lavaan script"} (default) to return a character object of
+\code{lavaan} syntax that can be passed immediately to \code{lavaan} functions, or
+\code{"syntax components"} to return a structured list of model components.}
 }
 \value{
 Character object of \code{lavaan} script that can be passed immediately to
-\code{lavaan} functions.
+\code{lavaan} functions (when \code{outputType = "lavaan script"}), or a structured list
+of model components (when \code{outputType = "syntax components"}).
 }
 \description{
 This function takes the outputted object from \code{scrapeVarCross()}

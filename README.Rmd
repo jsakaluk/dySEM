@@ -62,7 +62,6 @@ install.packages("dySEM")
 You can install the development version from [GitHub](https://github.com/) with:
 
 ``` {r, eval = FALSE}
-
 devtools::install_github("jsakaluk/dySEM")
 ```
 

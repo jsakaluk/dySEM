@@ -1212,42 +1212,42 @@ dvn <- list(
 
 test_that("Correct output for partner 1, type = 'free'", {
   result <- multifac_lvars(dvn, partner = "1", type = "free")
-  expect_equal(result[1], "Sat1 ~~ psi1*Sat1 + NA*Sat1")
-  expect_equal(result[2], "Comm1 ~~ psi2*Comm1 + NA*Comm1")
-  expect_equal(result[3], "Intim1 ~~ psi3*Intim1 + NA*Intim1")
-  expect_equal(result[length(result)], "Love1 ~~ psi6*Love1 + NA*Love1") # Check last latent variable
+  expect_equal(result[1], "Sat1 ~~ psv1*Sat1 + NA*Sat1")
+  expect_equal(result[2], "Comm1 ~~ psv2*Comm1 + NA*Comm1")
+  expect_equal(result[3], "Intim1 ~~ psv3*Intim1 + NA*Intim1")
+  expect_equal(result[length(result)], "Love1 ~~ psv6*Love1 + NA*Love1") # Check last latent variable
 })
 
 test_that("Correct output for partner 2, type = 'free'", {
   result <- multifac_lvars(dvn, partner = "2", type = "free")
-  expect_equal(result[1], "Sat2 ~~ psi7*Sat2 + NA*Sat2")
-  expect_equal(result[2], "Comm2 ~~ psi8*Comm2 + NA*Comm2")
-  expect_equal(result[3], "Intim2 ~~ psi9*Intim2 + NA*Intim2")
-  expect_equal(result[length(result)], "Love2 ~~ psi12*Love2 + NA*Love2") # Check last latent variable
+  expect_equal(result[1], "Sat2 ~~ psv7*Sat2 + NA*Sat2")
+  expect_equal(result[2], "Comm2 ~~ psv8*Comm2 + NA*Comm2")
+  expect_equal(result[3], "Intim2 ~~ psv9*Intim2 + NA*Intim2")
+  expect_equal(result[length(result)], "Love2 ~~ psv12*Love2 + NA*Love2") # Check last latent variable
 })
 
 test_that("Correct output for partner 1, type = 'constrain'", {
   result <- multifac_lvars(dvn, partner = "1", type = "constrain")
-  expect_equal(result[1], "Sat1 ~~ psi1*Sat1 + 1*Sat1")
-  expect_equal(result[2], "Comm1 ~~ psi2*Comm1 + 1*Comm1")
-  expect_equal(result[3], "Intim1 ~~ psi3*Intim1 + 1*Intim1")
-  expect_equal(result[length(result)], "Love1 ~~ psi6*Love1 + 1*Love1") # Check last latent variable
+  expect_equal(result[1], "Sat1 ~~ psv1*Sat1 + 1*Sat1")
+  expect_equal(result[2], "Comm1 ~~ psv2*Comm1 + 1*Comm1")
+  expect_equal(result[3], "Intim1 ~~ psv3*Intim1 + 1*Intim1")
+  expect_equal(result[length(result)], "Love1 ~~ psv6*Love1 + 1*Love1") # Check last latent variable
 })
 
 test_that("Correct output for partner 2, type = 'constrain'", {
   result <- multifac_lvars(dvn, partner = "2", type = "constrain")
-  expect_equal(result[1], "Sat2 ~~ psi7*Sat2 + 1*Sat2")
-  expect_equal(result[2], "Comm2 ~~ psi8*Comm2 + 1*Comm2")
-  expect_equal(result[3], "Intim2 ~~ psi9*Intim2 + 1*Intim2")
-  expect_equal(result[length(result)], "Love2 ~~ psi12*Love2 + 1*Love2") # Check last latent variable
+  expect_equal(result[1], "Sat2 ~~ psv7*Sat2 + 1*Sat2")
+  expect_equal(result[2], "Comm2 ~~ psv8*Comm2 + 1*Comm2")
+  expect_equal(result[3], "Intim2 ~~ psv9*Intim2 + 1*Intim2")
+  expect_equal(result[length(result)], "Love2 ~~ psv12*Love2 + 1*Love2") # Check last latent variable
 })
 
 test_that("Correct output for partner 2, type = 'equate'", {
   result <- multifac_lvars(dvn, partner = "2", type = "equate")
-  expect_equal(result[1], "Sat2 ~~ psi1*Sat2 + NA*Sat2")
-  expect_equal(result[2], "Comm2 ~~ psi2*Comm2 + NA*Comm2")
-  expect_equal(result[3], "Intim2 ~~ psi3*Intim2 + NA*Intim2")
-  expect_equal(result[length(result)], "Love2 ~~ psi6*Love2 + NA*Love2") # Check last latent variable
+  expect_equal(result[1], "Sat2 ~~ psv1*Sat2 + NA*Sat2")
+  expect_equal(result[2], "Comm2 ~~ psv2*Comm2 + NA*Comm2")
+  expect_equal(result[3], "Intim2 ~~ psv3*Intim2 + NA*Intim2")
+  expect_equal(result[length(result)], "Love2 ~~ psv6*Love2 + NA*Love2") # Check last latent variable
 })
 
 test_that("Handles empty variable names", {
