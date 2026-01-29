@@ -9,10 +9,12 @@ scriptCor(
   dvn,
   scaleset = "FF",
   lvname = "X",
+  lvar = "X",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_struct = c("variances", "means"),
   writeTo = NULL,
-  fileName = NULL
+  fileName = NULL,
+  outputType = "lavaan script"
 )
 }
 \arguments{
@@ -23,6 +25,10 @@ variable(s). Default is \code{"FF"} (fixed-factor; see Details for rationale),
 but user can specify \code{"MV"} (Marker Variable).}
 
 \item{lvname}{Input character to (arbitrarily) name the latent variable in \code{lavaan} syntax}
+
+\item{lvar}{Input character to specify whether the latent variable represents
+"X" or "Y" in the model. Default is \code{"X"}. This argument controls parameter
+labeling (e.g., \code{lx} vs \code{ly} for loadings, \code{tx} vs \code{ty} for intercepts).}
 
 \item{constr_dy_meas}{Input character vector detailing which measurement model parameters to constrain across dyad members.}
 
@@ -42,10 +48,16 @@ appended with the appropriate file extension (e.g., \code{.txt} for \code{lavaan
 scripts, \code{.rtf} for tabular output when \code{gtTab = TRUE}, or other extensions
 as appropriate for the output type). If a file with the same name already
 exists in the user's chosen directory, it will be overwritten.}
+
+\item{outputType}{Character string specifying the type of output to return.
+Options are \code{"lavaan script"} (default) to return a character object of
+\code{lavaan} syntax that can be passed immediately to \code{lavaan} functions, or
+\code{"syntax components"} to return a structured list of model components.}
 }
 \value{
 Character object of \code{lavaan} script that can be passed immediately to
-\code{lavaan} functions.
+\code{lavaan} functions (when \code{outputType = "lavaan script"}), or a structured list
+of model components (when \code{outputType = "syntax components"}).
 }
 \description{
 This function takes the outputted object from \code{scrapeVarCross()}

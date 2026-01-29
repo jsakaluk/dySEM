@@ -27,7 +27,7 @@ reporting on latent models of dyadic data via
 and used in the course of the research described in Sakaluk, Fisher, and
 Kilshaw (2021), and has since undergone considerable expansion.
 
-`dySEM` currently contains **68** functions, of which **25** are
+`dySEM` currently contains **70** functions, of which **27** are
 user-facing (i.e., exported), which are covered by **536** unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
@@ -46,7 +46,6 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-
 devtools::install_github("jsakaluk/dySEM")
 ```
 
@@ -138,8 +137,6 @@ There are additional optional functions, as well, that help users to
 calculate certain additional quantitative values (e.g., reliability,
 corrected model fit indexes in models with indistinguishable dyad
 members).
-
-    #> Warning: package 'ggplot2' was built under R version 4.4.3
 
 ### 1. Import and wrangle **data**
 

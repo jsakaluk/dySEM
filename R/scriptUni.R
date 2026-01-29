@@ -10,6 +10,9 @@
 #' @template scaleset
 #' @param lvname Input character to (arbitrarily) name the latent variable in
 #' `lavaan` syntax.
+#' @param lvar Input character to specify whether the latent variable represents
+#'  "X" or "Y" in the model. Default is `"X"`. This argument controls parameter
+#'  labeling (e.g., `lx` vs `ly` for loadings, `tx` vs `ty` for intercepts).
 #' @param constr_dy_meas Input character vector detailing which measurement
 #' model parameters to constrain across dyad members.
 #' @param constr_dy_struct Input character vector detailing which structural
@@ -22,8 +25,13 @@
 #'  defaults to `"none"`.
 #' @template writeTo
 #' @template fileName
+#' @param outputType Character string specifying the type of output to return.
+#'  Options are `"lavaan script"` (default) to return a character object of
+#'  `lavaan` syntax that can be passed immediately to `lavaan` functions, or
+#'  `"syntax components"` to return a structured list of model components.
 #' @return Character object of `lavaan` script that can be passed immediately to
-#'  `lavaan` functions.
+#'  `lavaan` functions (when `outputType = "lavaan script"`), or a structured list
+#'  of model components (when `outputType = "syntax components"`).
 #'
 #' @details
 #' * Users do not need to modify `constr_dy_struct` when using `scriptUni()`.
@@ -101,10 +109,12 @@ scriptUni <- function(
   dvn,
   scaleset = "FF",
   lvname = "X",
+  lvar = "X",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_struct = "none", # Users do not need to modify `constr_dy_struct` when using `scriptUni()`.
   writeTo = NULL,
-  fileName = NULL
+  fileName = NULL,
+  outputType = "lavaan script"
 ) {
   # Input validation
   # Validate dvn argument
@@ -114,13 +124,29 @@ scriptUni <- function(
   if (!is.list(dvn)) {
     stop("The `dvn` argument must be a list object.")
   }
-  if (length(dvn) != 6) {
-    stop("You must supply a dvn object containing information for only X [i.e., your target LV]")
-  }
 
   # Validate lvname argument
   if (!is.character(lvname)) {
     stop("The `lvname` argument must be a character string.")
+  }
+
+  # Validate lvar argument
+  if (!lvar %in% c("X", "Y")) {
+    stop("lvar must be either 'X' or 'Y'")
+  }
+
+  # Validate dvn has required elements and only contains information for the
+  # requested latent variable family (X or Y). For historical reasons,
+  # scriptUni() expects a dvn with *only* X (or only Y) information, in a
+  # 6-element list: p1[var]varnames, p2[var]varnames, [var]indper, dist1,
+  # dist2, indnum.
+  if (lvar == "X") {
+    required_elements <- c("p1xvarnames", "p2xvarnames", "xindper", "dist1", "dist2", "indnum")
+  } else { # lvar == "Y"
+    required_elements <- c("p1yvarnames", "p2yvarnames", "yindper", "dist1", "dist2", "indnum")
+  }
+  if (!all(required_elements %in% names(dvn)) || length(dvn) != length(required_elements)) {
+    stop("You must supply a dvn object containing information for only X")
   }
 
   # check for valid inputs
@@ -138,13 +164,18 @@ scriptUni <- function(
           Please leave it as the default value: 'none'.")
   }
 
+  # Validate outputType argument
+  if (!outputType %in% c("lavaan script", "syntax components")) {
+    stop("outputType must be either 'lavaan script' or 'syntax components'")
+  }
+
   # fixed factor
   if (scaleset == "FF") {
     # loadings
     if (any(constr_dy_meas == "loadings")) {
       xloadsg <- loads(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         lvname,
         partner = "g",
         type = "equated"
@@ -152,7 +183,7 @@ scriptUni <- function(
     } else {
       xloadsg <- loads(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         lvname,
         partner = "g",
         type = "free"
@@ -163,26 +194,26 @@ scriptUni <- function(
     if (any(constr_dy_meas == "intercepts")) {
       xints1 <- intercepts(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "1",
         type = "equated"
       )
       xints2 <- intercepts(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "2",
         type = "equated"
       )
     } else {
       xints1 <- intercepts(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "1",
         type = "free"
       )
       xints2 <- intercepts(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "2",
         type = "free"
       )
@@ -192,26 +223,26 @@ scriptUni <- function(
     if (any(constr_dy_meas == "residuals")) {
       xres1 <- resids(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "1",
         type = "equated"
       )
       xres2 <- resids(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "2",
         type = "equated"
       )
     } else {
       xres1 <- resids(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "1",
         type = "free"
       )
       xres2 <- resids(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "2",
         type = "free"
       )
@@ -220,14 +251,14 @@ scriptUni <- function(
     # correlated residuals
     xcoresids <- coresids(
       dvn,
-      lvar = "X",
+      lvar = lvar,
       type = "free"
     )
 
     # latent variances
     xvarg <- lvars(
       dvn,
-      lvar = "X",
+      lvar = lvar,
       lvname,
       partner = "g",
       type = "fixed"
@@ -236,11 +267,30 @@ scriptUni <- function(
     # latent means
     xmeang <- lmeans(
       dvn,
-      lvar = "X",
+      lvar = lvar,
       lvname,
       partner = "g",
       type = "fixed"
     )
+
+    # Return syntax components if requested
+    if (outputType == "syntax components") {
+      return(list(
+        measurement = list(
+          loadings = xloadsg,
+          intercepts = c(xints1, xints2),
+          residuals = c(xres1, xres2),
+          coresids = xcoresids
+        ),
+        structural = list(
+          variances = xvarg,
+          means = xmeang
+        ),
+        form = "Uni",
+        lvname = lvname,
+        partner_types = "g"
+      ))
+    }
 
     # Script Creation Syntax
     script <- sprintf(
@@ -259,7 +309,7 @@ scriptUni <- function(
     if (any(constr_dy_meas == "loadings")) {
       xloadsg <- loads(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         lvname,
         partner = "g",
         type = "equated_mv"
@@ -267,7 +317,7 @@ scriptUni <- function(
     } else {
       xloadsg <- loads(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         lvname,
         partner = "g",
         type = "fixed"
@@ -278,26 +328,26 @@ scriptUni <- function(
     if (any(constr_dy_meas == "intercepts")) {
       xints1 <- intercepts(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "1",
         type = "equated_mv"
       )
       xints2 <- intercepts(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "2",
         type = "equated" # keep as "equated" in scriptUni
       )
     } else {
       xints1 <- intercepts(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "1",
         type = "fixed"
       )
       xints2 <- intercepts(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "2",
         type = "free" # keep as "free" in scriptUni
       )
@@ -307,26 +357,26 @@ scriptUni <- function(
     if (any(constr_dy_meas == "residuals")) {
       xres1 <- resids(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "1",
         type = "equated"
       )
       xres2 <- resids(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "2",
         type = "equated"
       )
     } else {
       xres1 <- resids(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "1",
         type = "free"
       )
       xres2 <- resids(
         dvn,
-        lvar = "X",
+        lvar = lvar,
         partner = "2",
         type = "free"
       )
@@ -335,14 +385,14 @@ scriptUni <- function(
     # correlated residuals
     xcoresids <- coresids(
       dvn,
-      lvar = "X",
+      lvar = lvar,
       type = "free"
     )
 
     # latent variances
     xvarg <- lvars(
       dvn,
-      lvar = "X",
+      lvar = lvar,
       lvname,
       partner = "g",
       type = "free"
@@ -351,11 +401,30 @@ scriptUni <- function(
     # latent means
     xmeang <- lmeans(
       dvn,
-      lvar = "X",
+      lvar = lvar,
       lvname,
       partner = "g",
       type = "free"
     )
+
+    # Return syntax components if requested
+    if (outputType == "syntax components") {
+      return(list(
+        measurement = list(
+          loadings = xloadsg,
+          intercepts = c(xints1, xints2),
+          residuals = c(xres1, xres2),
+          coresids = xcoresids
+        ),
+        structural = list(
+          variances = xvarg,
+          means = xmeang
+        ),
+        form = "Uni",
+        lvname = lvname,
+        partner_types = "g"
+      ))
+    }
 
     # Script Creation Syntax
     script <- sprintf(

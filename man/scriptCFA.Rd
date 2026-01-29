@@ -2,10 +2,20 @@
 % Please edit documentation in R/scriptCFA.R
 \name{scriptCFA}
 \alias{scriptCFA}
+\alias{scriptMultiCor}
 \title{A Function That Writes, Saves, and Exports Syntax for
 Fitting Latent Dyadic Confirmatory Factor Analysis (CFA) Models with Multiple Factors}
 \usage{
 scriptCFA(
+  dvn,
+  scaleset = "FF",
+  constr_dy_meas = c("loadings", "intercepts", "residuals"),
+  constr_dy_struct = c("variances", "means"),
+  writeTo = NULL,
+  fileName = NULL
+)
+
+scriptMultiCor(
   dvn,
   scaleset = "FF",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -46,12 +56,20 @@ exists in the user's chosen directory, it will be overwritten.}
 \value{
 character object of lavaan script that can be passed immediately to
 lavaan functions
+
+character object of lavaan script that can be passed immediately to
+lavaan functions
 }
 \description{
 This function takes the outputted object from scrapeVarCross() when the var_list argument has been used,
 and automatically writes, returns, and exports (.txt) lavaan() syntax
 for specifying dyadic configural, loading, and intercept invariant
 measurement models for either a group of latent variables (e.g., different sub-scales from a self-report measures).
+
+\code{scriptMultiCor()} is a thin wrapper around \code{scriptCFA()} provided
+as a synonym for users who think of these models as dyadic multi-factor
+correlated-factor models. It takes the same arguments as \code{scriptCFA()}
+and returns the identical lavaan syntax.
 }
 \details{
 By default, many dySEM:: functions (including scriptCFA() default to

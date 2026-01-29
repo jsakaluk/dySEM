@@ -13,9 +13,9 @@ knitr::opts_chunk$set(
 
 This tutorial is a supplemental material from the following article: 
 
-Sakaluk, J. K., & Camanto, O. J. (2025). *Dyadic Data Analysis via Structural Equation Modeling with Latent Variables: A Tutorial with the dySEM package for R*. 
+Prine-Munroe, M., Sakaluk, J. K., Camanto, O., & Quinn-Nilas, C. (2025). *Evaluating Multi-Factor Dyadic Invariance in Couples’ Relationship Satisfaction Using dySEM*. 
 
-This article is intended to serve as the primary citation of record for the `dySEM` package's functionality for the techniques described in this tutorial. **If this tutorial has informed your modeling strategy (including but not limited to your use of `dySEM`), please cite this article**. 
+This article is intended to serve as the primary citation of record for the `dySEM` package's functionality for fitting and interpreting the the Multiple Correlated Dyadic Factors Model with the help of the `scriptCFA()` function (and others) in `dySEM`. **If this tutorial has informed your modeling strategy (including but not limited to your use of `dySEM`), please cite this article**. 
 
 The citation of research software aiding in analyses---like the use of `dySEM`---is a required practice, according to the Journal Article Reporting Standards (JARS) for Quantitative Research in Psychology ([Appelbaum et al., 2018](https://psycnet.apa.org/fulltext/2018-00750-002.html)). 
 
@@ -51,21 +51,21 @@ library(dySEM) #for dyadic SEM scripting and outputting
 library(lavaan) #for fitting dyadic SEMs
 ```
 
-For this exemplar, we use two built-in datasets from `dySEM` (focusing more on one). Of primary interest, the [`imsM`](https://jsakaluk.github.io/dySEM/reference/imsM.html) dataset corresponds to data from the “global” items from 282 mixed-sex couples responding to the full Rusbult et al. (1998) Investment Model Scale (IMS) (including 5 items each for satisfaction, quality of alternatives, investment, and commitment). More information about this data set can be found in [Sakaluk et al. (2021)](https://doi.org/10.1111/pere.12341).
+For this exemplar, we use two built-in datasets from `dySEM` (focusing more on one). Of primary interest, the [`pnrqM`](https://jsakaluk.github.io/dySEM/reference/pnrqM.html) dataset corresponds to data from a short-form of the Positive-Negative Relationship Quality Scale (PNRQ; Rogge et al., 2017) from 219 (M)ixed-sex couples (including 4 items each for positive and negative). More information about this data set can be found in Prine et al. (under review).
 
-All variables in this data frame follow a [“sip” naming pattern]((https://jsakaluk.github.io/dySEM/articles/varnames.html)):
+All variables in this data frame follow a [“sip” naming pattern]((https://jsakaluk.github.io/dySEM/articles/varnames.html)), with a delimiting "_" between the item number and distinguishing partner character:
 
 ```{r, tibble imsM, echo = TRUE}
 
-imsM_dat <- imsM
+pnrqM_dat <- pnrqM
 
-imsM_dat |> 
+pnrqM_dat |> 
   as_tibble()
 ```
 
 We will also use data from the [`prqcQ`](https://jsakaluk.github.io/dySEM/reference/prqcQ.html) dataset, which contains data from 118 queer couples responding to the Perceived Relationship Quality Components Inventory (Fletcher et al., 2000) (including 3 items each for satisfaction, commitment, intimacy, trust, passion, and love). While substantive analyses of this data set have not yet been reported, the data collection took place in parallel to the analyses reported in [Sakaluk et al. (2021)](https://doi.org/10.1111/pere.12341).
 
-In contrast to `imsM`, variable names in the `prqcQ` data frame follow the [“spi” naming pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html):
+In contrast to `pnrqM`, variable names in the `prqcQ` data frame follow the [“spi” naming pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html):
 
 ```{r, tibble prqc, echo = TRUE}
 
@@ -77,39 +77,38 @@ prqc_dat |>
 
 ## 1. Scraping the Variables
 
-Users will take note that the `imsM` dataset contains variables for items for which there are distinctive stems for each subscale (e.g., "sat", "invest", "com"), whereas the `prqcQ` dataset contains a repetitive uninformative stem ("prqc"), despite the presence of multidimensionality. Rest assured, [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html) has been developed with functionality to scrape variable information from both kinds of stems from multidimensional instruments. Further, scraping variable information remains relatively straightforward (and the key to unlocking the powerful functionality of `dySEM`'s scripters), with just one added "twist" from the simpler case of uni-construct or bi-construct models: the creation of a *named list* spelling out the naming 'formula' for each set of indicators.
+Users will take note that the `pnrqM` dataset contains variables for items for which there are distinctive stems for the positive and negative subscales (i.e., "sat.pnrq", "dsat.pnrq"), whereas the `prqcQ` dataset contains a repetitive uninformative stem ("prqc"), despite the presence of multidimensionality. Rest assured, [`scrapeVarCross()`](https://jsakaluk.github.io/dySEM/reference/scrapeVarCross.html) has been developed with functionality to scrape variable information from both kinds of stems from multidimensional instruments. Further, scraping variable information remains relatively straightforward (and the key to unlocking the powerful functionality of `dySEM`'s scripters), with just one added "twist" from the simpler case of uni-construct or bi-construct models: the creation of a *named list* spelling out the naming 'formula' for each set of indicators.
 
-
-### Distinctive Indicator Stems
+### Distinctive Indicator Stems (with `pnrqM`)
 
 The case when indicators have distinctive stems---usually indicating the putative factor onto which they load (e.g., "sat", "com")---is the most straightforward to scrape with `scrapeVarCross()`. 
 
-In this case, users will need to provide the names of the latent variables, the stem for each set of indicators, and the delimiters used in the variable names. In the case of the `imsM` exemplar (i.e., when stems are distinct), the named list must contain the following four elements/vectors (and the names of these elements/vectors must follow what is shown below):
+In this case, users will need to provide the names of the latent variables, the stem for each set of indicators, and the delimiters used in the variable names. In the case of the `pnrqM` exemplar (i.e., when stems are distinct), the named list must contain the following four elements/vectors (and the names of these elements/vectors must follow what is shown below):
 
 - **lvnames**: a vector of the (arbitrary) names that will be used for the latent variables in the `lavaan` script
-- **stem**: a vector containing each distinctive stem for each set of indicators (e.g., "sat.g", "qalt.g", "invest.g", "com")--- `scrapeVarCross()` will use these to search for indicators with matching stems
-- **delim1**: a vector containing the first delimiter used in the variable names (e.g., "", "", "", "")--- `scrapeVarCross()` will use these to search for indicators with matching patterns of delimination
-- **delim2**: a vector containing the second delimiter used in the variable names (e.g., "_", "_", "_", "_")--- `scrapeVarCross()` will use these to search for indicators with matching patterns of delimination
+- **stem**: a vector containing each distinctive stem for each set of indicators (in this case: "sat" and "dsat")--- `scrapeVarCross()` will use these to search for indicators with matching stems
+- **delim1**: a vector containing the first delimiter used in the variable names (e.g., ".", "_")--- `scrapeVarCross()` will use these to search for indicators with matching patterns of delimination
+- **delim2**: a vector containing the second delimiter used in the variable names--- `scrapeVarCross()` will use these to search for indicators with matching patterns of delimination
 
 Each of these elements/vectors must be of the same length, and the order of the elements in each vector must correspond to the order of the latent variables in `lvnames`. And so, saving this named list (in essence, the "recipe card" of indicator names for each factor) into its own object:
 
 ```{r, ims list, echo = TRUE}
 
 #When different factor use distinct stems:
-imsList <- list(lvnames = c("Sat", "Q_Alt", "Invest", "Comm"),
-stem = c("sat.g", "qalt.g", "invest.g", "com"),
-delim1 = c("", "", "", ""),
-delim2 = c("_", "_", "_", "_"))
+pnrqMList <- list(lvnames = c("Sat", "Dsat"),
+stem = c("sat.pnrq", "dsat.pnrq"),
+delim1 = c("", ""),#no delimeter between stem and item number
+delim2 = c("_", "_"))
 ```
 
-This list can then be passed to `scrapeVarCross()` to scrape the variable names from the `imsM` data frame, using the `var_list` argument. The `var_list_order` argument must then be set to indicate that the variables follow the ["sip" naming pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html), and distinguishing characters must also be specified with the `distinguish_1` and `distinguish_2` arguments^[In future updates of `scrapeVarCross()` we may consider enabling users to specify different naming patterns and/or distinguishing characters for indicators from each latent variable, but for now, the same pattern and characters must be used (and we assume that most users already follow this kind of variable naming convention)]:
+This list can then be passed to `scrapeVarCross()` to scrape the variable names from the `pnrqM` data frame, using the `var_list` argument. The `var_list_order` argument must then be set to indicate that the variables follow the ["sip" naming pattern](https://jsakaluk.github.io/dySEM/articles/varnames.html), and distinguishing characters must also be specified with the `distinguish_1` and `distinguish_2` arguments^[In future updates of `scrapeVarCross()` we may consider enabling users to specify different naming patterns and/or distinguishing characters for indicators from each latent variable, but for now, the same pattern and characters must be used (and we assume that most users already follow this kind of variable naming convention)]:
 
 ```{r, ims scrape, echo = TRUE}
 
-dvnIMS <- scrapeVarCross(imsM,
-var_list = imsList,
+dvnPNRQ <- scrapeVarCross(pnrqM,
+var_list = pnrqMList,
 var_list_order = "sip",
-distinguish_1 = "f",
+distinguish_1 = "w",
 distinguish_2 = "m")
 
 ```
@@ -118,11 +117,11 @@ The resulting *dvn* remains as unremarkable as ever, but continues to serve as t
 
 ```{r, ims dvn, echo = TRUE}
 
-dvnIMS
+dvnPNRQ
 
 ```
 
-### Non-Distinctive Indicator Stems
+### Non-Distinctive Indicator Stems (with `prqcQ`)
 
 The case when indicators have non-distinctive stems only requires that your named list---that you later supply to `scrapeVarCross()`---has two more elements/vectors. Currently, **this functionality assumes indicators from the same latent variable (e.g., items measuring Satisfaction) are clustered together, sequentially, in item number (e.g., prqc.1_1 prqc.1_2 prqc.1_3) rather than being interspersed with items from other latent variables (e.g., prqc.1_1 prqc.1_5, prqc.1_8)**.
 
@@ -159,19 +158,19 @@ Whether your *dvn* contains variable information for indicators with distinctive
 
 ## 2. Scripting the Model(s)
 
-Continuing with the `imsM` exemplar for this rest of this vignette, we can now quickly script a series of M-CDFMs using the [`scriptCFA()`](https://jsakaluk.github.io/dySEM/reference/scriptCFA.html) function (so named given that most imagine a M-CDFM model when conducting "dyadic CFA"), and incrementally layer on more dyadic invariance constraints via the `constr_dy_meas` argument. 
+Continuing with the `pnrqM` exemplar for this rest of this vignette, we can now quickly script a series of M-CDFMs using the [`scriptCFA()`](https://jsakaluk.github.io/dySEM/reference/scriptCFA.html) function (so named given that most imagine a M-CDFM model when conducting "dyadic CFA"), and incrementally layer on more dyadic invariance constraints via the `constr_dy_meas` argument. 
 
 The `writeTo` and `fileName` arguments (not depicted here) remain available to those wanting to export a `.txt` file of their concatenated `lavaan` script(s) (e.g., for posting on the OSF). `scaleset` remains fixed-factor, by default, but this is changeable to marker-variable ("MV") for those interested. Given the consequential nature of this choice (e.g., for interpreting the scale of parameter estimates), we strongly recommend making this argument explicit (despite its implicit default to "FF"):
 
 ```{r, script ims, echo = TRUE}
 
-script.ims.config <-  scriptCFA(dvnIMS, scaleset = "FF", constr_dy_meas = "none", constr_dy_struct = "none")
+script.pnrq.config <-  scriptCFA(dvnPNRQ, scaleset = "FF", constr_dy_meas = "none", constr_dy_struct = "none")
 
-script.ims.load <-  scriptCFA(dvnIMS, scaleset = "FF", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
+script.pnrq.load <-  scriptCFA(dvnPNRQ, scaleset = "FF", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
 
-script.ims.int <-  scriptCFA(dvnIMS, scaleset = "FF", constr_dy_meas = c("loadings", "intercepts"),constr_dy_struct = "none")
+script.pnrq.int <-  scriptCFA(dvnPNRQ, scaleset = "FF", constr_dy_meas = c("loadings", "intercepts"),constr_dy_struct = "none")
 
-script.ims.res <-  scriptCFA(dvnIMS, scaleset = "FF",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
+script.pnrq.res <-  scriptCFA(dvnPNRQ, scaleset = "FF",constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
 
 
 ```
@@ -180,7 +179,7 @@ You can concatenate these scripts, if you wish, using the base `cat()` function,
 
 ```{r, cat ims script, include = TRUE, eval = FALSE}
 
-cat(script.ims.config)
+cat(script.pnrq.config)
 
 ```
 
@@ -191,13 +190,13 @@ All of these models can now be fit with whichever `lavaan` wrapper the user pref
 
 ```{r, fit ims, echo = TRUE}
 
-ims.config.mod <- cfa(script.ims.config, data = imsM_dat)
+pnrq.config.mod <- cfa(script.pnrq.config, data = pnrqM_dat)
 
-ims.load.mod <- cfa(script.ims.load, data = imsM_dat)
+pnrq.load.mod <- cfa(script.pnrq.load, data = pnrqM_dat)
 
-ims.int.mod <- cfa(script.ims.int, data = imsM_dat)
+pnrq.int.mod <- cfa(script.pnrq.int, data = pnrqM_dat)
 
-ims.res.mod <- cfa(script.ims.res, data = imsM_dat)
+pnrq.res.mod <- cfa(script.pnrq.res, data = pnrqM_dat)
 
 ```
 
@@ -208,14 +207,14 @@ As with the [CDFM](https://jsakaluk.github.io/dySEM/articles/CDFM.html), competi
 
 ```{r, anova ims, echo = TRUE}
 
-anova(ims.config.mod, ims.load.mod, ims.int.mod, ims.res.mod)
+anova(pnrq.config.mod, pnrq.load.mod, pnrq.int.mod, pnrq.res.mod)
 ```
 
 Or, for a more reproducible-reporting-friendly option, `dySEM`'s [`outputInvarCompTab()`](https://jsakaluk.github.io/dySEM/reference/outputInvarCompTab.html) function is available, and amenable to other tabling packages/functions (e.g., `gt::gt()`, as we demonstrate below), and/or can write an `.rtf` if the user makes use of the `writeTo` and `fileName` arguments:
 
 ```{r, invarcomp ims, echo = TRUE}
 
-mods <- list(ims.config.mod, ims.load.mod, ims.int.mod, ims.res.mod)
+mods <- list(pnrq.config.mod, pnrq.load.mod, pnrq.int.mod, pnrq.res.mod)
 
 outputInvarCompTab(mods) |> 
   gt()
@@ -223,7 +222,7 @@ outputInvarCompTab(mods) |>
 
 ```{r, compare_store, include = FALSE}
 
-comp <- anova(ims.config.mod, ims.load.mod, ims.int.mod, ims.res.mod)
+comp <- anova(pnrq.config.mod, pnrq.load.mod, pnrq.int.mod, pnrq.res.mod)
 comp <- janitor::clean_names(comp)
 
 chisq_diff <- round(comp$chisq_diff, 2)
@@ -232,13 +231,13 @@ p <- round(comp$pr_chisq, 2)
 
 ```
 
-Were one strictly to follow only the likelihood ratio test statistic as a guide, they would reject the possibility of the relatively low bar of loading invariance for the IMS, $\chi^2$ (`r comp$df_diff[2]`) = `r chisq_diff[2]`, *p* `r if(p[2] < .001){paste("<.001")}`. Of course, other methods of model comparison and selection (and their respective thresholds) are available, and whatever method is chosen probably ought to be preregistered. 
+Were one strictly to follow only the likelihood ratio test statistic as a guide, they would reject the possibility of the relatively low bar of loading invariance for the PNRQ, $\chi^2$ (`r comp$df_diff[2]`) = `r chisq_diff[2]`, *p* `r if(p[2] < .001){paste("<.001")}`. Of course, other methods of model comparison and selection (and their respective thresholds) are available, and whatever method is chosen probably ought to be preregistered. 
 
 Meanwhile, the standard outputters from `dySEM` are available to help researchers either table and/or visualize their results. Given the complexity of the M-CDFM (often many more factors and items) than the CDFM, we recommend tabling (vs. visualizing) model output:
 
 ```{r, tables ims, echo = TRUE}
 
-outputParamTab(dvn = dvnIMS, model = "cfa", fit = ims.config.mod,
+outputParamTab(dvn = dvnPNRQ, model = "cfa", fit = pnrq.config.mod,
                tabletype = "measurement") |> 
   gt()
 
@@ -248,7 +247,7 @@ We have also provided a `tabletype = "correlation"` option to assist with provid
 
 ```{r corr_tab, echo = TRUE}
 
-outputParamTab(dvn = dvnIMS, model = "cfa", fit = ims.config.mod,
+outputParamTab(dvn = dvnPNRQ, model = "cfa", fit = pnrq.config.mod,
                tabletype = "correlation") |> 
   gt()
 ```
@@ -259,9 +258,137 @@ Finally, like with the CDFM, users can use additional `dySEM` functions to outpu
 
 ```{r ims noninvariance, echo = TRUE}
 
-outputConstraintTab(ims.load.mod) |> 
+outputConstraintTab(pnrq.load.mod) |> 
   gt()
 
 ```
 
-In this particular example, significant noninvariance is present in all but the third item of the *Commitment* factor the the IMS. 
+In this particular example, significant noninvariance is present for the loadings of most of the negative items (all but the third). 
+
+If we to compute effect sizes to quantify the magnitude of noninvariance in the
+PNRQ, we need to generate a "partial invariance" model, in which noninvariant measurement parameters are free to vary between partners, while others remain constrained. For these effect sizes to be accurate, **it is crucial** that the model contains one or more "anchor items"--items that are free of noninvariance.
+
+To begin this process, we will use `outputConstraintTab()` to identify which loadings *and* intercepts are noninvariant:
+
+```{r ims noninvariance_int, echo = TRUE}
+
+outputConstraintTab(pnrq.int.mod) |> 
+  gt()
+
+```
+
+This output corroborates what we saw before: there isn't intercept noninvariance to worry about (though now we have the added peace of mind that this is true for each intercept, individually, not just as a "family" of parameters). 
+
+While `dySEM` does not yet automate the production of partial-invariance model syntax, we can use the model syntax from the intercept invariance model and make some light adjustments:
+
+```{r ims cat_load, echo = TRUE}
+
+cat(script.pnrq.int)
+
+```
+
+The output of `outputConstraintTab()` indicated that the loadings for items 1, 2, and 4 of the negative subscale were noninvariant, so we simply "free" these loadings by removing the equality constraints (i.e., the shared parameter labels) for them:
+
+```{r ims partial script, echo = TRUE}
+
+script.pnrq.partial <- '
+#Measurement Model
+
+#Loadings (remove l5*, l6*, and l8* for partial invariance
+# in Dsat1 and Dsat2)
+Sat1 =~ NA*sat.pnrq1_w + lx1*sat.pnrq1_w + lx2*sat.pnrq2_w + lx3*sat.pnrq3_w + lx4*sat.pnrq4_w
+Dsat1 =~ NA*dsat.pnrq1_w + dsat.pnrq1_w + dsat.pnrq2_w + lx7*dsat.pnrq3_w + dsat.pnrq4_w
+Sat2 =~ NA*sat.pnrq1_m + lx1*sat.pnrq1_m + lx2*sat.pnrq2_m + lx3*sat.pnrq3_m + lx4*sat.pnrq4_m
+Dsat2 =~ NA*dsat.pnrq1_m + dsat.pnrq1_m + dsat.pnrq2_m + lx7*dsat.pnrq3_m + dsat.pnrq4_m
+
+#Intercepts
+sat.pnrq1_w ~ t1*1
+sat.pnrq2_w ~ t2*1
+sat.pnrq3_w ~ t3*1
+sat.pnrq4_w ~ t4*1
+dsat.pnrq1_w ~ t5*1
+dsat.pnrq2_w ~ t6*1
+dsat.pnrq3_w ~ t7*1
+dsat.pnrq4_w ~ t8*1
+
+sat.pnrq1_m ~ t1*1
+sat.pnrq2_m ~ t2*1
+sat.pnrq3_m ~ t3*1
+sat.pnrq4_m ~ t4*1
+dsat.pnrq1_m ~ t5*1
+dsat.pnrq2_m ~ t6*1
+dsat.pnrq3_m ~ t7*1
+dsat.pnrq4_m ~ t8*1
+
+#Residual Variances
+sat.pnrq1_w ~~ th1*sat.pnrq1_w
+sat.pnrq2_w ~~ th2*sat.pnrq2_w
+sat.pnrq3_w ~~ th3*sat.pnrq3_w
+sat.pnrq4_w ~~ th4*sat.pnrq4_w
+dsat.pnrq1_w ~~ th5*dsat.pnrq1_w
+dsat.pnrq2_w ~~ th6*dsat.pnrq2_w
+dsat.pnrq3_w ~~ th7*dsat.pnrq3_w
+dsat.pnrq4_w ~~ th8*dsat.pnrq4_w
+
+sat.pnrq1_m ~~ th9*sat.pnrq1_m
+sat.pnrq2_m ~~ th10*sat.pnrq2_m
+sat.pnrq3_m ~~ th11*sat.pnrq3_m
+sat.pnrq4_m ~~ th12*sat.pnrq4_m
+dsat.pnrq1_m ~~ th13*dsat.pnrq1_m
+dsat.pnrq2_m ~~ th14*dsat.pnrq2_m
+dsat.pnrq3_m ~~ th15*dsat.pnrq3_m
+dsat.pnrq4_m ~~ th16*dsat.pnrq4_m
+
+#Residual Covariances
+sat.pnrq1_w ~~ sat.pnrq1_m
+sat.pnrq2_w ~~ sat.pnrq2_m
+sat.pnrq3_w ~~ sat.pnrq3_m
+sat.pnrq4_w ~~ sat.pnrq4_m
+dsat.pnrq1_w ~~ dsat.pnrq1_m
+dsat.pnrq2_w ~~ dsat.pnrq2_m
+dsat.pnrq3_w ~~ dsat.pnrq3_m
+dsat.pnrq4_w ~~ dsat.pnrq4_m
+
+#Structural Model
+
+#Latent (Co)Variances
+Sat1 ~~ psi1*Sat1 + 1*Sat1
+Dsat1 ~~ psi2*Dsat1 + 1*Dsat1
+Sat2 ~~ psi3*Sat2 + NA*Sat2
+Dsat2 ~~ psi4*Dsat2 + NA*Dsat2
+Sat1 ~~ psi12*Dsat1
+Sat1 ~~ psi13*Sat2
+Sat1 ~~ psi14*Dsat2
+Dsat1 ~~ psi23*Sat2
+Dsat1 ~~ psi24*Dsat2
+Sat2 ~~ psi34*Dsat2
+
+#Latent Means
+Sat1 ~ a1*1 + 0*1
+Dsat1 ~ a2*1 + 0*1
+Sat2 ~ a3*1
+Dsat2 ~ a4*1
+'
+
+```
+
+Now we fit the partial invariance model:
+
+```{r, partial ims, echo = TRUE}
+
+pnrq.partial.mod <- cfa(script.pnrq.partial, data = pnrqM_dat)
+
+```
+
+We can then supply this partially invariant model (with anchor items) to `outputInvarItem()`, which identifies the noninvariant measurement parameters for each item in each factor, and (for those that are noninvariant) calculates a dyadic version of the dMACS noninvariance effect size metric first proposed by Nye and Drasgow (2011), and later reviewed and expanded upon by Gunn et al. (2020).
+
+```{r, dydmacs, echo = TRUE}
+
+#Key arguments are data file, dvn, and fitted invariance model
+outputInvarItem(dvn = dvnPNRQ, fit = pnrq.partial.mod, 
+                partialScript = script.pnrq.partial, 
+                dat = pnrqM_dat,
+                gtTab = FALSE, writeTo = NULL, fileName = NULL)
+
+
+```

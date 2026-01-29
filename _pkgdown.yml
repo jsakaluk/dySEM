@@ -65,6 +65,7 @@ reference:
   - outputParamTab
   - outputParamFig
   - outputInvarCompTab
+  - outputInvarItem
   - outputConstraintTab
   - outputUniConstructComp
 

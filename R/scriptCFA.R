@@ -318,3 +318,30 @@ scriptCFA <- function(dvn, scaleset = "FF",
     return(script)
   }
 }
+
+#' Wrapper for scriptCFA for Multiple Correlated Dyadic Factor Models (M-CDFMs)
+#'
+#' \code{scriptMultiCor()} is a thin wrapper around \code{scriptCFA()} provided
+#' as a synonym for users who think of these models as dyadic multi-factor
+#' correlated-factor models. It takes the same arguments as \code{scriptCFA()}
+#' and returns the identical lavaan syntax.
+#'
+#' @rdname scriptCFA
+#' @return character object of lavaan script that can be passed immediately to
+#' lavaan functions
+#' @export
+scriptMultiCor <- function(dvn,
+                           scaleset = "FF",
+                           constr_dy_meas = c("loadings", "intercepts", "residuals"),
+                           constr_dy_struct = c("variances", "means"),
+                           writeTo = NULL,
+                           fileName = NULL) {
+  scriptCFA(
+    dvn = dvn,
+    scaleset = scaleset,
+    constr_dy_meas = constr_dy_meas,
+    constr_dy_struct = constr_dy_struct,
+    writeTo = writeTo,
+    fileName = fileName
+  )
+}
