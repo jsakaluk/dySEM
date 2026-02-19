@@ -105,6 +105,7 @@ fileName = "BiDy_S")
 Other bi-construct script-writing functions: 
 \code{\link{scriptAPIM}()},
 \code{\link{scriptCFM}()},
-\code{\link{scriptMIM}()}
+\code{\link{scriptMIM}()},
+\code{\link{scriptTwoCross}()}
 }
 \concept{bi-construct script-writing functions}

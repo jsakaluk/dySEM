@@ -44,6 +44,7 @@ reference:
   - scriptCFM
   - scriptMIM
   - scriptBiDy
+  - scriptTwoCross
 
 - subtitle: Multi-construct Scripters
   desc: These functions are used to generate lavaan syntax corresponding to models representing more than two constructs within a dyadic data set

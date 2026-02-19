@@ -113,6 +113,7 @@ apim.script.indist <- scriptAPIM(dvn,
 Other bi-construct script-writing functions: 
 \code{\link{scriptBiDy}()},
 \code{\link{scriptCFM}()},
-\code{\link{scriptMIM}()}
+\code{\link{scriptMIM}()},
+\code{\link{scriptTwoCross}()}
 }
 \concept{bi-construct script-writing functions}

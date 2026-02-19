@@ -97,6 +97,7 @@ fileName = "CFM_indist")
 Other bi-construct script-writing functions: 
 \code{\link{scriptAPIM}()},
 \code{\link{scriptBiDy}()},
-\code{\link{scriptMIM}()}
+\code{\link{scriptMIM}()},
+\code{\link{scriptTwoCross}()}
 }
 \concept{bi-construct script-writing functions}

@@ -685,6 +685,22 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
+  } else if (partner == "g" & type == "fixed" & lvar == "Y") {
+    eta_x <- sprintf("%sDy =~ 1*", lvname)
+    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1yvarnames"]], collapse = "+"), "+", paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    return(eta.x)
+  } else if (partner == "g" & type == "equated_mv" & lvar == "Y") {
+    eta_x <- sprintf("%sDy =~ 1*%s+", lvname, dvn[["p1yvarnames"]][1])
+    eta.x1 <- list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x1[[i]] <- sprintf("lyg%s*%s", i, dvn[["p1yvarnames"]][i])
+    }
+    eta.x2 <- list()
+    for (i in 1:dvn[["yindper"]]) {
+      eta.x2[[i]] <- sprintf("lyg%s*%s", i, dvn[["p2yvarnames"]][i])
+    }
+    eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
+    return(eta.x)
   }
 }
 
@@ -1149,4 +1165,39 @@ cfmeans <- function(lvname, type, lvar = "X") {
     lmean <- sprintf("%s ~ NA*1", lvname)
     return(lmean)
   }
+}
+
+#' @rdname scriptHelpers
+#' @noRd
+twoCross_regs <- function(x_factors, y_factors, type = "free") {
+  if (length(x_factors) == 0 || length(y_factors) == 0) {
+    return(character(0))
+  }
+  reg_lines <- character(length(y_factors))
+  for (i in seq_along(y_factors)) {
+    y <- y_factors[i]
+    if (type == "zero") {
+      rhs_parts <- paste0("0*", x_factors)
+    } else {
+      rhs_parts <- paste0("b_", y, "_", x_factors, "*", x_factors)
+    }
+    reg_lines[i] <- paste(y, "~", paste(rhs_parts, collapse = " + "))
+  }
+  paste(reg_lines, collapse = "\n")
+}
+
+#' @rdname scriptHelpers
+#' @noRd
+getTwoCrossFactors <- function(components, dvn) {
+  form <- components$form
+  lvname <- components$lvname
+  dist1 <- dvn[["dist1"]]
+  dist2 <- dvn[["dist2"]]
+  switch(form,
+    Uni = paste0(lvname, "Dy"),
+    Cor = c(paste0(lvname, dist1), paste0(lvname, dist2)),
+    Hier = c(lvname, paste0(lvname, dist1), paste0(lvname, dist2)),
+    Bifac = c(paste0(lvname, "Dy"), paste0(lvname, dist1), paste0(lvname, dist2)),
+    stop("Unknown form: ", form)
+  )
 }
