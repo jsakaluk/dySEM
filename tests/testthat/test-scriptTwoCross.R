@@ -151,3 +151,60 @@ test_that("scriptTwoCross produces same chisq for cor/uni when x_scaleset and y_
   expect_equal(chisq_ff_ff, chisq_ff_mv)
   expect_equal(chisq_ff_ff, chisq_mv_ff)
 })
+
+# ---- scriptTwoCross(cor/cor) vs scriptAPIM equivalence ----
+# When x_model and y_model are both "cor" and constraint args match, both should
+# produce the same model (same df and chisq).
+test_that("scriptTwoCross cor/cor produces same df as scriptAPIM when constraint args match", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2 = "_",
+    distinguish_1 = "1", distinguish_2 = "2",
+    y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_",
+    verbose = FALSE
+  )
+  script_tc <- scriptTwoCross(dvn, lvxname = "Sat", lvyname = "Com",
+    x_model = "cor", y_model = "cor",
+    x_scaleset = "FF", y_scaleset = "FF",
+    constr_dy_x_meas = "none", constr_dy_x_struct = "none",
+    constr_dy_y_meas = "none", constr_dy_y_struct = "none",
+    constr_dy_xy_struct = "free", includeMeanStruct = FALSE
+  )
+  script_apim <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF",
+    constr_dy_x_meas = c("none"), constr_dy_y_meas = c("none"),
+    constr_dy_x_struct = c("none"), constr_dy_y_struct = c("none"),
+    constr_dy_xy_struct = c("none"), includeMeanStruct = FALSE
+  )
+  mod_tc <- lavaan::cfa(script_tc, data = commitmentQ, parallel = "no")
+  mod_apim <- lavaan::cfa(script_apim, data = commitmentQ, parallel = "no")
+  expect_equal(
+    as.double(lavaan::fitmeasures(mod_tc, "df")),
+    as.double(lavaan::fitmeasures(mod_apim, "df"))
+  )
+})
+
+test_that("scriptTwoCross cor/cor produces same chisq as scriptAPIM when constraint args match", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ, x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2 = "_",
+    distinguish_1 = "1", distinguish_2 = "2",
+    y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_",
+    verbose = FALSE
+  )
+  script_tc <- scriptTwoCross(dvn, lvxname = "Sat", lvyname = "Com",
+    x_model = "cor", y_model = "cor",
+    x_scaleset = "FF", y_scaleset = "FF",
+    constr_dy_x_meas = "none", constr_dy_x_struct = "none",
+    constr_dy_y_meas = "none", constr_dy_y_struct = "none",
+    constr_dy_xy_struct = "free", includeMeanStruct = FALSE
+  )
+  script_apim <- scriptAPIM(dvn, lvxname = "Sat", lvyname = "Com", scaleset = "FF",
+    constr_dy_x_meas = c("none"), constr_dy_y_meas = c("none"),
+    constr_dy_x_struct = c("none"), constr_dy_y_struct = c("none"),
+    constr_dy_xy_struct = c("none"), includeMeanStruct = FALSE
+  )
+  mod_tc <- lavaan::cfa(script_tc, data = commitmentQ, parallel = "no")
+  mod_apim <- lavaan::cfa(script_apim, data = commitmentQ, parallel = "no")
+  expect_equal(
+    as.double(lavaan::fitmeasures(mod_tc, "chisq")),
+    as.double(lavaan::fitmeasures(mod_apim, "chisq"))
+  )
+})
