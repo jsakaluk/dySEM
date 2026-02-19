@@ -89,10 +89,10 @@ Relationship Satisfaction Using dySEM</em>.</p>
 <p>This article is intended to serve as the primary citation of record
 for the <code>dySEM</code> package’s functionality for fitting and
 interpreting the the Multiple Correlated Dyadic Factors Model with the
-help of the <code><a href="../reference/scriptCFA.html">scriptCFA()</a></code> function (and others) in
-<code>dySEM</code>. <strong>If this tutorial has informed your modeling
-strategy (including but not limited to your use of <code>dySEM</code>),
-please cite this article</strong>.</p>
+help of the <code><a href="../reference/scriptCFA.html">scriptMultiCor()</a></code>/<code><a href="../reference/scriptCFA.html">scriptCFA()</a></code>
+function (and others) in <code>dySEM</code>. <strong>If this tutorial
+has informed your modeling strategy (including but not limited to your
+use of <code>dySEM</code>), please cite this article</strong>.</p>
 <p>The citation of research software aiding in analyses—like the use of
 <code>dySEM</code>—is a required practice, according to the Journal
 Article Reporting Standards (JARS) for Quantitative Research in
@@ -3606,6 +3606,140 @@ reviewed and expanded upon by Gunn et al. (2020).</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Dsat  dsat.pnrq2_w / dsat.… Yes                  No                     0.165 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> Dsat  dsat.pnrq3_w / dsat.… No                   No                     0     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> Dsat  dsat.pnrq4_w / dsat.… Yes                  No                     0.056<span style="text-decoration: underline;">8</span></span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quality-assurance">Quality Assurance<a class="anchor" aria-label="anchor" href="#quality-assurance"></a>
+</h2>
+<p>To paraphrase the introduction to the TV show <a href="https://www.imdb.com/title/tt2141913/" class="external-link">Review</a>, the astute
+reader might find themselves wondering:</p>
+<blockquote>
+<p><code>dySEM</code>: it’s all we have for automating dyadic SEM…but is
+it <em>any good</em>?</p>
+</blockquote>
+<p>That is, how can a scrutinous reader have faith that the software
+actually functions, as intended, and generates the correct model
+syntax?</p>
+<div class="section level3">
+<h3 id="why-have-confidence-in-dysem">Why have confidence in <code>dySEM</code>?<a class="anchor" aria-label="anchor" href="#why-have-confidence-in-dysem"></a>
+</h3>
+<p>All software, including ours, will inevitably contain errors. But we
+see three reasons for users to have confidence in <code>dySEM</code>’s
+core functionality.</p>
+<ol style="list-style-type: decimal">
+<li><p>Its codebase is completely open-source, meaning its entire
+codebase is available for interested users to inspect, test, and/or
+build on themselves (e.g., the code for the M-CDFA scripting is
+available <a href="https://github.com/jsakaluk/dySEM/blob/master/R/scriptCFA.R" class="external-link">here</a>).</p></li>
+<li><p><code>dySEM</code> has been accepted to <a href="https://cran.r-project.org/web/packages/dySEM/index.html" class="external-link">CRAN</a>
+should give users confidence, because <a href="https://r-pkgs.org/release.html" class="external-link">CRAN demands a strict set of
+checks</a> that need to be passed in order to ensure cross-platform
+compatibility and proper deployment. And finally,</p></li>
+<li><p><code>dySEM</code> is backed by more than 500 <a href="https://r-pkgs.org/testing-basics.html" class="external-link">self-verifying “unit
+tests”</a> that ensure its functionality executes as intended, including
+<a href="https://github.com/jsakaluk/dySEM/blob/master/tests/testthat/test-scriptCFA.R" class="external-link">31
+dedicated to testing the M-CDFM functionality</a>.</p></li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="key-human-written-and-human-verified-unit-tests">Key human-written and human-verified unit tests<a class="anchor" aria-label="anchor" href="#key-human-written-and-human-verified-unit-tests"></a>
+</h3>
+<p>Among these unit tests, many of the most important ones have been
+human-written and human-verified to provide correct model
+specifications. Namely, for each of the four M-CDFM’s (with our pnrqM
+data) corresponding to the four levels of invariance (configural,
+loading, intercept, residual), we have:</p>
+<ul>
+<li>calculated the appropriate number of parameters to be
+estimated,</li>
+<li>calculated the appropriate number of degrees of freedom, and</li>
+<li>ensured that these values do not change across
+<code>scalset = "FF"</code> or <code>scaleset = "MV"</code>
+options.</li>
+</ul>
+<p>We<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;and by “we”, “we” mean Omar&lt;/p&gt;"><sup>2</sup></a>
+also provide labeled path diagrams (with some corresponding arithmetic)
+below, for each of these four M-CDFM’s, to help users visually verify
+that the model specifications (and our unit tests) are correct<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;fixed-factor scaling depicted&lt;/p&gt;"><sup>3</sup></a>.</p>
+</div>
+<div class="section level3">
+<h3 id="path-diagrams-and-degree-of-freedom-math-for-each-level-of-invariance-in-the-m-cdfm">Path diagrams and degree of freedom math for each level of
+invariance in the M-CDFM<a class="anchor" aria-label="anchor" href="#path-diagrams-and-degree-of-freedom-math-for-each-level-of-invariance-in-the-m-cdfm"></a>
+</h3>
+<div class="float">
+<img src="images/ut_config.png" alt="Counting # of parameters to be estimated, and degrees of freedom, for the configural invariance M-CDFM, with the pnrqM data"><div class="figcaption">Counting # of parameters to be estimated, and
+degrees of freedom, for the configural invariance M-CDFM, with the pnrqM
+data</div>
+</div>
+<p>In the configural invariance M-CDFM, each partner shares the same
+number of factors, and the same general pattern of items loading onto
+factors, for which there are uniquely estimated loading values.
+Likewise, in the mean structure, each item has its own uniquely
+estimated intercept values. In the fixed-factor scaling of this model
+(shown in the path diagram), each factor has its latent variance
+constrained to 1 and its latent mean constrained to 0 for both partners
+(while all loadings and intercepts are estimated). In the
+marker-variable scaling (not shown in the diagram), the first loading of
+each factor is constrained to 1, and the intercept for the same item is
+constrained to 0, while the latent variance and mean are freely
+estimated.</p>
+<div class="float">
+<img src="images/ut_loading.png" alt="Counting # of parameters to be estimated, and degrees of freedom, for the loading invariance M-CDFM, with the pnrqM data"><div class="figcaption">Counting # of parameters to be estimated, and
+degrees of freedom, for the loading invariance M-CDFM, with the pnrqM
+data</div>
+</div>
+<p>In the loading invariance M-CDFM, the loading values for the same
+items across partners are constrained to be equal. In the fixed-factor
+scaling, as a result of these constraints on the loadings, the
+constraints on the latent variances are not needed for both pairs of
+latent variances of each factor, and so we can freely estimate one of
+the latent variances for each factor (while the other remains
+constrained to 1). In the marker-variable scaling, the marker variable’s
+loading remains constrained to 1 for each pair of factors, while the
+other remaining loadings are constrained across partner.</p>
+<div class="float">
+<img src="images/ut_intercept.png" alt="Counting # of parameters to be estimated, and degrees of freedom, for the intercept invariance M-CDFM, with the pnrqM data"><div class="figcaption">Counting # of parameters to be estimated, and
+degrees of freedom, for the intercept invariance M-CDFM, with the pnrqM
+data</div>
+</div>
+<p>In the intercept invariance M-CDFM, the intercept values for the same
+items across partners are constrained to be equal. In the fixed-factor
+scaling, as a result of these constraints on the intercepts, the
+constraints on the latent means are not needed for both pairs of latent
+means of each factor, and so we can freely estimate one of the latent
+means for each factor (while the other remains constrained to 0). In the
+marker-variable scaling, the marker variable’s intercept remains
+constrained to 0 for each pair of factors, while the other remaining
+intercepts are constrained across partner.</p>
+<div class="float">
+<img src="images/ut_residual.png" alt="Counting # of parameters to be estimated, and degrees of freedom, for the (less-frequently considered) residual invariance M-CDFM, with the pnrqM data"><div class="figcaption">Counting # of parameters to be estimated, and
+degrees of freedom, for the (less-frequently considered) residual
+invariance M-CDFM, with the pnrqM data</div>
+</div>
+<p>Finally, in the residual invariance M-CDFM, the residual variances
+for the same items across partners are constrained to be equal. The
+changes in syntax look identical for the fixed-factor and
+marker-variable scalings, as the constraints on the residual variances
+do not interact with the scale-setting choice a user makes (i.e., the
+residual variances are all uniquely estimated in configural, loading,
+and intercept invariance in both scalings, and therefore all pairs are
+available to be constrained across partner).</p>
+<p>We hope these diagrams (and their corresponding tests) provide users
+a sense of comfort that the M-CDFM functionality in <code>dySEM</code>
+is working as intended, and that the model specifications it produces
+are correct.</p>
+</div>
+<div class="section level3">
+<h3 id="qa-summary">QA Summary<a class="anchor" aria-label="anchor" href="#qa-summary"></a>
+</h3>
+<p>Of course, we welcome any users alerting us of any errors in our
+model specifications (e.g., via GitHub issues on the <code>dySEM</code>
+<a href="https://github.com/jsakaluk/dySEM/issues" class="external-link">GitHub Repo</a>), and
+we will work to resolve any such errors as quickly as possible. Indeed,
+somewhat paradoxically, we feel the ability to publicly identify and fix
+errors is a strength of open-source software like <code>dySEM</code>:
+let us know what problems you find, and through code, we can fix them
+for everyone, forever, and for free!</p>
+</div>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
