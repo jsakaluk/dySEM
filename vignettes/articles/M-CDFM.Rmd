@@ -15,7 +15,7 @@ This tutorial is a supplemental material from the following article:
 
 Prine-Munroe, M., Sakaluk, J. K., Camanto, O., & Quinn-Nilas, C. (2025). *Evaluating Multi-Factor Dyadic Invariance in Couples’ Relationship Satisfaction Using dySEM*. 
 
-This article is intended to serve as the primary citation of record for the `dySEM` package's functionality for fitting and interpreting the the Multiple Correlated Dyadic Factors Model with the help of the `scriptCFA()` function (and others) in `dySEM`. **If this tutorial has informed your modeling strategy (including but not limited to your use of `dySEM`), please cite this article**. 
+This article is intended to serve as the primary citation of record for the `dySEM` package's functionality for fitting and interpreting the the Multiple Correlated Dyadic Factors Model with the help of the `scriptMultiCor()`/`scriptCFA()` function (and others) in `dySEM`. **If this tutorial has informed your modeling strategy (including but not limited to your use of `dySEM`), please cite this article**. 
 
 The citation of research software aiding in analyses---like the use of `dySEM`---is a required practice, according to the Journal Article Reporting Standards (JARS) for Quantitative Research in Psychology ([Appelbaum et al., 2018](https://psycnet.apa.org/fulltext/2018-00750-002.html)). 
 
@@ -392,3 +392,59 @@ outputInvarItem(dvn = dvnPNRQ, fit = pnrq.partial.mod,
 
 
 ```
+
+## Quality Assurance
+
+To paraphrase the introduction to the TV show [Review](https://www.imdb.com/title/tt2141913/), the astute reader might find themselves wondering: 
+
+> `dySEM`: it’s all we have for automating dyadic SEM…but is it *any good*? 
+
+That is, how can a scrutinous reader have faith that the software actually functions, as intended, and generates the correct model syntax? 
+
+### Why have confidence in `dySEM`?
+
+All software, including ours, will inevitably contain errors. But we see three reasons for users to have confidence in `dySEM`’s core functionality. 
+
+1. Its codebase is completely open-source, meaning its entire codebase is available for interested users to inspect, test, and/or build on themselves (e.g., the code for the M-CDFA scripting is available [here](https://github.com/jsakaluk/dySEM/blob/master/R/scriptCFA.R)). 
+
+2. `dySEM` has been accepted to [CRAN](https://cran.r-project.org/web/packages/dySEM/index.html)  should give users confidence, because  [CRAN demands a strict set of checks](https://r-pkgs.org/release.html) that need to be passed in order to ensure cross-platform compatibility and proper deployment. And finally, 
+
+3. `dySEM` is backed by more than 500 [self-verifying “unit tests”](https://r-pkgs.org/testing-basics.html) that ensure its functionality executes as intended, including [31 dedicated to testing the M-CDFM functionality](https://github.com/jsakaluk/dySEM/blob/master/tests/testthat/test-scriptCFA.R). 
+
+### Key human-written and human-verified unit tests
+
+Among these unit tests, many of the most important ones have been human-written and human-verified to provide correct model specifications. Namely, for each of the four M-CDFM's (with our pnrqM data) corresponding to the four levels of invariance (configural, loading, intercept, residual), we have: 
+
+- calculated the appropriate number of parameters to be estimated, 
+- calculated the appropriate number of degrees of freedom, and
+- ensured that these values do not change across `scalset = "FF"` or `scaleset = "MV"` options.
+
+We^[and by "we", "we" mean Omar] also provide labeled path diagrams (with some corresponding arithmetic) below, for each of these four M-CDFM's, to help users visually verify that the model specifications (and our unit tests) are correct^[fixed-factor scaling depicted].
+
+### Path diagrams and degree of freedom math for each level of invariance in the M-CDFM
+
+![Counting # of parameters to be estimated, and degrees of freedom, for the configural invariance M-CDFM, with the pnrqM data](./images/ut_config.png)
+
+
+In the configural invariance M-CDFM, each partner shares the same number of factors, and the same general pattern of items loading onto factors, for which there are uniquely estimated loading values. Likewise, in the mean structure, each item has its own uniquely estimated intercept values. In the fixed-factor scaling of this model (shown in the path diagram), each factor has its latent variance constrained to 1 and its latent mean constrained to 0 for both partners (while all loadings and intercepts are estimated). In the marker-variable scaling (not shown in the diagram), the first loading of each factor is constrained to 1, and the intercept for the same item is constrained to 0, while the latent variance and mean are freely estimated. 
+
+![Counting # of parameters to be estimated, and degrees of freedom, for the loading invariance M-CDFM, with the pnrqM data](./images/ut_loading.png)
+
+
+In the loading invariance M-CDFM, the loading values for the same items across partners are constrained to be equal. In the fixed-factor scaling, as a result of these constraints on the loadings, the constraints on the latent variances are not needed for both pairs of latent variances of each factor, and so we can freely estimate one of the latent variances for each factor (while the other remains constrained to 1). In the marker-variable scaling, the marker variable's loading remains constrained to 1 for each pair of factors, while the other remaining loadings are constrained across partner.
+
+![Counting # of parameters to be estimated, and degrees of freedom, for the intercept invariance M-CDFM, with the pnrqM data](./images/ut_intercept.png)
+
+
+In the intercept invariance M-CDFM, the intercept values for the same items across partners are constrained to be equal. In the fixed-factor scaling, as a result of these constraints on the intercepts, the constraints on the latent means are not needed for both pairs of latent means of each factor, and so we can freely estimate one of the latent means for each factor (while the other remains constrained to 0). In the marker-variable scaling, the marker variable's intercept remains constrained to 0 for each pair of factors, while the other remaining intercepts are constrained across partner.
+
+![Counting # of parameters to be estimated, and degrees of freedom, for the (less-frequently considered) residual invariance M-CDFM, with the pnrqM data](./images/ut_residual.png)
+
+
+Finally, in the residual invariance M-CDFM, the residual variances for the same items across partners are constrained to be equal. The changes in syntax look identical for the fixed-factor and marker-variable scalings, as the constraints on the residual variances do not interact with the scale-setting choice a user makes (i.e., the residual variances are all uniquely estimated in configural, loading, and intercept invariance in both scalings, and therefore all pairs are available to be constrained across partner).
+
+We hope these diagrams (and their corresponding tests) provide users a sense of comfort that the M-CDFM functionality in `dySEM` is working as intended, and that the model specifications it produces are correct. 
+
+### QA Summary 
+
+Of course, we welcome any users alerting us of any errors in our model specifications (e.g., via GitHub issues on the `dySEM` [GitHub Repo](https://github.com/jsakaluk/dySEM/issues)), and we will work to resolve any such errors as quickly as possible. Indeed, somewhat paradoxically, we feel the ability to publicly identify and fix errors is a strength of open-source software like `dySEM`: let us know what problems you find, and through code, we can fix them for everyone, forever, and for free! 
