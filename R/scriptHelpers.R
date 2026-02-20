@@ -478,30 +478,101 @@ multifac_lmeans <- function(dvn, partner, type = "free") {
   return(lavaan_statements)
 }
 
+#' Wrap a modifier for multi-group lavaan syntax (c() vector form)
+#' @param modifier Single modifier (label or value, e.g. "lx2", "1", "NA")
+#' @param var Variable name (e.g. "sat.g.1_2")
+#' @param n_group Number of groups
+#' @param constraint "free" (different label per group), "equal" (same label), or "fixed" (same value)
+#' @return String like "c(lx2_1,lx2_2)*var" or "c(lx2,lx2)*var"
+#' @noRd
+wrap_multigroup <- function(modifier, var, n_group, constraint = "free") {
+  if (n_group < 2) {
+    return(paste0(modifier, "*", var))
+  }
+  if (constraint == "free") {
+    mods <- paste0(modifier, "_", seq_len(n_group))
+  } else if (constraint == "first_fixed_rest_free") {
+    mods <- c(modifier, rep("NA", n_group - 1))
+  } else if (identical(modifier, "NA")) {
+    mods <- rep("NA", n_group)
+  } else {
+    mods <- rep(modifier, n_group)
+  }
+  paste0("c(", paste(mods, collapse = ", "), ")*", var)
+}
+
 #' @rdname scriptHelpers
 #' @noRd
-loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
+loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free", group_n = NULL, constr_group_loadings = FALSE) {
   if (partner == "1" & type == "fixed" & lvar == "X") {
-    eta_x <- sprintf("%s%s =~ 1*", lvname, dvn[["dist1"]])
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1xvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta.x <- list()
+      for (i in 1:dvn[["xindper"]]) {
+        var <- dvn[["p1xvarnames"]][i]
+        eta.x[[i]] <- wrap_multigroup("1", var, group_n, "fixed")
+      }
+      eta_x <- sprintf("%s%s =~ ", lvname, dvn[["dist1"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%s%s =~ 1*", lvname, dvn[["dist1"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1xvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "1" & type == "fixed" & lvar == "Y") {
-    eta_x <- sprintf("%s%s =~ 1*", lvname, dvn[["dist1"]])
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1yvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta.x <- list()
+      for (i in 1:dvn[["yindper"]]) {
+        var <- dvn[["p1yvarnames"]][i]
+        eta.x[[i]] <- wrap_multigroup("1", var, group_n, "fixed")
+      }
+      eta_x <- sprintf("%s%s =~ ", lvname, dvn[["dist1"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%s%s =~ 1*", lvname, dvn[["dist1"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1yvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "1" & type == "free" & lvar == "X") {
-    eta_x <- sprintf("%s%s =~ NA*", lvname, dvn[["dist1"]])
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1xvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta.x <- list()
+      for (i in 1:dvn[["xindper"]]) {
+        mod <- paste0("lx", i)
+        var <- dvn[["p1xvarnames"]][i]
+        eta.x[[i]] <- wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      }
+      eta_x <- sprintf("%s%s =~ ", lvname, dvn[["dist1"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%s%s =~ NA*", lvname, dvn[["dist1"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1xvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "1" & type == "free" & lvar == "Y") {
-    eta_x <- sprintf("%s%s =~ NA*", lvname, dvn[["dist1"]])
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1yvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta.x <- list()
+      for (i in 1:dvn[["yindper"]]) {
+        mod <- paste0("ly", i)
+        var <- dvn[["p1yvarnames"]][i]
+        eta.x[[i]] <- wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      }
+      eta_x <- sprintf("%s%s =~ ", lvname, dvn[["dist1"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%s%s =~ NA*", lvname, dvn[["dist1"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1yvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "1" & type == "equated" & lvar == "X") {
     eta_x <- sprintf("%s%s =~ NA*%s+", lvname, dvn[["dist1"]], dvn[["p1xvarnames"]][1])
     eta.x <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x[[i]] <- sprintf("lx%s*%s", i, dvn[["p1xvarnames"]][i])
+      mod <- paste0("lx", i)
+      var <- dvn[["p1xvarnames"]][i]
+      eta.x[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
@@ -509,7 +580,13 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ NA*%s+", lvname, dvn[["dist1"]], dvn[["p1yvarnames"]][1])
     eta.x <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x[[i]] <- sprintf("ly%s*%s", i, dvn[["p1yvarnames"]][i])
+      mod <- paste0("ly", i)
+      var <- dvn[["p1yvarnames"]][i]
+      eta.x[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
@@ -517,7 +594,13 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ 1*%s+", lvname, dvn[["dist1"]], dvn[["p1xvarnames"]][1])
     eta.x <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x[[i]] <- sprintf("lx%s*%s", i, dvn[["p1xvarnames"]][i])
+      mod <- paste0("lx", i)
+      var <- dvn[["p1xvarnames"]][i]
+      eta.x[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
@@ -525,7 +608,13 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ 1*%s+", lvname, dvn[["dist1"]], dvn[["p1yvarnames"]][1])
     eta.x <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x[[i]] <- sprintf("ly%s*%s", i, dvn[["p1yvarnames"]][i])
+      mod <- paste0("ly", i)
+      var <- dvn[["p1yvarnames"]][i]
+      eta.x[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
@@ -533,7 +622,13 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ NA*%s+", lvname, dvn[["dist1"]], dvn[["p1xvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]] <- sprintf("lx%s*%s", i, dvn[["p1xvarnames"]][i])
+      mod <- paste0("lx", i)
+      var <- dvn[["p1xvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+")), fixed = T)
     return(eta.x)
@@ -541,31 +636,85 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ NA*%s+", lvname, dvn[["dist1"]], dvn[["p1yvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x1[[i]] <- sprintf("ly%s*%s", i, dvn[["p1yvarnames"]][i])
+      mod <- paste0("ly", i)
+      var <- dvn[["p1yvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+")), fixed = T)
     return(eta.x)
   } else if (partner == "2" & type == "fixed" & lvar == "X") {
-    eta_x <- sprintf("%s%s =~ 1*", lvname, dvn[["dist2"]])
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta.x <- list()
+      for (i in 1:dvn[["xindper"]]) {
+        var <- dvn[["p2xvarnames"]][i]
+        eta.x[[i]] <- wrap_multigroup("1", var, group_n, "fixed")
+      }
+      eta_x <- sprintf("%s%s =~ ", lvname, dvn[["dist2"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%s%s =~ 1*", lvname, dvn[["dist2"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "2" & type == "fixed" & lvar == "Y") {
-    eta_x <- sprintf("%s%s =~ 1*", lvname, dvn[["dist2"]])
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta.x <- list()
+      for (i in 1:dvn[["yindper"]]) {
+        var <- dvn[["p2yvarnames"]][i]
+        eta.x[[i]] <- wrap_multigroup("1", var, group_n, "fixed")
+      }
+      eta_x <- sprintf("%s%s =~ ", lvname, dvn[["dist2"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%s%s =~ 1*", lvname, dvn[["dist2"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "2" & type == "free" & lvar == "X") {
-    eta_x <- sprintf("%s%s =~ NA*", lvname, dvn[["dist2"]])
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta.x <- list()
+      for (i in 1:dvn[["xindper"]]) {
+        mod <- paste0("lx", dvn[["xindper"]] + i)
+        var <- dvn[["p2xvarnames"]][i]
+        eta.x[[i]] <- wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      }
+      eta_x <- sprintf("%s%s =~ ", lvname, dvn[["dist2"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%s%s =~ NA*", lvname, dvn[["dist2"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "2" & type == "free" & lvar == "Y") {
-    eta_x <- sprintf("%s%s =~ NA*", lvname, dvn[["dist2"]])
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta.x <- list()
+      for (i in 1:dvn[["yindper"]]) {
+        mod <- paste0("ly", dvn[["yindper"]] + i)
+        var <- dvn[["p2yvarnames"]][i]
+        eta.x[[i]] <- wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      }
+      eta_x <- sprintf("%s%s =~ ", lvname, dvn[["dist2"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%s%s =~ NA*", lvname, dvn[["dist2"]])
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "2" & type == "equated" & lvar == "X") {
     eta_x <- sprintf("%s%s =~ NA*%s+", lvname, dvn[["dist2"]], dvn[["p2xvarnames"]][1])
     eta.x <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x[[i]] <- sprintf("lx%s*%s", i, dvn[["p2xvarnames"]][i])
+      mod <- paste0("lx", i)
+      var <- dvn[["p2xvarnames"]][i]
+      eta.x[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
@@ -573,7 +722,13 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ NA*%s+", lvname, dvn[["dist2"]], dvn[["p2yvarnames"]][1])
     eta.x <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x[[i]] <- sprintf("ly%s*%s", i, dvn[["p2yvarnames"]][i])
+      mod <- paste0("ly", i)
+      var <- dvn[["p2yvarnames"]][i]
+      eta.x[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
@@ -581,7 +736,13 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ 1*%s+", lvname, dvn[["dist2"]], dvn[["p2xvarnames"]][1])
     eta.x <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x[[i]] <- sprintf("lx%s*%s", i, dvn[["p2xvarnames"]][i])
+      mod <- paste0("lx", i)
+      var <- dvn[["p2xvarnames"]][i]
+      eta.x[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
@@ -589,7 +750,13 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ 1*%s+", lvname, dvn[["dist2"]], dvn[["p2yvarnames"]][1])
     eta.x <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x[[i]] <- sprintf("ly%s*%s", i, dvn[["p2yvarnames"]][i])
+      mod <- paste0("ly", i)
+      var <- dvn[["p2yvarnames"]][i]
+      eta.x[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x, collapse = "+")), fixed = T)
     return(eta.x)
@@ -597,7 +764,13 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ NA*%s+", lvname, dvn[["dist2"]], dvn[["p2xvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]] <- sprintf("lx%s*%s", (dvn[["xindper"]] + i), dvn[["p2xvarnames"]][i])
+      mod <- paste0("lx", dvn[["xindper"]] + i)
+      var <- dvn[["p2xvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+")), fixed = T)
     return(eta.x)
@@ -605,40 +778,103 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%s%s =~ NA*%s+", lvname, dvn[["dist2"]], dvn[["p2yvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x1[[i]] <- sprintf("ly%s*%s", (dvn[["yindper"]] + i), dvn[["p2yvarnames"]][i])
+      mod <- paste0("ly", dvn[["yindper"]] + i)
+      var <- dvn[["p2yvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+")), fixed = T)
     return(eta.x)
   } else if (partner == "g" & type == "free" & lvar == "X") {
-    eta_x <- sprintf("%sDy =~ NA*", lvname)
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1xvarnames"]], collapse = "+"), "+", paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta_x <- sprintf("%sDy =~ ", lvname)
+      eta.x1 <- list()
+      for (i in 1:dvn[["xindper"]]) {
+        mod <- paste0("lxg", i)
+        var <- dvn[["p1xvarnames"]][i]
+        eta.x1[[i]] <- wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      }
+      eta.x2 <- list()
+      for (i in 1:dvn[["xindper"]]) {
+        mod <- paste0("lxg", dvn[["xindper"]] + i)
+        var <- dvn[["p2xvarnames"]][i]
+        eta.x2[[i]] <- wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      }
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%sDy =~ NA*", lvname)
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1xvarnames"]], collapse = "+"), "+", paste(dvn[["p2xvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "g" & type == "free" & lvar == "Y") {
-    eta_x <- sprintf("%sDy =~ NA*", lvname)
-    eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1yvarnames"]], collapse = "+"), "+", paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    if (!is.null(group_n) && group_n >= 2) {
+      eta_x <- sprintf("%sDy =~ ", lvname)
+      eta.x1 <- list()
+      for (i in 1:dvn[["yindper"]]) {
+        mod <- paste0("lyg", i)
+        var <- dvn[["p1yvarnames"]][i]
+        eta.x1[[i]] <- wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      }
+      eta.x2 <- list()
+      for (i in 1:dvn[["yindper"]]) {
+        mod <- paste0("lyg", dvn[["yindper"]] + i)
+        var <- dvn[["p2yvarnames"]][i]
+        eta.x2[[i]] <- wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      }
+      eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
+    } else {
+      eta_x <- sprintf("%sDy =~ NA*", lvname)
+      eta.x <- gsub(" ", "", paste(eta_x, paste(dvn[["p1yvarnames"]], collapse = "+"), "+", paste(dvn[["p2yvarnames"]], collapse = "+")), fixed = T)
+    }
     return(eta.x)
   } else if (partner == "g" & type == "equated" & lvar == "X") {
     eta_x <- sprintf("%sDy =~ NA*%s+", lvname, dvn[["p1xvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]] <- sprintf("lxg%s*%s", i, dvn[["p1xvarnames"]][i])
+      mod <- paste0("lxg", i)
+      var <- dvn[["p1xvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x2 <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x2[[i]] <- sprintf("lxg%s*%s", i, dvn[["p2xvarnames"]][i])
+      mod <- paste0("lxg", i)
+      var <- dvn[["p2xvarnames"]][i]
+      eta.x2[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
-
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
   } else if (partner == "g" & type == "equated" & lvar == "Y") {
     eta_x <- sprintf("%sDy =~ NA*%s+", lvname, dvn[["p1yvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x1[[i]] <- sprintf("lyg%s*%s", i, dvn[["p1yvarnames"]][i])
+      mod <- paste0("lyg", i)
+      var <- dvn[["p1yvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x2 <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x2[[i]] <- sprintf("lgy%s*%s", i, dvn[["p2yvarnames"]][i])
+      mod <- paste0("lgy", i)
+      var <- dvn[["p2yvarnames"]][i]
+      eta.x2[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
@@ -646,11 +882,23 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%sDy =~ NA*%s+", lvname, dvn[["p1xvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]] <- sprintf("lx%s*%s", i, dvn[["p1xvarnames"]][i])
+      mod <- paste0("lx", i)
+      var <- dvn[["p1xvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x2 <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x2[[i]] <- sprintf("lx%s*%s", (dvn[["xindper"]] + i), dvn[["p2xvarnames"]][i])
+      mod <- paste0("lx", dvn[["xindper"]] + i)
+      var <- dvn[["p2xvarnames"]][i]
+      eta.x2[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
@@ -658,11 +906,23 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%sDy =~ NA*%s+", lvname, dvn[["p1yvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x1[[i]] <- sprintf("ly%s*%s", i, dvn[["p1yvarnames"]][i])
+      mod <- paste0("ly", i)
+      var <- dvn[["p1yvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x2 <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x2[[i]] <- sprintf("ly%s*%s", (dvn[["yindper"]] + i), dvn[["p2yvarnames"]][i])
+      mod <- paste0("ly", dvn[["yindper"]] + i)
+      var <- dvn[["p2yvarnames"]][i]
+      eta.x2[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
@@ -677,11 +937,23 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%sDy =~ 1*%s+", lvname, dvn[["p1xvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x1[[i]] <- sprintf("lxg%s*%s", i, dvn[["p1xvarnames"]][i])
+      mod <- paste0("lxg", i)
+      var <- dvn[["p1xvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x2 <- list()
     for (i in 1:dvn[["xindper"]]) {
-      eta.x2[[i]] <- sprintf("lxg%s*%s", i, dvn[["p2xvarnames"]][i])
+      mod <- paste0("lxg", i)
+      var <- dvn[["p2xvarnames"]][i]
+      eta.x2[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
@@ -693,11 +965,23 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
     eta_x <- sprintf("%sDy =~ 1*%s+", lvname, dvn[["p1yvarnames"]][1])
     eta.x1 <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x1[[i]] <- sprintf("lyg%s*%s", i, dvn[["p1yvarnames"]][i])
+      mod <- paste0("lyg", i)
+      var <- dvn[["p1yvarnames"]][i]
+      eta.x1[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x2 <- list()
     for (i in 1:dvn[["yindper"]]) {
-      eta.x2[[i]] <- sprintf("lyg%s*%s", i, dvn[["p2yvarnames"]][i])
+      mod <- paste0("lyg", i)
+      var <- dvn[["p2yvarnames"]][i]
+      eta.x2[[i]] <- if (!is.null(group_n) && group_n >= 2) {
+        wrap_multigroup(mod, var, group_n, if (constr_group_loadings) "equal" else "free")
+      } else {
+        sprintf("%s*%s", mod, var)
+      }
     }
     eta.x <- gsub(" ", "", paste(eta_x, paste(eta.x1, collapse = "+"), "+", paste(eta.x2, collapse = "+")), fixed = T)
     return(eta.x)
@@ -706,128 +990,214 @@ loads <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
 
 #' @rdname scriptHelpers
 #' @noRd
-intercepts <- function(dvn, lvar = "X", partner = "1", type = "free") {
+intercepts <- function(dvn, lvar = "X", partner = "1", type = "free", group_n = NULL, constr_group_intercepts = FALSE) {
   if (partner == "1" & type == "fixed" & lvar == "X") {
     xints <- list()
-    xints[[1]] <- sprintf("%s ~ 0*1", dvn[["p1xvarnames"]][1])
-    for (i in 2:dvn[["xindper"]]) {
-      xints[[i]] <- sprintf("%s ~ 1", dvn[["p1xvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      xints[[1]] <- sprintf("%s ~ %s", dvn[["p1xvarnames"]][1], wrap_multigroup("0", "1", group_n, "fixed"))
+      for (i in 2:dvn[["xindper"]]) {
+        mod <- paste0("tx", i)
+        rhs <- wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free")
+        xints[[i]] <- sprintf("%s ~ %s", dvn[["p1xvarnames"]][i], rhs)
+      }
+    } else {
+      xints[[1]] <- sprintf("%s ~ 0*1", dvn[["p1xvarnames"]][1])
+      for (i in 2:dvn[["xindper"]]) {
+        xints[[i]] <- sprintf("%s ~ 1", dvn[["p1xvarnames"]][i])
+      }
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "1" & type == "fixed" & lvar == "Y") {
     xints <- list()
-    xints[[1]] <- sprintf("%s ~ 0*1", dvn[["p1yvarnames"]][1])
-    for (i in 2:dvn[["yindper"]]) {
-      xints[[i]] <- sprintf("%s ~ 1", dvn[["p1yvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      xints[[1]] <- sprintf("%s ~ %s", dvn[["p1yvarnames"]][1], wrap_multigroup("0", "1", group_n, "fixed"))
+      for (i in 2:dvn[["yindper"]]) {
+        mod <- paste0("ty", i)
+        rhs <- wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free")
+        xints[[i]] <- sprintf("%s ~ %s", dvn[["p1yvarnames"]][i], rhs)
+      }
+    } else {
+      xints[[1]] <- sprintf("%s ~ 0*1", dvn[["p1yvarnames"]][1])
+      for (i in 2:dvn[["yindper"]]) {
+        xints[[i]] <- sprintf("%s ~ 1", dvn[["p1yvarnames"]][i])
+      }
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "1" & type == "free" & lvar == "X") {
     xints <- list()
-    for (i in 1:dvn[["xindper"]]) {
-      xints[[i]] <- sprintf("%s ~ 1", dvn[["p1xvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      for (i in 1:dvn[["xindper"]]) {
+        mod <- paste0("tx", i)
+        rhs <- wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free")
+        xints[[i]] <- sprintf("%s ~ %s", dvn[["p1xvarnames"]][i], rhs)
+      }
+    } else {
+      for (i in 1:dvn[["xindper"]]) {
+        xints[[i]] <- sprintf("%s ~ 1", dvn[["p1xvarnames"]][i])
+      }
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "1" & type == "free" & lvar == "Y") {
     xints <- list()
-    for (i in 1:dvn[["yindper"]]) {
-      xints[[i]] <- sprintf("%s ~ 1", dvn[["p1yvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      for (i in 1:dvn[["yindper"]]) {
+        mod <- paste0("ty", i)
+        rhs <- wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free")
+        xints[[i]] <- sprintf("%s ~ %s", dvn[["p1yvarnames"]][i], rhs)
+      }
+    } else {
+      for (i in 1:dvn[["yindper"]]) {
+        xints[[i]] <- sprintf("%s ~ 1", dvn[["p1yvarnames"]][i])
+      }
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "1" & type == "equated" & lvar == "X") {
     xints <- list()
     for (i in 1:dvn[["xindper"]]) {
-      xints[[i]] <- sprintf("%s ~ tx%s*1", dvn[["p1xvarnames"]][i], i)
+      mod <- paste0("tx", i)
+      var <- dvn[["p1xvarnames"]][i]
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free") else paste0(mod, "*1")
+      xints[[i]] <- sprintf("%s ~ %s", var, rhs)
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "1" & type == "equated" & lvar == "Y") {
     xints <- list()
     for (i in 1:dvn[["yindper"]]) {
-      xints[[i]] <- sprintf("%s ~ ty%s*1", dvn[["p1yvarnames"]][i], i)
+      mod <- paste0("ty", i)
+      var <- dvn[["p1yvarnames"]][i]
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free") else paste0(mod, "*1")
+      xints[[i]] <- sprintf("%s ~ %s", var, rhs)
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "1" & type == "equated_mv" & lvar == "X") {
     xints <- list()
-    xints[[1]] <- sprintf("%s ~ 0*1 + tx1*1", dvn[["p1xvarnames"]][1])
-
+    rhs1 <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup("tx1", "1", group_n, if (constr_group_intercepts) "equal" else "free") else "tx1*1"
+    xints[[1]] <- sprintf("%s ~ 0*1 + %s", dvn[["p1xvarnames"]][1], rhs1)
     for (i in 2:dvn[["xindper"]]) {
-      xints[[i]] <- sprintf("%s ~ tx%s*1", dvn[["p1xvarnames"]][i], i)
+      mod <- paste0("tx", i)
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free") else paste0(mod, "*1")
+      xints[[i]] <- sprintf("%s ~ %s", dvn[["p1xvarnames"]][i], rhs)
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "1" & type == "equated_mv" & lvar == "Y") {
     xints <- list()
-    xints[[1]] <- sprintf("%s ~ 0*1 + ty1*1", dvn[["p1yvarnames"]][1])
-
+    rhs1 <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup("ty1", "1", group_n, if (constr_group_intercepts) "equal" else "free") else "ty1*1"
+    xints[[1]] <- sprintf("%s ~ 0*1 + %s", dvn[["p1yvarnames"]][1], rhs1)
     for (i in 2:dvn[["yindper"]]) {
-      xints[[i]] <- sprintf("%s ~ ty%s*1", dvn[["p1yvarnames"]][i], i)
+      mod <- paste0("ty", i)
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free") else paste0(mod, "*1")
+      xints[[i]] <- sprintf("%s ~ %s", dvn[["p1yvarnames"]][i], rhs)
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "2" & type == "fixed" & lvar == "X") {
     xints <- list()
-    xints[[1]] <- sprintf("%s ~ 0*1", dvn[["p2xvarnames"]][1])
-    for (i in 2:dvn[["xindper"]]) {
-      xints[[i]] <- sprintf("%s ~ 1", dvn[["p2xvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      xints[[1]] <- sprintf("%s ~ %s", dvn[["p2xvarnames"]][1], wrap_multigroup("0", "1", group_n, "fixed"))
+      for (i in 2:dvn[["xindper"]]) {
+        mod <- paste0("tx", dvn[["xindper"]] + i - 1)
+        rhs <- wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free")
+        xints[[i]] <- sprintf("%s ~ %s", dvn[["p2xvarnames"]][i], rhs)
+      }
+    } else {
+      xints[[1]] <- sprintf("%s ~ 0*1", dvn[["p2xvarnames"]][1])
+      for (i in 2:dvn[["xindper"]]) {
+        xints[[i]] <- sprintf("%s ~ 1", dvn[["p2xvarnames"]][i])
+      }
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "2" & type == "fixed" & lvar == "Y") {
     xints <- list()
-    xints[[1]] <- sprintf("%s ~ 0*1", dvn[["p2yvarnames"]][1])
-    for (i in 2:dvn[["yindper"]]) {
-      xints[[i]] <- sprintf("%s ~ 1", dvn[["p2yvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      xints[[1]] <- sprintf("%s ~ %s", dvn[["p2yvarnames"]][1], wrap_multigroup("0", "1", group_n, "fixed"))
+      for (i in 2:dvn[["yindper"]]) {
+        mod <- paste0("ty", dvn[["yindper"]] + i - 1)
+        rhs <- wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free")
+        xints[[i]] <- sprintf("%s ~ %s", dvn[["p2yvarnames"]][i], rhs)
+      }
+    } else {
+      xints[[1]] <- sprintf("%s ~ 0*1", dvn[["p2yvarnames"]][1])
+      for (i in 2:dvn[["yindper"]]) {
+        xints[[i]] <- sprintf("%s ~ 1", dvn[["p2yvarnames"]][i])
+      }
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "2" & type == "free" & lvar == "X") {
     xints <- list()
-    for (i in 1:dvn[["xindper"]]) {
-      xints[[i]] <- sprintf("%s ~ 1", dvn[["p2xvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      for (i in 1:dvn[["xindper"]]) {
+        mod <- paste0("tx", dvn[["xindper"]] + i)
+        rhs <- wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free")
+        xints[[i]] <- sprintf("%s ~ %s", dvn[["p2xvarnames"]][i], rhs)
+      }
+    } else {
+      for (i in 1:dvn[["xindper"]]) {
+        xints[[i]] <- sprintf("%s ~ 1", dvn[["p2xvarnames"]][i])
+      }
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "2" & type == "free" & lvar == "Y") {
     xints <- list()
-    for (i in 1:dvn[["yindper"]]) {
-      xints[[i]] <- sprintf("%s ~ 1", dvn[["p2yvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      for (i in 1:dvn[["yindper"]]) {
+        mod <- paste0("ty", dvn[["yindper"]] + i)
+        rhs <- wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free")
+        xints[[i]] <- sprintf("%s ~ %s", dvn[["p2yvarnames"]][i], rhs)
+      }
+    } else {
+      for (i in 1:dvn[["yindper"]]) {
+        xints[[i]] <- sprintf("%s ~ 1", dvn[["p2yvarnames"]][i])
+      }
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "2" & type == "equated" & lvar == "X") {
     xints <- list()
     for (i in 1:dvn[["xindper"]]) {
-      xints[[i]] <- sprintf("%s ~ tx%s*1", dvn[["p2xvarnames"]][i], i)
+      mod <- paste0("tx", i)
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free") else paste0(mod, "*1")
+      xints[[i]] <- sprintf("%s ~ %s", dvn[["p2xvarnames"]][i], rhs)
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "2" & type == "equated" & lvar == "Y") {
     xints <- list()
     for (i in 1:dvn[["yindper"]]) {
-      xints[[i]] <- sprintf("%s ~ ty%s*1", dvn[["p2yvarnames"]][i], i)
+      mod <- paste0("ty", i)
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free") else paste0(mod, "*1")
+      xints[[i]] <- sprintf("%s ~ %s", dvn[["p2yvarnames"]][i], rhs)
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "2" & type == "equated_mv" & lvar == "X") {
     xints <- list()
-    xints[[1]] <- sprintf("%s ~ 0*1 + tx1*1", dvn[["p2xvarnames"]][1])
-
+    rhs1 <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup("tx1", "1", group_n, if (constr_group_intercepts) "equal" else "free") else "tx1*1"
+    xints[[1]] <- sprintf("%s ~ 0*1 + %s", dvn[["p2xvarnames"]][1], rhs1)
     for (i in 2:dvn[["xindper"]]) {
-      xints[[i]] <- sprintf("%s ~ tx%s*1", dvn[["p2xvarnames"]][i], i)
+      mod <- paste0("tx", i)
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free") else paste0(mod, "*1")
+      xints[[i]] <- sprintf("%s ~ %s", dvn[["p2xvarnames"]][i], rhs)
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
   } else if (partner == "2" & type == "equated_mv" & lvar == "Y") {
     xints <- list()
-    xints[[1]] <- sprintf("%s ~ 0*1 + ty1*1", dvn[["p2yvarnames"]][1])
-
+    rhs1 <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup("ty1", "1", group_n, if (constr_group_intercepts) "equal" else "free") else "ty1*1"
+    xints[[1]] <- sprintf("%s ~ 0*1 + %s", dvn[["p2yvarnames"]][1], rhs1)
     for (i in 2:dvn[["yindper"]]) {
-      xints[[i]] <- sprintf("%s ~ ty%s*1", dvn[["p2yvarnames"]][i], i)
+      mod <- paste0("ty", i)
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_intercepts) "equal" else "free") else paste0(mod, "*1")
+      xints[[i]] <- sprintf("%s ~ %s", dvn[["p2yvarnames"]][i], rhs)
     }
     xints <- paste(xints, collapse = "\n")
     return(xints)
@@ -836,60 +1206,108 @@ intercepts <- function(dvn, lvar = "X", partner = "1", type = "free") {
 
 #' @rdname scriptHelpers
 #' @noRd
-resids <- function(dvn, lvar = "X", partner = "1", type = "free") {
+resids <- function(dvn, lvar = "X", partner = "1", type = "free", group_n = NULL, constr_group_residuals = FALSE) {
   if (partner == "1" & type == "free" & lvar == "X") {
     res <- list()
-    for (i in 1:dvn[["xindper"]]) {
-      res[[i]] <- sprintf("%s ~~ %s", dvn[["p1xvarnames"]][i], dvn[["p1xvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      for (i in 1:dvn[["xindper"]]) {
+        mod <- paste0("thx", i)
+        var <- dvn[["p1xvarnames"]][i]
+        rhs <- wrap_multigroup(mod, var, group_n, if (constr_group_residuals) "equal" else "free")
+        res[[i]] <- sprintf("%s ~~ %s", var, rhs)
+      }
+    } else {
+      for (i in 1:dvn[["xindper"]]) {
+        res[[i]] <- sprintf("%s ~~ %s", dvn[["p1xvarnames"]][i], dvn[["p1xvarnames"]][i])
+      }
     }
     res <- paste(res, collapse = "\n")
     return(res)
   } else if (partner == "1" & type == "free" & lvar == "Y") {
     res <- list()
-    for (i in 1:dvn[["yindper"]]) {
-      res[[i]] <- sprintf("%s ~~ %s", dvn[["p1yvarnames"]][i], dvn[["p1yvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      for (i in 1:dvn[["yindper"]]) {
+        mod <- paste0("thy", i)
+        var <- dvn[["p1yvarnames"]][i]
+        rhs <- wrap_multigroup(mod, var, group_n, if (constr_group_residuals) "equal" else "free")
+        res[[i]] <- sprintf("%s ~~ %s", var, rhs)
+      }
+    } else {
+      for (i in 1:dvn[["yindper"]]) {
+        res[[i]] <- sprintf("%s ~~ %s", dvn[["p1yvarnames"]][i], dvn[["p1yvarnames"]][i])
+      }
     }
     res <- paste(res, collapse = "\n")
     return(res)
   } else if (partner == "1" & type == "equated" & lvar == "X") {
     res <- list()
     for (i in 1:dvn[["xindper"]]) {
-      res[[i]] <- sprintf("%s ~~ thx%s*%s", dvn[["p1xvarnames"]][i], i, dvn[["p1xvarnames"]][i])
+      mod <- paste0("thx", i)
+      var <- dvn[["p1xvarnames"]][i]
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, var, group_n, if (constr_group_residuals) "equal" else "free") else paste0(mod, "*", var)
+      res[[i]] <- sprintf("%s ~~ %s", var, rhs)
     }
     res <- paste(res, collapse = "\n")
     return(res)
   } else if (partner == "1" & type == "equated" & lvar == "Y") {
     res <- list()
     for (i in 1:dvn[["yindper"]]) {
-      res[[i]] <- sprintf("%s ~~ thy%s*%s", dvn[["p1yvarnames"]][i], i, dvn[["p1yvarnames"]][i])
+      mod <- paste0("thy", i)
+      var <- dvn[["p1yvarnames"]][i]
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, var, group_n, if (constr_group_residuals) "equal" else "free") else paste0(mod, "*", var)
+      res[[i]] <- sprintf("%s ~~ %s", var, rhs)
     }
     res <- paste(res, collapse = "\n")
     return(res)
   } else if (partner == "2" & type == "free" & lvar == "X") {
     res <- list()
-    for (i in 1:dvn[["xindper"]]) {
-      res[[i]] <- sprintf("%s ~~ %s", dvn[["p2xvarnames"]][i], dvn[["p2xvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      for (i in 1:dvn[["xindper"]]) {
+        mod <- paste0("thx", dvn[["xindper"]] + i)
+        var <- dvn[["p2xvarnames"]][i]
+        rhs <- wrap_multigroup(mod, var, group_n, if (constr_group_residuals) "equal" else "free")
+        res[[i]] <- sprintf("%s ~~ %s", var, rhs)
+      }
+    } else {
+      for (i in 1:dvn[["xindper"]]) {
+        res[[i]] <- sprintf("%s ~~ %s", dvn[["p2xvarnames"]][i], dvn[["p2xvarnames"]][i])
+      }
     }
     res <- paste(res, collapse = "\n")
     return(res)
   } else if (partner == "2" & type == "free" & lvar == "Y") {
     res <- list()
-    for (i in 1:dvn[["yindper"]]) {
-      res[[i]] <- sprintf("%s ~~ %s", dvn[["p2yvarnames"]][i], dvn[["p2yvarnames"]][i])
+    if (!is.null(group_n) && group_n >= 2) {
+      for (i in 1:dvn[["yindper"]]) {
+        mod <- paste0("thy", dvn[["yindper"]] + i)
+        var <- dvn[["p2yvarnames"]][i]
+        rhs <- wrap_multigroup(mod, var, group_n, if (constr_group_residuals) "equal" else "free")
+        res[[i]] <- sprintf("%s ~~ %s", var, rhs)
+      }
+    } else {
+      for (i in 1:dvn[["yindper"]]) {
+        res[[i]] <- sprintf("%s ~~ %s", dvn[["p2yvarnames"]][i], dvn[["p2yvarnames"]][i])
+      }
     }
     res <- paste(res, collapse = "\n")
     return(res)
   } else if (partner == "2" & type == "equated" & lvar == "X") {
     res <- list()
     for (i in 1:dvn[["xindper"]]) {
-      res[[i]] <- sprintf("%s ~~ thx%s*%s", dvn[["p2xvarnames"]][i], i, dvn[["p2xvarnames"]][i])
+      mod <- paste0("thx", i)
+      var <- dvn[["p2xvarnames"]][i]
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, var, group_n, if (constr_group_residuals) "equal" else "free") else paste0(mod, "*", var)
+      res[[i]] <- sprintf("%s ~~ %s", var, rhs)
     }
     res <- paste(res, collapse = "\n")
     return(res)
   } else if (partner == "2" & type == "equated" & lvar == "Y") {
     res <- list()
     for (i in 1:dvn[["yindper"]]) {
-      res[[i]] <- sprintf("%s ~~ thy%s*%s", dvn[["p2yvarnames"]][i], i, dvn[["p2yvarnames"]][i])
+      mod <- paste0("thy", i)
+      var <- dvn[["p2yvarnames"]][i]
+      rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, var, group_n, if (constr_group_residuals) "equal" else "free") else paste0(mod, "*", var)
+      res[[i]] <- sprintf("%s ~~ %s", var, rhs)
     }
     res <- paste(res, collapse = "\n")
     return(res)
@@ -898,17 +1316,33 @@ resids <- function(dvn, lvar = "X", partner = "1", type = "free") {
 
 #' @rdname scriptHelpers
 #' @noRd
-coresids <- function(dvn, lvar = "X", type = "free") {
+coresids <- function(dvn, lvar = "X", type = "free", group_n = NULL, constr_group_residual_covariances = FALSE) {
   if (lvar == "X" & type == "free") {
     coresids <- list()
     for (i in 1:dvn[["xindper"]]) {
-      coresids[[i]] <- sprintf("%s ~~ %s", dvn[["p1xvarnames"]][i], dvn[["p2xvarnames"]][i])
+      v1 <- dvn[["p1xvarnames"]][i]
+      v2 <- dvn[["p2xvarnames"]][i]
+      if (!is.null(group_n) && group_n >= 2) {
+        mod <- paste0("rc", i)
+        rhs <- wrap_multigroup(mod, v2, group_n, if (constr_group_residual_covariances) "equal" else "free")
+        coresids[[i]] <- sprintf("%s ~~ %s", v1, rhs)
+      } else {
+        coresids[[i]] <- sprintf("%s ~~ %s", v1, v2)
+      }
     }
     coresids <- paste(coresids, collapse = "\n")
   } else if (lvar == "Y" & type == "free") {
     coresids <- list()
     for (i in 1:dvn[["yindper"]]) {
-      coresids[[i]] <- sprintf("%s ~~ %s", dvn[["p1yvarnames"]][i], dvn[["p2yvarnames"]][i])
+      v1 <- dvn[["p1yvarnames"]][i]
+      v2 <- dvn[["p2yvarnames"]][i]
+      if (!is.null(group_n) && group_n >= 2) {
+        mod <- paste0("rc", i)
+        rhs <- wrap_multigroup(mod, v2, group_n, if (constr_group_residual_covariances) "equal" else "free")
+        coresids[[i]] <- sprintf("%s ~~ %s", v1, rhs)
+      } else {
+        coresids[[i]] <- sprintf("%s ~~ %s", v1, v2)
+      }
     }
     coresids <- paste(coresids, collapse = "\n")
   }
@@ -917,144 +1351,217 @@ coresids <- function(dvn, lvar = "X", type = "free") {
 
 #' @rdname scriptHelpers
 #' @noRd
-lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
+lvars <- function(dvn, lvar = "X", lvname, partner = "1", type = "free", group_n = NULL, constr_group_variances = FALSE, constr_group_loadings = FALSE) {
   if (partner == "1" & type == "fixed") {
-    lvar <- sprintf("%s%s ~~ 1*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist1"]])
+    lv <- paste0(lvname, dvn[["dist1"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      constraint <- if (constr_group_loadings) "first_fixed_rest_free" else "fixed"
+      rhs <- wrap_multigroup("1", lv, group_n, constraint)
+      lvar <- sprintf("%s ~~ %s", lv, rhs)
+    } else {
+      lvar <- sprintf("%s ~~ 1*%s", lv, lv)
+    }
     return(lvar)
   } else if (partner == "1" & type == "free") {
-    lvar <- sprintf("%s%s ~~ NA*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist1"]])
+    lv <- paste0(lvname, dvn[["dist1"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      rhs <- wrap_multigroup("NA", lv, group_n, "fixed")
+      lvar <- sprintf("%s ~~ %s", lv, rhs)
+    } else {
+      lvar <- sprintf("%s ~~ NA*%s", lv, lv)
+    }
     return(lvar)
   } else if (partner == "1" & type == "equated") {
-    if (lvar == "X") {
-      lvar <- sprintf("%s%s ~~ psix*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist1"]])
-    } else if (lvar == "Y") {
-      lvar <- sprintf("%s%s ~~ psiy*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist1"]])
+    lv <- paste0(lvname, dvn[["dist1"]])
+    mod <- if (lvar == "X") "psix" else "psiy"
+    if (!is.null(group_n) && group_n >= 2) {
+      rhs <- wrap_multigroup(mod, lv, group_n, if (constr_group_variances) "equal" else "free")
+    } else {
+      rhs <- paste0(mod, "*", lv)
     }
-    return(lvar)
+    return(sprintf("%s ~~ %s", lv, rhs))
   } else if (partner == "1" & type == "equated_ff") {
-    if (lvar == "X") {
-      lvar <- sprintf("%s%s ~~ 1*%s%s + psix*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist1"]])
-    } else if (lvar == "Y") {
-      lvar <- sprintf("%s%s ~~ 1*%s%s + psiy*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist1"]])
-    }
-    return(lvar)
+    lv <- paste0(lvname, dvn[["dist1"]])
+    mod <- if (lvar == "X") "psix" else "psiy"
+    psipart <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, lv, group_n, if (constr_group_variances) "equal" else "free") else paste0(mod, "*", lv)
+    return(sprintf("%s ~~ 1*%s + %s", lv, lv, psipart))
   } else if (partner == "2" & type == "fixed") {
-    lvar <- sprintf("%s%s ~~ 1*%s%s", lvname, dvn[["dist2"]], lvname, dvn[["dist2"]])
+    lv <- paste0(lvname, dvn[["dist2"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      constraint <- if (constr_group_loadings) "first_fixed_rest_free" else "fixed"
+      rhs <- wrap_multigroup("1", lv, group_n, constraint)
+      lvar <- sprintf("%s ~~ %s", lv, rhs)
+    } else {
+      lvar <- sprintf("%s ~~ 1*%s", lv, lv)
+    }
     return(lvar)
   } else if (partner == "2" & type == "free") {
-    lvar <- sprintf("%s%s ~~ NA*%s%s", lvname, dvn[["dist2"]], lvname, dvn[["dist2"]])
+    lv <- paste0(lvname, dvn[["dist2"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      rhs <- wrap_multigroup("NA", lv, group_n, "fixed")
+      lvar <- sprintf("%s ~~ %s", lv, rhs)
+    } else {
+      lvar <- sprintf("%s ~~ NA*%s", lv, lv)
+    }
     return(lvar)
   } else if (partner == "2" & type == "equated") {
-    if (lvar == "X") {
-      lvar <- sprintf("%s%s ~~ psix*%s%s", lvname, dvn[["dist2"]], lvname, dvn[["dist2"]])
-    } else if (lvar == "Y") {
-      lvar <- sprintf("%s%s ~~ psiy*%s%s", lvname, dvn[["dist2"]], lvname, dvn[["dist2"]])
+    lv <- paste0(lvname, dvn[["dist2"]])
+    mod <- if (lvar == "X") "psix" else "psiy"
+    if (!is.null(group_n) && group_n >= 2) {
+      rhs <- wrap_multigroup(mod, lv, group_n, if (constr_group_variances) "equal" else "free")
+    } else {
+      rhs <- paste0(mod, "*", lv)
     }
-    return(lvar)
+    return(sprintf("%s ~~ %s", lv, rhs))
   } else if (partner == "2" & type == "equated_ff") {
-    if (lvar == "X") {
-      lvar <- sprintf("%s%s ~~ 1*%s%s + psix*%s%s", lvname, dvn[["dist2"]], lvname, dvn[["dist2"]], lvname, dvn[["dist2"]])
-    } else if (lvar == "Y") {
-      lvar <- sprintf("%s%s ~~ 1*%s%s + psiy*%s%s", lvname, dvn[["dist2"]], lvname, dvn[["dist2"]], lvname, dvn[["dist2"]])
-    }
-    return(lvar)
+    lv <- paste0(lvname, dvn[["dist2"]])
+    mod <- if (lvar == "X") "psix" else "psiy"
+    psipart <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, lv, group_n, if (constr_group_variances) "equal" else "free") else paste0(mod, "*", lv)
+    return(sprintf("%s ~~ 1*%s + %s", lv, lv, psipart))
   } else if (partner == "g" & type == "fixed") {
-    lvar <- sprintf("%sDy ~~ 1*%sDy", lvname, lvname)
+    lv <- paste0(lvname, "Dy")
+    if (!is.null(group_n) && group_n >= 2) {
+      constraint <- if (constr_group_loadings) "first_fixed_rest_free" else "fixed"
+      rhs <- wrap_multigroup("1", lv, group_n, constraint)
+      lvar <- sprintf("%s ~~ %s", lv, rhs)
+    } else {
+      lvar <- sprintf("%s ~~ 1*%s", lv, lv)
+    }
     return(lvar)
   } else if (partner == "g" & type == "free") {
-    lvar <- sprintf("%sDy ~~ NA*%sDy", lvname, lvname)
+    lv <- paste0(lvname, "Dy")
+    if (!is.null(group_n) && group_n >= 2) {
+      rhs <- wrap_multigroup("NA", lv, group_n, "fixed")
+      lvar <- sprintf("%s ~~ %s", lv, rhs)
+    } else {
+      lvar <- sprintf("%s ~~ NA*%s", lv, lv)
+    }
     return(lvar)
   } else if (partner == "g" & type == "equated_ff") {
-    if (lvar == "X") {
-      lvar <- sprintf("%sDy ~~ NA*%sDy + psix*%sDy", lvname, lvname, lvname)
-    } else if (lvar == "Y") {
-      lvar <- sprintf("%sDy ~~ NA*%sDy + psiy*%sDy", lvname, lvname, lvname)
-    }
-    return(lvar)
+    lv <- paste0(lvname, "Dy")
+    mod <- if (lvar == "X") "psix" else "psiy"
+    psipart <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, lv, group_n, if (constr_group_variances) "equal" else "free") else paste0(mod, "*", lv)
+    return(sprintf("%s ~~ NA*%s + %s", lv, lv, psipart))
   } else if (partner == "g" & type == "equated") {
-    if (lvar == "X") {
-      lvar <- sprintf("%sDy ~~ psix*%sDy", lvname, lvname)
-    } else if (lvar == "Y") {
-      lvar <- sprintf("%sDy ~~ psiy*%sDy", lvname, lvname)
+    lv <- paste0(lvname, "Dy")
+    mod <- if (lvar == "X") "psix" else "psiy"
+    if (!is.null(group_n) && group_n >= 2) {
+      rhs <- wrap_multigroup(mod, lv, group_n, if (constr_group_variances) "equal" else "free")
+    } else {
+      rhs <- paste0(mod, "*", lv)
     }
-    return(lvar)
+    return(sprintf("%s ~~ %s", lv, rhs))
   }
 }
 
 #' @rdname scriptHelpers
 #' @noRd
-lcovars <- function(dvn, lvname, type = "free") {
+lcovars <- function(dvn, lvname, type = "free", group_n = NULL, constr_group_variances = FALSE) {
+  lv2 <- paste0(lvname, dvn[["dist2"]])
   if (type == "free") {
-    lcovar <- sprintf("%s%s ~~ %s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      lhs <- paste0(lvname, dvn[["dist1"]])
+      rhs <- wrap_multigroup("psi12", lv2, group_n, if (constr_group_variances) "equal" else "free")
+      lcovar <- sprintf("%s ~~ %s", lhs, rhs)
+    } else {
+      lcovar <- sprintf("%s%s ~~ %s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+    }
   } else if (type == "zero") {
-    lcovar <- sprintf("%s%s ~~ 0*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      lhs <- paste0(lvname, dvn[["dist1"]])
+      rhs <- wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed")
+      lcovar <- sprintf("%s ~~ %s", lhs, rhs)
+    } else {
+      lcovar <- sprintf("%s%s ~~ 0*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+    }
   }
   return(lcovar)
 }
 
 #' @rdname scriptHelpers
 #' @noRd
-lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free") {
+lmeans <- function(dvn, lvar = "X", lvname, partner = "1", type = "free", group_n = NULL, constr_group_means = FALSE, constr_group_intercepts = FALSE) {
   if (partner == "1" & type == "fixed") {
-    alpha <- sprintf("%s%s ~ 0*1", lvname, dvn[["dist1"]])
+    lv <- paste0(lvname, dvn[["dist1"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      constraint <- if (constr_group_intercepts) "first_fixed_rest_free" else "fixed"
+      rhs <- wrap_multigroup("0", "1", group_n, constraint)
+      alpha <- sprintf("%s ~ %s", lv, rhs)
+    } else {
+      alpha <- sprintf("%s ~ 0*1", lv)
+    }
     return(alpha)
   } else if (partner == "1" & type == "free") {
-    alpha <- sprintf("%s%s ~ NA*1", lvname, dvn[["dist1"]])
+    lv <- paste0(lvname, dvn[["dist1"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      rhs <- wrap_multigroup("NA", "1", group_n, "fixed")
+      alpha <- sprintf("%s ~ %s", lv, rhs)
+    } else {
+      alpha <- sprintf("%s ~ NA*1", lv)
+    }
     return(alpha)
   } else if (partner == "1" & type == "equated") {
-    if (lvar == "X") {
-      alpha <- sprintf("%s%s ~ alphax*1", lvname, dvn[["dist1"]])
-    } else if (lvar == "Y") {
-      alpha <- sprintf("%s%s ~ alphay*1", lvname, dvn[["dist1"]])
-    }
-    return(alpha)
+    mod <- if (lvar == "X") "alphax" else "alphay"
+    rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_means) "equal" else "free") else paste0(mod, "*1")
+    return(sprintf("%s%s ~ %s", lvname, dvn[["dist1"]], rhs))
   } else if (partner == "1" & type == "equated_ff") {
-    if (lvar == "X") {
-      alpha <- sprintf("%s%s ~ 0*1 + alphax*1", lvname, dvn[["dist1"]])
-    } else if (lvar == "Y") {
-      alpha <- sprintf("%s%s ~ 0*1 + alphay*1", lvname, dvn[["dist1"]])
-    }
-    return(alpha)
+    mod <- if (lvar == "X") "alphax" else "alphay"
+    rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_means) "equal" else "free") else paste0(mod, "*1")
+    return(sprintf("%s%s ~ 0*1 + %s", lvname, dvn[["dist1"]], rhs))
   } else if (partner == "2" & type == "fixed") {
-    alpha <- sprintf("%s%s ~ 0*1", lvname, dvn[["dist2"]])
+    lv <- paste0(lvname, dvn[["dist2"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      constraint <- if (constr_group_intercepts) "first_fixed_rest_free" else "fixed"
+      rhs <- wrap_multigroup("0", "1", group_n, constraint)
+      alpha <- sprintf("%s ~ %s", lv, rhs)
+    } else {
+      alpha <- sprintf("%s ~ 0*1", lv)
+    }
     return(alpha)
   } else if (partner == "2" & type == "free") {
-    alpha <- sprintf("%s%s ~ NA*1", lvname, dvn[["dist2"]])
+    lv <- paste0(lvname, dvn[["dist2"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      rhs <- wrap_multigroup("NA", "1", group_n, "fixed")
+      alpha <- sprintf("%s ~ %s", lv, rhs)
+    } else {
+      alpha <- sprintf("%s ~ NA*1", lv)
+    }
     return(alpha)
   } else if (partner == "2" & type == "equated") {
-    if (lvar == "X") {
-      alpha <- sprintf("%s%s ~ alphax*1", lvname, dvn[["dist2"]])
-    } else if (lvar == "Y") {
-      alpha <- sprintf("%s%s ~ alphay*1", lvname, dvn[["dist2"]])
-    }
-    return(alpha)
+    mod <- if (lvar == "X") "alphax" else "alphay"
+    rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_means) "equal" else "free") else paste0(mod, "*1")
+    return(sprintf("%s%s ~ %s", lvname, dvn[["dist2"]], rhs))
   } else if (partner == "2" & type == "equated_ff") {
-    if (lvar == "X") {
-      alpha <- sprintf("%s%s ~ 0*1 + alphax*1", lvname, dvn[["dist2"]])
-    } else if (lvar == "Y") {
-      alpha <- sprintf("%s%s ~ 0*1 + alphay*1", lvname, dvn[["dist2"]])
-    }
-    return(alpha)
+    mod <- if (lvar == "X") "alphax" else "alphay"
+    rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_means) "equal" else "free") else paste0(mod, "*1")
+    return(sprintf("%s%s ~ 0*1 + %s", lvname, dvn[["dist2"]], rhs))
   } else if (partner == "g" & type == "free") {
-    alpha <- sprintf("%sDy ~ NA*1", lvname)
+    lv <- paste0(lvname, "Dy")
+    if (!is.null(group_n) && group_n >= 2) {
+      rhs <- wrap_multigroup("NA", "1", group_n, "fixed")
+      alpha <- sprintf("%s ~ %s", lv, rhs)
+    } else {
+      alpha <- sprintf("%s ~ NA*1", lv)
+    }
     return(alpha)
   } else if (partner == "g" & type == "fixed") {
-    alpha <- sprintf("%sDy ~ 0*1", lvname)
+    lv <- paste0(lvname, "Dy")
+    if (!is.null(group_n) && group_n >= 2) {
+      constraint <- if (constr_group_intercepts) "first_fixed_rest_free" else "fixed"
+      rhs <- wrap_multigroup("0", "1", group_n, constraint)
+      alpha <- sprintf("%s ~ %s", lv, rhs)
+    } else {
+      alpha <- sprintf("%s ~ 0*1", lv)
+    }
     return(alpha)
   } else if (partner == "g" & type == "equated_ff") {
-    if (lvar == "X") {
-      alpha <- sprintf("%sDy ~ 0*1 + alphax*1", lvname)
-    } else if (lvar == "Y") {
-      alpha <- sprintf("%sDy ~ 0*1 + alphay*1", lvname)
-    }
-    return(alpha)
+    mod <- if (lvar == "X") "alphax" else "alphay"
+    rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_means) "equal" else "free") else paste0(mod, "*1")
+    return(sprintf("%sDy ~ 0*1 + %s", lvname, rhs))
   } else if (partner == "g" & type == "equated") {
-    if (lvar == "X") {
-      alpha <- sprintf("%sDy ~ alphax*1", lvname)
-    } else if (lvar == "Y") {
-      alpha <- sprintf("%sDy ~ alphay*1", lvname)
-    }
-    return(alpha)
+    mod <- if (lvar == "X") "alphax" else "alphay"
+    rhs <- if (!is.null(group_n) && group_n >= 2) wrap_multigroup(mod, "1", group_n, if (constr_group_means) "equal" else "free") else paste0(mod, "*1")
+    return(sprintf("%sDy ~ %s", lvname, rhs))
   }
 }
 
@@ -1118,7 +1625,41 @@ lregs <- function(dvn, param, lvxname, lvyname, type = "free") {
 
 #' @rdname scriptHelpers
 #' @noRd
-cfloads <- function(dvn, lvname, type = "equated") {
+cfloads <- function(dvn, lvname, type = "equated", group_n = NULL, constr_group_loadings = FALSE) {
+  lv1 <- paste0(lvname, dvn[["dist1"]])
+  lv2 <- paste0(lvname, dvn[["dist2"]])
+  if (!is.null(group_n) && group_n >= 2) {
+    if (type == "equated") {
+      p1 <- wrap_multigroup("NA", lv1, group_n, "fixed")
+      p2 <- wrap_multigroup("cfx", lv1, group_n, if (constr_group_loadings) "equal" else "free")
+      p3 <- wrap_multigroup("cfx", lv2, group_n, if (constr_group_loadings) "equal" else "free")
+      return(sprintf("%s =~ %s + %s + %s", lvname, p1, p2, p3))
+    } else if (type == "fixed") {
+      p1 <- wrap_multigroup("1", lv1, group_n, "fixed")
+      p2 <- wrap_multigroup("1", lv2, group_n, "fixed")
+      return(sprintf("%s =~ %s + %s", lvname, p1, p2))
+    } else if (type == "fixed_x") {
+      p1 <- wrap_multigroup("1", lv1, group_n, "fixed")
+      p2 <- wrap_multigroup("cfx", lv1, group_n, if (constr_group_loadings) "equal" else "free")
+      p3 <- wrap_multigroup("cfx", lv2, group_n, if (constr_group_loadings) "equal" else "free")
+      return(sprintf("%s =~ %s + %s + %s", lvname, p1, p2, p3))
+    } else if (type == "fixed_y") {
+      p1 <- wrap_multigroup("1", lv1, group_n, "fixed")
+      p2 <- wrap_multigroup("cfy", lv1, group_n, if (constr_group_loadings) "equal" else "free")
+      p3 <- wrap_multigroup("cfy", lv2, group_n, if (constr_group_loadings) "equal" else "free")
+      return(sprintf("%s =~ %s + %s + %s", lvname, p1, p2, p3))
+    } else if (type == "equated_x") {
+      p1 <- wrap_multigroup("NA", lv1, group_n, "fixed")
+      p2 <- wrap_multigroup("cfx", lv1, group_n, if (constr_group_loadings) "equal" else "free")
+      p3 <- wrap_multigroup("cfx", lv2, group_n, if (constr_group_loadings) "equal" else "free")
+      return(sprintf("%s =~ %s + %s + %s", lvname, p1, p2, p3))
+    } else if (type == "equated_y") {
+      p1 <- wrap_multigroup("NA", lv1, group_n, "fixed")
+      p2 <- wrap_multigroup("cfy", lv1, group_n, if (constr_group_loadings) "equal" else "free")
+      p3 <- wrap_multigroup("cfy", lv2, group_n, if (constr_group_loadings) "equal" else "free")
+      return(sprintf("%s =~ %s + %s + %s", lvname, p1, p2, p3))
+    }
+  }
   if (type == "equated") {
     eta.cx <- sprintf("%s =~ NA*%s%s + cfx*%s%s + cfx*%s%s", lvname, lvname, dvn[["dist1"]], lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
     return(eta.cx)
@@ -1142,7 +1683,19 @@ cfloads <- function(dvn, lvname, type = "equated") {
 
 #' @rdname scriptHelpers
 #' @noRd
-cfvars <- function(lvname, type) {
+cfvars <- function(lvname, type, group_n = NULL, constr_group_variances = FALSE) {
+  if (!is.null(group_n) && group_n >= 2) {
+    if (type == "fixed") {
+      rhs <- wrap_multigroup("1", lvname, group_n, "fixed")
+      return(sprintf("%s ~~ %s", lvname, rhs))
+    } else if (type == "free") {
+      rhs <- wrap_multigroup("psi_cf", lvname, group_n, if (constr_group_variances) "equal" else "free")
+      return(sprintf("%s ~~ %s", lvname, rhs))
+    } else if (type == "equated_x") {
+      rhs <- wrap_multigroup("psix", lvname, group_n, if (constr_group_variances) "equal" else "free")
+      return(sprintf("%s ~~ %s", lvname, rhs))
+    }
+  }
   if (type == "fixed") {
     lvar <- sprintf("%s ~~ 1*%s", lvname, lvname)
     return(lvar)
@@ -1157,7 +1710,16 @@ cfvars <- function(lvname, type) {
 
 #' @rdname scriptHelpers
 #' @noRd
-cfmeans <- function(lvname, type, lvar = "X") {
+cfmeans <- function(lvname, type, lvar = "X", group_n = NULL, constr_group_means = FALSE) {
+  if (!is.null(group_n) && group_n >= 2) {
+    if (type == "fixed") {
+      rhs <- wrap_multigroup("0", "1", group_n, "fixed")
+      return(sprintf("%s ~ %s", lvname, rhs))
+    } else if (type == "free") {
+      rhs <- wrap_multigroup("alpha_cf", "1", group_n, if (constr_group_means) "equal" else "free")
+      return(sprintf("%s ~ %s", lvname, rhs))
+    }
+  }
   if (type == "fixed") {
     lmean <- sprintf("%s ~ 0*1", lvname)
     return(lmean)

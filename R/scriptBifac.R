@@ -16,6 +16,10 @@
 #' @param constr_dy_struct Input character vector detailing which structural model parameters to constrain across dyad members.
 #' Default is `c("variances", "means")`(in combination with defaults for `constr_dy_meas`, an indistinguishable correlated dyadic factors model),
 #' but user can specify any combination of `"variances"` and `"means"`, or `"none"`.
+#' @param constr_group_meas Optional character vector detailing which measurement model parameters to constrain across groups.
+#' Valid values: `"loadings"`, `"intercepts"`, `"residuals"`, or `"none"`. Default `NULL` = single-group. Requires dvn from `scrapeVarCross(..., group = "varname")`.
+#' @param constr_group_struct Optional character vector detailing which structural model parameters to constrain across groups.
+#' Valid values: `"variances"`, `"means"`, or `"none"`. Default `NULL` = single-group. Requires dvn from `scrapeVarCross(..., group = "varname")`.
 #' @template writeTo
 #' @template fileName
 #' @param outputType Character string specifying the type of output to return.
@@ -126,6 +130,8 @@ scriptBifac <- function(
     lvar = "X",
     constr_dy_meas = c("loadings", "intercepts", "residuals"),
     constr_dy_struct = c("variances", "means"),
+    constr_group_meas = NULL,
+    constr_group_struct = NULL,
     writeTo = NULL,
     fileName = NULL,
     outputType = "lavaan script") {
@@ -154,7 +160,13 @@ scriptBifac <- function(
   } else {
     required_elements <- c("p1yvarnames", "p2yvarnames", "yindper", "dist1", "dist2", "indnum")
   }
-  if (!all(required_elements %in% names(dvn)) || length(dvn) != 6) {
+  if (!all(required_elements %in% names(dvn))) {
+    stop("You must supply a dvn object containing information for only X or Y [i.e., your target LV]")
+  }
+  if (lvar == "X" && "p1yvarnames" %in% names(dvn)) {
+    stop("You must supply a dvn object containing information for only X or Y [i.e., your target LV]")
+  }
+  if (lvar == "Y" && "p1xvarnames" %in% names(dvn)) {
     stop("You must supply a dvn object containing information for only X or Y [i.e., your target LV]")
   }
 
@@ -166,12 +178,59 @@ scriptBifac <- function(
     stop("scaleset must be either 'FF' (fixed-factor) or 'MV' (marker variable)")
   }
 
-  if (!any(constr_dy_meas %in% c("loadings", "loadings_source", "intercepts", "residuals", "none"))) {
-    stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'")
+  valid_dy_meas <- c("loadings", "loadings_source", "intercepts", "residuals", "none")
+  invalid_dy_meas <- setdiff(constr_dy_meas, valid_dy_meas)
+  if (length(invalid_dy_meas) > 0) {
+    stop("constr_dy_meas contains invalid value(s): ", paste(sQuote(invalid_dy_meas), collapse = ", "),
+         ". Valid options: ", paste(sQuote(valid_dy_meas), collapse = ", "))
   }
 
-  if (!any(constr_dy_struct %in% c("variances", "means", "none"))) {
-    stop("constr_dy_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
+  valid_dy_struct <- c("variances", "means", "none")
+  invalid_dy_struct <- setdiff(constr_dy_struct, valid_dy_struct)
+  if (length(invalid_dy_struct) > 0) {
+    stop("constr_dy_struct contains invalid value(s): ", paste(sQuote(invalid_dy_struct), collapse = ", "),
+         ". Valid options: ", paste(sQuote(valid_dy_struct), collapse = ", "))
+  }
+
+  # Multi-group: validate constr_group_* and derive group_n / constr flags
+  group_n <- NULL
+  constr_group_loadings <- FALSE
+  constr_group_intercepts <- FALSE
+  constr_group_residuals <- FALSE
+  constr_group_residual_covariances <- FALSE
+  constr_group_variances <- FALSE
+  constr_group_means <- FALSE
+  if (!is.null(constr_group_meas) || !is.null(constr_group_struct)) {
+    valid_group_meas <- c("loadings", "intercepts", "residuals", "residual.covariances", "none")
+    if (!is.null(constr_group_meas)) {
+      invalid_group_meas <- setdiff(constr_group_meas, valid_group_meas)
+      if (length(invalid_group_meas) > 0) {
+        stop("constr_group_meas contains invalid value(s): ", paste(sQuote(invalid_group_meas), collapse = ", "),
+             ". Valid options: ", paste(sQuote(valid_group_meas), collapse = ", "))
+      }
+    }
+    valid_group_struct <- c("variances", "means", "none")
+    if (!is.null(constr_group_struct)) {
+      invalid_group_struct <- setdiff(constr_group_struct, valid_group_struct)
+      if (length(invalid_group_struct) > 0) {
+        stop("constr_group_struct contains invalid value(s): ", paste(sQuote(invalid_group_struct), collapse = ", "),
+             ". Valid options: ", paste(sQuote(valid_group_struct), collapse = ", "))
+      }
+    }
+    if (!"group_n" %in% names(dvn)) {
+      stop("Multi-group analysis requires dvn from scrapeVarCross(..., group = \"varname\"). Run scrapeVarCross with a group argument.")
+    }
+    group_n <- dvn$group_n
+    if (!is.null(constr_group_meas) && !identical(constr_group_meas, "none")) {
+      constr_group_loadings <- "loadings" %in% constr_group_meas
+      constr_group_intercepts <- "intercepts" %in% constr_group_meas
+      constr_group_residuals <- "residuals" %in% constr_group_meas
+      constr_group_residual_covariances <- "residual.covariances" %in% constr_group_meas
+    }
+    if (!is.null(constr_group_struct) && !identical(constr_group_struct, "none")) {
+      constr_group_variances <- "variances" %in% constr_group_struct
+      constr_group_means <- "means" %in% constr_group_struct
+    }
   }
 
   if (scaleset == "FF") {
@@ -184,7 +243,9 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
 
       xloads1 <- loads(
@@ -192,14 +253,18 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
       xloads2 <- loads(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
     }
 
@@ -210,7 +275,9 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "equated_source"
+        type = "equated_source",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
 
       xloads1 <- loads(
@@ -218,14 +285,18 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "equated_source"
+        type = "equated_source",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
       xloads2 <- loads(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "equated_source"
+        type = "equated_source",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
     } else {
       xloadsg <- loads(
@@ -233,21 +304,27 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
       xloads1 <- loads(
         dvn,
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
       xloads2 <- loads(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
     }
 
@@ -257,26 +334,34 @@ scriptBifac <- function(
         dvn,
         lvar = lvar,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_intercepts = constr_group_intercepts
       )
       xints2 <- intercepts(
         dvn,
         lvar = lvar,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_intercepts = constr_group_intercepts
       )
     } else {
       xints1 <- intercepts(
         dvn,
         lvar = lvar,
         partner = "1",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_intercepts = constr_group_intercepts
       )
       xints2 <- intercepts(
         dvn,
         lvar = lvar,
         partner = "2",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_intercepts = constr_group_intercepts
       )
     }
 
@@ -286,26 +371,34 @@ scriptBifac <- function(
         dvn,
         lvar = lvar,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_residuals = constr_group_residuals
       )
       xres2 <- resids(
         dvn,
         lvar = lvar,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_residuals = constr_group_residuals
       )
     } else {
       xres1 <- resids(
         dvn,
         lvar = lvar,
         partner = "1",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_residuals = constr_group_residuals
       )
       xres2 <- resids(
         dvn,
         lvar = lvar,
         partner = "2",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_residuals = constr_group_residuals
       )
     }
 
@@ -313,7 +406,9 @@ scriptBifac <- function(
     xcoresids <- coresids(
       dvn,
       lvar = lvar,
-      "free"
+      type = "free",
+      group_n = group_n,
+      constr_group_residual_covariances = constr_group_residual_covariances
     )
 
 
@@ -326,21 +421,30 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "equated_ff"
+        type = "equated_ff",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
       xvar1 <- lvars(
         dvn,
         lvar = lvar,
         lvname = lvname,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
       xvar2 <- lvars(
         dvn,
         lvar = lvar,
         lvname = lvname,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
     } else if (!any(constr_dy_struct == "variances") &
       any(constr_dy_meas %in% c("loadings"))) {
@@ -349,21 +453,30 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
       xvar1 <- lvars(
         dvn,
         lvar = lvar,
         lvname = lvname,
         partner = "1",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
       xvar2 <- lvars(
         dvn,
         lvar = lvar,
         lvname = lvname,
         partner = "2",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
     } else {
       xvarg <- lvars(
@@ -371,28 +484,43 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
       xvar1 <- lvars(
         dvn,
         lvar = lvar,
         lvname = lvname,
         partner = "1",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
       xvar2 <- lvars(
         dvn,
         lvar = lvar,
         lvname = lvname,
         partner = "2",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
     }
 
-    # orthogonal between bifactor and specific factors
-    xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist1"]])
-    xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist2"]])
-    xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+    # orthogonal between bifactor and specific factors (fixed 0; use wrap_multigroup when multi-group)
+    if (!is.null(group_n) && group_n >= 2) {
+      xcovargxx1 <- sprintf("%sDy ~~ %s", lvname, wrap_multigroup("0", paste0(lvname, dvn[["dist1"]]), group_n, "fixed"))
+      xcovargxx2 <- sprintf("%sDy ~~ %s", lvname, wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
+      xcovarx1x2 <- sprintf("%s%s ~~ %s", paste0(lvname, dvn[["dist1"]]), wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
+    } else {
+      xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist1"]])
+      xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist2"]])
+      xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+    }
 
     # latent means for X
     if (any(constr_dy_struct == "means")) {
@@ -401,21 +529,30 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "equated_ff"
+        type = "equated_ff",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
       xmean1 <- lmeans(
         dvn,
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
       xmean2 <- lmeans(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
     } else if (!any(constr_dy_struct == "means") & any(constr_dy_meas == "intercepts")) {
       xmeang <- lmeans(
@@ -423,21 +560,30 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
       xmean1 <- lmeans(
         dvn,
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
       xmean2 <- lmeans(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
     } else {
       xmeang <- lmeans(
@@ -445,21 +591,30 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
       xmean1 <- lmeans(
         dvn,
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
       xmean2 <- lmeans(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
     }
 
@@ -501,21 +656,27 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
       xloads1 <- loads(
         dvn,
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
       xloads2 <- loads(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
     } else if (any(constr_dy_meas == "loadings")) {
       xloadsg <- loads(
@@ -523,21 +684,27 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "equated_mv"
+        type = "equated_mv",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
       xloads1 <- loads(
         dvn,
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
       xloads2 <- loads(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
     } else {
       xloadsg <- loads(
@@ -545,7 +712,9 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
 
       xloads1 <- loads(
@@ -553,14 +722,18 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
       xloads2 <- loads(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_loadings = constr_group_loadings
       )
     }
 
@@ -570,26 +743,34 @@ scriptBifac <- function(
         dvn,
         lvar = lvar,
         partner = "1",
-        type = "equated_mv"
+        type = "equated_mv",
+        group_n = group_n,
+        constr_group_intercepts = constr_group_intercepts
       )
       xints2 <- intercepts(
         dvn,
         lvar = lvar,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_intercepts = constr_group_intercepts
       )
     } else {
       xints1 <- intercepts(
         dvn,
         lvar = lvar,
         partner = "1",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_intercepts = constr_group_intercepts
       )
       xints2 <- intercepts(
         dvn,
         lvar = lvar,
         partner = "2",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_intercepts = constr_group_intercepts
       )
     }
 
@@ -599,32 +780,40 @@ scriptBifac <- function(
         dvn,
         lvar = lvar,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_residuals = constr_group_residuals
       )
       xres2 <- resids(
         dvn,
         lvar = lvar,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_residuals = constr_group_residuals
       )
     } else {
       xres1 <- resids(
         dvn,
         lvar = lvar,
         partner = "1",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_residuals = constr_group_residuals
       )
       xres2 <- resids(
         dvn,
         lvar = lvar,
         partner = "2",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_residuals = constr_group_residuals
       )
     }
 
 
     # correlated residuals for X
-    xcoresids <- coresids(dvn, lvar = lvar, "free")
+    xcoresids <- coresids(dvn, lvar = lvar, type = "free", group_n = group_n, constr_group_residual_covariances = constr_group_residual_covariances)
 
 
     # latent variances
@@ -634,7 +823,10 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
 
       xvar1 <- lvars(
@@ -642,14 +834,20 @@ scriptBifac <- function(
         lvar = lvar,
         lvname = lvname,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
       xvar2 <- lvars(
         dvn,
         lvar = lvar,
         lvname = lvname,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
     } else {
       xvarg <- lvars(
@@ -657,7 +855,10 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
 
       xvar1 <- lvars(
@@ -665,21 +866,33 @@ scriptBifac <- function(
         lvar = lvar,
         lvname = lvname,
         partner = "1",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
       xvar2 <- lvars(
         dvn,
         lvar = lvar,
         lvname = lvname,
         partner = "2",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_variances = constr_group_variances,
+        constr_group_loadings = constr_group_loadings
       )
     }
 
     # orthogonal between bifactor and specific factors
-    xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist1"]])
-    xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist2"]])
-    xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+    if (!is.null(group_n) && group_n >= 2) {
+      xcovargxx1 <- sprintf("%sDy ~~ %s", lvname, wrap_multigroup("0", paste0(lvname, dvn[["dist1"]]), group_n, "fixed"))
+      xcovargxx2 <- sprintf("%sDy ~~ %s", lvname, wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
+      xcovarx1x2 <- sprintf("%s%s ~~ %s", paste0(lvname, dvn[["dist1"]]), wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
+    } else {
+      xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist1"]])
+      xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist2"]])
+      xcovarx1x2 <- sprintf("%s%s ~~ 0*%s%s", lvname, dvn[["dist1"]], lvname, dvn[["dist2"]])
+    }
 
 
     # latent means
@@ -689,7 +902,10 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
 
       xmean1 <- lmeans(
@@ -697,14 +913,20 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
       xmean2 <- lmeans(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "equated"
+        type = "equated",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
     } else if (any(constr_dy_meas == "intercepts")) {
       xmeang <- lmeans(
@@ -712,7 +934,10 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
 
       xmean1 <- lmeans(
@@ -720,14 +945,20 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
       xmean2 <- lmeans(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
     } else {
       xmeang <- lmeans(
@@ -735,7 +966,10 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "g",
-        type = "fixed"
+        type = "fixed",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
 
       xmean1 <- lmeans(
@@ -743,14 +977,20 @@ scriptBifac <- function(
         lvar = lvar,
         lvname,
         partner = "1",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
       xmean2 <- lmeans(
         dvn,
         lvar = lvar,
         lvname,
         partner = "2",
-        type = "free"
+        type = "free",
+        group_n = group_n,
+        constr_group_means = constr_group_means,
+        constr_group_intercepts = constr_group_intercepts
       )
     }
 

@@ -27,6 +27,7 @@
 #' @param var_list optional named list of indicator variable information, if more than one LV is to be scripted (e.g., a dyadic CFA with multiple sub-scales from the same measure). If supplied, this list *must* contain the following elements: "stem" (a vector of stems), "delim1" (a vector of delimiting characters), and"delim2" (a vector of subsequently delimiting characters). Optionally may include numeric vectors "min_num" and "max_num" if indicators for different LVs share the same stem and must be separated by range of item numbers within a measure.
 #' @param var_list_order optional character for order of (S)tem, (P)artner number, and (I)tem number for any of the indicator variables of a multi-LV model (i.e., this functionality assumes the same ordering of elements throughout)
 #' @param var_list_item_num optional character for item number of any of the indicator variables of a multi-LV model
+#' @param group optional character naming a column in \code{dat} that defines groups for multi-group analysis. When supplied, the returned dvn will include \code{group} (variable name), \code{group_n} (number of levels), and \code{group_levels} (values). Required for multi-group scripters when \code{constr_group_meas} or \code{constr_group_struct} are non-NULL.
 #' @param covs_order optional character for order of (S)tem, (P)artner number, and (I)tem number for any
 #' covariate(s). Defaults to NULL. This and other covariate arguments only necessary if there are covariates to be scripted in your model(s).
 #' @param covs_stem optional input character stem(s) of indicator variables for covariate(s). Can accept a single stem (e.g., "anx"), or a vector of stems (e.g., c("anx", "dep")).
@@ -51,7 +52,7 @@
 scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1 = NULL, x_delim2 = NULL, x_item_num = "\\d+", distinguish_1 = "1", distinguish_2 = "2",
                            y_order = NULL, y_stem = NULL, y_delim1 = NULL, y_delim2 = NULL, y_item_num = "\\d+",
                            var_list = NULL, var_list_order = NULL, var_list_item_num = "\\d+",
-                           covs_order = NULL, covs_stem = NULL, covs_delim1 = NULL, covs_delim2 = NULL, verbose = TRUE) {
+                           group = NULL, covs_order = NULL, covs_stem = NULL, covs_delim1 = NULL, covs_delim2 = NULL, verbose = TRUE) {
   # Input validation
   # Validate dat argument
   if (!is.data.frame(dat)) {
@@ -112,6 +113,35 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1 = NULL, x_deli
     stop("The `verbose` argument must be a logical value (TRUE or FALSE).")
   }
 
+  # Validate and process group argument when provided
+  group_meta <- NULL
+  if (!is.null(group)) {
+    if (!is.character(group) || length(group) != 1 || nchar(group) == 0) {
+      stop("The `group` argument must be a non-empty character string.")
+    }
+    if (!group %in% names(dat)) {
+      stop("The `group` argument must name a column in `dat`. Column '", group, "' was not found.")
+    }
+    group_levels <- unique(dat[[group]])
+    group_n <- length(group_levels)
+    if (group_n < 2) {
+      stop("The `group` variable must have at least 2 levels for multi-group analysis. Found ", group_n, " level(s).")
+    }
+    group_meta <- list(
+      group = group,
+      group_n = group_n,
+      group_levels = as.character(sort(group_levels))
+    )
+  }
+
+  # Helper to append group metadata to varlist when group was supplied
+  append_group_if <- function(varlist) {
+    if (!is.null(group_meta)) {
+      varlist <- c(varlist, group_meta)
+    }
+    varlist
+  }
+
   if (!is.null(var_list)) {
     if (var_list_order == "sip") {
       x1vars <- list()
@@ -157,14 +187,14 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1 = NULL, x_deli
       tot_var <- num_x1_var + num_x2_var # count total number of items in x1 and x2
 
       if (num_x1_var == num_x2_var) { # return list unless number of x1 and x2 items dont match
-        varlist <- list(
+        varlist <- append_group_if(list(
           p1xvarnames = x1vars,
           p2xvarnames = x2vars,
           xindper = num_x1_var,
           dist1 = dist_1,
           dist2 = dist_2,
           indnum = tot_var
-        )
+        ))
         if (verbose) print_scrape_cross(varlist, var_list, distinguish_1 = distinguish_1, distinguish_2 = distinguish_2)
         return(varlist)
       } else if (num_x1_var != num_x2_var) {
@@ -216,14 +246,14 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1 = NULL, x_deli
       tot_var <- num_x1_var + num_x2_var # count total number of items in x1 and x2
 
       if (num_x1_var == num_x2_var) { # return list unless number of x1 and x2 items dont match
-        varlist <- list(
+        varlist <- append_group_if(list(
           p1xvarnames = x1vars,
           p2xvarnames = x2vars,
           xindper = num_x1_var,
           dist1 = dist_1,
           dist2 = dist_2,
           indnum = tot_var
-        )
+        ))
         if (verbose) print_scrape_cross(varlist, var_list, distinguish_1 = distinguish_1, distinguish_2 = distinguish_2)
         return(varlist)
       } else if (num_x1_var != num_x2_var) {
@@ -275,14 +305,14 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1 = NULL, x_deli
       tot_var <- num_x1_var + num_x2_var # count total number of items in x1 and x2
 
       if (num_x1_var == num_x2_var) { # return list unless number of x1 and x2 items dont match
-        varlist <- list(
+        varlist <- append_group_if(list(
           p1xvarnames = x1vars,
           p2xvarnames = x2vars,
           xindper = num_x1_var,
           dist1 = dist_1,
           dist2 = dist_2,
           indnum = tot_var
-        )
+        ))
         if (verbose) print_scrape_cross(varlist, var_list, distinguish_1 = distinguish_1, distinguish_2 = distinguish_2)
         return(varlist)
       } else if (num_x1_var != num_x2_var) {
@@ -306,14 +336,14 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1 = NULL, x_deli
     dist_2 <- distinguish_2
     tot_var <- num_x1_var + num_x2_var
     if (num_x1_var == num_x2_var) {
-      varlist <- list(
+      varlist <- append_group_if(list(
         p1xvarnames = x1vars,
         p2xvarnames = x2vars,
         xindper = num_x1_var,
         dist1 = dist_1,
         dist2 = dist_2,
         indnum = tot_var
-      )
+      ))
       if (verbose) print_scrape_cross(varlist, var_list = NULL, x_stem = x_stem, distinguish_1 = distinguish_1, distinguish_2 = distinguish_2)
       return(varlist)
     } else if (num_x1_var != num_x2_var) {
@@ -349,7 +379,7 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1 = NULL, x_deli
     tot_var <- num_x1_var + num_x2_var + num_y1_var + num_y2_var
 
     if (num_x1_var == num_x2_var && num_y1_var == num_y2_var) {
-      varlist <- list(
+      varlist <- append_group_if(list(
         p1xvarnames = x1vars,
         p2xvarnames = x2vars,
         xindper = num_x1_var,
@@ -359,7 +389,7 @@ scrapeVarCross <- function(dat, x_order = "spi", x_stem, x_delim1 = NULL, x_deli
         p2yvarnames = y2vars,
         yindper = num_y1_var,
         indnum = tot_var
-      )
+      ))
       if (verbose) print_scrape_cross(varlist, var_list = NULL, x_stem = x_stem, y_stem = y_stem, distinguish_1 = distinguish_1, distinguish_2 = distinguish_2)
       return(varlist)
     } else if (num_x1_var != num_x2_var || num_y1_var != num_y2_var) {
