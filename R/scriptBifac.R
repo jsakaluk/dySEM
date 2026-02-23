@@ -515,7 +515,7 @@ scriptBifac <- function(
     if (!is.null(group_n) && group_n >= 2) {
       xcovargxx1 <- sprintf("%sDy ~~ %s", lvname, wrap_multigroup("0", paste0(lvname, dvn[["dist1"]]), group_n, "fixed"))
       xcovargxx2 <- sprintf("%sDy ~~ %s", lvname, wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
-      xcovarx1x2 <- sprintf("%s%s ~~ %s", paste0(lvname, dvn[["dist1"]]), wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
+      xcovarx1x2 <- sprintf("%s ~~ %s", paste0(lvname, dvn[["dist1"]]), wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
     } else {
       xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist1"]])
       xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist2"]])
@@ -887,7 +887,7 @@ scriptBifac <- function(
     if (!is.null(group_n) && group_n >= 2) {
       xcovargxx1 <- sprintf("%sDy ~~ %s", lvname, wrap_multigroup("0", paste0(lvname, dvn[["dist1"]]), group_n, "fixed"))
       xcovargxx2 <- sprintf("%sDy ~~ %s", lvname, wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
-      xcovarx1x2 <- sprintf("%s%s ~~ %s", paste0(lvname, dvn[["dist1"]]), wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
+      xcovarx1x2 <- sprintf("%s ~~ %s", paste0(lvname, dvn[["dist1"]]), wrap_multigroup("0", paste0(lvname, dvn[["dist2"]]), group_n, "fixed"))
     } else {
       xcovargxx1 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist1"]])
       xcovargxx2 <- sprintf("%sDy ~~ 0*%s%s", lvname, lvname, dvn[["dist2"]])

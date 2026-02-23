@@ -1758,7 +1758,7 @@ getTwoCrossFactors <- function(components, dvn) {
   switch(form,
     Uni = paste0(lvname, "Dy"),
     Cor = c(paste0(lvname, dist1), paste0(lvname, dist2)),
-    Hier = c(lvname, paste0(lvname, dist1), paste0(lvname, dist2)),
+    Hier = lvname,  # only second-order factor for latent regressions
     Bifac = c(paste0(lvname, "Dy"), paste0(lvname, dist1), paste0(lvname, dist2)),
     stop("Unknown form: ", form)
   )

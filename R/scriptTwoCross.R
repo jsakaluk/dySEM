@@ -167,7 +167,46 @@ scriptTwoCross <- function(
   # Extract factor names and generate regressions
   x_factors <- getTwoCrossFactors(comp_x, dvn)
   y_factors <- getTwoCrossFactors(comp_y, dvn)
-  regs <- twoCross_regs(x_factors, y_factors, type = constr_dy_xy_struct)
+  # When hier predicts bifactor: only the general bifactor factor as outcome
+  if (comp_x$form == "Hier" && comp_y$form == "Bifac") {
+    y_factors <- paste0(comp_y$lvname, "Dy")
+  }
+  # When bifactor predicts uni/cor/hier: only general factor as predictor (partner-specific
+  # factors omitted due to identification/estimation issues in bifactor predictive models)
+  if (comp_x$form == "Bifac" && comp_y$form %in% c("Uni", "Cor", "Hier")) {
+    warning(
+      "When x_model = \"bifactor\" predicts uni-, cor-, or hier-structured Y, only the ",
+      "general dyadic factor is used as a predictor; partner-specific factors are omitted. ",
+      "This restriction is due to identification and estimation errors in bifactor predictive ",
+      "models (Eid et al., 2018; Zhang et al., 2021, 2023) that have not yet been resolved for ",
+      "dyadic versions of these models.",
+      call. = FALSE
+    )
+    x_factors <- paste0(comp_x$lvname, "Dy")
+  }
+  # When both bifactor: general predicts general, specifics predict specifics
+  if (comp_x$form == "Bifac" && comp_y$form == "Bifac") {
+    lvx <- comp_x$lvname
+    lvy <- comp_y$lvname
+    d1 <- dvn$dist1
+    d2 <- dvn$dist2
+    x_gen <- paste0(lvx, "Dy")
+    x_spec <- c(paste0(lvx, d1), paste0(lvx, d2))
+    y_gen <- paste0(lvy, "Dy")
+    y_spec <- c(paste0(lvy, d1), paste0(lvy, d2))
+    if (constr_dy_xy_struct == "zero") {
+      reg_gen <- paste(y_gen, "~", paste0("0*", x_gen))
+      reg_spec <- vapply(y_spec, function(y) paste(y, "~", paste(paste0("0*", x_spec), collapse = " + ")), character(1L))
+    } else {
+      reg_gen <- paste(y_gen, "~", paste0("b_", y_gen, "_", x_gen, "*", x_gen))
+      reg_spec <- vapply(y_spec, function(y) {
+        paste(y, "~", paste(paste0("b_", y, "_", x_spec, "*", x_spec), collapse = " + "))
+      }, character(1L))
+    }
+    regs <- paste(c(reg_gen, reg_spec), collapse = "\n")
+  } else {
+    regs <- twoCross_regs(x_factors, y_factors, type = constr_dy_xy_struct)
+  }
 
   # Helper to collapse component elements
   paste_meas <- function(m) {
@@ -187,14 +226,27 @@ scriptTwoCross <- function(
   }
 
   # Assemble script sections
+  # Hierarchical second-order loadings (cf_loadings) belong in Loadings, not Latent Variances
   x_loads <- paste_meas(comp_x$measurement$loadings)
+  if (!is.null(comp_x$structural$cf_loadings)) {
+    cf_x <- paste_meas(comp_x$structural$cf_loadings)
+    if (nzchar(cf_x)) x_loads <- paste(x_loads, cf_x, sep = "\n\n")
+  }
   y_loads <- paste_meas(comp_y$measurement$loadings)
+  if (!is.null(comp_y$structural$cf_loadings)) {
+    cf_y <- paste_meas(comp_y$structural$cf_loadings)
+    if (nzchar(cf_y)) y_loads <- paste(y_loads, cf_y, sep = "\n\n")
+  }
   x_res <- paste_meas(comp_x$measurement$residuals)
   y_res <- paste_meas(comp_y$measurement$residuals)
   x_cores <- paste_meas(comp_x$measurement$coresids)
   y_cores <- paste_meas(comp_y$measurement$coresids)
-  x_struct <- paste_struct(comp_x$structural, exclude_means = !includeMeanStruct)
-  y_struct <- paste_struct(comp_y$structural, exclude_means = !includeMeanStruct)
+  x_struct_list <- comp_x$structural
+  if ("cf_loadings" %in% names(x_struct_list)) x_struct_list <- x_struct_list[names(x_struct_list) != "cf_loadings"]
+  y_struct_list <- comp_y$structural
+  if ("cf_loadings" %in% names(y_struct_list)) y_struct_list <- y_struct_list[names(y_struct_list) != "cf_loadings"]
+  x_struct <- paste_struct(x_struct_list, exclude_means = !includeMeanStruct)
+  y_struct <- paste_struct(y_struct_list, exclude_means = !includeMeanStruct)
 
   if (includeMeanStruct) {
     x_ints <- paste_meas(comp_x$measurement$intercepts)
