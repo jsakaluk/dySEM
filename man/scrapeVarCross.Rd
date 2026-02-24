@@ -21,6 +21,7 @@ scrapeVarCross(
   var_list = NULL,
   var_list_order = NULL,
   var_list_item_num = "\\\\d+",
+  group = NULL,
   covs_order = NULL,
   covs_stem = NULL,
   covs_delim1 = NULL,
@@ -68,6 +69,8 @@ Will be updated to allow particular range of values, to make more sub-scale frie
 
 \item{var_list_item_num}{optional character for item number of any of the indicator variables of a multi-LV model}
 
+\item{group}{optional character naming a column in \code{dat} that defines groups for multi-group analysis. When supplied, the returned dvn will include \code{group} (variable name), \code{group_n} (number of levels), and \code{group_levels} (values). Required for multi-group scripters when \code{constr_group_meas} or \code{constr_group_struct} are non-NULL.}
+
 \item{covs_order}{optional character for order of (S)tem, (P)artner number, and (I)tem number for any
 covariate(s). Defaults to NULL. This and other covariate arguments only necessary if there are covariates to be scripted in your model(s).}
 
@@ -100,5 +103,9 @@ dvnxy <- scrapeVarCross(
   x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2",
   y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_"
 )
+}
+\seealso{
+Other variable-scraping functions: 
+\code{\link{build_dvn}()}
 }
 \concept{variable-scraping functions}

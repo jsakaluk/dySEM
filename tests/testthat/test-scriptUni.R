@@ -905,7 +905,7 @@ test_that("scriptUni produces same chisq for constr_dy_meas = c(loadings, interc
     dvn,
     scaleset = "MV",
     lvname = "Sat",
-    constr_dy_meas = c("loadings", "intercepts", "residual"),
+    constr_dy_meas = c("loadings", "intercepts", "residuals"),
     constr_dy_struct = "none"
   )
 
@@ -920,7 +920,7 @@ test_that("scriptUni produces same chisq for constr_dy_meas = c(loadings, interc
     dvn,
     scaleset = "MV",
     lvname = "Sat",
-    constr_dy_meas = c("loadings", "intercepts", "residual"),
+    constr_dy_meas = c("loadings", "intercepts", "residuals"),
     constr_dy_struct = "none"
   )
 
@@ -977,7 +977,7 @@ test_that("scriptUni rejects invalid constr_dy_meas values", {
   )
   expect_error(
     scriptUni(dvn = dvn, lvname = "Sat", constr_dy_meas = "invalid_option"),
-    "constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'"
+    "constr_dy_meas contains invalid value\\(s\\)|Valid options"
   )
 })
 

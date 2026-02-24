@@ -152,6 +152,12 @@ scriptUni <- function(
   if (!all(required_elements %in% names(dvn))) {
     stop("You must supply a dvn object containing information for only X")
   }
+  if (lvar == "X" && "p1yvarnames" %in% names(dvn)) {
+    stop("You must supply a dvn object containing information for only X")
+  }
+  if (lvar == "Y" && "p1xvarnames" %in% names(dvn)) {
+    stop("You must supply a dvn object containing information for only Y")
+  }
 
   # check for valid inputs
 

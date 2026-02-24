@@ -12,6 +12,8 @@ scriptUni(
   lvar = "X",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_struct = "none",
+  constr_group_meas = NULL,
+  constr_group_struct = NULL,
   writeTo = NULL,
   fileName = NULL,
   outputType = "lavaan script"
@@ -42,6 +44,10 @@ latent variable shared by both partners, leaving no structural parameters to
 constrain across the modeled dyad members. For consistency with other
 scripter functions, \code{constr_dy_struct} is included as an argument, but
 defaults to \code{"none"}.}
+
+\item{constr_group_meas}{Optional character vector for cross-group measurement constraints (e.g. \code{"loadings"}, \code{"intercepts"}, \code{"residuals"}, \code{"none"}). When \code{NULL} (default), single-group model. When non-NULL, requires \code{dvn} from \code{scrapeVarCross(..., group = "varname")}.}
+
+\item{constr_group_struct}{Optional character vector for cross-group structural constraints (e.g. \code{"variances"}, \code{"means"}, \code{"none"}). When \code{NULL} (default), single-group model.}
 
 \item{writeTo}{A character string specifying a directory path to where the
 output file(s) should be saved. If set to \code{"."}, the file(s) will be written

@@ -12,6 +12,8 @@ scriptHier(
   lvar = "X",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_struct = c("variances", "means"),
+  constr_group_meas = NULL,
+  constr_group_struct = NULL,
   writeTo = NULL,
   fileName = NULL,
   outputType = "lavaan script"
@@ -35,6 +37,12 @@ labeling and which indicator variables are used from the dvn.}
 \item{constr_dy_struct}{Input character vector detailing which structural model parameters to constrain across dyad members.
 Default is \code{c("variances", "means")}(in combination with defaults for \code{constr_dy_meas}, an indistinguishable correlated dyadic factors model),
 but user can specify any combination of \code{"variances"} and \code{"means"}, or \code{"none"}.}
+
+\item{constr_group_meas}{Optional character vector detailing which measurement model parameters to constrain across groups.
+Valid values: \code{"loadings"}, \code{"intercepts"}, \code{"residuals"}, or \code{"none"}. Default \code{NULL} = single-group. Requires dvn from \code{scrapeVarCross(..., group = "varname")}.}
+
+\item{constr_group_struct}{Optional character vector detailing which structural model parameters to constrain across groups.
+Valid values: \code{"variances"}, \code{"means"}, or \code{"none"}. Default \code{NULL} = single-group. Requires dvn from \code{scrapeVarCross(..., group = "varname")}.}
 
 \item{writeTo}{A character string specifying a directory path to where the
 output file(s) should be saved. If set to \code{"."}, the file(s) will be written

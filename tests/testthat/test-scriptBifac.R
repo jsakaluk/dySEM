@@ -1592,7 +1592,7 @@ test_that("scriptBifac rejects invalid constr_dy_meas values", {
   )
   expect_error(
     scriptBifac(dvn = dvn, lvname = "Sat", constr_dy_meas = "invalid_option"),
-    "constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'"
+    "constr_dy_meas contains invalid value\\(s\\)|Valid options"
   )
 })
 

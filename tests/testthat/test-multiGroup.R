@@ -77,7 +77,7 @@ test_that("scriptCor multi-group model runs with lavaan::cfa", {
   if (inherits(fit, "error")) {
     skip(paste("lavaan cfa failed:", conditionMessage(fit)))
   }
-  expect_s3_class(fit, "lavaan")
+  expect_s4_class(fit, "lavaan")
 })
 
 test_that("constr_group without group in dvn raises clear error", {
