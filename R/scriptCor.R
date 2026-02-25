@@ -166,11 +166,14 @@ scriptCor <- function(
   }
 
   # check for valid inputs
-  valid_dy_meas <- c("loadings", "intercepts", "residuals", "none")
+  valid_dy_meas <- c("loadings", "intercepts", "residuals", "coresids_zero", "coresids_equal", "none")
   invalid_dy_meas <- setdiff(constr_dy_meas, valid_dy_meas)
   if (length(invalid_dy_meas) > 0) {
     stop("constr_dy_meas contains invalid value(s): ", paste(sQuote(invalid_dy_meas), collapse = ", "),
          ". Valid options: ", paste(sQuote(valid_dy_meas), collapse = ", "))
+  }
+  if (any(constr_dy_meas == "coresids_zero") && any(constr_dy_meas == "coresids_equal")) {
+    stop("constr_dy_meas cannot contain both 'coresids_zero' and 'coresids_equal'.")
   }
 
   valid_dy_struct <- c("variances", "means", "none")
@@ -278,7 +281,8 @@ scriptCor <- function(
   }
 
   # Correlated residuals
-  xcoresids <- coresids(dvn, lvar = lvar, type = "free", group_n = group_n, constr_group_residual_covariances = constr_group_residual_covariances)
+  coresids_type <- if (any(constr_dy_meas == "coresids_zero")) "zero" else if (any(constr_dy_meas == "coresids_equal")) "equated" else "free"
+  xcoresids <- coresids(dvn, lvar = lvar, type = coresids_type, group_n = group_n, constr_group_residual_covariances = constr_group_residual_covariances)
 
   # latent variances
   if (any(constr_dy_struct == "variances")) {

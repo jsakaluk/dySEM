@@ -231,11 +231,17 @@ multifac_resids <- function(dvn, partner = "1", type = "free") {
 
 #' @rdname scriptHelpers
 #' @noRd
-multifac_coresids <- function(dvn, type = "free") {
+multifac_coresids <- function(dvn, type = "free", lvar = "X") {
   # Check for valid type input
-  if (!type %in% c("free", "zero")) {
-    stop("Invalid type argument. Use 'free' or 'zero'.")
+  if (!type %in% c("free", "zero", "equated")) {
+    stop("Invalid type argument. Use 'free', 'zero', or 'equated'.")
   }
+  # Check for valid lvar input
+  if (!lvar %in% c("X", "Y")) {
+    stop("Invalid lvar argument. Use 'X' or 'Y'.")
+  }
+
+  label_equated <- if (lvar == "X") "corresidx" else "corresidy"
 
   # Get the relevant variable names for both partners
   p1xvarnames <- dvn$p1xvarnames
@@ -266,6 +272,8 @@ multifac_coresids <- function(dvn, type = "free") {
         residual_statement <- paste0(p1_indicators[i], " ~~ ", p2_indicators[i])
       } else if (type == "zero") {
         residual_statement <- paste0(p1_indicators[i], " ~~ 0*", p2_indicators[i])
+      } else if (type == "equated") {
+        residual_statement <- paste0(p1_indicators[i], " ~~ ", label_equated, "*", p2_indicators[i])
       }
 
       # Add the residual covariance statement to the output
@@ -1317,36 +1325,51 @@ resids <- function(dvn, lvar = "X", partner = "1", type = "free", group_n = NULL
 #' @rdname scriptHelpers
 #' @noRd
 coresids <- function(dvn, lvar = "X", type = "free", group_n = NULL, constr_group_residual_covariances = FALSE) {
-  if (lvar == "X" & type == "free") {
-    coresids <- list()
-    for (i in 1:dvn[["xindper"]]) {
-      v1 <- dvn[["p1xvarnames"]][i]
-      v2 <- dvn[["p2xvarnames"]][i]
-      if (!is.null(group_n) && group_n >= 2) {
-        mod <- paste0("rc", i)
-        rhs <- wrap_multigroup(mod, v2, group_n, if (constr_group_residual_covariances) "equal" else "free")
-        coresids[[i]] <- sprintf("%s ~~ %s", v1, rhs)
-      } else {
-        coresids[[i]] <- sprintf("%s ~~ %s", v1, v2)
-      }
-    }
-    coresids <- paste(coresids, collapse = "\n")
-  } else if (lvar == "Y" & type == "free") {
-    coresids <- list()
-    for (i in 1:dvn[["yindper"]]) {
-      v1 <- dvn[["p1yvarnames"]][i]
-      v2 <- dvn[["p2yvarnames"]][i]
-      if (!is.null(group_n) && group_n >= 2) {
-        mod <- paste0("rc", i)
-        rhs <- wrap_multigroup(mod, v2, group_n, if (constr_group_residual_covariances) "equal" else "free")
-        coresids[[i]] <- sprintf("%s ~~ %s", v1, rhs)
-      } else {
-        coresids[[i]] <- sprintf("%s ~~ %s", v1, v2)
-      }
-    }
-    coresids <- paste(coresids, collapse = "\n")
+  # Check for valid type input
+  if (!type %in% c("free", "zero", "equated")) {
+    stop("Invalid type argument. Use 'free', 'zero', or 'equated'.")
   }
-  return(coresids)
+  # Check for valid lvar input
+  if (!lvar %in% c("X", "Y")) {
+    stop("Invalid lvar argument. Use 'X' or 'Y'.")
+  }
+
+  if (lvar == "X") {
+    nind <- dvn[["xindper"]]
+    p1vars <- dvn[["p1xvarnames"]]
+    p2vars <- dvn[["p2xvarnames"]]
+    label_equated <- "corresidx"
+  } else {
+    nind <- dvn[["yindper"]]
+    p1vars <- dvn[["p1yvarnames"]]
+    p2vars <- dvn[["p2yvarnames"]]
+    label_equated <- "corresidy"
+  }
+
+  coresids_out <- list()
+  for (i in 1:nind) {
+    v1 <- p1vars[i]
+    v2 <- p2vars[i]
+    if (type == "free") {
+      if (!is.null(group_n) && group_n >= 2) {
+        mod <- paste0("rc", i)
+        rhs <- wrap_multigroup(mod, v2, group_n, if (constr_group_residual_covariances) "equal" else "free")
+        coresids_out[[i]] <- sprintf("%s ~~ %s", v1, rhs)
+      } else {
+        coresids_out[[i]] <- sprintf("%s ~~ %s", v1, v2)
+      }
+    } else if (type == "zero") {
+      coresids_out[[i]] <- sprintf("%s ~~ 0*%s", v1, v2)
+    } else if (type == "equated") {
+      if (!is.null(group_n) && group_n >= 2) {
+        rhs <- wrap_multigroup(label_equated, v2, group_n, if (constr_group_residual_covariances) "equal" else "free")
+        coresids_out[[i]] <- sprintf("%s ~~ %s", v1, rhs)
+      } else {
+        coresids_out[[i]] <- sprintf("%s ~~ %s*%s", v1, label_equated, v2)
+      }
+    }
+  }
+  paste(coresids_out, collapse = "\n")
 }
 
 #' @rdname scriptHelpers

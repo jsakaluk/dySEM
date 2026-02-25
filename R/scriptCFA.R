@@ -153,8 +153,11 @@ scriptCFA <- function(dvn, scaleset = "FF",
     stop("You must supply a dvn object from an instance of scrapeVarCross() when the var_list argument has been used (i.e., the dvn should contain indicators for multiple factors per partner. If you are looking to script a correlated factors model (scriptCFA()'s previous functionality), please use scriptCor() instead.")
   }
 
-  if (!any(constr_dy_meas %in% c("loadings", "intercepts", "residuals", "none"))) {
-    stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'")
+  if (!any(constr_dy_meas %in% c("loadings", "intercepts", "residuals", "coresids_zero", "coresids_equal", "none"))) {
+    stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', 'coresids_zero', 'coresids_equal', or 'none'")
+  }
+  if (any(constr_dy_meas == "coresids_zero") && any(constr_dy_meas == "coresids_equal")) {
+    stop("constr_dy_meas cannot contain both 'coresids_zero' and 'coresids_equal'.")
   }
 
   if (!any(constr_dy_struct %in% c("variances", "means", "none"))) {
@@ -214,7 +217,8 @@ scriptCFA <- function(dvn, scaleset = "FF",
   }
 
   # Correlated residuals
-  xcoresids <- multifac_coresids(dvn, type = "free")
+  coresids_type <- if (any(constr_dy_meas == "coresids_zero")) "zero" else if (any(constr_dy_meas == "coresids_equal")) "equated" else "free"
+  xcoresids <- multifac_coresids(dvn, type = coresids_type, lvar = "X")
 
   # latent variances
   if (any(constr_dy_struct == "variances")) {
