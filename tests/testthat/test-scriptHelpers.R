@@ -857,7 +857,7 @@ test_that("Handles empty variable names", {
 })
 
 test_that("Error on invalid type", {
-  expect_error(multifac_coresids(dvn, type = "unknown"), "Invalid type argument. Use 'free' or 'zero'.")
+  expect_error(multifac_coresids(dvn, type = "unknown"), "Invalid type argument. Use 'free', 'zero', or 'equated'.")
 })
 
 test_that("Error on mismatched indicators", {

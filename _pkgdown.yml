@@ -52,6 +52,13 @@ reference:
   - scriptCFA
   - scriptDyEFA
 
+- subtitle: Monte Carlo simulation Scripters
+  desc: These functions are used to generate a dvn and lavaan syntax necessary to specify a population model from which to randomly sample as a data-generating mechanism in a Monte Carlo simulation
+  contents:
+  - build_dvn
+  - scriptPopUni
+  - scriptPopCor
+
 - subtitle: Specialized Indistinguishability-Related Scripters
   desc: These functions are used to generate lavaan syntax corresponding to models that are used to make corrections to model fit indexes when fitting indistinguishable models
   contents:

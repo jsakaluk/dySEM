@@ -67,7 +67,13 @@ devtools::install_github("jsakaluk/dySEM")
 
 ## Current Functionality 
 
-The package currently provides functionality regarding the following types of latent dyadic data models: 
+The package currently provides the following kind of functionality: 
+
+**NEW (BETA) Functionality**
+
+1. "Boutique" Bi-Construct Models (e.g., Univariate --> Hierarchical)
+2. Uni-Construct Model Multi-Group Specification
+3. Monte Carlo dvn creation and scripter functions
 
 **Uni-Construct Models**
 

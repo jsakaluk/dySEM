@@ -1,4 +1,8 @@
-# dySEM 1.5.0
+# dySEM 2.0.0
+
+* Initial multi-group support! (for scriptUni() and scriptCor())!
+* Boutique bi-constructc cross-sectional model specification with scriptTwoCross()
+* Initial scripting support for Monte Carlo simulation (via forthcoming updates to dySim: https://jsakaluk.github.io/dySim/)
 
 # dySEM 1.4.1
 

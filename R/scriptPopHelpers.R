@@ -9,12 +9,11 @@
 #' @param partner Character: \code{"1"} or \code{"2"} for partner-specific, or \code{"g"} for unidimensional (both partners)
 #' @param values Numeric vector of parameter values. Length must match number of indicators.
 #' @param lvar Character \code{"X"} or \code{"Y"} for latent variable family. Default \code{"X"}.
-#' @family population-scripting helpers
-#' @name scriptPopHelpers
-NULL
+#' @family helpers
+
 
 #' @rdname scriptPopHelpers
-#' @export
+#' @noRd
 popLoadings <- function(dvn, lvname, partner, values, lvar = "X") {
   nvar <- if (lvar == "X") dvn$xindper else dvn$yindper
   if (partner == "g") {
@@ -45,7 +44,7 @@ popLoadings <- function(dvn, lvname, partner, values, lvar = "X") {
 }
 
 #' @rdname scriptPopHelpers
-#' @export
+#' @noRd
 popIntercepts <- function(dvn, partner, values, lvar = "X") {
   varnames <- if (partner == "1") {
     if (lvar == "X") dvn$p1xvarnames else dvn$p1yvarnames
@@ -60,7 +59,7 @@ popIntercepts <- function(dvn, partner, values, lvar = "X") {
 }
 
 #' @rdname scriptPopHelpers
-#' @export
+#' @noRd
 popResiduals <- function(dvn, partner, values, lvar = "X") {
   varnames <- if (partner == "1") {
     if (lvar == "X") dvn$p1xvarnames else dvn$p1yvarnames
@@ -75,7 +74,7 @@ popResiduals <- function(dvn, partner, values, lvar = "X") {
 }
 
 #' @rdname scriptPopHelpers
-#' @export
+#' @noRd
 popCoresids <- function(dvn, values, lvar = "X") {
   p1vars <- if (lvar == "X") dvn$p1xvarnames else dvn$p1yvarnames
   p2vars <- if (lvar == "X") dvn$p2xvarnames else dvn$p2yvarnames
@@ -88,7 +87,7 @@ popCoresids <- function(dvn, values, lvar = "X") {
 
 #' @rdname scriptPopHelpers
 #' @param value Numeric; single value for latent variance
-#' @export
+#' @noRd
 popLatentVars <- function(dvn, lvname, partner, value, lvar = "X") {
   dist <- if (partner == "1") dvn$dist1 else dvn$dist2
   lv_label <- paste0(lvname, dist)
@@ -97,7 +96,7 @@ popLatentVars <- function(dvn, lvname, partner, value, lvar = "X") {
 
 #' @rdname scriptPopHelpers
 #' @param value Numeric; latent covariance value
-#' @export
+#' @noRd
 popLatentCovars <- function(dvn, lvname, value, lvar = "X") {
   lv1 <- paste0(lvname, dvn$dist1)
   lv2 <- paste0(lvname, dvn$dist2)
@@ -106,7 +105,7 @@ popLatentCovars <- function(dvn, lvname, value, lvar = "X") {
 
 #' @rdname scriptPopHelpers
 #' @param value Numeric; latent mean value
-#' @export
+#' @noRd
 popLatentMeans <- function(dvn, lvname, partner, value, lvar = "X") {
   dist <- if (partner == "1") dvn$dist1 else dvn$dist2
   lv_label <- paste0(lvname, dist)
