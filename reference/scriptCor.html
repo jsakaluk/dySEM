@@ -13,7 +13,7 @@ two-factor models."><meta property="og:image" content="https://jsakaluk.github.i
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,8 @@ two-factor models.</p>
 <span>  lvar <span class="op">=</span> <span class="st">"X"</span>,</span>
 <span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
 <span>  constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>,</span>
+<span>  constr_group_meas <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  constr_group_struct <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  writeTo <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fileName <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  outputType <span class="op">=</span> <span class="st">"lavaan script"</span></span>
@@ -105,6 +107,16 @@ labeling (e.g., <code>lx</code> vs <code>ly</code> for loadings, <code>tx</code>
 <dd><p>Input character vector detailing which structural model parameters to constrain across dyad members.
 Default is <code>c("variances", "means")</code>(in combination with defaults for <code>constr_dy_meas</code>, an indistinguishable correlated dyadic factors model),
 but user can specify any combination of <code>"variances"</code> and <code>"means"</code>, or <code>"none"</code>.</p></dd>
+
+
+<dt id="arg-constr-group-meas">constr_group_meas<a class="anchor" aria-label="anchor" href="#arg-constr-group-meas"></a></dt>
+<dd><p>Optional character vector detailing which measurement model parameters to constrain across groups.
+Valid values: <code>"loadings"</code>, <code>"intercepts"</code>, <code>"residuals"</code>, <code>"residual.covariances"</code>, or <code>"none"</code>. Default <code>NULL</code> = single-group. Requires dvn from <code>scrapeVarCross(..., group = "varname")</code>.</p></dd>
+
+
+<dt id="arg-constr-group-struct">constr_group_struct<a class="anchor" aria-label="anchor" href="#arg-constr-group-struct"></a></dt>
+<dd><p>Optional character vector detailing which structural model parameters to constrain across groups.
+Valid values: <code>"variances"</code>, <code>"means"</code>, or <code>"none"</code>. Default <code>NULL</code> = single-group. Requires dvn from <code>scrapeVarCross(..., group = "varname")</code>.</p></dd>
 
 
 <dt id="arg-writeto">writeTo<a class="anchor" aria-label="anchor" href="#arg-writeto"></a></dt>

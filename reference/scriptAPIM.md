@@ -149,7 +149,8 @@ which this function relies on
 Other bi-construct script-writing functions:
 [`scriptBiDy()`](https://jsakaluk.github.io/dySEM/reference/scriptBiDy.md),
 [`scriptCFM()`](https://jsakaluk.github.io/dySEM/reference/scriptCFM.md),
-[`scriptMIM()`](https://jsakaluk.github.io/dySEM/reference/scriptMIM.md)
+[`scriptMIM()`](https://jsakaluk.github.io/dySEM/reference/scriptMIM.md),
+[`scriptTwoCross()`](https://jsakaluk.github.io/dySEM/reference/scriptTwoCross.md)
 
 ## Examples
 

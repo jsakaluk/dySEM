@@ -13,7 +13,7 @@ hierarchical models."><meta property="og:image" content="https://jsakaluk.github
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,10 +64,14 @@ hierarchical models.</p>
 <span>  <span class="va">dvn</span>,</span>
 <span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span>
 <span>  lvname <span class="op">=</span> <span class="st">"X"</span>,</span>
+<span>  lvar <span class="op">=</span> <span class="st">"X"</span>,</span>
 <span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
 <span>  constr_dy_struct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variances"</span>, <span class="st">"means"</span><span class="op">)</span>,</span>
+<span>  constr_group_meas <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  constr_group_struct <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  writeTo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  fileName <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  fileName <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  outputType <span class="op">=</span> <span class="st">"lavaan script"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,6 +93,12 @@ but user can specify <code>"MV"</code> (Marker Variable).</p></dd>
 <dd><p>Input character to (arbitrarily) name the latent variable in <code>lavaan</code> syntax</p></dd>
 
 
+<dt id="arg-lvar">lvar<a class="anchor" aria-label="anchor" href="#arg-lvar"></a></dt>
+<dd><p>Input character to specify whether the latent variable represents
+"X" or "Y" in the model. Default is <code>"X"</code>. This argument controls parameter
+labeling and which indicator variables are used from the dvn.</p></dd>
+
+
 <dt id="arg-constr-dy-meas">constr_dy_meas<a class="anchor" aria-label="anchor" href="#arg-constr-dy-meas"></a></dt>
 <dd><p>Input character vector detailing which measurement model parameters to constrain across dyad members.</p></dd>
 
@@ -97,6 +107,16 @@ but user can specify <code>"MV"</code> (Marker Variable).</p></dd>
 <dd><p>Input character vector detailing which structural model parameters to constrain across dyad members.
 Default is <code>c("variances", "means")</code>(in combination with defaults for <code>constr_dy_meas</code>, an indistinguishable correlated dyadic factors model),
 but user can specify any combination of <code>"variances"</code> and <code>"means"</code>, or <code>"none"</code>.</p></dd>
+
+
+<dt id="arg-constr-group-meas">constr_group_meas<a class="anchor" aria-label="anchor" href="#arg-constr-group-meas"></a></dt>
+<dd><p>Optional character vector detailing which measurement model parameters to constrain across groups.
+Valid values: <code>"loadings"</code>, <code>"intercepts"</code>, <code>"residuals"</code>, or <code>"none"</code>. Default <code>NULL</code> = single-group. Requires dvn from <code>scrapeVarCross(..., group = "varname")</code>.</p></dd>
+
+
+<dt id="arg-constr-group-struct">constr_group_struct<a class="anchor" aria-label="anchor" href="#arg-constr-group-struct"></a></dt>
+<dd><p>Optional character vector detailing which structural model parameters to constrain across groups.
+Valid values: <code>"variances"</code>, <code>"means"</code>, or <code>"none"</code>. Default <code>NULL</code> = single-group. Requires dvn from <code>scrapeVarCross(..., group = "varname")</code>.</p></dd>
 
 
 <dt id="arg-writeto">writeTo<a class="anchor" aria-label="anchor" href="#arg-writeto"></a></dt>
@@ -115,11 +135,19 @@ scripts, <code>.rtf</code> for tabular output when <code>gtTab = TRUE</code>, or
 as appropriate for the output type). If a file with the same name already
 exists in the user's chosen directory, it will be overwritten.</p></dd>
 
+
+<dt id="arg-outputtype">outputType<a class="anchor" aria-label="anchor" href="#arg-outputtype"></a></dt>
+<dd><p>Character string specifying the type of output to return.
+Options are <code>"lavaan script"</code> (default) to return a character object of
+<code>lavaan</code> syntax that can be passed immediately to <code>lavaan</code> functions, or
+<code>"syntax components"</code> to return a structured list of model components.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Character object of <code>lavaan</code> script that can be passed immediately to
-<code>lavaan</code> functions.</p>
+<code>lavaan</code> functions (when <code>outputType = "lavaan script"</code>), or a structured list
+of model components (when <code>outputType = "syntax components"</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

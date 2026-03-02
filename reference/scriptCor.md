@@ -16,6 +16,8 @@ scriptCor(
   lvar = "X",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_struct = c("variances", "means"),
+  constr_group_meas = NULL,
+  constr_group_struct = NULL,
   writeTo = NULL,
   fileName = NULL,
   outputType = "lavaan script"
@@ -59,6 +61,21 @@ scriptCor(
   combination with defaults for `constr_dy_meas`, an indistinguishable
   correlated dyadic factors model), but user can specify any combination
   of `"variances"` and `"means"`, or `"none"`.
+
+- constr_group_meas:
+
+  Optional character vector detailing which measurement model parameters
+  to constrain across groups. Valid values: `"loadings"`,
+  `"intercepts"`, `"residuals"`, `"residual.covariances"`, or `"none"`.
+  Default `NULL` = single-group. Requires dvn from
+  `scrapeVarCross(..., group = "varname")`.
+
+- constr_group_struct:
+
+  Optional character vector detailing which structural model parameters
+  to constrain across groups. Valid values: `"variances"`, `"means"`, or
+  `"none"`. Default `NULL` = single-group. Requires dvn from
+  `scrapeVarCross(..., group = "varname")`.
 
 - writeTo:
 

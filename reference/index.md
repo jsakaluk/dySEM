@@ -77,6 +77,9 @@ models representing two constructs within a dyadic data set
 - [`scriptBiDy()`](https://jsakaluk.github.io/dySEM/reference/scriptBiDy.md)
   : A Function That Writes, Saves, and Exports Syntax for Fitting
   Bifactor Dyadic (BiDy) models
+- [`scriptTwoCross()`](https://jsakaluk.github.io/dySEM/reference/scriptTwoCross.md)
+  : A Function That Writes, Saves, and Exports Syntax for Fitting
+  Boutique Two-Construct Dyadic SEM Models
 
 ### Multi-construct Scripters
 
@@ -90,6 +93,19 @@ models representing more than two constructs within a dyadic data set
 - [`scriptDyEFA()`](https://jsakaluk.github.io/dySEM/reference/scriptDyEFA.md)
   : A Function That Writes, Saves, and Exports Syntax for Fitting Dyadic
   Exploratory Factor Analysis (DEFA) Models
+
+### Monte Carlo simulation Scripters
+
+These functions are used to generate a dvn and lavaan syntax necessary
+to specify a population model from which to randomly sample as a
+data-generating mechanism in a Monte Carlo simulation
+
+- [`build_dvn()`](https://jsakaluk.github.io/dySEM/reference/build_dvn.md)
+  : Build a Dyad Variable Names (dvn) List Without a Data Frame
+- [`scriptPopUni()`](https://jsakaluk.github.io/dySEM/reference/scriptPopUni.md)
+  : Write Population lavaan Syntax for Unidimensional Dyadic CFA
+- [`scriptPopCor()`](https://jsakaluk.github.io/dySEM/reference/scriptPopCor.md)
+  : Write Population lavaan Syntax for Correlated Dyadic CFA
 
 ### Specialized Indistinguishability-Related Scripters
 

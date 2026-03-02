@@ -15,6 +15,8 @@ scriptUni(
   lvar = "X",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_struct = "none",
+  constr_group_meas = NULL,
+  constr_group_struct = NULL,
   writeTo = NULL,
   fileName = NULL,
   outputType = "lavaan script"
@@ -61,6 +63,19 @@ scriptUni(
   across the modeled dyad members. For consistency with other scripter
   functions, `constr_dy_struct` is included as an argument, but defaults
   to `"none"`.
+
+- constr_group_meas:
+
+  Optional character vector for cross-group measurement constraints
+  (e.g. `"loadings"`, `"intercepts"`, `"residuals"`, `"none"`). When
+  `NULL` (default), single-group model. When non-NULL, requires `dvn`
+  from `scrapeVarCross(..., group = "varname")`.
+
+- constr_group_struct:
+
+  Optional character vector for cross-group structural constraints (e.g.
+  `"variances"`, `"means"`, `"none"`). When `NULL` (default),
+  single-group model.
 
 - writeTo:
 

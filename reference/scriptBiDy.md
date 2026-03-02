@@ -131,7 +131,8 @@ lavaan functions
 Other bi-construct script-writing functions:
 [`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md),
 [`scriptCFM()`](https://jsakaluk.github.io/dySEM/reference/scriptCFM.md),
-[`scriptMIM()`](https://jsakaluk.github.io/dySEM/reference/scriptMIM.md)
+[`scriptMIM()`](https://jsakaluk.github.io/dySEM/reference/scriptMIM.md),
+[`scriptTwoCross()`](https://jsakaluk.github.io/dySEM/reference/scriptTwoCross.md)
 
 ## Examples
 

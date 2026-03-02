@@ -13,7 +13,7 @@ one-factor models."><meta property="og:image" content="https://jsakaluk.github.i
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,8 @@ one-factor models.</p>
 <span>  lvar <span class="op">=</span> <span class="st">"X"</span>,</span>
 <span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
 <span>  constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  constr_group_meas <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  constr_group_struct <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  writeTo <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fileName <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  outputType <span class="op">=</span> <span class="st">"lavaan script"</span></span>
@@ -112,6 +114,14 @@ latent variable shared by both partners, leaving no structural parameters to
 constrain across the modeled dyad members. For consistency with other
 scripter functions, <code>constr_dy_struct</code> is included as an argument, but
 defaults to <code>"none"</code>.</p></dd>
+
+
+<dt id="arg-constr-group-meas">constr_group_meas<a class="anchor" aria-label="anchor" href="#arg-constr-group-meas"></a></dt>
+<dd><p>Optional character vector for cross-group measurement constraints (e.g. <code>"loadings"</code>, <code>"intercepts"</code>, <code>"residuals"</code>, <code>"none"</code>). When <code>NULL</code> (default), single-group model. When non-NULL, requires <code>dvn</code> from <code>scrapeVarCross(..., group = "varname")</code>.</p></dd>
+
+
+<dt id="arg-constr-group-struct">constr_group_struct<a class="anchor" aria-label="anchor" href="#arg-constr-group-struct"></a></dt>
+<dd><p>Optional character vector for cross-group structural constraints (e.g. <code>"variances"</code>, <code>"means"</code>, <code>"none"</code>). When <code>NULL</code> (default), single-group model.</p></dd>
 
 
 <dt id="arg-writeto">writeTo<a class="anchor" aria-label="anchor" href="#arg-writeto"></a></dt>
