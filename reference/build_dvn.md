@@ -15,7 +15,12 @@ build_dvn(
   x_delim1 = "",
   x_delim2 = "_",
   distinguish_1 = "A",
-  distinguish_2 = "B"
+  distinguish_2 = "B",
+  n_items_y = NULL,
+  y_order = NULL,
+  y_stem = NULL,
+  y_delim1 = NULL,
+  y_delim2 = NULL
 )
 ```
 
@@ -51,6 +56,15 @@ build_dvn(
 
   Character identifying the second partner (e.g., `"B"`).
 
+- n_items_y:
+
+  Optional number of Y indicators per partner. When non-`NULL`,
+  `p1yvarnames`, `p2yvarnames`, and `yindper` are included.
+
+- y_order, y_stem, y_delim1, y_delim2:
+
+  Y naming (default `NULL` mirrors X).
+
 ## Value
 
 A list compatible with dySEM dvn structure:
@@ -78,6 +92,10 @@ A list compatible with dySEM dvn structure:
 - indnum:
 
   Total number of indicators
+
+- p1yvarnames,p2yvarnames,yindper:
+
+  Included when `n_items_y` is set
 
 ## See also
 

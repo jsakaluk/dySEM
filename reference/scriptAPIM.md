@@ -60,8 +60,9 @@ scriptAPIM(
 
   input character vector detailing which structural model parameters to
   constrain across dyad members for latent X. Default is c("variances",
-  "means"), but user can specify any combination of "variances" and
-  "means", or "none".
+  "means"), but user can specify any combination of "variances",
+  "means", and/or "orthogonal" (zero dyadic covariance between partners'
+  latent X), or "none".
 
 - constr_dy_y_meas:
 
@@ -74,9 +75,10 @@ scriptAPIM(
 - constr_dy_y_struct:
 
   input character vector detailing which structural model parameters to
-  constrain across dyad members for latent X. Default is c("variances",
-  "means"), but user can specify any combination of "variances" and
-  "means", or "none".
+  constrain across dyad members for latent Y. Default is c("variances",
+  "means"), but user can specify any combination of "variances",
+  "means", and/or "orthogonal" (zero dyadic covariance between partners'
+  latent Y), or "none".
 
 - constr_dy_xy_struct:
 
@@ -150,6 +152,7 @@ Other bi-construct script-writing functions:
 [`scriptBiDy()`](https://jsakaluk.github.io/dySEM/reference/scriptBiDy.md),
 [`scriptCFM()`](https://jsakaluk.github.io/dySEM/reference/scriptCFM.md),
 [`scriptMIM()`](https://jsakaluk.github.io/dySEM/reference/scriptMIM.md),
+[`scriptObsAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptObsAPIM.md),
 [`scriptTwoCross()`](https://jsakaluk.github.io/dySEM/reference/scriptTwoCross.md)
 
 ## Examples

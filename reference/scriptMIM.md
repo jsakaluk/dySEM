@@ -143,6 +143,7 @@ Other bi-construct script-writing functions:
 [`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md),
 [`scriptBiDy()`](https://jsakaluk.github.io/dySEM/reference/scriptBiDy.md),
 [`scriptCFM()`](https://jsakaluk.github.io/dySEM/reference/scriptCFM.md),
+[`scriptObsAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptObsAPIM.md),
 [`scriptTwoCross()`](https://jsakaluk.github.io/dySEM/reference/scriptTwoCross.md)
 
 ## Examples

@@ -66,8 +66,7 @@ models representing two constructs within a dyadic data set
   : A Function That Writes, Saves, and Exports Syntax for Fitting Latent
   Actor-Partner Interdependence Models (APIMs)
 - [`scriptObsAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptObsAPIM.md)
-  : A Function That Writes, Saves, and Exports Syntax for Fitting
-  Observed Actor-Partner Interdependence Models
+  : Observed Actor-Partner Interdependence Model (lavaan syntax)
 - [`scriptCFM()`](https://jsakaluk.github.io/dySEM/reference/scriptCFM.md)
   : A Function That Writes, Saves, and Exports Syntax for Fitting Latent
   Common Fate Models (CFMs)
@@ -106,6 +105,8 @@ data-generating mechanism in a Monte Carlo simulation
   : Write Population lavaan Syntax for Unidimensional Dyadic CFA
 - [`scriptPopCor()`](https://jsakaluk.github.io/dySEM/reference/scriptPopCor.md)
   : Write Population lavaan Syntax for Correlated Dyadic CFA
+- [`scriptPopAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptPopAPIM.md)
+  : Population lavaan syntax for a latent indistinguishable APIM
 
 ### Specialized Indistinguishability-Related Scripters
 
@@ -155,6 +156,13 @@ to dyadic SEM
 - [`getIndistFit()`](https://jsakaluk.github.io/dySEM/reference/getIndistFit.md)
   : A Function that Computes Corrected Fit Indexes According to the ISAT
   and INULL Models of Olsen & Kenny (2006)
+
+### GUI
+
+Function to launch the dySEM GUI
+
+- [`launchScripter()`](https://jsakaluk.github.io/dySEM/reference/launchScripter.md)
+  : Launch the dySEM Interactive Scripter
 
 ### Deprecated functions
 

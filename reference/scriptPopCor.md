@@ -60,6 +60,7 @@ Character string of lavaan syntax
 ## See also
 
 Other population-scripting functions:
+[`scriptPopAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptPopAPIM.md),
 [`scriptPopUni()`](https://jsakaluk.github.io/dySEM/reference/scriptPopUni.md)
 
 ## Examples

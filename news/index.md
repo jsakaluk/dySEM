@@ -2,11 +2,30 @@
 
 ## dySEM 2.0.0
 
+- [`scriptObsAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptObsAPIM.md)
+  now uses the same structural constraint arguments as
+  [`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md)
+  (`constr_dy_x_struct`, `constr_dy_y_struct`, `constr_dy_xy_struct`,
+  `includeMeanStruct`, `est_k`), with defaults aligned to an
+  indistinguishable observed APIM. `equate` and `k` are deprecated in
+  favor of `constr_dy_xy_struct` and `est_k`. Orthogonal dyadic
+  covariances are supported via `"orthogonal"` in the `*_struct`
+  vectors. Saving syntax now requires both `writeTo` and `fileName`.
+
+- [`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md)
+  documents and validates `"orthogonal"` in `constr_dy_x_struct` and
+  `constr_dy_y_struct` (zero latent dyadic covariance); unknown
+  constraint tokens now error consistently.
+
 - Initial multi-group support! (for scriptUni() and scriptCor())!
+
 - Boutique bi-constructc cross-sectional model specification with
   scriptTwoCross()
+
 - Initial scripting support for Monte Carlo simulation (via forthcoming
   updates to dySim: <https://jsakaluk.github.io/dySim/>)
+
+- Initial GUI support
 
 ## dySEM 1.4.1
 

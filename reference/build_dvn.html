@@ -64,7 +64,12 @@ requiring an actual data frame. Compatible with <code>scrapeVarCross</code> nami
 <span>  x_delim1 <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  x_delim2 <span class="op">=</span> <span class="st">"_"</span>,</span>
 <span>  distinguish_1 <span class="op">=</span> <span class="st">"A"</span>,</span>
-<span>  distinguish_2 <span class="op">=</span> <span class="st">"B"</span></span>
+<span>  distinguish_2 <span class="op">=</span> <span class="st">"B"</span>,</span>
+<span>  n_items_y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y_stem <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y_delim1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y_delim2 <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -99,6 +104,15 @@ requiring an actual data frame. Compatible with <code>scrapeVarCross</code> nami
 <dt id="arg-distinguish-">distinguish_2<a class="anchor" aria-label="anchor" href="#arg-distinguish-"></a></dt>
 <dd><p>Character identifying the second partner (e.g., <code>"B"</code>).</p></dd>
 
+
+<dt id="arg-n-items-y">n_items_y<a class="anchor" aria-label="anchor" href="#arg-n-items-y"></a></dt>
+<dd><p>Optional number of Y indicators per partner. When non-<code>NULL</code>,
+<code>p1yvarnames</code>, <code>p2yvarnames</code>, and <code>yindper</code> are included.</p></dd>
+
+
+<dt id="arg-y-order-y-stem-y-delim-y-delim-">y_order, y_stem, y_delim1, y_delim2<a class="anchor" aria-label="anchor" href="#arg-y-order-y-stem-y-delim-y-delim-"></a></dt>
+<dd><p>Y naming (default <code>NULL</code> mirrors X).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -120,6 +134,9 @@ requiring an actual data frame. Compatible with <code>scrapeVarCross</code> nami
 
 <dt>indnum</dt>
 <dd><p>Total number of indicators</p></dd>
+
+<dt>p1yvarnames,p2yvarnames,yindper</dt>
+<dd><p>Included when <code>n_items_y</code> is set</p></dd>
 
 </dl></div>
     <div class="section level2">

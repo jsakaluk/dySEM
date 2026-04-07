@@ -114,7 +114,7 @@ or "none" to specify an otherwise unconstrained dyadic configural invariance mod
 <dt id="arg-constr-dy-x-struct">constr_dy_x_struct<a class="anchor" aria-label="anchor" href="#arg-constr-dy-x-struct"></a></dt>
 <dd><p>input character vector detailing which structural model parameters to constrain across dyad members for latent X.
 Default is c("variances", "means"),
-but user can specify any combination of "variances" and "means", or "none".</p></dd>
+but user can specify any combination of "variances", "means", and/or "orthogonal" (zero dyadic covariance between partners' latent X), or "none".</p></dd>
 
 
 <dt id="arg-constr-dy-y-meas">constr_dy_y_meas<a class="anchor" aria-label="anchor" href="#arg-constr-dy-y-meas"></a></dt>
@@ -125,9 +125,9 @@ or "none" to specify an otherwise unconstrained dyadic configural invariance mod
 
 
 <dt id="arg-constr-dy-y-struct">constr_dy_y_struct<a class="anchor" aria-label="anchor" href="#arg-constr-dy-y-struct"></a></dt>
-<dd><p>input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+<dd><p>input character vector detailing which structural model parameters to constrain across dyad members for latent Y.
 Default is c("variances", "means"),
-but user can specify any combination of "variances" and "means", or "none".</p></dd>
+but user can specify any combination of "variances", "means", and/or "orthogonal" (zero dyadic covariance between partners' latent Y), or "none".</p></dd>
 
 
 <dt id="arg-constr-dy-xy-struct">constr_dy_xy_struct<a class="anchor" aria-label="anchor" href="#arg-constr-dy-xy-struct"></a></dt>
@@ -188,6 +188,7 @@ with containing X or Y variables, they are alerted to respecify the dvn object.<
 <code><a href="scriptBiDy.html">scriptBiDy()</a></code>,
 <code><a href="scriptCFM.html">scriptCFM()</a></code>,
 <code><a href="scriptMIM.html">scriptMIM()</a></code>,
+<code><a href="scriptObsAPIM.html">scriptObsAPIM()</a></code>,
 <code><a href="scriptTwoCross.html">scriptTwoCross()</a></code></p></div>
     </div>
 

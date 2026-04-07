@@ -46,9 +46,12 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.0" id="dysem-200">dySEM 2.0.0<a class="anchor" aria-label="anchor" href="#dysem-200"></a></h2>
-<ul><li>Initial multi-group support! (for scriptUni() and scriptCor())!</li>
-<li>Boutique bi-constructc cross-sectional model specification with scriptTwoCross()</li>
-<li>Initial scripting support for Monte Carlo simulation (via forthcoming updates to dySim: <a href="https://jsakaluk.github.io/dySim/" class="external-link uri">https://jsakaluk.github.io/dySim/</a>)</li>
+<ul><li><p><code><a href="../reference/scriptObsAPIM.html">scriptObsAPIM()</a></code> now uses the same structural constraint arguments as <code><a href="../reference/scriptAPIM.html">scriptAPIM()</a></code> (<code>constr_dy_x_struct</code>, <code>constr_dy_y_struct</code>, <code>constr_dy_xy_struct</code>, <code>includeMeanStruct</code>, <code>est_k</code>), with defaults aligned to an indistinguishable observed APIM. <code>equate</code> and <code>k</code> are deprecated in favor of <code>constr_dy_xy_struct</code> and <code>est_k</code>. Orthogonal dyadic covariances are supported via <code>"orthogonal"</code> in the <code>*_struct</code> vectors. Saving syntax now requires both <code>writeTo</code> and <code>fileName</code>.</p></li>
+<li><p><code><a href="../reference/scriptAPIM.html">scriptAPIM()</a></code> documents and validates <code>"orthogonal"</code> in <code>constr_dy_x_struct</code> and <code>constr_dy_y_struct</code> (zero latent dyadic covariance); unknown constraint tokens now error consistently.</p></li>
+<li><p>Initial multi-group support! (for scriptUni() and scriptCor())!</p></li>
+<li><p>Boutique bi-constructc cross-sectional model specification with scriptTwoCross()</p></li>
+<li><p>Initial scripting support for Monte Carlo simulation (via forthcoming updates to dySim: <a href="https://jsakaluk.github.io/dySim/" class="external-link uri">https://jsakaluk.github.io/dySim/</a>)</p></li>
+<li><p>Initial GUI support</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.1" id="dysem-141">dySEM 1.4.1<a class="anchor" aria-label="anchor" href="#dysem-141"></a></h2><p class="text-muted">CRAN release: 2025-12-22</p>

@@ -1,7 +1,10 @@
-# A Function That Writes, Saves, and Exports Syntax for Fitting Observed Actor-Partner Interdependence Models
+# Observed Actor-Partner Interdependence Model (lavaan syntax)
 
-A Function That Writes, Saves, and Exports Syntax for Fitting Observed
-Actor-Partner Interdependence Models
+Writes lavaan syntax for an APIM with one observed (or composite) X and
+Y per partner. Structural constraints mirror
+[`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md)
+(dyadic variances/means, actor/partner paths, optional orthogonal dyadic
+covariances).
 
 ## Usage
 
@@ -11,8 +14,13 @@ scriptObsAPIM(
   Y1 = NULL,
   X2 = NULL,
   Y2 = NULL,
-  equate = "none",
-  k = FALSE,
+  constr_dy_x_struct = c("variances", "means"),
+  constr_dy_y_struct = c("variances", "means"),
+  constr_dy_xy_struct = c("actors", "partners"),
+  includeMeanStruct = FALSE,
+  equate = lifecycle::deprecated(),
+  k = lifecycle::deprecated(),
+  est_k = FALSE,
   writeTo = NULL,
   fileName = NULL
 )
@@ -20,32 +28,55 @@ scriptObsAPIM(
 
 ## Arguments
 
-- X1:
+- X1, X2, Y1, Y2:
 
-  character of vector name containing X variable/composite for partner 1
+  Character names of variables for partners 1 and 2.
 
-- Y1:
+- constr_dy_x_struct:
 
-  character of vector name containing Y variable/composite for partner 1
+  Character vector: any of `"variances"`, `"means"`, `"orthogonal"`,
+  and/or `"none"`. Defaults match
+  [`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md).
+  `"means"` is applied only when `includeMeanStruct` is `TRUE` (same
+  behavior as
+  [`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md)).
+  `"orthogonal"` fixes the dyadic covariance between `X1` and `X2` to
+  zero.
 
-- X2:
+- constr_dy_y_struct:
 
-  character of vector name containing X variable/composite for partner 2
+  Same allowed values as `constr_dy_x_struct`, for the Y side.
+  `"variances"` equates residual variances of `Y1` and `Y2`;
+  `"orthogonal"` fixes the residual covariance between `Y1` and `Y2` to
+  zero.
 
-- Y2:
+- constr_dy_xy_struct:
 
-  character of vector name containing Y variable/composite for partner 2
+  Character vector: `"actors"`, `"partners"`, `"all"`, `"actors_zero"`,
+  `"partners_zero"`, and/or `"none"` (same semantics as
+  [`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md)).
+
+- includeMeanStruct:
+
+  Logical; if `TRUE`, mean structure is included and `"means"` in
+  `constr_dy_x_struct` / `constr_dy_y_struct` equates exogenous means
+  and regression intercepts, respectively.
 
 - equate:
 
-  character of what parameter(s) to constrain ("actor", "partner",
-  "all"); default is "none" (all freely estimated)
+  **\[deprecated\]** Use `constr_dy_xy_struct` instead. If supplied,
+  maps `none` → `"none"`, `actor` → `c("actors")`, `partner` →
+  `c("partners")`, `all` → `c("actors", "partners")`.
 
 - k:
 
-  input logical for whether Kenny & Ledermann's (2010) k parameter
-  should be calculated to characterize the dyadic pattern in the APIM.
-  Default to FALSE
+  **\[deprecated\]** Use `est_k` instead.
+
+- est_k:
+
+  Logical; if `TRUE`, Kenny & Ledermann's (2010) k ratio(s) are defined
+  in the syntax (see
+  [`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md)).
 
 - writeTo:
 
@@ -68,15 +99,30 @@ scriptObsAPIM(
 
 ## Value
 
-character object of lavaan script that can be passed immediately to
-lavaan functions.
+Character string of lavaan model syntax.
+
+## See also
+
+[`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md)
+
+Other bi-construct script-writing functions:
+[`scriptAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptAPIM.md),
+[`scriptBiDy()`](https://jsakaluk.github.io/dySEM/reference/scriptBiDy.md),
+[`scriptCFM()`](https://jsakaluk.github.io/dySEM/reference/scriptCFM.md),
+[`scriptMIM()`](https://jsakaluk.github.io/dySEM/reference/scriptMIM.md),
+[`scriptTwoCross()`](https://jsakaluk.github.io/dySEM/reference/scriptTwoCross.md)
 
 ## Examples
 
 ``` r
-obsAPIMScript <- scriptObsAPIM (X1 = "SexSatA", Y1 = "RelSatA",
-X2 = "SexSatB", Y2 = "RelSatB",
-equate = "none",
-writeTo = tempdir(),
-fileName = "obsAPIM_script")
+scriptObsAPIM(
+  X1 = "SexSatA", Y1 = "RelSatA",
+  X2 = "SexSatB", Y2 = "RelSatB",
+  constr_dy_xy_struct = "none",
+  constr_dy_x_struct = "none",
+  constr_dy_y_struct = "none",
+  writeTo = tempdir(),
+  fileName = "obsAPIM_script"
+)
+#> [1] "# Actor and partner effects\nRelSatA ~ a1*SexSatA + p1*SexSatB\nRelSatB ~ a2*SexSatB + p2*SexSatA\n\n# Dyadic X covariance\nSexSatA ~~ SexSatB\n\n# Residual covariance between Y\nRelSatA ~~ RelSatB"
 ```
