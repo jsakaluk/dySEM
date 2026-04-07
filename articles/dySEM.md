@@ -363,11 +363,11 @@ unstandardized value) or tables (e.g., featuring measurement- or
 structural-model parameter, or both) are created.
 
 ``` r
-outputParamTab(dvn, model = "cfa", fit = qual.indist.fit, 
+outputParamTab(dvn, model = "cfa", fit = qual.ind.fit, 
                tabletype = "measurement", writeTo = tempdir(), 
-               fileName = "cfa_indist")
+               fileName = "cfa_ind")
 
-outputParamFig(fit = qual.indist.fit, figtype = "standardized",
+outputParamFig(fit = qual.ind.fit, figtype = "standardized",
                writeTo = tempdir(), 
-               fileName = "cfa_indist")
+               fileName = "cfa_ind")
 ```

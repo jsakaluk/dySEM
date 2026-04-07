@@ -3,7 +3,7 @@
 A dataset containing 9 observed indicators of relationship quality
 (PRQC) and 5 observed indicators of sexual satisfaction from 121 couples
 in the DRES (Daily Relationship Experiences Study; Raposo, Impett, &
-Muise, in press)
+Muise, 2020)
 
 ## Usage
 
