@@ -108,6 +108,7 @@ Other bi-construct script-writing functions:
 \code{\link{scriptAPIM}()},
 \code{\link{scriptBiDy}()},
 \code{\link{scriptCFM}()},
+\code{\link{scriptObsAPIM}()},
 \code{\link{scriptTwoCross}()}
 }
 \concept{bi-construct script-writing functions}

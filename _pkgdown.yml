@@ -58,6 +58,7 @@ reference:
   - build_dvn
   - scriptPopUni
   - scriptPopCor
+  - scriptPopAPIM
 
 - subtitle: Specialized Indistinguishability-Related Scripters
   desc: These functions are used to generate lavaan syntax corresponding to models that are used to make corrections to model fit indexes when fitting indistinguishable models
@@ -83,6 +84,11 @@ reference:
   - getDyReliability
   - getDydmacs
   - getIndistFit
+
+- subtitle: GUI
+  desc: Function to launch the dySEM GUI
+  contents:
+  - launchScripter
 
 - subtitle: Deprecated functions
   desc: These functions are deprecated and will be removed in future versions of *dySEM*

@@ -16,14 +16,14 @@
 #' or "none" to specify an otherwise unconstrained dyadic configural invariance model
 #' @param constr_dy_x_struct input character vector detailing which structural model parameters to constrain across dyad members for latent X.
 #' Default is c("variances", "means"),
-#' but user can specify any combination of "variances" and "means", or "none".
+#' but user can specify any combination of "variances", "means", and/or "orthogonal" (zero dyadic covariance between partners' latent X), or "none".
 #' @param constr_dy_y_meas input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
 #' Default is c("loadings", "intercepts", "residuals"),
 #' but user can specify any combination of "loadings", "intercepts", and "residuals",
 #' or "none" to specify an otherwise unconstrained dyadic configural invariance model
-#' @param constr_dy_y_struct input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+#' @param constr_dy_y_struct input character vector detailing which structural model parameters to constrain across dyad members for latent Y.
 #' Default is c("variances", "means"),
-#' but user can specify any combination of "variances" and "means", or "none".
+#' but user can specify any combination of "variances", "means", and/or "orthogonal" (zero dyadic covariance between partners' latent Y), or "none".
 #' @param constr_dy_xy_struct input character vector detailing which structural model parameters to constrain for modeling the predictive association(s) between
 #' partners' latent x and y. Default is c("actors", "partners"), but users can also specify "all", "actors_zero", "partners_zero", or "none".
 #' @param includeMeanStruct input logical for whether the user wants to include the mean structure in the model. Defaults FALSE, to support subsequent calculation of dynamic fit indexes (see Details)
@@ -127,14 +127,14 @@ scriptAPIM <- function(dvn, scaleset = "FF",
   if (!any(constr_dy_x_meas %in% c("loadings", "intercepts", "residuals", "none"))) {
     stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'")
   }
-  if (!any(constr_dy_x_struct %in% c("variances", "means", "none"))) {
-    stop("constr_dy_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
+  if (!all(constr_dy_x_struct %in% c("variances", "means", "none", "orthogonal"))) {
+    stop("constr_dy_x_struct must be a character vector containing only 'variances', 'means', 'none', and/or 'orthogonal'")
   }
   if (!any(constr_dy_y_meas %in% c("loadings", "intercepts", "residuals", "none"))) {
     stop("constr_dy_meas must be a character vector containing any combination of 'loadings', 'intercepts', 'residuals', or 'none'")
   }
-  if (!any(constr_dy_y_struct %in% c("variances", "means", "none"))) {
-    stop("constr_dy_struct must be a character vector containing any combination of 'variances', 'means', or 'none'")
+  if (!all(constr_dy_y_struct %in% c("variances", "means", "none", "orthogonal"))) {
+    stop("constr_dy_y_struct must be a character vector containing only 'variances', 'means', 'none', and/or 'orthogonal'")
   }
   if (!any(constr_dy_xy_struct %in% c("actors", "partners", "all", "actors_zero", "partners_zero", "none"))) {
     stop("constr_dy_xy_struct must be a character vector containing any combination of 'actors', 'partners', 'all', 'actors_zero', 'partners_zero' or 'none'")
@@ -452,7 +452,7 @@ scriptAPIM <- function(dvn, scaleset = "FF",
 
 
   # Write script to file if requested
-  if (!is.null(writeTo) | !is.null(fileName)) {
+  if (!is.null(writeTo) || !is.null(fileName)) {
     # if there is a path or file name,
     # check for valid input,
     # and if valid, write script

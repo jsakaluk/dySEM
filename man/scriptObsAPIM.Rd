@@ -2,33 +2,53 @@
 % Please edit documentation in R/scriptObsAPIM.R
 \name{scriptObsAPIM}
 \alias{scriptObsAPIM}
-\title{A Function That Writes, Saves, and Exports Syntax for
-Fitting Observed Actor-Partner Interdependence Models}
+\title{Observed Actor-Partner Interdependence Model (lavaan syntax)}
 \usage{
 scriptObsAPIM(
   X1 = NULL,
   Y1 = NULL,
   X2 = NULL,
   Y2 = NULL,
-  equate = "none",
-  k = FALSE,
+  constr_dy_x_struct = c("variances", "means"),
+  constr_dy_y_struct = c("variances", "means"),
+  constr_dy_xy_struct = c("actors", "partners"),
+  includeMeanStruct = FALSE,
+  equate = lifecycle::deprecated(),
+  k = lifecycle::deprecated(),
+  est_k = FALSE,
   writeTo = NULL,
   fileName = NULL
 )
 }
 \arguments{
-\item{X1}{character of vector name containing X variable/composite for partner 1}
+\item{X1, X2, Y1, Y2}{Character names of variables for partners 1 and 2.}
 
-\item{Y1}{character of vector name containing Y variable/composite for partner 1}
+\item{constr_dy_x_struct}{Character vector: any of \code{"variances"}, \code{"means"},
+\code{"orthogonal"}, and/or \code{"none"}. Defaults match \code{\link[=scriptAPIM]{scriptAPIM()}}. \code{"means"}
+is applied only when \code{includeMeanStruct} is \code{TRUE} (same behavior as
+\code{\link[=scriptAPIM]{scriptAPIM()}}). \code{"orthogonal"} fixes the dyadic covariance between \code{X1} and
+\code{X2} to zero.}
 
-\item{X2}{character of vector name containing X variable/composite for partner 2}
+\item{constr_dy_y_struct}{Same allowed values as \code{constr_dy_x_struct}, for the
+Y side. \code{"variances"} equates residual variances of \code{Y1} and \code{Y2};
+\code{"orthogonal"} fixes the residual covariance between \code{Y1} and \code{Y2} to zero.}
 
-\item{Y2}{character of vector name containing Y variable/composite for partner 2}
+\item{constr_dy_xy_struct}{Character vector: \code{"actors"}, \code{"partners"}, \code{"all"},
+\code{"actors_zero"}, \code{"partners_zero"}, and/or \code{"none"} (same semantics as
+\code{\link[=scriptAPIM]{scriptAPIM()}}).}
 
-\item{equate}{character of what parameter(s) to constrain ("actor", "partner", "all"); default is "none" (all freely estimated)}
+\item{includeMeanStruct}{Logical; if \code{TRUE}, mean structure is included and
+\code{"means"} in \code{constr_dy_x_struct} / \code{constr_dy_y_struct} equates exogenous
+means and regression intercepts, respectively.}
 
-\item{k}{input logical for whether Kenny & Ledermann's (2010) k parameter should be
-calculated to characterize the dyadic pattern in the APIM. Default to FALSE}
+\item{equate}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{constr_dy_xy_struct}
+instead. If supplied, maps \code{none} → \code{"none"}, \code{actor} → \code{c("actors")},
+\code{partner} → \code{c("partners")}, \code{all} → \code{c("actors", "partners")}.}
+
+\item{k}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{est_k} instead.}
+
+\item{est_k}{Logical; if \code{TRUE}, Kenny & Ledermann's (2010) k ratio(s) are
+defined in the syntax (see \code{\link[=scriptAPIM]{scriptAPIM()}}).}
 
 \item{writeTo}{A character string specifying a directory path to where the
 output file(s) should be saved. If set to \code{"."}, the file(s) will be written
@@ -44,19 +64,32 @@ as appropriate for the output type). If a file with the same name already
 exists in the user's chosen directory, it will be overwritten.}
 }
 \value{
-character object of lavaan script that can be passed immediately to
-lavaan functions.
+Character string of lavaan model syntax.
 }
 \description{
-A Function That Writes, Saves, and Exports Syntax for
-Fitting Observed Actor-Partner Interdependence Models
+Writes lavaan syntax for an APIM with one observed (or composite) X and Y per
+partner. Structural constraints mirror \code{\link[=scriptAPIM]{scriptAPIM()}} (dyadic variances/means,
+actor/partner paths, optional orthogonal dyadic covariances).
 }
 \examples{
-
-obsAPIMScript <- scriptObsAPIM (X1 = "SexSatA", Y1 = "RelSatA",
-X2 = "SexSatB", Y2 = "RelSatB",
-equate = "none",
-writeTo = tempdir(),
-fileName = "obsAPIM_script")
-
+scriptObsAPIM(
+  X1 = "SexSatA", Y1 = "RelSatA",
+  X2 = "SexSatB", Y2 = "RelSatB",
+  constr_dy_xy_struct = "none",
+  constr_dy_x_struct = "none",
+  constr_dy_y_struct = "none",
+  writeTo = tempdir(),
+  fileName = "obsAPIM_script"
+)
 }
+\seealso{
+\code{\link[=scriptAPIM]{scriptAPIM()}}
+
+Other bi-construct script-writing functions: 
+\code{\link{scriptAPIM}()},
+\code{\link{scriptBiDy}()},
+\code{\link{scriptCFM}()},
+\code{\link{scriptMIM}()},
+\code{\link{scriptTwoCross}()}
+}
+\concept{bi-construct script-writing functions}

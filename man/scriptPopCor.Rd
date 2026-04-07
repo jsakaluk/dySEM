@@ -48,6 +48,7 @@ scriptPopCor(dvn, "X", list(
 }
 \seealso{
 Other population-scripting functions: 
+\code{\link{scriptPopAPIM}()},
 \code{\link{scriptPopUni}()}
 }
 \concept{population-scripting functions}

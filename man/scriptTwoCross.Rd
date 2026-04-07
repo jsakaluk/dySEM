@@ -117,6 +117,7 @@ Other bi-construct script-writing functions:
 \code{\link{scriptAPIM}()},
 \code{\link{scriptBiDy}()},
 \code{\link{scriptCFM}()},
-\code{\link{scriptMIM}()}
+\code{\link{scriptMIM}()},
+\code{\link{scriptObsAPIM}()}
 }
 \concept{bi-construct script-writing functions}

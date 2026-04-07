@@ -41,16 +41,16 @@ or "none" to specify an otherwise unconstrained dyadic configural invariance mod
 
 \item{constr_dy_x_struct}{input character vector detailing which structural model parameters to constrain across dyad members for latent X.
 Default is c("variances", "means"),
-but user can specify any combination of "variances" and "means", or "none".}
+but user can specify any combination of "variances", "means", and/or "orthogonal" (zero dyadic covariance between partners' latent X), or "none".}
 
 \item{constr_dy_y_meas}{input character vector detailing which measurement model parameters to constrain across dyad members for latent X.
 Default is c("loadings", "intercepts", "residuals"),
 but user can specify any combination of "loadings", "intercepts", and "residuals",
 or "none" to specify an otherwise unconstrained dyadic configural invariance model}
 
-\item{constr_dy_y_struct}{input character vector detailing which structural model parameters to constrain across dyad members for latent X.
+\item{constr_dy_y_struct}{input character vector detailing which structural model parameters to constrain across dyad members for latent Y.
 Default is c("variances", "means"),
-but user can specify any combination of "variances" and "means", or "none".}
+but user can specify any combination of "variances", "means", and/or "orthogonal" (zero dyadic covariance between partners' latent Y), or "none".}
 
 \item{constr_dy_xy_struct}{input character vector detailing which structural model parameters to constrain for modeling the predictive association(s) between
 partners' latent x and y. Default is c("actors", "partners"), but users can also specify "all", "actors_zero", "partners_zero", or "none".}
@@ -114,6 +114,7 @@ Other bi-construct script-writing functions:
 \code{\link{scriptBiDy}()},
 \code{\link{scriptCFM}()},
 \code{\link{scriptMIM}()},
+\code{\link{scriptObsAPIM}()},
 \code{\link{scriptTwoCross}()}
 }
 \concept{bi-construct script-writing functions}

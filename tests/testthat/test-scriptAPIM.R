@@ -481,3 +481,38 @@ test_that("scriptAPIM rejects dvn object with missing required elements", {
     "You must supply a dvn object containing information for both X and Y"
   )
 })
+
+test_that("scriptAPIM rejects unknown tokens in constr_dy_x_struct", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ,
+    x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2 = "_",
+    y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_",
+    distinguish_1 = "1", distinguish_2 = "2"
+  )
+  expect_error(
+    scriptAPIM(
+      dvn, lvxname = "Sat", lvyname = "Com",
+      constr_dy_x_struct = c("variances", "bogus")
+    ),
+    "constr_dy_x_struct"
+  )
+})
+
+test_that("scriptAPIM accepts orthogonal in structural constraints", {
+  dvn <- scrapeVarCross(
+    dat = commitmentQ,
+    x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2 = "_",
+    y_order = "spi", y_stem = "com", y_delim1 = ".", y_delim2 = "_",
+    distinguish_1 = "1", distinguish_2 = "2"
+  )
+  s <- scriptAPIM(
+    dvn,
+    lvxname = "Sat", lvyname = "Com",
+    constr_dy_x_struct = c("orthogonal"),
+    constr_dy_y_struct = c("orthogonal"),
+    constr_dy_xy_struct = c("none"),
+    includeMeanStruct = FALSE
+  )
+  expect_match(s, "Sat1 ~~ 0*Sat2", fixed = TRUE)
+  expect_match(s, "Com1 ~~ 0*Com2", fixed = TRUE)
+})

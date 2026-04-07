@@ -11,7 +11,12 @@ build_dvn(
   x_delim1 = "",
   x_delim2 = "_",
   distinguish_1 = "A",
-  distinguish_2 = "B"
+  distinguish_2 = "B",
+  n_items_y = NULL,
+  y_order = NULL,
+  y_stem = NULL,
+  y_delim1 = NULL,
+  y_delim2 = NULL
 )
 }
 \arguments{
@@ -28,6 +33,11 @@ build_dvn(
 \item{distinguish_1}{Character identifying the first partner (e.g., \code{"A"}).}
 
 \item{distinguish_2}{Character identifying the second partner (e.g., \code{"B"}).}
+
+\item{n_items_y}{Optional number of Y indicators per partner. When non-\code{NULL},
+\code{p1yvarnames}, \code{p2yvarnames}, and \code{yindper} are included.}
+
+\item{y_order, y_stem, y_delim1, y_delim2}{Y naming (default \code{NULL} mirrors X).}
 }
 \value{
 A list compatible with dySEM dvn structure:
@@ -37,6 +47,7 @@ A list compatible with dySEM dvn structure:
 \item{dist1}{First partner distinguisher}
 \item{dist2}{Second partner distinguisher}
 \item{indnum}{Total number of indicators}
+\item{p1yvarnames,p2yvarnames,yindper}{Included when \code{n_items_y} is set}
 }
 \description{
 Creates a dvn structure for use with dySEM population scripters and simulation
