@@ -1,3 +1,7 @@
+# dySEM 1.4.2
+
+* JOSS review release. Incorporates the documentation and example-script corrections contributed by @smasongarrison in PR #156: link formatting and typo fixes in `R/DRES-data.R`, `man/DRES.Rd`, `paper/paper.md`, `paper/paper.html`, and `vignettes/dySEM.Rmd`. No user-facing code changes relative to 1.4.1; this is the version archived with a DOI for the JOSS submission (openjournals/joss-reviews#10115).
+
 # dySEM 1.4.1
 
 * Much more extensive unit testing coverage
