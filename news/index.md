@@ -1,6 +1,17 @@
 # Changelog
 
-## dySEM 2.0.0
+## dySEM 2.0.0 (in development)
+
+- **Note on scope.** v2.0.0 introduces substantial new functionality
+  developed *after* the v1.4.2 JOSS archival release (see
+  openjournals/joss-reviews#10115). These additions (multi-group
+  support,
+  [`scriptTwoCross()`](https://jsakaluk.github.io/dySEM/reference/scriptTwoCross.md),
+  Monte Carlo simulation scripters, GUI support, `"orthogonal"`
+  constraint tokens, etc.) were *not* part of the JOSS-reviewed release
+  and should not be cited as JOSS-reviewed functionality. The
+  JOSS-reviewed and -archived version is v1.4.2 (tag `v1.4.2`, branch
+  `release/joss-1.4.2`).
 
 - [`scriptObsAPIM()`](https://jsakaluk.github.io/dySEM/reference/scriptObsAPIM.md)
   now uses the same structural constraint arguments as
@@ -26,6 +37,18 @@
   updates to dySim: <https://jsakaluk.github.io/dySim/>)
 
 - Initial GUI support
+
+## dySEM 1.4.2
+
+- JOSS review release. Incorporates the documentation and example-script
+  corrections contributed by
+  [@smasongarrison](https://github.com/smasongarrison) in PR
+  [\#156](https://github.com/jsakaluk/dySEM/issues/156): link formatting
+  and typo fixes in `R/DRES-data.R`, `man/DRES.Rd`, `paper/paper.md`,
+  `paper/paper.html`, and `vignettes/dySEM.Rmd`. No user-facing code
+  changes relative to 1.4.1; this is the version archived with a DOI for
+  the JOSS submission (openjournals/joss-reviews#10115). Lives on branch
+  `release/joss-1.4.2` at tag `v1.4.2`.
 
 ## dySEM 1.4.1
 
