@@ -206,11 +206,11 @@ For both tabling and path diagraming, UseRs can specify a directory path to wher
 
 
 ```{r dyoutput, eval = FALSE}
-outputParamTab(dvn, model = "cfa", fit = qual.indist.fit, 
+outputParamTab(dvn, model = "cfa", fit = qual.ind.fit, 
                tabletype = "measurement", writeTo = tempdir(), 
-               fileName = "cfa_indist")
+               fileName = "cfa_ind")
 
-outputParamFig(fit = qual.indist.fit, figtype = "standardized",
+outputParamFig(fit = qual.ind.fit, figtype = "standardized",
                writeTo = tempdir(), 
-               fileName = "cfa_indist")
+               fileName = "cfa_ind")
 ```

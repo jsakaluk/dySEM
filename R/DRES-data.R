@@ -1,8 +1,8 @@
 #' Relationship quality and sexual satisfaction of 121 couples
 #'
-#'A dataset containing 9 observed indicators of relationship quality (PRQC)
-#'and 5 observed indicators of sexual satisfaction from 121 couples
-#'in the DRES (Daily Relationship Experiences Study; Raposo, Impett, & Muise, in press)
+#' A dataset containing 9 observed indicators of relationship quality (PRQC)
+#' and 5 observed indicators of sexual satisfaction from 121 couples
+#' in the DRES (Daily Relationship Experiences Study; Raposo, Impett, & Muise, 2020)
 #'
 #' @docType data
 #'
@@ -40,7 +40,7 @@
 #'  \item{sexsat5.2}{sexual satisfaction item 5 for partner 2}
 #' }
 #'
-#'@references Raposo, S., Impett, E. A., & Muise, A. (2020). Avoidantly Attached Individuals Are More Exchange‐Oriented and Less Communal in the Bedroom. *Archives of Sexual Behavior*, *49*, 2863–2881. https://doi.org/10.1007/s10508-020-01813-9
+#' @references Raposo, S., Impett, E. A., & Muise, A. (2020). Avoidantly Attached Individuals Are More Exchange‐Oriented and Less Communal in the Bedroom. *Archives of Sexual Behavior*, *49*, 2863–2881. https://doi.org/10.1007/s10508-020-01813-9
 #'
 #'
 "DRES"
