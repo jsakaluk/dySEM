@@ -70,32 +70,30 @@ outputUniConstructComp(
 
 - gtTab:
 
-  A logical input indicating whether to generate the table(s) in
+  A logical input indicating whether to generate the requested index(es)
+  for each fitted model (requested via the `indexes` argument) in
   [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) table object
-  format (`TRUE`). By default (`FALSE`), the table(s) are generated in
-  [`tibble::tibble()`](https://tibble.tidyverse.org/reference/tibble.html)
-  format. Users can also apply the `writeTo` argument if they wish to
-  export the [`gt::gt()`](https://gt.rstudio.com/reference/gt.html)
-  table object(s).
+  format (`TRUE`). Users can also apply the `writeTo` argument if they
+  wish to export the
+  [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) table object.
 
 - writeTo:
 
-  A character string specifying a directory path to where the output
-  file(s) should be saved. If set to `"."`, the file(s) will be written
-  to the current working directory. The default is `NULL`, and examples
-  use a temporary directory created by
-  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). When dealing with
-  tabular output, `writeTo` is only relevant if `gtTab = TRUE`.
+  A character vector string specifying a directory path to where the
+  [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) table object
+  should be saved. If set to ".", the file will be written to the
+  current working directory. The default is `NULL`, and examples use a
+  temporary directory created by
+  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). `writeTo` is only
+  relevant if `gtTab = TRUE`.
 
 - fileName:
 
-  A character string specifying a desired base name for the output file.
-  The default is `NULL`. The specified name will be automatically
-  appended with the appropriate file extension (e.g., `.txt` for
-  `lavaan` scripts, `.rtf` for tabular output when `gtTab = TRUE`, or
-  other extensions as appropriate for the output type). If a file with
-  the same name already exists in the user's chosen directory, it will
-  be overwritten.
+  A character string specifying a desired base name for the output
+  [`gt::gt()`](https://gt.rstudio.com/reference/gt.html) file. The
+  resulting base name will automatically be appended with a `.rtf` file
+  extension. `fileName` is only relevant if `gtTab = TRUE` and `writeTo`
+  is specified.
 
 ## Value
 
@@ -230,70 +228,10 @@ outputUniConstructComp(
   writeTo = tempdir(),
   fileName = "uni-construct-dyad-models"
 )
-#> Output stored in: /tmp/RtmpYJnrx6/uni-construct-dyad-models.rtf
+#> Output stored in: /tmp/Rtmpq7ajWv/uni-construct-dyad-models.rtf
 
 
   
 
 Model
 ```
-
-Type
-
-df
-
-bic
-
-df_diff
-
-bic_diff
-
-Bifactor
-
-Higher Order
-
-20
-
-8512.446
-
-NA
-
-NA
-
-Hierarchical
-
-Higher Order
-
-29
-
-8473.677
-
-9
-
--38.76866
-
-Correlated Factors
-
-Lower Order
-
-29
-
-8473.677
-
-NA
-
-NA
-
-Unidimensional
-
-Lower Order
-
-30
-
-9459.109
-
-1
-
-985.43122
-
-\# }

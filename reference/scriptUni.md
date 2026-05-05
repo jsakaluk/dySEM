@@ -12,14 +12,10 @@ scriptUni(
   dvn,
   scaleset = "FF",
   lvname = "X",
-  lvar = "X",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
   constr_dy_struct = "none",
-  constr_group_meas = NULL,
-  constr_group_struct = NULL,
   writeTo = NULL,
-  fileName = NULL,
-  outputType = "lavaan script"
+  fileName = NULL
 )
 ```
 
@@ -33,20 +29,13 @@ scriptUni(
 - scaleset:
 
   Input character to specify how to set the scale of the latent
-  variable(s). Default is `"FF"` (fixed-factor; see Details for
-  rationale), but user can specify `"MV"` (Marker Variable).
+  variable. Default is `"FF"` (fixed-factor; see Details for rationale),
+  but user can specify `"MV"` (Marker Variable).
 
 - lvname:
 
   Input character to (arbitrarily) name the latent variable in `lavaan`
   syntax.
-
-- lvar:
-
-  Input character to specify whether the latent variable represents "X"
-  or "Y" in the model. Default is `"X"`. This argument controls
-  parameter labeling (e.g., `lx` vs `ly` for loadings, `tx` vs `ty` for
-  intercepts).
 
 - constr_dy_meas:
 
@@ -64,51 +53,26 @@ scriptUni(
   functions, `constr_dy_struct` is included as an argument, but defaults
   to `"none"`.
 
-- constr_group_meas:
-
-  Optional character vector for cross-group measurement constraints
-  (e.g. `"loadings"`, `"intercepts"`, `"residuals"`, `"none"`). When
-  `NULL` (default), single-group model. When non-NULL, requires `dvn`
-  from `scrapeVarCross(..., group = "varname")`.
-
-- constr_group_struct:
-
-  Optional character vector for cross-group structural constraints (e.g.
-  `"variances"`, `"means"`, `"none"`). When `NULL` (default),
-  single-group model.
-
 - writeTo:
 
-  A character string specifying a directory path to where the output
-  file(s) should be saved. If set to `"."`, the file(s) will be written
-  to the current working directory. The default is `NULL`, and examples
-  use a temporary directory created by
-  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). When dealing with
-  tabular output, `writeTo` is only relevant if `gtTab = TRUE`.
+  A character string specifying a directory path to where a `.txt` file
+  of the resulting `lavaan` script should be written. If set to `“.”`,
+  the `.txt` file will be written to the current working directory. The
+  default is `NULL`, and examples use a temporary directory created by
+  [`tempdir()`](https://rdrr.io/r/base/tempfile.html).
 
 - fileName:
 
-  A character string specifying a desired base name for the output file.
-  The default is `NULL`. The specified name will be automatically
-  appended with the appropriate file extension (e.g., `.txt` for
-  `lavaan` scripts, `.rtf` for tabular output when `gtTab = TRUE`, or
-  other extensions as appropriate for the output type). If a file with
+  A character string specifying a desired base name for the `.txt`
+  output file. The default is `NULL`. The specified name will be
+  automatically appended with the `.txt` file extension. If a file with
   the same name already exists in the user's chosen directory, it will
   be overwritten.
-
-- outputType:
-
-  Character string specifying the type of output to return. Options are
-  `"lavaan script"` (default) to return a character object of `lavaan`
-  syntax that can be passed immediately to `lavaan` functions, or
-  `"syntax components"` to return a structured list of model components.
 
 ## Value
 
 Character object of `lavaan` script that can be passed immediately to
-`lavaan` functions (when `outputType = "lavaan script"`), or a
-structured list of model components (when
-`outputType = "syntax components"`).
+`lavaan` functions.
 
 ## Details
 
@@ -143,6 +107,7 @@ Other uni-construct script-writing functions:
 ## Examples
 
 ``` r
+
 dvn <- scrapeVarCross(
   commitmentQ,
   x_order = "spi",

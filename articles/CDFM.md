@@ -62,6 +62,7 @@ This exemplar makes use of the `tidyverse` meta-package, and the `gt`,
 `dySEM`, and `lavaan` (Rosseel, 2012) packages.
 
 ``` r
+
 library(dplyr) #for data management
 library(gt) #for reproducible tabling
 library(dySEM) #for dyadic SEM scripting and outputting
@@ -100,6 +101,7 @@ satisfaction items, and assign them into a stand-alone demonstration
 data frame called `my_dat`:
 
 ``` r
+
 
 my_dat <- commitmentM
 
@@ -172,6 +174,7 @@ often refer to this list as a* **“dyad variable names”** *list, or*
 
 ``` r
 
+
 sat_dvn <- scrapeVarCross(dat = my_dat, x_order = "sip", x_stem = "sat.g", x_delim1 = "", x_delim2="_", distinguish_1="f", distinguish_2="m")
 #> 
 #> ── Variable Scraping Summary ──
@@ -233,6 +236,7 @@ object.
 
 ``` r
 
+
 sat.config.script <- scriptCor(sat_dvn, lvname = "Sat", scaleset = "FF", constr_dy_meas = "none", constr_dy_struct = "none")
 
 sat.load.script <- scriptCor(sat_dvn, lvname = "Sat", scaleset = "FF", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
@@ -247,6 +251,7 @@ as we shall soon see, they are immediately passable to `lavaan`:
 
 ``` r
 
+
 sat.resid.script
 #> [1] "#Measurement Model\n\n#Loadings\nSatf=~NA*sat.g1_f+lx1*sat.g1_f+lx2*sat.g2_f+lx3*sat.g3_f+lx4*sat.g4_f+lx5*sat.g5_f\nSatm=~NA*sat.g1_m+lx1*sat.g1_m+lx2*sat.g2_m+lx3*sat.g3_m+lx4*sat.g4_m+lx5*sat.g5_m\n\n#Intercepts\nsat.g1_f ~ tx1*1\nsat.g2_f ~ tx2*1\nsat.g3_f ~ tx3*1\nsat.g4_f ~ tx4*1\nsat.g5_f ~ tx5*1\n\nsat.g1_m ~ tx1*1\nsat.g2_m ~ tx2*1\nsat.g3_m ~ tx3*1\nsat.g4_m ~ tx4*1\nsat.g5_m ~ tx5*1\n\n#Residual Variances\nsat.g1_f ~~ thx1*sat.g1_f\nsat.g2_f ~~ thx2*sat.g2_f\nsat.g3_f ~~ thx3*sat.g3_f\nsat.g4_f ~~ thx4*sat.g4_f\nsat.g5_f ~~ thx5*sat.g5_f\n\nsat.g1_m ~~ thx1*sat.g1_m\nsat.g2_m ~~ thx2*sat.g2_m\nsat.g3_m ~~ thx3*sat.g3_m\nsat.g4_m ~~ thx4*sat.g4_m\nsat.g5_m ~~ thx5*sat.g5_m\n\n#Residual Covariances\nsat.g1_f ~~ sat.g1_m\nsat.g2_f ~~ sat.g2_m\nsat.g3_f ~~ sat.g3_m\nsat.g4_f ~~ sat.g4_m\nsat.g5_f ~~ sat.g5_m\n\n#Structural Model\n\n#Latent (Co)Variances\nSatf ~~ 1*Satf\nSatm ~~ NA*Satm\nSatf ~~ Satm\n\n#Latent Means\nSatf ~ 0*1\nSatm ~ NA*1"
 ```
@@ -256,6 +261,7 @@ concatenated, they can be presented in a much more readable format that
 mirrors what users expect from a manually written `lavaan` script:
 
 ``` r
+
 
 cat(sat.resid.script)
 #> #Measurement Model
@@ -318,6 +324,7 @@ specifications for [`cfa()`](https://rdrr.io/pkg/lavaan/man/cfa.html):
 
 ``` r
 
+
 sat.config.mod <- cfa(sat.config.script, data = my_dat)
 
 sat.load.mod <- cfa(sat.load.script, data = my_dat)
@@ -340,6 +347,7 @@ For example, researchers could use the built in anova() function as
 below:
 
 ``` r
+
 
 anova(sat.config.mod, sat.load.mod, sat.int.mod, sat.resid.mod)
 #> 
@@ -365,6 +373,7 @@ a function we have written to wrap some of the same comparative output
 in a more reproducible-reporting-friendly format:
 
 ``` r
+
 
 mods <- list(sat.config.mod, sat.load.mod, sat.int.mod, sat.resid.mod)
 
@@ -392,15 +401,16 @@ reproducible reporting document formats (like .Rmd and .Qmd):
 
 ``` r
 
+
 outputInvarCompTab(mods, gtTab = TRUE)
 ```
 
-| mod        | chisq   | df  | pvalue | aic      | bic      | rmsea | cfi   | chisq_diff | df_diff | p_diff | aic_diff | bic_diff | rmsea_diff | cfi_diff |
-|------------|---------|-----|--------|----------|----------|-------|-------|------------|---------|--------|----------|----------|------------|----------|
-| configural | 57.490  | 29  | 0.001  | 8205.656 | 8335.991 | 0.060 | 0.993 | NA         | NA      | NA     | NA       | NA       | NA         | NA       |
-| loading    | 63.944  | 33  | 0.001  | 8204.110 | 8319.963 | 0.058 | 0.992 | 6.454      | 4       | 0.168  | -1.546   | -16.028  | -0.001     | -0.001   |
-| intercept  | 67.018  | 37  | 0.002  | 8199.185 | 8300.556 | 0.054 | 0.992 | 3.074      | 4       | 0.545  | -4.926   | -19.407  | -0.004     | 0.000    |
-| residual   | 109.846 | 42  | 0.000  | 8232.013 | 8315.282 | 0.077 | 0.983 | 42.828     | 5       | 0.000  | 32.828   | 14.726   | 0.022      | -0.010   |
+| mod | chisq | df | pvalue | aic | bic | rmsea | cfi | chisq_diff | df_diff | p_diff | aic_diff | bic_diff | rmsea_diff | cfi_diff |
+|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
+| configural | 57.490 | 29 | 0.001 | 8205.656 | 8335.991 | 0.060 | 0.993 | NA | NA | NA | NA | NA | NA | NA |
+| loading | 63.944 | 33 | 0.001 | 8204.110 | 8319.963 | 0.058 | 0.992 | 6.454 | 4 | 0.168 | -1.546 | -16.028 | -0.001 | -0.001 |
+| intercept | 67.018 | 37 | 0.002 | 8199.185 | 8300.556 | 0.054 | 0.992 | 3.074 | 4 | 0.545 | -4.926 | -19.407 | -0.004 | 0.000 |
+| residual | 109.846 | 42 | 0.000 | 8232.013 | 8315.282 | 0.077 | 0.983 | 42.828 | 5 | 0.000 | 32.828 | 14.726 | 0.022 | -0.010 |
 
 Conversely, if users prefer to export the output to a file, they can set
 the additional `writeTo` argument to a directory path (a path of “.”
@@ -412,13 +422,14 @@ processing software:
 
 ``` r
 
+
 outputInvarCompTab(mods, gtTab = TRUE, writeTo = ".", fileName = "sat_invar_comp")
 ```
 
 Were one strictly to follow only the likelihood ratio test statistic as
 a guide, they might feel comfortable claiming they have reasonable
 support for most forms of dyadic invariance, with the exception of
-significant residual noninvariances, $\chi^{2}$ (5) = 42.83, *p* = 0.
+significant residual noninvariances, $`\chi^2`$ (5) = 42.83, *p* = 0.
 
 Users can then request that `dySEM` provide them with reproducible
 output via either the
@@ -430,6 +441,7 @@ wanted a table of measurement model output from the dyadic intercept
 invariance model they could use:
 
 ``` r
+
 
 outputParamTab(sat_dvn, model = "cfa", fit = sat.int.mod, 
                tabletype = "measurement") |> 
@@ -468,6 +480,7 @@ estimates they wish to be depicted in the path diagram.
 
 ``` r
 
+
 outputParamFig(fit = sat.int.mod, figtype = "standardized")
 ```
 
@@ -497,27 +510,28 @@ multiplier test statistic and corresponding test:
 
 ``` r
 
+
 outputConstraintTab(sat.resid.mod) |> 
   gt()
 ```
 
-| param1                | constraint | param2                | chi2   | df  | pvalue | sig    |
-|-----------------------|------------|-----------------------|--------|-----|--------|--------|
-| Satf =~ sat.g1_f      | ==         | Satm =~ sat.g1_m      | 1.131  | 1   | 0.288  | NA     |
-| Satf =~ sat.g2_f      | ==         | Satm =~ sat.g2_m      | 0.633  | 1   | 0.426  | NA     |
-| Satf =~ sat.g3_f      | ==         | Satm =~ sat.g3_m      | 0.060  | 1   | 0.806  | NA     |
-| Satf =~ sat.g4_f      | ==         | Satm =~ sat.g4_m      | 1.839  | 1   | 0.175  | NA     |
-| Satf =~ sat.g5_f      | ==         | Satm =~ sat.g5_m      | 3.603  | 1   | 0.058  | NA     |
-| sat.g1_f ~1           | ==         | sat.g1_m ~1           | 0.057  | 1   | 0.812  | NA     |
-| sat.g2_f ~1           | ==         | sat.g2_m ~1           | 1.316  | 1   | 0.251  | NA     |
-| sat.g3_f ~1           | ==         | sat.g3_m ~1           | 0.048  | 1   | 0.827  | NA     |
-| sat.g4_f ~1           | ==         | sat.g4_m ~1           | 0.103  | 1   | 0.748  | NA     |
-| sat.g5_f ~1           | ==         | sat.g5_m ~1           | 2.090  | 1   | 0.148  | NA     |
-| sat.g1_f \~~ sat.g1_f | ==         | sat.g1_m \~~ sat.g1_m | 22.977 | 1   | 0.000  | \*\*\* |
-| sat.g2_f \~~ sat.g2_f | ==         | sat.g2_m \~~ sat.g2_m | 0.263  | 1   | 0.608  | NA     |
-| sat.g3_f \~~ sat.g3_f | ==         | sat.g3_m \~~ sat.g3_m | 0.317  | 1   | 0.573  | NA     |
-| sat.g4_f \~~ sat.g4_f | ==         | sat.g4_m \~~ sat.g4_m | 2.422  | 1   | 0.120  | NA     |
-| sat.g5_f \~~ sat.g5_f | ==         | sat.g5_m \~~ sat.g5_m | 17.185 | 1   | 0.000  | \*\*\* |
+| param1 | constraint | param2 | chi2 | df | pvalue | sig |
+|----|----|----|----|----|----|----|
+| Satf =~ sat.g1_f | == | Satm =~ sat.g1_m | 1.131 | 1 | 0.288 | NA |
+| Satf =~ sat.g2_f | == | Satm =~ sat.g2_m | 0.633 | 1 | 0.426 | NA |
+| Satf =~ sat.g3_f | == | Satm =~ sat.g3_m | 0.060 | 1 | 0.806 | NA |
+| Satf =~ sat.g4_f | == | Satm =~ sat.g4_m | 1.839 | 1 | 0.175 | NA |
+| Satf =~ sat.g5_f | == | Satm =~ sat.g5_m | 3.603 | 1 | 0.058 | NA |
+| sat.g1_f ~1 | == | sat.g1_m ~1 | 0.057 | 1 | 0.812 | NA |
+| sat.g2_f ~1 | == | sat.g2_m ~1 | 1.316 | 1 | 0.251 | NA |
+| sat.g3_f ~1 | == | sat.g3_m ~1 | 0.048 | 1 | 0.827 | NA |
+| sat.g4_f ~1 | == | sat.g4_m ~1 | 0.103 | 1 | 0.748 | NA |
+| sat.g5_f ~1 | == | sat.g5_m ~1 | 2.090 | 1 | 0.148 | NA |
+| sat.g1_f \~~ sat.g1_f | == | sat.g1_m \~~ sat.g1_m | 22.977 | 1 | 0.000 | \*\*\* |
+| sat.g2_f \~~ sat.g2_f | == | sat.g2_m \~~ sat.g2_m | 0.263 | 1 | 0.608 | NA |
+| sat.g3_f \~~ sat.g3_f | == | sat.g3_m \~~ sat.g3_m | 0.317 | 1 | 0.573 | NA |
+| sat.g4_f \~~ sat.g4_f | == | sat.g4_m \~~ sat.g4_m | 2.422 | 1 | 0.120 | NA |
+| sat.g5_f \~~ sat.g5_f | == | sat.g5_m \~~ sat.g5_m | 17.185 | 1 | 0.000 | \*\*\* |
 
 In this particular instance, significant noninvariance was only
 introduced by forcing the constraint on the residual variances for the

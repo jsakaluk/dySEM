@@ -8,8 +8,8 @@ reporting on latent models of dyadic data via
 and used in the course of the research described in Sakaluk, Fisher, and
 Kilshaw (2021), and has since undergone considerable expansion.
 
-`dySEM` currently contains **84** functions, of which **31** are
-user-facing (i.e., exported), which are covered by **551** unit tests.
+`dySEM` currently contains **68** functions, of which **25** are
+user-facing (i.e., exported), which are covered by **536** unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
@@ -20,6 +20,7 @@ You can install the released version of dySEM from
 [CRAN](https://cran.r-project.org) with:
 
 ``` r
+
 install.packages("dySEM")
 ```
 
@@ -27,18 +28,15 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
+
+
 devtools::install_github("jsakaluk/dySEM")
 ```
 
 ## Current Functionality
 
-The package currently provides the following kind of functionality:
-
-**NEW (BETA) Functionality**
-
-1.  “Boutique” Bi-Construct Models (e.g., Univariate –\> Hierarchical)
-2.  Uni-Construct Model Multi-Group Specification
-3.  Monte Carlo dvn creation and scripter functions
+The package currently provides functionality regarding the following
+types of latent dyadic data models:
 
 **Uni-Construct Models**
 
@@ -124,6 +122,10 @@ calculate certain additional quantitative values (e.g., reliability,
 corrected model fit indexes in models with indistinguishable dyad
 members).
 
+``` R
+#> Warning: package 'ggplot2' was built under R version 4.4.3
+```
+
 ### 1. Import and wrangle **data**
 
 Structural equation modeling (SEM) programs like `lavaan` require dyadic
@@ -132,6 +134,7 @@ data for one dyad, with separate columns for each observation made for
 each member of the dyad. For example:
 
 ``` r
+
 DRES
 #> # A tibble: 121 × 18
 #>    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_7.1 PRQC_8.1
@@ -162,6 +165,7 @@ elements.`dySEM` scrapers largely function by asking you to specify in
 what order the elements of variable names are ordered.
 
 ``` r
+
 dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_delim2=".",  distinguish_1="1", distinguish_2="2")
 #> 
 #> ── Variable Scraping Summary ──
@@ -184,6 +188,7 @@ typically require only three arguments to be specified:
     imposed (if any)
 
 ``` r
+
 qual.indist.script <- scriptCor(dvn, lvname = "Quality")
 ```
 
@@ -198,6 +203,7 @@ to your preferred `lavaan` wrapper, with your estimator and missing data
 treatment of choice. For example:
 
 ``` r
+
 qual.indist.fit <- lavaan::cfa(qual.indist.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 ```
 
@@ -205,6 +211,7 @@ At this point, the full arsenal of `lavaan` model-inspecting tools are
 at your disposal. For example:
 
 ``` r
+
 summary(qual.indist.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 ```
 
@@ -218,6 +225,7 @@ by replacing [`tempdir()`](https://rdrr.io/r/base/tempfile.html) (e.g.,
 with `"."`, which will place it in your current working directory).
 
 ``` r
+
 
 outputParamTab(dvn, model = "cfa", fit = qual.indist.fit, 
                tabletype = "measurement", writeTo = tempdir(), 

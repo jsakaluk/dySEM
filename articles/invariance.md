@@ -55,9 +55,9 @@ the indicator variables (e.g., questionnaire items) and their
 statistical relationships to the latent variable(s) being modeled. These
 include:
 
-- item *intercepts* (contained in the $\tau$ matrix)
-- item *loadings*, and (contained in the $\lambda$ matrix)
-- item *residual variances* (contained in the $\theta$ matrix)
+- item *intercepts* (contained in the $`\tau`$ matrix)
+- item *loadings*, and (contained in the $`\lambda`$ matrix)
+- item *residual variances* (contained in the $`\theta`$ matrix)
 
 Indeed, these parameters are at work in the general-linear-model-like
 equation for reproducing item responses based on a specified measurement
@@ -68,7 +68,7 @@ one-unit increase in X), their score on predictor variable X, and
 leftover residual variance (i.e, the difference between their observed
 and predicted score on Y)…:
 
-$Y_{i} = b_{0} + b_{1}X_{i} + \epsilon_{i}$
+$`Y_i = b_0 + b_1X_i + \epsilon_i`$
 
 …so too does the reflective latent variable model suggest that a
 person’s (i) response to a given item (e.g., sat.g.1.1) can be produced
@@ -79,17 +79,17 @@ variable), their score the latent variable, and leftover residual
 variance (i.e, variance in sat.g.1.1 unaccounted for by the latent
 variable)…
 
-$sat.g.1.1_{i} = \tau_{1} + \lambda_{11}\zeta_{i} + \theta_{11}$
+$`sat.g.1.1_i = \tau_1 + \lambda_{11}\zeta_i + \theta_{11}`$
 
 The only other major conceptual distinction from your generic GLM is
 that this equation plays out for each and every item in the measurement
 model,
 
-$sat.g.1.2_{i} = \tau_{2} + \lambda_{21}\zeta_{i} + \theta_{22}$
+$`sat.g.1.2_i = \tau_2 + \lambda_{21}\zeta_i + \theta_{22}`$
 
-$sat.g.1.3_{i} = \tau_{3} + \lambda_{31}\zeta_{i} + \theta_{33}$
+$`sat.g.1.3_i = \tau_3 + \lambda_{31}\zeta_i + \theta_{33}`$
 
-$sat.g.1.4_{i} = \tau_{4} + \lambda_{41}\zeta_{i} + \theta_{44}$
+$`sat.g.1.4_i = \tau_4 + \lambda_{41}\zeta_i + \theta_{44}`$
 
 … etc.
 
@@ -97,11 +97,11 @@ The structural model, meanwhile, includes all parameter types that
 govern statistical properties of the latent variables themselves, and
 their relationships to one another. These include:
 
-- *latent variances* (contained in the $\Psi$ matrix)
-- *latent means* (contained in the $A$ matrix)
+- *latent variances* (contained in the $`\Psi`$ matrix)
+- *latent means* (contained in the $`A`$ matrix)
 - *latent covariances*/*latent correlations* (also contained in the
-  $\Psi$ matrix), and
-- *latent slopes* (contained in the $B$ matrix)
+  $`\Psi`$ matrix), and
+- *latent slopes* (contained in the $`B`$ matrix)
 
 When using the term “indistinguishable” in the context of structural
 equation modeling with latent variables, we therefore need to be very
@@ -210,6 +210,7 @@ model.
 ## Example Data and Scraping Variable Names
 
 ``` r
+
 library(dySEM)
 library(lavaan)
 library(semPlot)
@@ -237,6 +238,7 @@ separate partner from item number. We assign this to an object
 information about (d)yad (v)ariable (n)ames):
 
 ``` r
+
 dvn <- scrapeVarCross(dat = commitmentQ, 
                       x_order = "spi", x_stem = "sat.g", x_delim1 = ".", x_delim2="_", 
                       distinguish_1="1", distinguish_2="2")
@@ -300,6 +302,7 @@ measurement-level indistinguishability), and then testing whether more
 complicated models are empirically warranted.
 
 ``` r
+
 sat.residual.script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = "none")
 sat.intercept.script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = c("loadings", "intercepts"), constr_dy_struct = "none")
 sat.loading.script <- scriptCor(dvn, lvname = "Sat", constr_dy_meas = c("loadings"), constr_dy_struct = "none")
@@ -318,6 +321,7 @@ you can see a friendly human-readable version of what scriptCor()
 generated:
 
 ``` r
+
 cat(sat.residual.script)
 #> #Measurement Model
 #> 
@@ -375,6 +379,7 @@ We can now immediately pass all of these models to `lavaan` for fitting.
 ### Model Fitting
 
 ``` r
+
 sat.residual.fit <- cfa(sat.residual.script, 
                                  data = commitmentQ, 
                                  std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
@@ -398,6 +403,7 @@ And we can expeditiously compare all the models at once:
 
 ``` r
 
+
 out <- anova(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
 ```
 
@@ -416,6 +422,7 @@ subsequently relaxed groups of constraints significantly improves the
 model. All it requires as input is a list of all four models, in order:
 
 ``` r
+
 
 mods <- list(sat.residual.fit, sat.intercept.fit, sat.loading.fit, sat.config.fit)
 outputInvarCompTab(mods)
@@ -486,6 +493,7 @@ respective amount is significantly different from zero.
 
 ``` r
 
+
 lavTestScore(sat.residual.fit)
 #> $test
 #> 
@@ -527,6 +535,7 @@ to notice that are the residual variances for the 2nd and 5th items,
 respectively.
 
 ``` r
+
 
 partable(sat.residual.fit)
 #>    id       lhs op       rhs user block group free ustart exo label plabel
@@ -652,6 +661,7 @@ immediately readable and intuitive list of constraints:
 
 ``` r
 
+
 outputConstraintTab(sat.residual.fit)
 #> # A tibble: 15 × 7
 #>    param1                   constraint param2            chi2    df pvalue sig  
@@ -683,14 +693,14 @@ variance constraints (`~~` operator) did (for the 2nd and 5th items).
 Finally, when noninvariance is present, it’s often informative to
 quantify the magnitude of it. Although not often reported, there are a
 variety of effect size measures for noninvariance (see Nye and Drasgow,
-2011; Gunn et al., 2020), one of which ($d_{MACS}$) we have adapted for
-the dyadic invariance case (in Sakaluk et al., 2021).
+2011; Gunn et al., 2020), one of which ($`d_{MACS}`$) we have adapted
+for the dyadic invariance case (in Sakaluk et al., 2021).
 
-$d_{MACS}$ gives you the standardized average difference in a given
+$`d_{MACS}`$ gives you the standardized average difference in a given
 indicator score between the two members of the dyad, across a normal
 latent variable distribution for the second partner assuming the
 differences were uniform (Gunn et al., 2020). Put another way, you can
-think of $d_{MACS}$ as providing you a standardized sense of how
+think of $`d_{MACS}`$ as providing you a standardized sense of how
 misleading noninvariance in a given item would be, in terms of either
 creating the illusion of a group difference on an item, or suppressing
 the presence of a group difference on an item. That is, it is “Cohen’s
@@ -699,7 +709,7 @@ of measurement modeling (e.g., vs. a *t*-test), users should not expect
 the same interpretative thresholds as Cohen’s *d* to hold (Nye et al.,
 2019).
 
-To calculate $d_{MACS}$ for your items, you must first determine a
+To calculate $`d_{MACS}`$ for your items, you must first determine a
 viable “partially invariant” model (Nye & Drasgow, 2011; Gunn et al,
 2020): that is, a model that is invariant on all parameters except for
 those that were identified as significantly noninvariant in the previous
@@ -709,6 +719,7 @@ In this case, we would need to specify a model that is invariant on all
 parameters except for the residual variances for the 2nd and 5th items.
 
 ``` r
+
 
 sat.partial.script <-'
 #Measurement Model
@@ -770,10 +781,11 @@ sat.partial.fit <- cfa(sat.partial.script,
 ```
 
 We can then pass our data frame, dvn, and partially invariant model to
-the `getDydmacs` function, which will return a list of the $d_{MACS}$
+the `getDydmacs` function, which will return a list of the $`d_{MACS}`$
 values for each item.
 
 ``` r
+
 
 getDydmacs(dat, dvn, sat.partial.fit)
 #>      dMACS
@@ -784,11 +796,11 @@ getDydmacs(dat, dvn, sat.partial.fit)
 #> [5,]     0
 ```
 
-In this case, our $d_{MACS}$ values are all 0; this is because the
-$d_{MACS}$ measure is only sensitive to noninvariance in loadings and
+In this case, our $`d_{MACS}`$ values are all 0; this is because the
+$`d_{MACS}`$ measure is only sensitive to noninvariance in loadings and
 intercepts (which are the primary measurement models of interest in most
 invariance testing), and so the residual noninvariance in the 2nd and
-5th items does not contribute to the $d_{MACS}$ values.
+5th items does not contribute to the $`d_{MACS}`$ values.
 
 Note, however, how much noninvariance “matters” in a given case will
 vary across contexts. Nye et al. (2019), for example, note that in a

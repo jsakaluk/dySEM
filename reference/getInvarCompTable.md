@@ -24,6 +24,7 @@ difference in fit statistics between each model and the previous model
 ## Examples
 
 ``` r
+
 dvn <- scrapeVarCross(
   dat = commitmentQ, x_order = "spi",
   x_stem = "sat.g", x_delim1 = ".", x_delim2 = "_", distinguish_1 = "1", distinguish_2 = "2"

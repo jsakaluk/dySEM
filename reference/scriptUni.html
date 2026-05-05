@@ -9,11 +9,11 @@ one-factor models."><meta property="og:image" content="https://jsakaluk.github.i
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,7 @@ one-factor models."><meta property="og:image" content="https://jsakaluk.github.i
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>A Function That Writes, Saves, and Exports Syntax for Fitting Unidimensional Dyadic Factor Models</h1>
-      <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/master/R/scriptUni.R" class="external-link"><code>R/scriptUni.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jsakaluk/dySEM/blob/v1.4.2/R/scriptUni.R" class="external-link"><code>R/scriptUni.R</code></a></small>
       <div class="d-none name"><code>scriptUni.Rd</code></div>
     </div>
 
@@ -64,14 +64,10 @@ one-factor models.</p>
 <span>  <span class="va">dvn</span>,</span>
 <span>  scaleset <span class="op">=</span> <span class="st">"FF"</span>,</span>
 <span>  lvname <span class="op">=</span> <span class="st">"X"</span>,</span>
-<span>  lvar <span class="op">=</span> <span class="st">"X"</span>,</span>
 <span>  constr_dy_meas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="st">"intercepts"</span>, <span class="st">"residuals"</span><span class="op">)</span>,</span>
 <span>  constr_dy_struct <span class="op">=</span> <span class="st">"none"</span>,</span>
-<span>  constr_group_meas <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  constr_group_struct <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  writeTo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  fileName <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  outputType <span class="op">=</span> <span class="st">"lavaan script"</span></span>
+<span>  fileName <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,19 +81,13 @@ one-factor models.</p>
 
 <dt id="arg-scaleset">scaleset<a class="anchor" aria-label="anchor" href="#arg-scaleset"></a></dt>
 <dd><p>Input character to specify how to set the scale of the latent
-variable(s). Default is <code>"FF"</code> (fixed-factor; see Details for rationale),
-but user can specify <code>"MV"</code> (Marker Variable).</p></dd>
+variable. Default is <code>"FF"</code> (fixed-factor; see Details for rationale), but
+user can specify <code>"MV"</code> (Marker Variable).</p></dd>
 
 
 <dt id="arg-lvname">lvname<a class="anchor" aria-label="anchor" href="#arg-lvname"></a></dt>
 <dd><p>Input character to (arbitrarily) name the latent variable in
 <code>lavaan</code> syntax.</p></dd>
-
-
-<dt id="arg-lvar">lvar<a class="anchor" aria-label="anchor" href="#arg-lvar"></a></dt>
-<dd><p>Input character to specify whether the latent variable represents
-"X" or "Y" in the model. Default is <code>"X"</code>. This argument controls parameter
-labeling (e.g., <code>lx</code> vs <code>ly</code> for loadings, <code>tx</code> vs <code>ty</code> for intercepts).</p></dd>
 
 
 <dt id="arg-constr-dy-meas">constr_dy_meas<a class="anchor" aria-label="anchor" href="#arg-constr-dy-meas"></a></dt>
@@ -116,43 +106,26 @@ scripter functions, <code>constr_dy_struct</code> is included as an argument, bu
 defaults to <code>"none"</code>.</p></dd>
 
 
-<dt id="arg-constr-group-meas">constr_group_meas<a class="anchor" aria-label="anchor" href="#arg-constr-group-meas"></a></dt>
-<dd><p>Optional character vector for cross-group measurement constraints (e.g. <code>"loadings"</code>, <code>"intercepts"</code>, <code>"residuals"</code>, <code>"none"</code>). When <code>NULL</code> (default), single-group model. When non-NULL, requires <code>dvn</code> from <code>scrapeVarCross(..., group = "varname")</code>.</p></dd>
-
-
-<dt id="arg-constr-group-struct">constr_group_struct<a class="anchor" aria-label="anchor" href="#arg-constr-group-struct"></a></dt>
-<dd><p>Optional character vector for cross-group structural constraints (e.g. <code>"variances"</code>, <code>"means"</code>, <code>"none"</code>). When <code>NULL</code> (default), single-group model.</p></dd>
-
-
 <dt id="arg-writeto">writeTo<a class="anchor" aria-label="anchor" href="#arg-writeto"></a></dt>
-<dd><p>A character string specifying a directory path to where the
-output file(s) should be saved. If set to <code>"."</code>, the file(s) will be written
-to the current working directory. The default is <code>NULL</code>, and examples use a
-temporary directory created by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>. When dealing with tabular output,
-<code>writeTo</code> is only relevant if <code>gtTab = TRUE</code>.</p></dd>
+<dd><p>A character string specifying a directory path to where a
+<code>.txt</code> file of the resulting <code>lavaan</code> script should be written. If set to
+<code>“.”</code>, the <code>.txt</code> file will be written to the current working directory. The
+default is <code>NULL</code>, and examples use a temporary directory created by
+<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></dd>
 
 
 <dt id="arg-filename">fileName<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
 <dd><p>A character string specifying a desired base name for the
-output file. The default is <code>NULL</code>. The specified name will be automatically
-appended with the appropriate file extension (e.g., <code>.txt</code> for <code>lavaan</code>
-scripts, <code>.rtf</code> for tabular output when <code>gtTab = TRUE</code>, or other extensions
-as appropriate for the output type). If a file with the same name already
-exists in the user's chosen directory, it will be overwritten.</p></dd>
-
-
-<dt id="arg-outputtype">outputType<a class="anchor" aria-label="anchor" href="#arg-outputtype"></a></dt>
-<dd><p>Character string specifying the type of output to return.
-Options are <code>"lavaan script"</code> (default) to return a character object of
-<code>lavaan</code> syntax that can be passed immediately to <code>lavaan</code> functions, or
-<code>"syntax components"</code> to return a structured list of model components.</p></dd>
+<code>.txt</code> output file. The default is <code>NULL</code>. The specified name will be
+automatically appended with the <code>.txt</code> file extension. If a file with the
+same name already exists in the user's chosen directory, it will be
+overwritten.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Character object of <code>lavaan</code> script that can be passed immediately to
-<code>lavaan</code> functions (when <code>outputType = "lavaan script"</code>), or a structured list
-of model components (when <code>outputType = "syntax components"</code>).</p>
+<code>lavaan</code> functions.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

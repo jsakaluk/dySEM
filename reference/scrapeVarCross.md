@@ -26,7 +26,6 @@ scrapeVarCross(
   var_list = NULL,
   var_list_order = NULL,
   var_list_item_num = "\\d+",
-  group = NULL,
   covs_order = NULL,
   covs_stem = NULL,
   covs_delim1 = NULL,
@@ -125,14 +124,6 @@ scrapeVarCross(
   optional character for item number of any of the indicator variables
   of a multi-LV model
 
-- group:
-
-  optional character naming a column in `dat` that defines groups for
-  multi-group analysis. When supplied, the returned dvn will include
-  `group` (variable name), `group_n` (number of levels), and
-  `group_levels` (values). Required for multi-group scripters when
-  `constr_group_meas` or `constr_group_struct` are non-NULL.
-
 - covs_order:
 
   optional character for order of (S)tem, (P)artner number, and (I)tem
@@ -166,11 +157,6 @@ scrapeVarCross(
 a list, referred in short-hand as a "dvn" (dyad variable names list)
 containing variable names for p1, p2, \# of items per LV, characters
 distinguishing partners, and total number of indicators
-
-## See also
-
-Other variable-scraping functions:
-[`build_dvn()`](https://jsakaluk.github.io/dySEM/reference/build_dvn.md)
 
 ## Examples
 

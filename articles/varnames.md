@@ -1,6 +1,7 @@
 # Anatomy of a Variable Name
 
 ``` r
+
 library(dySEM)
 #> 
 #>  Welcome to dySEM!

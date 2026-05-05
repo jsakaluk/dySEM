@@ -102,6 +102,7 @@ This exemplar makes use of the `dplyr`, `janitor`, `gt`, `dySEM`, and
 the `dynamic` package.
 
 ``` r
+
 library(dplyr) #for data management
 library(janitor) # for cleaning up data frames for tabling
 library(gt) #for reproducible tabling
@@ -127,6 +128,7 @@ this bi-construct exemplar, we will make use of both the responses to
 the satisfaction and commitment items:
 
 ``` r
+
 com_dat <- commitmentQ
 
 com_dat |> 
@@ -163,6 +165,7 @@ distinguishing characters—in this case, “1’ and”2”—are used for both
 and y indicators):
 
 ``` r
+
 
 apim_dvn <- scrapeVarCross(dat = com_dat, 
                            x_order = "spi", x_stem = "sat.g", x_delim1 = ".",x_delim2="_",  
@@ -223,6 +226,7 @@ estimating *k* in each model:
 
 ``` r
 
+
 #actor and partner paths constrained by default
 apim.script.indist <-  scriptAPIM(apim_dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE)
 
@@ -241,6 +245,7 @@ apim.script.free.actpart <-  scriptAPIM(apim_dvn, lvxname = "Sat", lvyname = "Co
 We can then pass these scripted models to `lavaan` for model fitting:
 
 ``` r
+
 apim.fit.indist <- cfa(apim.script.indist, data = com_dat)
 apim.fit.free.act <- cfa(apim.script.free.act, data = com_dat)
 apim.fit.free.part <- cfa(apim.script.free.part, data = com_dat)
@@ -250,6 +255,7 @@ apim.fit.free.actpart <- cfa(apim.script.free.actpart, data = com_dat)
 ## 4. Outputting and Interpreting the Model(s)
 
 ``` r
+
 #compare competing models
 comp_act <- anova(apim.fit.indist, apim.fit.free.act)
 comp_part <- anova(apim.fit.indist, apim.fit.free.part)
@@ -274,9 +280,9 @@ mis_actpart <- fitMeasures(apim.fit.free.actpart, c("rmsea", "cfi"))
 ```
 
 Interestingly, while neither freely estimating the actor paths,
-$\chi^{2}$ (1) = 0.71, *p* = 0.4, or partner paths, $\chi^{2}$ (1) =
+$`\chi^2`$ (1) = 0.71, *p* = 0.4, or partner paths, $`\chi^2`$ (1) =
 0.27, *p* = 0.61, significantly improved the fit of the model, freely
-estimating both actor and partner paths did, $\chi^{2}$ (2) = 9.78, *p*
+estimating both actor and partner paths did, $`\chi^2`$ (2) = 9.78, *p*
 = 0.01. That said, the freely estimated model did not fit the data
 particularly well according to traditional model fit cutoffs (Hu &
 Bentler, 1999), with RMSEA = 0.11 and CFI = 0.886.
@@ -286,6 +292,7 @@ makes it easy to visualize the parameter estimates from the L-APIM, via
 `semPlot` package (Epskamp, 2015):
 
 ``` r
+
 
 outputParamFig(fit = apim.fit.free.actpart, figtype = "unstandardized")
 ```
@@ -299,6 +306,7 @@ provide only structural model output (as we demonstrate), measurement
 model output, or both:
 
 ``` r
+
 
 outputParamTab(apim_dvn, model = "apim", fit = apim.fit.free.actpart, 
                tabletype = "structural") |> 
@@ -364,6 +372,7 @@ verify this for yourself with
 [`summary()`](https://rdrr.io/r/base/summary.html)):
 
 ``` r
+
 #without mean structure
 #freely estimate both actor and partner effects
 apim.script.free.actpart.noms <-  scriptAPIM(apim_dvn, lvxname = "Sat", lvyname = "Com", est_k = TRUE, constr_dy_xy_struct = c("none"), includeMeanStruct = FALSE)
@@ -377,6 +386,7 @@ simulation-based function, it’s good practice to set a random seed (to
 ensure you can get the same numeric results from run to run):
 
 ``` r
+
 set.seed(519)
 DDDFI(apim.fit.free.actpart.noms)
 ```

@@ -72,6 +72,7 @@ Our data set therefore results in a tibble that is 121 (# of couples) x
 28 ((9 PRQC items + 5 GMSEX items) x 2 (# of dyad members)):
 
 ``` r
+
 DRES
 #> # A tibble: 121 × 28
 #>    PRQC_1.1 PRQC_2.1 PRQC_3.1 PRQC_4.1 PRQC_5.1 PRQC_6.1 PRQC_7.1 PRQC_8.1
@@ -159,6 +160,7 @@ indicators, which have the following properties:
 Feeding this information to `scrapeVarCross` is quite straightforward:
 
 ``` r
+
 dvn <- scrapeVarCross(DRES, x_order = "sip", x_stem = "PRQC", x_delim1="_",x_delim2=".",  distinguish_1="1", distinguish_2="2")
 #> 
 #> ── Variable Scraping Summary ──
@@ -244,6 +246,7 @@ specify
 
 ``` r
 
+
 qual.indist.script <- scriptCor(dvn, lvname = "Quality")
 ```
 
@@ -258,6 +261,7 @@ you leverage `dySEM` to quickly script a sequence of competing models
 (e.g., from configural invariance CFA –\> fully indistinguishable CFA)
 
 ``` r
+
 
 qual.res.script <- scriptCor(dvn, lvname = "Quality", constr_dy_meas = c("loadings", "intercepts", "residuals"), constr_dy_struct = c("none"))
 
@@ -293,6 +297,7 @@ and gradually relaxing constraints on different groups of parameters:
 
 ``` r
 
+
 #Fit fully indistinguishable model
 qual.ind.fit <- lavaan::cfa(qual.indist.script, data = DRES, std.lv = FALSE, auto.fix.first= FALSE, meanstructure = TRUE)
 
@@ -317,6 +322,7 @@ are `summary` and `anova`.
 parameter estimates and tests to your console. For example:
 
 ``` r
+
 summary(qual.config.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 ```
 
@@ -324,6 +330,7 @@ summary(qual.config.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRU
 nested dyadic models. For example:
 
 ``` r
+
 anova(qual.config.fit, qual.load.fit, qual.int.fit, qual.res.fit, qual.ind.fit)
 #> 
 #> Chi-Squared Difference Test
@@ -363,6 +370,7 @@ unstandardized value) or tables (e.g., featuring measurement- or
 structural-model parameter, or both) are created.
 
 ``` r
+
 outputParamTab(dvn, model = "cfa", fit = qual.ind.fit, 
                tabletype = "measurement", writeTo = tempdir(), 
                fileName = "cfa_ind")

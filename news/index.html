@@ -3,11 +3,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-dark" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">dySEM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,22 +41,12 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/jsakaluk/dySEM/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/jsakaluk/dySEM/blob/v1.4.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.0.0" id="dysem-200-in-development">dySEM 2.0.0 (in development)<a class="anchor" aria-label="anchor" href="#dysem-200-in-development"></a></h2>
-<ul><li><p><strong>Note on scope.</strong> v2.0.0 introduces substantial new functionality developed <em>after</em> the v1.4.2 JOSS archival release (see openjournals/joss-reviews#10115). These additions (multi-group support, <code><a href="../reference/scriptTwoCross.html">scriptTwoCross()</a></code>, Monte Carlo simulation scripters, GUI support, <code>"orthogonal"</code> constraint tokens, etc.) were <em>not</em> part of the JOSS-reviewed release and should not be cited as JOSS-reviewed functionality. The JOSS-reviewed and -archived version is v1.4.2 (tag <code>v1.4.2</code>, branch <code>release/joss-1.4.2</code>).</p></li>
-<li><p><code><a href="../reference/scriptObsAPIM.html">scriptObsAPIM()</a></code> now uses the same structural constraint arguments as <code><a href="../reference/scriptAPIM.html">scriptAPIM()</a></code> (<code>constr_dy_x_struct</code>, <code>constr_dy_y_struct</code>, <code>constr_dy_xy_struct</code>, <code>includeMeanStruct</code>, <code>est_k</code>), with defaults aligned to an indistinguishable observed APIM. <code>equate</code> and <code>k</code> are deprecated in favor of <code>constr_dy_xy_struct</code> and <code>est_k</code>. Orthogonal dyadic covariances are supported via <code>"orthogonal"</code> in the <code>*_struct</code> vectors. Saving syntax now requires both <code>writeTo</code> and <code>fileName</code>.</p></li>
-<li><p><code><a href="../reference/scriptAPIM.html">scriptAPIM()</a></code> documents and validates <code>"orthogonal"</code> in <code>constr_dy_x_struct</code> and <code>constr_dy_y_struct</code> (zero latent dyadic covariance); unknown constraint tokens now error consistently.</p></li>
-<li><p>Initial multi-group support! (for scriptUni() and scriptCor())!</p></li>
-<li><p>Boutique bi-constructc cross-sectional model specification with scriptTwoCross()</p></li>
-<li><p>Initial scripting support for Monte Carlo simulation (via forthcoming updates to dySim: <a href="https://jsakaluk.github.io/dySim/" class="external-link uri">https://jsakaluk.github.io/dySim/</a>)</p></li>
-<li><p>Initial GUI support</p></li>
-</ul></div>
-    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.2" id="dysem-142">dySEM 1.4.2<a class="anchor" aria-label="anchor" href="#dysem-142"></a></h2>
-<ul><li>JOSS review release. Incorporates the documentation and example-script corrections contributed by <a href="https://github.com/smasongarrison" class="external-link">@smasongarrison</a> in PR <a href="https://github.com/jsakaluk/dySEM/issues/156" class="external-link">#156</a>: link formatting and typo fixes in <code>R/DRES-data.R</code>, <code>man/DRES.Rd</code>, <code>paper/paper.md</code>, <code>paper/paper.html</code>, and <code>vignettes/dySEM.Rmd</code>. No user-facing code changes relative to 1.4.1; this is the version archived with a DOI for the JOSS submission (openjournals/joss-reviews#10115). Lives on branch <code>release/joss-1.4.2</code> at tag <code>v1.4.2</code>.</li>
+<ul><li>JOSS review release. Incorporates the documentation and example-script corrections contributed by <a href="https://github.com/smasongarrison" class="external-link">@smasongarrison</a> in PR <a href="https://github.com/jsakaluk/dySEM/issues/156" class="external-link">#156</a>: link formatting and typo fixes in <code>R/DRES-data.R</code>, <code>man/DRES.Rd</code>, <code>paper/paper.md</code>, <code>paper/paper.html</code>, and <code>vignettes/dySEM.Rmd</code>. No user-facing code changes relative to 1.4.1; this is the version archived with a DOI for the JOSS submission (openjournals/joss-reviews#10115).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.1" id="dysem-141">dySEM 1.4.1<a class="anchor" aria-label="anchor" href="#dysem-141"></a></h2><p class="text-muted">CRAN release: 2025-12-22</p>

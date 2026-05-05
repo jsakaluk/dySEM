@@ -7,24 +7,10 @@ loading, and intercept invariant measurement models for either a group
 of latent variables (e.g., different sub-scales from a self-report
 measures).
 
-`scriptMultiCor()` is a thin wrapper around `scriptCFA()` provided as a
-synonym for users who think of these models as dyadic multi-factor
-correlated-factor models. It takes the same arguments as `scriptCFA()`
-and returns the identical lavaan syntax.
-
 ## Usage
 
 ``` r
 scriptCFA(
-  dvn,
-  scaleset = "FF",
-  constr_dy_meas = c("loadings", "intercepts", "residuals"),
-  constr_dy_struct = c("variances", "means"),
-  writeTo = NULL,
-  fileName = NULL
-)
-
-scriptMultiCor(
   dvn,
   scaleset = "FF",
   constr_dy_meas = c("loadings", "intercepts", "residuals"),
@@ -43,9 +29,9 @@ scriptMultiCor(
 
 - scaleset:
 
-  Input character to specify how to set the scale of the latent
-  variable(s). Default is `"FF"` (fixed-factor; see Details for
-  rationale), but user can specify `"MV"` (Marker Variable).
+  input character to specify how to set the scale of the latent
+  variable(s). Default is "FF" (fixed-factor; see Details for
+  rationale), but user can specify "MV" (Marker Variable)
 
 - constr_dy_meas:
 
@@ -66,27 +52,19 @@ scriptMultiCor(
 
 - writeTo:
 
-  A character string specifying a directory path to where the output
-  file(s) should be saved. If set to `"."`, the file(s) will be written
-  to the current working directory. The default is `NULL`, and examples
-  use a temporary directory created by
-  [`tempdir()`](https://rdrr.io/r/base/tempfile.html). When dealing with
-  tabular output, `writeTo` is only relevant if `gtTab = TRUE`.
+  A character string specifying a directory path to where a .txt file of
+  the resulting lavaan script should be written. If set to “.”, the .txt
+  file will be written to the current working directory. The default is
+  NULL, and examples use a temporary directory created by tempdir().
 
 - fileName:
 
-  A character string specifying a desired base name for the output file.
-  The default is `NULL`. The specified name will be automatically
-  appended with the appropriate file extension (e.g., `.txt` for
-  `lavaan` scripts, `.rtf` for tabular output when `gtTab = TRUE`, or
-  other extensions as appropriate for the output type). If a file with
-  the same name already exists in the user's chosen directory, it will
-  be overwritten.
+  A character string specifying a desired base name for the .txt output
+  file. The default is NULL. The specified name will be automatically
+  appended with the .txt file extension. If a file with the same name
+  already exists in the user's chosen directory, it will be overwritten.
 
 ## Value
-
-character object of lavaan script that can be passed immediately to
-lavaan functions
 
 character object of lavaan script that can be passed immediately to
 lavaan functions
@@ -118,6 +96,7 @@ Other multi-construct script-writing functions:
 ## Examples
 
 ``` r
+
 # When different factor use distinct stems:
 imsList <- list(
   lvnames = c("Sat", "Q_Alt", "Invest", "Comm"),

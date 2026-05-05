@@ -38,10 +38,7 @@ getDydmacs(dat, dvn, fit, nodewidth = 0.01, lowerLV = -5, upperLV = 5)
 
 ## Value
 
-For single LV models: a matrix with one column "dMACS" containing d_macs
-values. For multiple LV models: a named list of matrices, where each
-element corresponds to one LV and contains a matrix with one column
-"dMACS" containing d_macs values for that LV.
+vector of d_macs values
 
 ## See also
 

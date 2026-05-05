@@ -19,7 +19,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/jsakaluk/dySEM/blob/master/inst/CITATION)
+[`inst/CITATION`](https://github.com/jsakaluk/dySEM/blob/v1.4.2/inst/CITATION)
 
 Sakaluk, J. K., Fisher, A. N., & Kilshaw, R. E. (2021). Dyadic
 Measurement invariance and its importance for replicability in romantic
