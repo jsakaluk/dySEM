@@ -1,0 +1,31 @@
+cff-version: "1.2.0"
+authors:
+  - family-names: Sakaluk
+    given-names: John Kitchener
+    orcid: "https://orcid.org/0000-0002-2515-9822"
+  - family-names: Camanto
+    given-names: Omar J.
+    orcid: "https://orcid.org/0009-0009-4012-9777"
+doi: "10.6084/m9.figshare.32180541"
+message: "If you use this software, please cite our article in the Journal of Open Source Software."
+preferred-citation:
+  authors:
+    - family-names: Sakaluk
+      given-names: John Kitchener
+      orcid: "https://orcid.org/0000-0002-2515-9822"
+    - family-names: Camanto
+      given-names: Omar J.
+      orcid: "https://orcid.org/0009-0009-4012-9777"
+  date-published: 2026-05-19
+  doi: "10.21105/joss.10115"
+  issn: "2475-9066"
+  issue: 121
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 10115
+  title: "dySEM: An R Package for Dyadic Structural Equation Modeling with Latent Variables"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.10115"
+  volume: 11
+title: "dySEM: An R Package for Dyadic Structural Equation Modeling with Latent Variables"
