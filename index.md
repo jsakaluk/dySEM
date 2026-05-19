@@ -8,8 +8,8 @@ reporting on latent models of dyadic data via
 and used in the course of the research described in Sakaluk, Fisher, and
 Kilshaw (2021), and has since undergone considerable expansion.
 
-`dySEM` currently contains **68** functions, of which **25** are
-user-facing (i.e., exported), which are covered by **536** unit tests.
+`dySEM` currently contains **84** functions, of which **31** are
+user-facing (i.e., exported), which are covered by **551** unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
@@ -29,14 +29,18 @@ You can install the development version from
 
 ``` r
 
-
 devtools::install_github("jsakaluk/dySEM")
 ```
 
 ## Current Functionality
 
-The package currently provides functionality regarding the following
-types of latent dyadic data models:
+The package currently provides the following kind of functionality:
+
+**NEW (BETA) Functionality**
+
+1.  “Boutique” Bi-Construct Models (e.g., Univariate –\> Hierarchical)
+2.  Uni-Construct Model Multi-Group Specification
+3.  Monte Carlo dvn creation and scripter functions
 
 **Uni-Construct Models**
 
@@ -121,10 +125,6 @@ There are additional optional functions, as well, that help users to
 calculate certain additional quantitative values (e.g., reliability,
 corrected model fit indexes in models with indistinguishable dyad
 members).
-
-``` R
-#> Warning: package 'ggplot2' was built under R version 4.4.3
-```
 
 ### 1. Import and wrangle **data**
 
