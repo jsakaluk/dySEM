@@ -2,7 +2,7 @@
 % Please edit documentation in R/launchScripter.R
 \name{launchScripter}
 \alias{launchScripter}
-\title{Launch the dySEM Interactive Scripter}
+\title{Launch the interactive dySEM GUI}
 \usage{
 launchScripter(launch.browser = TRUE)
 }

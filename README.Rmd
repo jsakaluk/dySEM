@@ -14,11 +14,12 @@ knitr::opts_chunk$set(
 ```
 # dySEM <a href="https://jsakaluk.github.io/dySEM/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 <!-- badges: start -->
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CodeFactor](https://www.codefactor.io/repository/github/jsakaluk/dysem/badge/master)](https://www.codefactor.io/repository/github/jsakaluk/dysem/overview/master)
 [![codecov](https://codecov.io/gh/jsakaluk/dySEM/branch/master/graph/badge.svg)](https://app.codecov.io/gh/jsakaluk/dySEM)
 [![R-CMD-check](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jsakaluk/dySEM/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/dySEM)](https://CRAN.R-project.org/package=dySEM)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.10115/status.svg)](https://doi.org/10.21105/joss.10115)
 [![Monthly Downloads](https://cranlogs.r-pkg.org/badges/dySEM)](https://cranlogs.r-pkg.org/badges/dySEM)
 [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/dySEM)](https://cranlogs.r-pkg.org/badges/grand-total/dySEM)
 
@@ -26,7 +27,8 @@ knitr::opts_chunk$set(
 
 ## Summary
 
-The `dySEM` helps automate the process of scripting, fitting, and reporting on latent models of dyadic data via [`lavaan`](https://lavaan.ugent.be). The package was initially developed and used in the course of the research described in Sakaluk, Fisher, and  Kilshaw (2021), and has since undergone considerable expansion.
+The `dySEM` package helps automate the process of scripting, fitting, and reporting on latent models of dyadic data via [`lavaan`](https://lavaan.ugent.be). The package was initially developed and used in the course of the research described in Sakaluk, Fisher, and  Kilshaw (2021), and has since undergone considerable expansion. Version 1.4.2 was released as part of the package's publication in the 
+[Journal of Open Source Software](https://joss.theoj.org/papers/10.21105/joss.10115) in 2026.
 
 ```{r package-stats, echo = FALSE, message = FALSE, warning = FALSE, results = 'hide'}
 # Source helper functions to count package statistics
@@ -71,7 +73,7 @@ The package currently provides the following kind of functionality:
 
 **NEW (BETA) Functionality**
 
-1. "Boutique" Bi-Construct Models (e.g., Univariate --> Hierarchical)
+1. Bi-Construct Hybrid Models (e.g., Univariate --> Hierarchical)
 2. Uni-Construct Model Multi-Group Specification
 3. Monte Carlo dvn creation and scripter functions
 

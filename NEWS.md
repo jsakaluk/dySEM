@@ -1,3 +1,7 @@
+# dySEM 2.1.0
+
+* The dySEM paper has been accepted at [JOSS](https://joss.theoj.org/papers/10.21105/joss.10115) 
+
 # dySEM 2.0.0 (in development)
 
 * **Note on scope.** v2.0.0 introduces substantial new functionality developed *after* the v1.4.2 JOSS archival release (see openjournals/joss-reviews#10115). These additions (multi-group support, `scriptTwoCross()`, Monte Carlo simulation scripters, GUI support, `"orthogonal"` constraint tokens, etc.) were *not* part of the JOSS-reviewed release and should not be cited as JOSS-reviewed functionality. The JOSS-reviewed and -archived version is v1.4.2 (tag `v1.4.2`, branch `release/joss-1.4.2`).
