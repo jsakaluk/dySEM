@@ -3,34 +3,6 @@
 ``` r
 
 library(dySEM)
-#> 
-#>  Welcome to dySEM!
-#>  
-#>  Please support your academic developers by citing dySEM; this helps us justify to our home institutions the time we spend on expanding and improving dySEM:
-#>  
-#>  Sakaluk, J. K., & Camanto, O. J. (2026)
-#> 
-#>                Journal of Open Source Software, 11(121), 10115. 
-#> 
-#>                https://doi.org/10.21105/joss.10115
-#>  
-#>  dySEM is also heavily dependent on the lavaan package (please cite it too):
-#>  
-#>  Rosseel, Y. (2012). lavaan: An R package for structural equation modeling
-#> 
-#>                Journal of Statistical Software, 48, 1-36. 
-#> 
-#>                https://doi.org/10.18637/jss.v048.i02
-#>  
-#>  And should you use dySEM's outputParamFig() function, please be sure to
-#>  
-#>  also cite the semPlot package (upon which it depends):
-#>  
-#>  Epskamp, S. (2015). semPlot: Unified visualizations of structural equation
-#> 
-#>                models. Structural Equation Modeling: A Multidisciplinary Journal, 22(3), 474-483.
-#> 
-#>                https://doi.org/10.1080/10705511.2014.937847
 ```
 
 ## Introduction

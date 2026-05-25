@@ -1,4 +1,4 @@
-# Launch the dySEM Interactive Scripter
+# Launch the interactive dySEM GUI
 
 Opens a Shiny application that guides researchers through selecting a
 dyadic model, configuring invariance constraints and variable naming

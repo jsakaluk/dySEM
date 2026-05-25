@@ -2,14 +2,17 @@
 
 ## Summary
 
-The `dySEM` helps automate the process of scripting, fitting, and
-reporting on latent models of dyadic data via
+The `dySEM` package helps automate the process of scripting, fitting,
+and reporting on latent models of dyadic data via
 [`lavaan`](https://lavaan.ugent.be). The package was initially developed
 and used in the course of the research described in Sakaluk, Fisher, and
-Kilshaw (2021), and has since undergone considerable expansion.
+Kilshaw (2021), and has since undergone considerable expansion. Version
+1.4.2 was released as part of the package’s publication in the [Journal
+of Open Source
+Software](https://joss.theoj.org/papers/10.21105/joss.10115) in 2026.
 
-`dySEM` currently contains **84** functions, of which **31** are
-user-facing (i.e., exported), which are covered by **551** unit tests.
+`dySEM` currently contains **86** functions, of which **33** are
+user-facing (i.e., exported), which are covered by **559** unit tests.
 
 The `dySEM` logo was designed by Lowell Deranleau (for logo design
 inquiries, email: <agangofwolves@gmail.com>).
@@ -38,7 +41,7 @@ The package currently provides the following kind of functionality:
 
 **NEW (BETA) Functionality**
 
-1.  “Boutique” Bi-Construct Models (e.g., Univariate –\> Hierarchical)
+1.  Bi-Construct Hybrid Models (e.g., Univariate –\> Hierarchical)
 2.  Uni-Construct Model Multi-Group Specification
 3.  Monte Carlo dvn creation and scripter functions
 

@@ -162,7 +162,7 @@ to dyadic SEM
 Function to launch the dySEM GUI
 
 - [`launchScripter()`](https://jsakaluk.github.io/dySEM/reference/launchScripter.md)
-  : Launch the dySEM Interactive Scripter
+  : Launch the interactive dySEM GUI
 
 ### Deprecated functions
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## dySEM 2.1.0
+
+- The dySEM paper has been accepted at
+  [JOSS](https://joss.theoj.org/papers/10.21105/joss.10115)
+
 ## dySEM 2.0.0 (in development)
 
 - **Note on scope.** v2.0.0 introduces substantial new functionality

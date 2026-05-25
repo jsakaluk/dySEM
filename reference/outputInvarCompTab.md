@@ -142,7 +142,7 @@ outputInvarCompTab(mods,
   parsimonyFirst = FALSE,
   gtTab = TRUE, writeTo = tempdir(), fileName = "dCFA_Invar_Standard"
 )
-#> Output stored in: /tmp/RtmpLNlfMR/dCFA_Invar_Standard.rtf
+#> Output stored in: /tmp/RtmpTkMmdj/dCFA_Invar_Standard.rtf
 
 
   
