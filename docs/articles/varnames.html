@@ -174,7 +174,7 @@ names.</p>
 <h2 id="double-trouble-with-dyadic-variable-names">Double-Trouble with Dyadic Variable Names<a class="anchor" aria-label="anchor" href="#double-trouble-with-dyadic-variable-names"></a>
 </h2>
 <p>Variable names get a bit more complicated in the context of “dyad”
-(KENNY REF) or “=ide” (MLM REF) datasets, because these datasets contain
+(Kenny et al,. 2020) or “=ide” (MLM REF) datasets, because these datasets contain
 the same variable twice, in two different columns: one for each member
 of a dyad.</p>
 <p><br></p>
@@ -182,18 +182,18 @@ of a dyad.</p>
 <p><br></p>
 <p>Each variable needs its own unique name, and so typically, dyad
 datasets involve appending a distinguishing character(s) or number(s) to
-make clear to which partner’s value a given variable refers. These
+make clear to which partner a given variable refers. These
 <strong><em>distinguishers</em></strong> come in one of two varieties,
 corresponding to the type of dyads under study. If the dyads in the
 dataset are “indistinguishable”–that is, there’s no systematic and
 consistent way to assign dyad members to a particular role (e.g.,
 friends, coworkers)–then distinguishers are usually arbitrary in name
-and designation. For example, some partner’s variables might be given
+and designation. For example, one partner’s variables might be given
 the distinguisher “1” or “A”, while the other partner’s variables might
 be given the distinguisher “2” or “B”. The particular two distinguishers
 selected in these cases ultimately do not matter (as they do not convey
 any meaningful role-based information), as long as they are applied
-repetitiously between dyad members.</p>
+consistently between dyad members.</p>
 <p><br></p>
 <p><img src="https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p6.png" style="width:70.0%"></p>
 <p><br></p>
@@ -201,9 +201,8 @@ repetitiously between dyad members.</p>
 “distinguishable”–that is, there’s a systematic role that defines
 members within a dyad (e.g., heterosexual romantic partners, parent and
 child, manager and employee, therapist and client)–then there is the
-opportunity for distinguishers for variable names to be selected for
-clarity to help you (and others) intuit which partner’s data is captured
-in which columns.</p>
+opportunity to select variable name distinguishers to help you (and others) 
+intuit which partner’s data is captured in which columns.</p>
 <p><br></p>
 <p><img src="https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p7.jpeg" style="width:70.0%"></p>
 <p><br></p>
@@ -217,21 +216,21 @@ together. Understanding these specific features and the labels we use in
 <em>dySEM</em> to refer to them will make it much easier for you when
 you go to use a scraping function (e.g.,
 <code><a href="../reference/scrapeVarCross.html">scrapeVarCross()</a></code>).</p>
-<p>Let’s imagine a hypothetical dataset in which managers and employee
-dyads both reported on how positively they felt about their respective
+<p>Let’s imagine a hypothetical dataset in which both employees and managers 
+reported how positively they felt about their respective
 jobs, using a three-item questionnaire:</p>
 <p><br></p>
 <p><img src="https://raw.githubusercontent.com/jsakaluk/dySEM/master/img/vig_anatomy/p8.png" style="width:70.0%"></p>
 <p><br></p>
-<p>Breaking these names down, we are left with the following component
-features: The variable <strong><em>stem</em></strong>: characters that
-(ambiguous, or [ideally] intuitive) are consistent across all variables,
-for both partners that we are interested in (e.g., pos) The
+<p>Breaking these names down, we are left with the following components: 
+The variable <strong><em>stem</em></strong>: characters that
+are consistent across all variables,
+for both partners that we are interested in (e.g., pos); the
 <strong><em>item number</em></strong>: a number that only appears twice
-(once per partner) that indicates which specific variable within those
-sharing its stem is being referenced (e.g., 2) And the
+(once per partner) indicating which specific variable within those
+sharing its stem is being referenced (e.g., 2); and the
 <strong><em>partner distinguisher</em></strong>: the character that
-indicates which variables correspond to which partner (e.g., m or e)
+indicates which variables correspond to which partner (e.g., m or e).
 <strong><em>Delimiters</em></strong> such as “.” or “_” can also be used
 to separate the 1st feature from the 2nd, and the 2nd from the 3rd.
 Sometimes a name might include one delimiter; other times (as in this
@@ -241,7 +240,7 @@ case), it might include two.</p>
 <p><br></p>
 <p>When dyadic dataset variable name features are arranged in this order
 (<em>S</em>tem, <em>I</em>tem number, <em>P</em>artner distinguisher),
-we refer to them as <strong>“sip”-ordered</strong> when using dySEM. We
+we refer to them as <strong>“sip”-ordered</strong> in dySEM. We
 do this because variable naming conventions are somewhat arbitrary and
 varied; people can and do arrange dyadic variable names in other orders.
 For example, another common ordering is <em>S</em>tem, <em>P</em>artner
